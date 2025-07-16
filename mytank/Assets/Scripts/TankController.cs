@@ -90,8 +90,20 @@ public class TankController : MonoBehaviour
     {
         transform.position = new Vector2(x, y);
         Direction = direction;
-        
-        
+        Vector3 rotation=Vector3.zero;
+        switch (direction)
+        {
+            case "up":rotation= new Vector3(0,0,0);
+                break;
+            case "down":rotation= new Vector3(0,0,180);
+                break;
+            case "left":rotation= new Vector3(0,0,90);
+                break;
+            case "right":rotation= new Vector3(0,0,-90);
+                break;
+                
+        }
+        transform.rotation = Quaternion.Euler(rotation);
     }
     
     void SendMoveUpdate(int x, int y, string direction)

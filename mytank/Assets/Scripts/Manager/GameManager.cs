@@ -103,10 +103,11 @@ public class GameManager :SingletonMono<GameManager>
             
                 GameObject tank = Instantiate(tankPrefab, new Vector2(x, y), Quaternion.identity);
                 tank.tag = "Tank";
+                
                 TankController controller = tank.GetComponent<TankController>();
                 controller.Initialize(playerId, hp);
                 players[playerId] = controller;
-            
+                controller.MoveTo(x, y, direction);
                 Debug.Log($"Created tank for player {playerId} at position ({x}, {y})");
             }
         }

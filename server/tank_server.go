@@ -80,7 +80,7 @@ type GameStateData struct {
 	State   string             `json:"state"`
 }
 
-var playerNum int = 2
+var playerNum int = 1
 
 func NewServer() *Server {
 	return &Server{
@@ -194,17 +194,20 @@ func (s *Server) joinRoom(client *Client, roomID string) {
 
 	// 设置初始位置
 	var x, y int
+	var direction string
 	if len(room.Players) == 0 {
 		x, y = 1, 1 // 玩家1在左上
+		direction = "up"
 	} else {
 		x, y = 18, 18 // 玩家2在右下
+		direction = "down"
 	}
 
 	player := &Player{
 		ID:        playerID,
 		X:         x,
 		Y:         y,
-		Direction: "up",
+		Direction: direction,
 		HP:        3,
 		LastMove:  0,
 		LastShoot: 0,
