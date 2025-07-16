@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,14 +8,25 @@ public class TankController : MonoBehaviour
     public int HP { get; private set; }
     public string Direction { get; private set; }
     
+    public Vector2Int Position { get=>new Vector2Int(Mathf.RoundToInt( transform.position.x ),Mathf.RoundToInt( transform.position.y ));  }
     private float moveInterval = 0.1f; // 移动间隔限制
     private float shootInterval = 0.5f; // 射击间隔限制
     
     private float lastMoveTime;
     private float lastShootTime;
     
-    private bool isLocalPlayer;
-    
+ public bool isLocalPlayer;
+
+    private void OnEnable()
+    {
+        TankManager.Instance.controllers.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        TankManager.Instance.controllers.Remove(this);
+    }
+
     public void Initialize(string playerID, int initialHP = 3)
     {
         PlayerID = playerID;
@@ -135,16 +147,16 @@ public class TankController : MonoBehaviour
     void ShootBullet()
     {
         int startX = Mathf.RoundToInt(transform.position.x);
-        int startZ = Mathf.RoundToInt(transform.position.z);
+        int startY = Mathf.RoundToInt(transform.position.y);
         
         // 根据朝向确定子弹初始位置
         switch (Direction)
         {
             case "up":
-                startZ += 1;
+                startY += 1;
                 break;
             case "down":
-                startZ -= 1;
+                startY -= 1;
                 break;
             case "left":
                 startX -= 1;
@@ -160,7 +172,7 @@ public class TankController : MonoBehaviour
         string bulletID = System.Guid.NewGuid().ToString();
         GameObject bulletObj = Instantiate(
             GameManager.Instance.bulletPrefab, 
-            new Vector3(startX, 0.5f, startZ), 
+            new Vector3(startX, 0.5f, startY), 
             Quaternion.identity
         );
         
@@ -173,7 +185,7 @@ public class TankController : MonoBehaviour
             ID = bulletID,
             PlayerID = PlayerID,
             X = startX,
-            Y = startZ, // 注意：在网络传输中使用Y而不是Z
+            Y = startY, // 注意：在网络传输中使用Y而不是Z
             Direction = Direction,
             Timestamp = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };

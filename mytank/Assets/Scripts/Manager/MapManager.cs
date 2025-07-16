@@ -94,6 +94,21 @@
         // 检查位置是否可通行
         public bool IsWalkable(int x, int y)
         {
+            foreach (var tank in TankManager.Instance.controllers)
+            {
+                if (tank.isLocalPlayer)
+                {
+                    continue;
+                }
+
+                if (tank.Position.x == x && tank.Position.y == y)
+                {
+                    return false;
+                }
+            }
+
+          
+            
             return GetWallType(x, y) == 0;
         }
         
