@@ -94,14 +94,15 @@
         // 检查位置是否可通行
         public bool IsWalkable(int x, int y)
         {
-            foreach (var tank in TankManager.Instance.controllers)
+            foreach (var kv in GameManager.Instance.tanks)
             {
+                var tank = kv.Value;
                 if (tank.isLocalPlayer)
                 {
                     continue;
                 }
 
-                if (tank.Position.x == x && tank.Position.y == y)
+                if (tank.Pos.x == x && tank.Pos.y == y)
                 {
                     return false;
                 }

@@ -13,6 +13,7 @@ public class BulletController : MonoBehaviour
     private float moveInterval = 0.2f; // 子弹移动间隔
     private float lastMoveTime;
     
+    public Vector2Int Pos=>new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
     public void Initialize(string id, string direction, string ownerID, bool local = false)
     {
         BulletID = id;
@@ -30,10 +31,9 @@ public class BulletController : MonoBehaviour
         {
             yield return new WaitForSeconds(moveInterval);
             
-            // 计算移动位置
-            Vector3 currentPos = transform.position;
-            int currentX = Mathf.RoundToInt(currentPos.x);
-            int currentY = Mathf.RoundToInt(currentPos.y);
+            
+            int currentX = Pos.x;
+            int currentY = Pos.y;
             
             int nextX = currentX;
             int nextY = currentY;
@@ -54,17 +54,49 @@ public class BulletController : MonoBehaviour
                     break;
             }
             
-            // 检查碰撞
-            RaycastHit[] hits = Physics.RaycastAll(
-                new Vector3(currentX, 0.5f, currentY),
-                new Vector3(nextX - currentX, 0, nextY - currentY).normalized,
-                1.0f
-            );
+           
             
             bool shouldDestroy = false;
-            string hitType = "";
+            int nextWallType = MapManager.Instance.GetWallType(nextX, nextY);
+            bool isHit = false;
+            foreach (var kv in GameManager.Instance.tanks)
+            {
+                var tank = kv.Value;
+                if (tank.PlayerID != OwnerID)
+                {
+                    if (tank.Pos.x == nextX && tank.Pos.y == nextY)
+                    {
+                        isHit = true;
+                        break;
+                    }
+                }
+            }
+
+            if (isHit)
+            {
+                //那个坦克受伤
+                 shouldDestroy = true;
+                
+            }
+            else if (nextWallType == 0)
+            {
+                //移动
+                transform.position = new Vector2(nextX, nextY);
+            }
+            else if (nextWallType == 1)
+            {
+                //销毁自己
+                shouldDestroy = true;
+            }
+            else if (nextWallType == 2)
+            {
+                //销毁自己和那个可破坏墙
+                MapManager.Instance.SetWallType(nextX, nextY, 0);
+                shouldDestroy = true;
+                
+            }
             
-            foreach (RaycastHit hit in hits)
+           /* foreach (RaycastHit hit in hits)
             {
                 if (hit.collider.CompareTag("Wall"))
                 {
@@ -102,14 +134,14 @@ public class BulletController : MonoBehaviour
                         break;
                     }
                 }
-            }
+            }*/
             
             if (shouldDestroy)
             {
                 if (isLocal)
                 {
                     // 发送子弹销毁消息
-                    SendBulletDestroy(nextX, nextY, hitType);
+                    SendBulletDestroy(nextX, nextY);
                 }
                 
                 Destroy(gameObject);
@@ -140,14 +172,14 @@ public class BulletController : MonoBehaviour
         tank.TakeDamage(newHP);
     }
     
-    void SendBulletDestroy(int hitX, int hitZ, string hitType)
+    void SendBulletDestroy(int hitX, int hitY)
     {
         var destroyData = new BulletDestroyData
         {
             ID = BulletID,
             PlayerID = OwnerID,
             HitX = hitX,
-            HitY = hitZ // 注意：在网络传输中使用Y
+            HitY = hitY // 注意：在网络传输中使用Y
         };
         
         NetworkManager.Instance.SendMessage("bullet_destroy", destroyData);

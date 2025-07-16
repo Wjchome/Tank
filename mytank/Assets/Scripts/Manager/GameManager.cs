@@ -16,7 +16,7 @@ public class GameManager :SingletonMono<GameManager>
     
     
     
-    public Dictionary<string, TankController> players = new Dictionary<string, TankController>();
+    public Dictionary<string, TankController> tanks = new Dictionary<string, TankController>();
   
     public Dictionary<string, BulletController> bullets = new Dictionary<string, BulletController>();
     
@@ -94,7 +94,7 @@ public class GameManager :SingletonMono<GameManager>
             string playerId = entry.Key;
             JObject playerObj = entry.Value as JObject;
         
-            if (!players.ContainsKey(playerId))
+            if (!tanks.ContainsKey(playerId))
             {
                 int x = playerObj["x"].Value<int>();
                 int y = playerObj["y"].Value<int>();
@@ -106,7 +106,7 @@ public class GameManager :SingletonMono<GameManager>
                 
                 TankController controller = tank.GetComponent<TankController>();
                 controller.Initialize(playerId, hp);
-                players[playerId] = controller;
+                tanks[playerId] = controller;
                 controller.MoveTo(x, y, direction);
                 Debug.Log($"Created tank for player {playerId} at position ({x}, {y})");
             }
@@ -118,7 +118,7 @@ public class GameManager :SingletonMono<GameManager>
         if (moveData.PlayerID == NetworkManager.Instance.playerID)
             return; // 忽略自己的移动消息
             
-        if (players.TryGetValue(moveData.PlayerID, out TankController tank))
+        if (tanks.TryGetValue(moveData.PlayerID, out TankController tank))
         {
             tank.MoveTo(moveData.X, moveData.Y, moveData.Direction);
         }
@@ -169,7 +169,7 @@ public class GameManager :SingletonMono<GameManager>
 
     void HandlePlayerHit(PlayerHitData hitData)
     {
-        if (players.TryGetValue(hitData.PlayerID, out TankController tank))
+        if (tanks.TryGetValue(hitData.PlayerID, out TankController tank))
         {
             tank.TakeDamage(hitData.HP);
             
@@ -202,10 +202,10 @@ public class GameManager :SingletonMono<GameManager>
     {
         Debug.Log($"Player {playerID} disconnected");
         
-        if (players.TryGetValue(playerID, out TankController tank))
+        if (tanks.TryGetValue(playerID, out TankController tank))
         {
             Destroy(tank.gameObject);
-            players.Remove(playerID);
+            tanks.Remove(playerID);
         }
         
         // 如果对方掉线，显示胜利

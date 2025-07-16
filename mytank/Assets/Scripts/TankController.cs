@@ -7,8 +7,9 @@ public class TankController : MonoBehaviour
     public string PlayerID { get; private set; }
     public int HP { get; private set; }
     public string Direction { get; private set; }
-    
-    public Vector2Int Position { get=>new Vector2Int(Mathf.RoundToInt( transform.position.x ),Mathf.RoundToInt( transform.position.y ));  }
+
+    public Vector2Int Pos =>
+        new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
     private float moveInterval = 0.1f; // 移动间隔限制
     private float shootInterval = 0.5f; // 射击间隔限制
     
