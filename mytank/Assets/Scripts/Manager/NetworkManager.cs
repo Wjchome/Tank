@@ -33,7 +33,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             tcpClient = new TcpClient("localhost", 8080);
             stream = tcpClient.GetStream();
             reader = new StreamReader(stream, Encoding.UTF8);
-            writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
+            writer = new StreamWriter(stream, new UTF8Encoding(false)) { AutoFlush = true };
             isConnected = true;
             
             Debug.Log("Connected to server");
@@ -59,7 +59,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
                     if (!string.IsNullOrEmpty(line))
                     {
                         Debug.Log("Received: " + line);
-                        
+                        MessageManager.Instance.SetReceiveTxt("Receive:\n"+ line);
                         var message = JsonConvert.DeserializeObject<NetworkMessage>(line);
                         OnMessageReceived?.Invoke(message.type, message.data);
                     }
@@ -84,8 +84,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
             var message = new NetworkMessage { type = type, data = data };
             string json = JsonConvert.SerializeObject(message);
             
-            Debug.Log("Sending: " + json);
             writer.WriteLine(json); // 使用WriteLine自动添加换行符
+            Debug.Log("Sending: " + json);
+            
+            MessageManager.Instance.SetSendTxt("Sending: \n"+json);
+            
         }
         catch (Exception e)
         {

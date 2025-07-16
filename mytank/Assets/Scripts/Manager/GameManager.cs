@@ -101,7 +101,7 @@ public class GameManager :SingletonMono<GameManager>
                 int hp = playerObj["hp"].Value<int>();
                 string direction = playerObj["direction"].Value<string>();
             
-                GameObject tank = Instantiate(tankPrefab, new Vector3(x, 0.5f, y), Quaternion.identity);
+                GameObject tank = Instantiate(tankPrefab, new Vector2(x, y), Quaternion.identity);
                 tank.tag = "Tank";
                 TankController controller = tank.GetComponent<TankController>();
                 controller.Initialize(playerId, hp);

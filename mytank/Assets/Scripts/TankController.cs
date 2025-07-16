@@ -31,7 +31,6 @@ public class TankController : MonoBehaviour
             GetComponent<Renderer>().material.color = Color.red; // 远程玩家标记为红色
         }
         
-        transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z); // 调整高度
     }
     
     void Update()
@@ -47,19 +46,19 @@ public class TankController : MonoBehaviour
         if (Time.time - lastMoveTime < moveInterval) return;
         
         int newX = Mathf.RoundToInt(transform.position.x);
-        int newZ = Mathf.RoundToInt(transform.position.z);
+        int newY = Mathf.RoundToInt(transform.position.y);
         string newDirection = Direction;
         bool moved = false;
         
         if (Input.GetKey(KeyCode.W))
         {
-            newZ += 1;
+            newY += 1;
             newDirection = "up";
             moved = true;
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            newZ -= 1;
+            newY -= 1;
             newDirection = "down";
             moved = true;
         }
@@ -76,60 +75,32 @@ public class TankController : MonoBehaviour
             moved = true;
         }
         
-        if (moved && IsValidMove(newX, newZ))
+        if (moved && MapManager.Instance.IsWalkable(newX, newY))
         {
             // 本地逻辑先执行
-            MoveTo(newX, newZ, newDirection);
+            MoveTo(newX, newY, newDirection);
             
             // 发送移动消息给服务器
-            SendMoveUpdate(newX, newZ, newDirection);
+            SendMoveUpdate(newX, newY, newDirection);
             lastMoveTime = Time.time;
         }
     }
     
-    public void MoveTo(int x, int z, string direction)
+    public void MoveTo(int x, int y, string direction)
     {
-        transform.position = new Vector3(x, 0.5f, z);
+        transform.position = new Vector2(x, y);
         Direction = direction;
         
-        // 更新朝向
-        Quaternion rotation = Quaternion.identity;
-        switch (Direction)
-        {
-            case "up":
-                rotation = Quaternion.Euler(0, 0, 0);
-                break;
-            case "down":
-                rotation = Quaternion.Euler(0, 180, 0);
-                break;
-            case "left":
-                rotation = Quaternion.Euler(0, 270, 0);
-                break;
-            case "right":
-                rotation = Quaternion.Euler(0, 90, 0);
-                break;
-        }
-        transform.rotation = rotation;
+        
     }
     
-    public bool IsValidMove(int x, int z)
-    {
-        // 检查地图边界
-        if (x < 0 || x >= 20 || z < 0 || z >= 20)
-            return false;
-            
-        // 检查是否是空格子（这里需要与GameManager关联以获取地图信息）
-        Collider[] colliders = Physics.OverlapBox(new Vector3(x, 0.5f, z), new Vector3(0.4f, 0.4f, 0.4f));
-        return colliders.Length == 0;
-    }
-    
-    void SendMoveUpdate(int x, int z, string direction)
+    void SendMoveUpdate(int x, int y, string direction)
     {
         var moveData = new PlayerMoveData
         {
             PlayerID = PlayerID,
             X = x,
-            Y = z, // 注意：在网络传输中使用Y而不是Z
+            Y = y, 
             Direction = direction,
             Timestamp = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };
@@ -171,9 +142,7 @@ public class TankController : MonoBehaviour
                 break;
         }
         
-        // 检查子弹起始位置是否合法
-        if (!IsValidMove(startX, startZ))
-            return;
+       
         
         // 创建本地子弹
         string bulletID = System.Guid.NewGuid().ToString();

@@ -62,6 +62,10 @@
                     {
                         map[x, y] = 2; // 可破坏墙
                     }
+                    else if (child.CompareTag("Floor"))
+                    {
+                        map[x, y] = 0;//空地
+                    }
                 }
             }
             
@@ -93,27 +97,7 @@
             return GetWallType(x, y) == 0;
         }
         
-        // 获取地图尺寸
-        public Vector2Int GetMapSize()
-        {
-            return new Vector2Int(mapWidth, mapHeight);
-        }
+       
         
-        // 清除指定位置的墙
-        public void ClearWall(int x, int y)
-        {
-            SetWallType(x, y, 0);
-        }
-        
-        // 添加不可破坏墙
-        public void AddWall(int x, int y)
-        {
-            SetWallType(x, y, 1);
-        }
-        
-        // 添加可破坏墙
-        public void AddBreakableWall(int x, int y)
-        {
-            SetWallType(x, y, 2);
-        }
+       
     }

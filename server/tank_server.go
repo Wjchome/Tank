@@ -133,6 +133,8 @@ func (s *Server) handleClient(conn net.Conn) {
 			continue
 		}
 
+		fmt.Println("Received", line) // 打印收到的原始 JSON
+
 		var msg Message
 		if err := json.Unmarshal([]byte(line), &msg); err != nil {
 			log.Printf("Failed to unmarshal message: %v", err)
@@ -348,11 +350,12 @@ func (s *Server) sendToClient(client *Client, msg Message) {
 	// 添加换行符作为消息分隔符
 	message := string(jsonData) + "\n"
 
+	fmt.Println("Send:", message) // 打印发送的原始 JSON
+
 	_, err = client.Conn.Write([]byte(message))
 	if err != nil {
 		log.Printf("Failed to send message to client %s: %v", client.ID, err)
 	}
-
 }
 
 func (s *Server) broadcastToRoom(roomID string, msg Message) {
@@ -391,6 +394,38 @@ func (s *Server) removeClient(clientID string) {
 			})
 		}
 		delete(s.clients, clientID)
+	}
+}
+
+// 更规范的房间广播公共函数
+func (s *Server) BroadcastToRoom(roomID string, msg Message) {
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+	for _, client := range s.clients {
+		if client.RoomID == roomID {
+			s.sendToClient(client, msg)
+		}
+	}
+}
+
+func (s *Server) BroadcastToRoomExcept(roomID, exceptClientID string, msg Message) {
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+	for clientID, client := range s.clients {
+		if client.RoomID == roomID && clientID != exceptClientID {
+			s.sendToClient(client, msg)
+		}
+	}
+}
+
+func (s *Server) SendToRoomPlayer(roomID, playerID string, msg Message) {
+	s.mutex.RLock()
+	defer s.mutex.RUnlock()
+	for _, client := range s.clients {
+		if client.RoomID == roomID && client.PlayerID == playerID {
+			s.sendToClient(client, msg)
+			break
+		}
 	}
 }
 
