@@ -80,6 +80,11 @@ type GameStateData struct {
 	State   string             `json:"state"`
 }
 
+type WallDestroyData struct {
+	X int `json:"x"`
+	Y int `json:"y"`
+}
+
 var playerNum int = 2
 
 func NewServer() *Server {
@@ -247,6 +252,8 @@ func (s *Server) handleMessage(client *Client, msg Message) {
 		s.handleBulletDestroy(client, msg.Data)
 	case "player_hit":
 		s.handlePlayerHit(client, msg.Data)
+	case "wall_destroy":
+		s.handleWallDestroy(client, msg.Data)
 	}
 }
 
@@ -343,6 +350,17 @@ func (s *Server) handlePlayerHit(client *Client, data interface{}) {
 			Data: map[string]string{"winner": hitData.HitByID},
 		})
 	}
+}
+
+func (s *Server) handleWallDestroy(client *Client, data interface{}) {
+	var wallData WallDestroyData
+	jsonData, _ := json.Marshal(data)
+	json.Unmarshal(jsonData, &wallData)
+
+	s.broadcastToRoom(client.RoomID, Message{
+		Type: "wall_destroy",
+		Data: wallData,
+	})
 }
 
 func (s *Server) sendToClient(client *Client, msg Message) {

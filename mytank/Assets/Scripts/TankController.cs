@@ -5,7 +5,7 @@ using UnityEngine;
 public class TankController : MonoBehaviour
 {
     public string PlayerID { get; private set; }
-    public int HP { get; private set; }
+    public int HP;
     public string Direction { get; private set; }
 
     public Vector2Int Pos =>
@@ -147,33 +147,14 @@ public class TankController : MonoBehaviour
     
     void ShootBullet()
     {
-        int startX = Mathf.RoundToInt(transform.position.x);
-        int startY = Mathf.RoundToInt(transform.position.y);
-        
-        // 根据朝向确定子弹初始位置
-        switch (Direction)
-        {
-            case "up":
-                startY += 1;
-                break;
-            case "down":
-                startY -= 1;
-                break;
-            case "left":
-                startX -= 1;
-                break;
-            case "right":
-                startX += 1;
-                break;
-        }
-        
+       
        
         
         // 创建本地子弹
         string bulletID = System.Guid.NewGuid().ToString();
         GameObject bulletObj = Instantiate(
             GameManager.Instance.bulletPrefab, 
-            new Vector2(startX,  startY), 
+            new Vector2(Pos.x,  Pos.y), 
             Quaternion.identity
         );
         
@@ -185,8 +166,8 @@ public class TankController : MonoBehaviour
         {
             ID = bulletID,
             PlayerID = PlayerID,
-            X = startX,
-            Y = startY, 
+            X = Pos.x,
+            Y = Pos.y,
             Direction = Direction,
             Timestamp = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };

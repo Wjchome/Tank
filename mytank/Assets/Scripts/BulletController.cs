@@ -59,6 +59,7 @@ public class BulletController : MonoBehaviour
             bool shouldDestroy = false;
             int nextWallType = MapManager.Instance.GetWallType(nextX, nextY);
             bool isHit = false;
+            TankController hitTank = null;
             foreach (var kv in GameManager.Instance.tanks)
             {
                 var tank = kv.Value;
@@ -67,6 +68,7 @@ public class BulletController : MonoBehaviour
                     if (tank.Pos.x == nextX && tank.Pos.y == nextY)
                     {
                         isHit = true;
+                        hitTank = tank;
                         break;
                     }
                 }
@@ -74,9 +76,12 @@ public class BulletController : MonoBehaviour
 
             if (isHit)
             {
-                //那个坦克受伤
-                 shouldDestroy = true;
-                
+                // 那个坦克受伤
+                if (hitTank != null && isLocal)
+                {
+                    HandleTankHit(hitTank);
+                }
+                shouldDestroy = true;
             }
             else if (nextWallType == 0)
             {
@@ -90,51 +95,18 @@ public class BulletController : MonoBehaviour
             }
             else if (nextWallType == 2)
             {
-                //销毁自己和那个可破坏墙
+                // 销毁自己和那个可破坏墙
+                if (isLocal)
+                {
+                    var wallData = new WallDestroyData { X = nextX, Y = nextY };
+                    NetworkManager.Instance.SendMessage("wall_destroy", wallData);
+                }
                 MapManager.Instance.SetWallType(nextX, nextY, 0);
                 shouldDestroy = true;
                 
             }
             
-           /* foreach (RaycastHit hit in hits)
-            {
-                if (hit.collider.CompareTag("Wall"))
-                {
-                    // 不可破坏墙
-                    shouldDestroy = true;
-                    hitType = "wall";
-                    break;
-                }
-                else if (hit.collider.CompareTag("BreakableWall"))
-                {
-                    // 可破坏墙
-                    shouldDestroy = true;
-                    hitType = "breakable";
-                    if (isLocal)
-                    {
-                        // 本地逻辑：破坏墙
-                        Destroy(hit.collider.gameObject);
-                    }
-                    break;
-                }
-                else if (hit.collider.CompareTag("Tank"))
-                {
-                    // 坦克
-                    TankController tank = hit.collider.GetComponent<TankController>();
-                    if (tank.PlayerID != OwnerID) // 不会命中自己
-                    {
-                        shouldDestroy = true;
-                        hitType = "tank";
-                        
-                        if (isLocal)
-                        {
-                            // 处理坦克被击中逻辑
-                            HandleTankHit(tank);
-                        }
-                        break;
-                    }
-                }
-            }*/
+       
             
             if (shouldDestroy)
             {

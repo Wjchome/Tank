@@ -17,12 +17,21 @@
         public Transform wallsParent;
         
         
-       
+       public Dictionary<int,GameObject> typeToPrefab;
+        
+        private GameObject[,] gridObjects; // 记录每个格子的实例
         
         private void Awake()
         {
             // 在运行时从wallsParent读取地图数据
             LoadMapFromWallsParent();
+            typeToPrefab = new Dictionary<int, GameObject>()
+            {
+                { 0, floorPrefab },
+                { 1, breakableWallPrefab },
+                { 2, wallPrefab },
+            };
+            gridObjects = new GameObject[mapWidth, mapHeight];
         }
         
         void LoadMapFromWallsParent()
@@ -34,6 +43,20 @@
             }
             
             map = new int[mapWidth, mapHeight];
+            if (gridObjects == null)
+                gridObjects = new GameObject[mapWidth, mapHeight];
+            // 清理原有实例
+            for (int x = 0; x < mapWidth; x++)
+            {
+                for (int y = 0; y < mapHeight; y++)
+                {
+                    if (gridObjects[x, y] != null)
+                    {
+                        Destroy(gridObjects[x, y]);
+                        gridObjects[x, y] = null;
+                    }
+                }
+            }
             
             // 初始化地图为空
             for (int x = 0; x < mapWidth; x++)
@@ -57,14 +80,17 @@
                     if (child.CompareTag("Wall"))
                     {
                         map[x, y] = 1; // 不可破坏墙
+                        gridObjects[x, y] = child.gameObject;
                     }
                     else if (child.CompareTag("BreakableWall"))
                     {
                         map[x, y] = 2; // 可破坏墙
+                        gridObjects[x, y] = child.gameObject;
                     }
                     else if (child.CompareTag("Floor"))
                     {
                         map[x, y] = 0;//空地
+                        gridObjects[x, y] = child.gameObject;
                     }
                 }
             }
@@ -88,6 +114,17 @@
             if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight)
             {
                 map[x, y] = wallType;
+            
+                if (gridObjects[x, y] != null)
+                {
+                    Destroy(gridObjects[x, y]);
+                    gridObjects[x, y] = null;
+                }
+                GameObject prefab = typeToPrefab[wallType];
+                
+                GameObject obj = Instantiate(prefab, new Vector2(x, y), Quaternion.identity, wallsParent);
+                gridObjects[x, y] = obj;
+                    
             }
         }
         

@@ -84,6 +84,11 @@ public class GameManager :SingletonMono<GameManager>
                 string disconnectedID = jObject["playerID"].ToString();
                 HandlePlayerDisconnect(disconnectedID);
                 break;
+
+            case "wall_destroy":
+                var wallData = jObject.ToObject<WallDestroyData>();
+                MapManager.Instance.SetWallType(wallData.X, wallData.Y, 0);
+                break;
         }
     }
 
@@ -147,21 +152,7 @@ public class GameManager :SingletonMono<GameManager>
         
         if (bullets.TryGetValue(destroyData.ID, out BulletController bullet))
         {
-            // 如果子弹击中了可破坏墙，同步销毁墙
-            Collider[] colliders = Physics.OverlapSphere(
-                new Vector3(destroyData.HitX, 0.5f, destroyData.HitY),
-                0.5f
-            );
-        
-            foreach (Collider collider in colliders)
-            {
-                if (collider.CompareTag("BreakableWall"))
-                {
-                    Destroy(collider.gameObject);
-                    break;
-                }
-            }
-        
+            
             Destroy(bullet.gameObject);
             bullets.Remove(destroyData.ID);
         }

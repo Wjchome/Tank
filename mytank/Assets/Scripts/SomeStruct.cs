@@ -54,3 +54,10 @@ public class PlayerMoveData
     public string Direction;
     public long Timestamp;
 }
+
+[System.Serializable]
+public class WallDestroyData
+{
+    public int X;
+    public int Y;
+}
