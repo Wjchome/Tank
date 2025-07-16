@@ -66,6 +66,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
         if (msg != null)
         {
+            MessageManager.Instance.SetReceiveTxt("Receive:\n" + msg.data);
+            
             OnMessageReceived?.Invoke(msg.type, msg.data);
         }
     }

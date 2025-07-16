@@ -33,18 +33,18 @@ public class BulletController : MonoBehaviour
             // 计算移动位置
             Vector3 currentPos = transform.position;
             int currentX = Mathf.RoundToInt(currentPos.x);
-            int currentZ = Mathf.RoundToInt(currentPos.z);
+            int currentY = Mathf.RoundToInt(currentPos.y);
             
             int nextX = currentX;
-            int nextZ = currentZ;
+            int nextY = currentY;
             
             switch (Direction)
             {
                 case "up":
-                    nextZ += 1;
+                    nextY += 1;
                     break;
                 case "down":
-                    nextZ -= 1;
+                    nextY -= 1;
                     break;
                 case "left":
                     nextX -= 1;
@@ -56,8 +56,8 @@ public class BulletController : MonoBehaviour
             
             // 检查碰撞
             RaycastHit[] hits = Physics.RaycastAll(
-                new Vector3(currentX, 0.5f, currentZ),
-                new Vector3(nextX - currentX, 0, nextZ - currentZ).normalized,
+                new Vector3(currentX, 0.5f, currentY),
+                new Vector3(nextX - currentX, 0, nextY - currentY).normalized,
                 1.0f
             );
             
@@ -109,7 +109,7 @@ public class BulletController : MonoBehaviour
                 if (isLocal)
                 {
                     // 发送子弹销毁消息
-                    SendBulletDestroy(nextX, nextZ, hitType);
+                    SendBulletDestroy(nextX, nextY, hitType);
                 }
                 
                 Destroy(gameObject);
@@ -117,7 +117,7 @@ public class BulletController : MonoBehaviour
             }
             
             // 没有碰撞，继续移动
-            transform.position = new Vector3(nextX, 0.5f, nextZ);
+            transform.position = new Vector3(nextX, nextY);
         }
     }
     

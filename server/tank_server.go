@@ -80,7 +80,7 @@ type GameStateData struct {
 	State   string             `json:"state"`
 }
 
-var playerNum int = 1
+var playerNum int = 2
 
 func NewServer() *Server {
 	return &Server{

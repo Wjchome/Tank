@@ -15,7 +15,7 @@ public class TankController : MonoBehaviour
     private float lastMoveTime;
     private float lastShootTime;
     
- public bool isLocalPlayer;
+    public bool isLocalPlayer;
 
     private void OnEnable()
     {
@@ -172,7 +172,7 @@ public class TankController : MonoBehaviour
         string bulletID = System.Guid.NewGuid().ToString();
         GameObject bulletObj = Instantiate(
             GameManager.Instance.bulletPrefab, 
-            new Vector3(startX, 0.5f, startY), 
+            new Vector2(startX,  startY), 
             Quaternion.identity
         );
         
@@ -185,7 +185,7 @@ public class TankController : MonoBehaviour
             ID = bulletID,
             PlayerID = PlayerID,
             X = startX,
-            Y = startY, // 注意：在网络传输中使用Y而不是Z
+            Y = startY, 
             Direction = Direction,
             Timestamp = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
         };

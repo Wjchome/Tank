@@ -131,7 +131,7 @@ public class GameManager :SingletonMono<GameManager>
             
         GameObject bulletObj = Instantiate(
             bulletPrefab, 
-            new Vector3(bulletData.X, 0.5f, bulletData.Y), 
+            new Vector2(bulletData.X,  bulletData.Y), 
             Quaternion.identity
         );
         
