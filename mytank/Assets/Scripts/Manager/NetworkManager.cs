@@ -5,6 +5,8 @@ using System.Text;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using System.Collections.Generic;
+using System.Threading;
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
@@ -19,6 +21,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
     public string playerID;
     public event Action<string, object> OnMessageReceived;
     
+    private Queue<NetworkMessage> messageQueue = new Queue<NetworkMessage>();
+    private object queueLock = new object();
+    private Thread receiveThread;
 
     
     void Start()
@@ -37,7 +42,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
             isConnected = true;
             
             Debug.Log("Connected to server");
-            StartCoroutine(ReceiveMessages());
+            // 启动独立线程读取消息
+            receiveThread = new Thread(ReceiveMessagesThread);
+            receiveThread.IsBackground = true;
+            receiveThread.Start();
         }
         catch (Exception e)
         {
@@ -45,36 +53,62 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
     }
     
-    IEnumerator ReceiveMessages()
+    void Update()
     {
-        byte[] buffer = new byte[4096];
-        
+        // 每帧只处理一条消息（如需每帧处理多条可用 while）
+        NetworkMessage msg = null;
+        lock (queueLock)
+        {
+            if (messageQueue.Count > 0)
+            {
+                msg = messageQueue.Dequeue();
+            }
+        }
+        if (msg != null)
+        {
+            OnMessageReceived?.Invoke(msg.type, msg.data);
+        }
+    }
+
+    // 用线程读取消息
+    void ReceiveMessagesThread()
+    {
         while (isConnected && tcpClient.Connected)
         {
+            string line = null;
             try
             {
-                if (stream.DataAvailable)
-                {
-                    string line = reader.ReadLine();
-                    if (!string.IsNullOrEmpty(line))
-                    {
-                        Debug.Log("Received: " + line);
-                        MessageManager.Instance.SetReceiveTxt("Receive:\n"+ line);
-                        var message = JsonConvert.DeserializeObject<NetworkMessage>(line);
-                        OnMessageReceived?.Invoke(message.type, message.data);
-                    }
-                }
+                line = reader.ReadLine();
             }
             catch (Exception e)
             {
                 Debug.LogError("Receive error: " + e.Message);
                 break;
             }
-            
-            yield return new WaitForSeconds(0.01f);
+
+            if (!string.IsNullOrEmpty(line))
+            {
+                Debug.Log("[Receive] " + line);
+                //MessageManager.Instance.SetReceiveTxt("Receive:\n" + line);
+                NetworkMessage message = null;
+                try
+                {
+                    message = JsonConvert.DeserializeObject<NetworkMessage>(line);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Json parse error: " + e.Message);
+                }
+                if (message != null)
+                {
+                    lock (queueLock)
+                    {
+                        messageQueue.Enqueue(message);
+                    }
+                }
+            }
         }
     }
-    
     public void SendMessage(string type, object data)
     {
         if (!isConnected || writer == null) return;
@@ -99,6 +133,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     void OnDestroy()
     {
         isConnected = false;
+        
         reader?.Close();
         writer?.Close();
         stream?.Close();

@@ -80,6 +80,8 @@ type GameStateData struct {
 	State   string             `json:"state"`
 }
 
+var playerNum int = 2
+
 func NewServer() *Server {
 	return &Server{
 		clients:   make(map[string]*Client),
@@ -217,7 +219,7 @@ func (s *Server) joinRoom(client *Client, roomID string) {
 	})
 
 	// 如果房间满了，开始游戏
-	if len(room.Players) == 1 {
+	if len(room.Players) == playerNum {
 		room.State = "playing"
 		go func() {
 			time.Sleep(100 * time.Millisecond)
