@@ -167,10 +167,7 @@
             foreach (var kv in GameStateManager.Instance.playerTanks)
             {
                 var tank = kv.Value;
-                if (tank.isLocalPlayer)
-                {
-                    continue;
-                }
+                
 
                 if (tank.Pos.x == x && tank.Pos.y == y)
                 {

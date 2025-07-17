@@ -23,13 +23,9 @@ public class GameStateManager : SingletonMono<GameStateManager>
     {
         foreach (var input in frameInputs.Inputs)
         {
-            // 如果没有该玩家的坦克，创建
-            if (!playerTanks.TryGetValue(input.PlayerId, out TankController tank))
-            {
-                tank = CreatePlayerTank(input.PlayerId);
-            }
+           
             // 推进本地状态
-            ApplyInputToTank(tank, input);
+            ApplyInputToTank(playerTanks[input.PlayerId], input);
         }
     }
 

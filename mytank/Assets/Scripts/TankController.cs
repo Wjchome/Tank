@@ -8,6 +8,11 @@ public class TankController : MonoBehaviour
     public int HP;
     public string Direction { get; private set; }
 
+    public float moveInterval = 0.1f;
+    public float lastMoveTime;
+
+    public float shootInterval = 0.2f;
+    public float lastShootTime;
     public Vector2Int Pos =>
         new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
 
@@ -31,36 +36,52 @@ public class TankController : MonoBehaviour
 
     void HandleMovementInput()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Time.time - lastMoveTime > moveInterval)
         {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-        }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-        }
-        else if (Input.GetKeyDown(KeyCode.A))
-        {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
+            lastMoveTime = Time.time;
+        
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
+            }
         }
     }
 
     void HandleShootInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Time.time - lastShootTime > shootInterval)
         {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
+            }
+            lastShootTime=Time.time;
         }
+        
     }
 
     // 帧同步推进调用
     public void MoveBy(int dx, int dy, string direction)
     {
-        transform.position += new Vector3(dx, dy, 0);
+        int newX = Pos.x + dx;
+        int newY = Pos.y + dy;
+        if (MapManager.Instance.IsWalkable(newX, newY))
+        {
+            transform.position =new Vector2(newX, newY);
+        }
         Direction = direction;
         Vector3 rotation = Vector3.zero;
         switch (direction)
@@ -75,6 +96,7 @@ public class TankController : MonoBehaviour
 
     public void Shoot()
     {
+        
         // 可实现本地子弹生成逻辑，或简单Debug
         Debug.Log($"{PlayerID} shoot!");
     }

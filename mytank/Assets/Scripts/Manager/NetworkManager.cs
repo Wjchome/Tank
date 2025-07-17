@@ -27,7 +27,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     void Start()
     {
-        //NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
+        
         NetworkManager.Instance.OnGameStart += OnGameStartFun;
         ConnectToServer();
     }
