@@ -90,11 +90,16 @@ public class TankController : MonoBehaviour
         
         if (moved && MapManager.Instance.IsWalkable(newX, newY))
         {
-            // 本地逻辑先执行
+            // 移动 + 旋转
             MoveTo(newX, newY, newDirection);
-            
-            // 发送移动消息给服务器
             SendMoveUpdate(newX, newY, newDirection);
+            lastMoveTime = Time.time;
+        }
+        else if (moved && newDirection != Direction)
+        {
+            // 只旋转，不移动
+            MoveTo(Pos.x ,Pos.y , newDirection);
+            SendMoveUpdate(Pos.x , Pos.y , newDirection);
             lastMoveTime = Time.time;
         }
     }

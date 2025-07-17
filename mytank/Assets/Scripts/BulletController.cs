@@ -117,6 +117,8 @@ public class BulletController : MonoBehaviour
                 }
                 
                 Destroy(gameObject);
+                GameManager.Instance.bullets.Remove(BulletID);
+                
                 yield break;
             }
             
