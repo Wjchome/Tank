@@ -1,47 +1,47 @@
 using System;
 using System.Collections;
 using System.Net.Sockets;
-using System.Text;
 using UnityEngine;
-using Newtonsoft.Json;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading;
+using Tankgame;
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
-
-    
     private TcpClient tcpClient;
     private NetworkStream stream;
-    private StreamReader reader;
-    private StreamWriter writer;
     private bool isConnected = false;
-    
+
     public string playerID;
-    public event Action<string, object> OnMessageReceived;
+    public long currentFrame = 0;
+
+    // 事件定义
+    public event Action<FrameInputs> OnFrameInputs;
+    public event Action<GameStart> OnGameStart;
     
-    private Queue<NetworkMessage> messageQueue = new Queue<NetworkMessage>();
+    private Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
     private object queueLock = new object();
     private Thread receiveThread;
+    private bool shouldStopThread = false;
 
-    
     void Start()
     {
+        //NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
+        NetworkManager.Instance.OnGameStart += OnGameStartFun;
         ConnectToServer();
     }
-    
+
     void ConnectToServer()
     {
         try
         {
             tcpClient = new TcpClient("localhost", 8080);
             stream = tcpClient.GetStream();
-            reader = new StreamReader(stream, Encoding.UTF8);
-            writer = new StreamWriter(stream, new UTF8Encoding(false)) { AutoFlush = true };
             isConnected = true;
-            
-            Debug.Log("Connected to server");
+
+            Debug.Log("Connected to frame sync server");
+
             // 启动独立线程读取消息
             receiveThread = new Thread(ReceiveMessagesThread);
             receiveThread.IsBackground = true;
@@ -52,11 +52,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
             Debug.LogError("Failed to connect: " + e.Message);
         }
     }
-    
+
     void Update()
     {
-        // 每帧只处理一条消息（如需每帧处理多条可用 while）
-        NetworkMessage msg = null;
+        // 在主线程处理消息队列
+        ServerMessage msg = null;
         lock (queueLock)
         {
             if (messageQueue.Count > 0)
@@ -64,88 +64,161 @@ public class NetworkManager : SingletonMono<NetworkManager>
                 msg = messageQueue.Dequeue();
             }
         }
+
         if (msg != null)
         {
-            MessageManager.Instance.SetReceiveTxt("Receive:\n" + msg.data);
-            
-            OnMessageReceived?.Invoke(msg.type, msg.data);
+            ProcessServerMessage(msg);
+        }
+    }
+
+    // 处理服务器消息
+    void ProcessServerMessage(ServerMessage message)
+    {
+        MessageSerializer.LogMessage("[Server]", message);
+
+        if (message.FrameInputs != null)
+        {
+            currentFrame = message.FrameInputs.FrameNumber;
+            OnFrameInputs?.Invoke(message.FrameInputs);
+        }
+        else if (message.GameStart != null)
+        {
+            OnGameStart?.Invoke(message.GameStart);
+        }
+        else if (message.ConnectSuccess!= null) {
+            playerID= message.ConnectSuccess.YourPlayerId;
         }
     }
 
     // 用线程读取消息
     void ReceiveMessagesThread()
     {
-        while (isConnected && tcpClient.Connected)
+        while (isConnected && tcpClient.Connected && !shouldStopThread)
         {
-            string line = null;
             try
             {
-                line = reader.ReadLine();
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Receive error: " + e.Message);
-                break;
-            }
+                // 读取消息长度前缀（4字节）
+                byte[] lengthBytes = new byte[4];
+                int bytesRead = stream.Read(lengthBytes, 0, 4);
+                if (bytesRead != 4)
+                {
+                    Debug.LogError("Failed to read message length");
+                    break;
+                }
 
-            if (!string.IsNullOrEmpty(line))
-            {
-                Debug.Log("[Receive] " + line);
-                //MessageManager.Instance.SetReceiveTxt("Receive:\n" + line);
-                NetworkMessage message = null;
-                try
+                // 解析消息长度（大端序）
+                int messageLength = (lengthBytes[0] << 24) | (lengthBytes[1] << 16) |
+                                   (lengthBytes[2] << 8) | lengthBytes[3];
+
+                // 读取消息内容
+                byte[] messageBytes = new byte[messageLength];
+                bytesRead = 0;
+                while (bytesRead < messageLength)
                 {
-                    message = JsonConvert.DeserializeObject<NetworkMessage>(line);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError("Json parse error: " + e.Message);
-                }
-                if (message != null)
-                {
-                    lock (queueLock)
+                    int read = stream.Read(messageBytes, bytesRead, messageLength - bytesRead);
+                    if (read == 0)
                     {
-                        messageQueue.Enqueue(message);
+                        Debug.LogError("Connection closed by server");
+                        break;
+                    }
+                    bytesRead += read;
+                }
+
+                if (bytesRead == messageLength)
+                {
+                    // 反序列化消息
+                    ServerMessage message = MessageSerializer.DeserializeServerMessage(messageBytes);
+                    if (message != null)
+                    {
+                        lock (queueLock)
+                        {
+                            messageQueue.Enqueue(message);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Debug.LogError($"Receive error: {e.Message}");
+                break;
+            }
         }
+
+        Debug.Log("Receive thread ended");
     }
-    public void SendMessage(string type, object data)
+
+    // 发送玩家输入
+    public void SendPlayerInput(InputType inputType)
     {
-        if (!isConnected || writer == null) return;
-        
+       
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot send input: not connected");
+            return;
+        }
+
+        var message = MessageSerializer.CreatePlayerInputMessage(playerID, inputType, currentFrame);
+        SendMessage(message);
+    }
+
+    // 发送消息到服务器
+    public void SendMessage(ClientMessage message)
+    {
+        if (!isConnected || stream == null)
+        {
+            Debug.LogWarning("Cannot send message: not connected");
+            return;
+        }
+
         try
         {
-            var message = new NetworkMessage { type = type, data = data };
-            string json = JsonConvert.SerializeObject(message);
-            
-            writer.WriteLine(json); // 使用WriteLine自动添加换行符
-            Debug.Log("Sending: " + json);
-            
-            MessageManager.Instance.SetSendTxt("Sending: \n"+json);
-            
+            byte[] data = MessageSerializer.SerializeClientMessage(message);
+            if (data != null)
+            {
+                stream.Write(data, 0, data.Length);
+                stream.Flush();
+                MessageSerializer.LogMessage("[Client]", message);
+            }
         }
         catch (Exception e)
         {
-            Debug.LogError("Send error: " + e.Message);
+            Debug.LogError($"Send error: {e.Message}");
         }
     }
-    
+
     void OnDestroy()
     {
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnGameStart -= OnGameStart;
+        }
+        shouldStopThread = true;
         isConnected = false;
-        
-        reader?.Close();
-        writer?.Close();
+
         stream?.Close();
         tcpClient?.Close();
-    }
-}
 
-[System.Serializable]
-public class NetworkMessage
-{
-    public string type;
-    public object data;
+        if (receiveThread != null && receiveThread.IsAlive)
+        {
+            receiveThread.Join(1000); // 等待线程结束，最多1秒
+        }
+    }
+
+    void OnApplicationQuit()
+    {
+        OnDestroy();
+    }
+
+    void OnGameStartFun(GameStart gameStart)
+    {
+        Debug.Log($"Game started! Room: {gameStart.RoomId}, Players: {string.Join(",", gameStart.PlayerIds)}");
+        foreach (var playerId in gameStart.PlayerIds)
+        {
+            if (!GameStateManager.Instance. playerTanks.ContainsKey(playerId))
+            {
+                GameStateManager.Instance.CreatePlayerTank(playerId);
+                
+            }
+        }
+    }
 }

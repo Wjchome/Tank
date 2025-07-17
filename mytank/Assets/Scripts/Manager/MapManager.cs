@@ -164,7 +164,7 @@
         // 检查位置是否可通行（保持原有方法兼容性）
         public bool IsWalkable(int x, int y)
         {
-            foreach (var kv in GameManager.Instance.tanks)
+            foreach (var kv in GameStateManager.Instance.playerTanks)
             {
                 var tank = kv.Value;
                 if (tank.isLocalPlayer)

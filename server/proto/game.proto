@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package tankgame;
+
+option go_package = "server/proto";
+
+
+// 连接成功，分配给客户端的 player_id
+message ConnectSuccess {
+  string your_player_id = 1;
+}
+
+
+// 玩家输入类型
+enum InputType {
+  INPUT_NONE = 0;
+  INPUT_MOVE_UP = 1;
+  INPUT_MOVE_DOWN = 2;
+  INPUT_MOVE_LEFT = 3;
+  INPUT_MOVE_RIGHT = 4;
+  INPUT_SHOOT = 5;
+}
+
+// 玩家输入
+message PlayerInput {
+  string player_id = 1;
+  InputType input_type = 2;
+  int64 frame_number = 3;
+  int64 timestamp = 4;
+}
+
+// 帧输入转发
+message FrameInputs {
+  int64 frame_number = 1;
+  repeated PlayerInput inputs = 2;
+}
+
+// 房间信息
+message RoomInfo {
+  string room_id = 1;
+  repeated string player_ids = 2;
+  string status = 3; // "waiting", "playing", "ended"
+}
+
+// 游戏开始
+message GameStart {
+  string room_id = 1;
+  repeated string player_ids = 2;
+}
+
+// 服务器消息
+message ServerMessage {
+  oneof data {
+    FrameInputs frame_inputs = 1;
+    RoomInfo room_info = 2;
+    GameStart game_start = 3;
+    ConnectSuccess connect_success = 4;
+  }
+}
+
+// 客户端消息
+message ClientMessage {
+  oneof data {
+    PlayerInput player_input = 1;
+  }
+}

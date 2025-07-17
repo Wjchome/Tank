@@ -1,19 +1,18 @@
+using TMPro;
 
-    using TMPro;
+public class MessageManager:SingletonMono<MessageManager>
+{
+    public TextMeshProUGUI sendTxt;
+    public TextMeshProUGUI receiveTxt;
 
-    public class MessageManager:SingletonMono<MessageManager>
+
+    public void SetSendTxt(string send)
     {
-        public TextMeshProUGUI sendTxt;
-        public TextMeshProUGUI receiveTxt;
-
-
-        public void SetSendTxt(string send)
-        {
-            sendTxt.text = send;
-        }
-
-        public void SetReceiveTxt(string receive)
-        {
-            receiveTxt.text = receive;
-        }
+        sendTxt.text = send;
     }
+
+    public void SetReceiveTxt(string receive)
+    {
+        receiveTxt.text = receive;
+    }
+}

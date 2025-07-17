@@ -9,11 +9,9 @@ public class BulletController : MonoBehaviour
     public string OwnerID { get; private set; }
     
     private bool isLocal; // 是否由本地客户端创建
-    private float moveSpeed = 5f; // 子弹移动速度
-    private float moveInterval = 0.2f; // 子弹移动间隔
-    private float lastMoveTime;
     
-    public Vector2Int Pos=>new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+    public Vector2Int Pos => new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+    
     public void Initialize(string id, string direction, string ownerID, bool local = false)
     {
         BulletID = id;
@@ -21,144 +19,27 @@ public class BulletController : MonoBehaviour
         OwnerID = ownerID;
         isLocal = local;
         
-        lastMoveTime = Time.time;
-        StartCoroutine(MoveRoutine());
+        // 设置子弹朝向
+        SetBulletRotation();
     }
     
-    IEnumerator MoveRoutine()
+    void SetBulletRotation()
     {
-        while (true)
+        Vector3 rotation = Vector3.zero;
+        switch (Direction)
         {
-            yield return new WaitForSeconds(moveInterval);
-            
-            
-            int currentX = Pos.x;
-            int currentY = Pos.y;
-            
-            int nextX = currentX;
-            int nextY = currentY;
-            
-            switch (Direction)
-            {
-                case "up":
-                    nextY += 1;
-                    break;
-                case "down":
-                    nextY -= 1;
-                    break;
-                case "left":
-                    nextX -= 1;
-                    break;
-                case "right":
-                    nextX += 1;
-                    break;
-            }
-            
-           
-            
-            bool shouldDestroy = false;
-            MapType nextWallType = MapManager.Instance.GetWallType(nextX, nextY);
-            bool isHit = false;
-            TankController hitTank = null;
-            foreach (var kv in GameManager.Instance.tanks)
-            {
-                var tank = kv.Value;
-                if (tank.PlayerID != OwnerID)
-                {
-                    if (tank.Pos.x == nextX && tank.Pos.y == nextY)
-                    {
-                        isHit = true;
-                        hitTank = tank;
-                        break;
-                    }
-                }
-            }
-
-            if (isHit)
-            {
-                // 那个坦克受伤
-                if (hitTank != null && isLocal)
-                {
-                    HandleTankHit(hitTank);
-                }
-                shouldDestroy = true;
-            }
-            else if (MapManager.Instance.IsBulletPassable(nextX, nextY))
-            {
-                //移动
-                transform.position = new Vector2(nextX, nextY);
-            }
-            else if (nextWallType == MapType.wall)
-            {
-                //销毁自己
-                shouldDestroy = true;
-            }
-            else if (nextWallType == MapType.breakableWall)
-            {
-                // 销毁自己和那个可破坏墙
-                if (isLocal)
-                {
-                    var wallData = new WallDestroyData { X = nextX, Y = nextY };
-                    NetworkManager.Instance.SendMessage("wall_destroy", wallData);
-                }
-                MapManager.Instance.SetWallType(nextX, nextY, 0);
-                shouldDestroy = true;
-                
-            }
-            
-       
-            
-            if (shouldDestroy)
-            {
-                if (isLocal)
-                {
-                    // 发送子弹销毁消息
-                    SendBulletDestroy(nextX, nextY);
-                }
-                
-                Destroy(gameObject);
-                GameManager.Instance.bullets.Remove(BulletID);
-                
-                yield break;
-            }
-            
-            // 没有碰撞，继续移动
-            transform.position = new Vector3(nextX, nextY);
+            case "up": rotation = new Vector3(0, 0, 0); break;
+            case "down": rotation = new Vector3(0, 0, 180); break;
+            case "left": rotation = new Vector3(0, 0, 90); break;
+            case "right": rotation = new Vector3(0, 0, -90); break;
         }
+        transform.rotation = Quaternion.Euler(rotation);
     }
     
-    void HandleTankHit(TankController tank)
+    // 在帧同步系统中，子弹位置由服务器控制，客户端只负责显示
+    // 这个方法会被GameStateManager调用来更新子弹位置
+    public void UpdatePosition(int x, int y)
     {
-        // 计算新的HP
-        int newHP = tank.HP - 1;
-        
-        // 发送玩家受击消息
-        var hitData = new PlayerHitData
-        {
-            PlayerID = tank.PlayerID,
-            HP = newHP,
-            HitByID = OwnerID
-        };
-        
-        NetworkManager.Instance.SendMessage("player_hit", hitData);
-        
-        // 本地更新坦克HP
-        tank.TakeDamage(newHP);
-    }
-    
-    void SendBulletDestroy(int hitX, int hitY)
-    {
-        var destroyData = new BulletDestroyData
-        {
-            ID = BulletID,
-            PlayerID = OwnerID,
-            HitX = hitX,
-            HitY = hitY // 注意：在网络传输中使用Y
-        };
-        
-        NetworkManager.Instance.SendMessage("bullet_destroy", destroyData);
-        
-        // 从GameManager中移除子弹记录
-        GameManager.Instance.bullets.Remove(BulletID);
+        transform.position = new Vector2(x, y);
     }
 }

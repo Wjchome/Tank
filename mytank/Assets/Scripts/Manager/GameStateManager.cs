@@ -1,0 +1,67 @@
+using System.Collections.Generic;
+using UnityEngine;
+using Tankgame;
+
+public class GameStateManager : SingletonMono<GameStateManager>
+{
+    public Dictionary<string, TankController> playerTanks = new Dictionary<string, TankController>();
+
+    void Start()
+    {
+        NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
+    }
+
+    void OnDestroy()
+    {
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnFrameInputs -= OnFrameInputs;
+        }
+    }
+
+    void OnFrameInputs(FrameInputs frameInputs)
+    {
+        foreach (var input in frameInputs.Inputs)
+        {
+            // 如果没有该玩家的坦克，创建
+            if (!playerTanks.TryGetValue(input.PlayerId, out TankController tank))
+            {
+                tank = CreatePlayerTank(input.PlayerId);
+            }
+            // 推进本地状态
+            ApplyInputToTank(tank, input);
+        }
+    }
+
+     public TankController CreatePlayerTank(string playerId)
+    {
+        GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, new Vector2(1, 1), Quaternion.identity);
+        TankController tank = tankObj.GetComponent<TankController>();
+        tank.Initialize(playerId, 3);
+        playerTanks[playerId] = tank;
+        return tank;
+    }
+
+    void ApplyInputToTank(TankController tank, PlayerInput input)
+    {
+        if (tank == null) return;
+        switch (input.InputType)
+        {
+            case InputType.InputMoveUp:
+                tank.MoveBy(0, 1, "up");
+                break;
+            case InputType.InputMoveDown:
+                tank.MoveBy(0, -1, "down");
+                break;
+            case InputType.InputMoveLeft:
+                tank.MoveBy(-1, 0, "left");
+                break;
+            case InputType.InputMoveRight:
+                tank.MoveBy(1, 0, "right");
+                break;
+            case InputType.InputShoot:
+                tank.Shoot();
+                break;
+        }
+    }
+} 
