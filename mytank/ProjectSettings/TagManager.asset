@@ -8,6 +8,8 @@ TagManager:
   - Wall
   - BreakableWall
   - Floor
+  - Tree
+  - River
   layers:
   - Default
   - TransparentFX

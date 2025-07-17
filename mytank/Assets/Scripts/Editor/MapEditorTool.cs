@@ -4,8 +4,8 @@ using UnityEditor;
 public class MapEditorTool : EditorWindow
 {
     private MapManager mapManager;
-    private int selectedTool = 0; // 0=清除, 1=不可破坏墙, 2=可破坏墙
-    private string[] toolNames = { "清除", "不可破坏墙", "可破坏墙" };
+    private int selectedTool = 0; // 0清除, 1=不可破坏墙, 2=可破坏墙, 3=河流, 4=树荫
+    private string[] toolNames = { "清除", "不可破坏墙", "可破坏墙", "河流", "树荫" };
     private bool isEditing = false;
     
     [MenuItem("Tools/Map Editor")]
@@ -76,6 +76,8 @@ public class MapEditorTool : EditorWindow
         mapManager.wallPrefab = (GameObject)EditorGUILayout.ObjectField("墙预制体", mapManager.wallPrefab, typeof(GameObject), false);
         mapManager.breakableWallPrefab = (GameObject)EditorGUILayout.ObjectField("可破坏墙预制体", mapManager.breakableWallPrefab, typeof(GameObject), false);
         mapManager.floorPrefab = (GameObject)EditorGUILayout.ObjectField("地面", mapManager.floorPrefab, typeof(GameObject), false);
+        mapManager.riverPrefab = (GameObject)EditorGUILayout.ObjectField("河流", mapManager.riverPrefab, typeof(GameObject), false);
+        mapManager.treePrefab = (GameObject)EditorGUILayout.ObjectField("树荫", mapManager.treePrefab, typeof(GameObject), false);
         mapManager.wallsParent = (Transform)EditorGUILayout.ObjectField("墙父对象", mapManager.wallsParent, typeof(Transform), true);
         
         EditorGUILayout.Space();
@@ -105,8 +107,7 @@ public class MapEditorTool : EditorWindow
         EditorGUILayout.HelpBox(
             "1. 启用编辑模式\n" +
             "2. 选择编辑工具\n" +
-            "3. 在Scene视图中点击网格进行编辑\n" +
-            "4. 白色格子=空格，灰色=不可破坏墙，黄色=可破坏墙", 
+            "3. 在Scene视图中点击网格进行编辑\n" ,
             MessageType.Info);
         
         EditorGUILayout.EndVertical();
@@ -253,6 +254,14 @@ public class MapEditorTool : EditorWindow
             case 2: // 可破坏墙
                 prefab = mapManager.breakableWallPrefab;
                 tag = "BreakableWall";
+                break;
+            case 3: // 河流
+                prefab = mapManager.riverPrefab;
+                tag = "River";
+                break;
+            case 4: // 树荫
+                prefab = mapManager.treePrefab;
+                tag = "Tree";
                 break;
             case 0: // 清除
                 prefab = mapManager.floorPrefab;

@@ -85,7 +85,7 @@ type WallDestroyData struct {
 	Y int `json:"y"`
 }
 
-var playerNum int = 2
+var playerNum int = 1
 
 func NewServer() *Server {
 	return &Server{

@@ -57,7 +57,7 @@ public class BulletController : MonoBehaviour
            
             
             bool shouldDestroy = false;
-            int nextWallType = MapManager.Instance.GetWallType(nextX, nextY);
+            MapType nextWallType = MapManager.Instance.GetWallType(nextX, nextY);
             bool isHit = false;
             TankController hitTank = null;
             foreach (var kv in GameManager.Instance.tanks)
@@ -83,17 +83,17 @@ public class BulletController : MonoBehaviour
                 }
                 shouldDestroy = true;
             }
-            else if (nextWallType == 0)
+            else if (MapManager.Instance.IsBulletPassable(nextX, nextY))
             {
                 //移动
                 transform.position = new Vector2(nextX, nextY);
             }
-            else if (nextWallType == 1)
+            else if (nextWallType == MapType.wall)
             {
                 //销毁自己
                 shouldDestroy = true;
             }
-            else if (nextWallType == 2)
+            else if (nextWallType == MapType.breakableWall)
             {
                 // 销毁自己和那个可破坏墙
                 if (isLocal)
