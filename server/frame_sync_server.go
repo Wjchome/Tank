@@ -112,9 +112,11 @@ func (s *Server) handleClient(conn net.Conn) {
 
 	// 房间满员时广播 GameStart
 	if roomFull {
+		randomSeed := time.Now().UnixNano() // 新增：生成随机种子
 		gameStart := &myproto.GameStart{
-			RoomId:    room.ID,
-			PlayerIds: playerIDs,
+			RoomId:     room.ID,
+			PlayerIds:  playerIDs,
+			RandomSeed: randomSeed, // 新增
 		}
 		serverMsg := &myproto.ServerMessage{
 			Data: &myproto.ServerMessage_GameStart{

@@ -313,6 +313,7 @@ type GameStart struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomId        string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
 	PlayerIds     []string               `protobuf:"bytes,2,rep,name=player_ids,json=playerIds,proto3" json:"player_ids,omitempty"`
+	RandomSeed    int64                  `protobuf:"varint,3,opt,name=random_seed,json=randomSeed,proto3" json:"random_seed,omitempty"` // 新增
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -359,6 +360,13 @@ func (x *GameStart) GetPlayerIds() []string {
 		return x.PlayerIds
 	}
 	return nil
+}
+
+func (x *GameStart) GetRandomSeed() int64 {
+	if x != nil {
+		return x.RandomSeed
+	}
+	return 0
 }
 
 // 服务器消息
@@ -563,11 +571,13 @@ const file_proto_game_proto_rawDesc = "" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1d\n" +
 	"\n" +
 	"player_ids\x18\x02 \x03(\tR\tplayerIds\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\tR\x06status\"C\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\"d\n" +
 	"\tGameStart\x12\x17\n" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1d\n" +
 	"\n" +
-	"player_ids\x18\x02 \x03(\tR\tplayerIds\"\x81\x02\n" +
+	"player_ids\x18\x02 \x03(\tR\tplayerIds\x12\x1f\n" +
+	"\vrandom_seed\x18\x03 \x01(\x03R\n" +
+	"randomSeed\"\x81\x02\n" +
 	"\rServerMessage\x12:\n" +
 	"\fframe_inputs\x18\x01 \x01(\v2\x15.tankgame.FrameInputsH\x00R\vframeInputs\x121\n" +
 	"\troom_info\x18\x02 \x01(\v2\x12.tankgame.RoomInfoH\x00R\broomInfo\x124\n" +

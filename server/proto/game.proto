@@ -46,6 +46,7 @@ message RoomInfo {
 message GameStart {
   string room_id = 1;
   repeated string player_ids = 2;
+  int64 random_seed = 3; // 新增
 }
 
 // 服务器消息

@@ -102,6 +102,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 0
+  moveInterval: 0.1
+  lastMoveTime: 0
+  shootInterval: 0.2
+  lastShootTime: 0
+  moveDuration: 0.1
   isLocalPlayer: 0
 --- !u!1 &6892167971784402337
 GameObject:

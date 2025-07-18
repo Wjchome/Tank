@@ -2,6 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+public enum GameMode
+{
+    opponent,
+    friend
+}
+
 public class GameManager : SingletonMono<GameManager>
 {
     [Header("Prefabs")]
@@ -11,6 +17,7 @@ public class GameManager : SingletonMono<GameManager>
     public bool gameStarted = false;
     public GameObject gameOverPanel;
     public TextMeshProUGUI winnerText;
+    public GameMode gameMode=GameMode.opponent;
 
     void Start()
     {

@@ -220,5 +220,12 @@ public class NetworkManager : SingletonMono<NetworkManager>
                 
             }
         }
+        // 用服务器下发的随机种子初始化Unity随机数
+        UnityEngine.Random.InitState((int)gameStart.RandomSeed);
+        // 随机生成一个敌人坦克
+        Vector2 enemyPos = new Vector2(UnityEngine.Random.Range(3, 8), UnityEngine.Random.Range(3, 8));
+        GameObject enemyTank = GameObject.Instantiate(GameManager.Instance.tankPrefab, enemyPos, Quaternion.identity);
+        enemyTank.GetComponent<Renderer>().material.color = Color.red; // 敌人坦克用红色区分
+        enemyTank.name = "EnemyTank";
     }
 }

@@ -151,8 +151,21 @@
                     
             }
         }
-        
-        
+
+        public TankController GetTankController(int x, int y)
+        {
+            foreach (var kv in GameStateManager.Instance.playerTanks)
+            {
+                var tank = kv.Value;
+                
+
+                if (tank.Pos.x == x && tank.Pos.y == y)
+                {
+                    return kv.Value;
+                }
+            }
+            return null;
+        }
 
         // 检查子弹是否可以通过（子弹不能过墙，但可以过河流和树荫）
         public bool IsBulletPassable(int x, int y)
