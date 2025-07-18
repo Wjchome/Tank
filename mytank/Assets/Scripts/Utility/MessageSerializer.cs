@@ -64,6 +64,30 @@ public static class MessageSerializer
         };
     }
 
+    // 创建房间请求消息
+    public static ClientMessage CreateRoomRequestMessage(string roomName, int maxPlayers)
+    {
+        return new ClientMessage
+        {
+            CreateRoomRequest = new CreateRoomRequest
+            {
+                RoomName = roomName,
+                MaxPlayers = maxPlayers
+            }
+        };
+    }
+
+    // 创建加入房间请求消息
+    public static ClientMessage CreateJoinRoomRequestMessage(string roomId)
+    {
+        return new ClientMessage
+        {
+            JoinRoomRequest = new JoinRoomRequest
+            {
+                RoomId = roomId
+            }
+        };
+    }
   
     // 打印消息内容（调试用）
     public static void LogMessage(string prefix, object message)

@@ -12,12 +12,28 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private TcpClient tcpClient;
     private NetworkStream stream;
     private bool isConnected = false;
-
+    
     public string playerID;
     public long currentFrame = 0;
 
+    void SetPlayerID(ConnectSuccess connectSuccess)
+    {
+        playerID = connectSuccess.YourPlayerId;
+    }
+    
+    // 房间管理相关
+    public List<RoomInfo> availableRooms = new List<RoomInfo>();
+    public RoomInfo currentRoom;
+    public bool isHost = false;
+
     // 事件定义
     public event Action<FrameInputs> OnFrameInputs;
+    public event Action<ConnectSuccess> OnConnectSuccess;
+    
+    public event Action<List<RoomInfo>> OnRoomListReceived;
+    public event Action<CreateRoomResponse> OnCreateRoomResponse;
+    public event Action<JoinRoomResponse> OnJoinRoomResponse;
+    public event Action<RoomInfo> OnRoomInfoUpdate;
     public event Action<GameStart> OnGameStart;
     
     private Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
@@ -25,12 +41,12 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private Thread receiveThread;
     private bool shouldStopThread = false;
 
-    void Start()
+    private void Start()
     {
-        
-        NetworkManager.Instance.OnGameStart += OnGameStartFun;
+        OnConnectSuccess += SetPlayerID;
         ConnectToServer();
     }
+    
 
     void ConnectToServer()
     {
@@ -39,7 +55,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             tcpClient = new TcpClient("localhost", 8080);
             stream = tcpClient.GetStream();
             isConnected = true;
-
+            
             Debug.Log("Connected to frame sync server");
 
             // 启动独立线程读取消息
@@ -52,7 +68,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
             Debug.LogError("Failed to connect: " + e.Message);
         }
     }
-
+    
+    //每帧处理一个服务端传输来的消息
     void Update()
     {
         // 在主线程处理消息队列
@@ -85,8 +102,47 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             OnGameStart?.Invoke(message.GameStart);
         }
-        else if (message.ConnectSuccess!= null) {
-            playerID= message.ConnectSuccess.YourPlayerId;
+        else if (message.ConnectSuccess != null)
+        {
+           OnConnectSuccess?.Invoke(message.ConnectSuccess);
+          
+        }
+        else if (message.RoomList != null)
+        {
+            availableRooms = new List<RoomInfo>(message.RoomList.Rooms);
+            OnRoomListReceived?.Invoke(availableRooms);
+            Debug.Log($"Received {availableRooms.Count} available rooms");
+        }
+        else if (message.CreateRoomResponse != null)
+        {
+            OnCreateRoomResponse?.Invoke(message.CreateRoomResponse);
+            if (message.CreateRoomResponse.Success)
+            {
+                Debug.Log($"Room created successfully: {message.CreateRoomResponse.RoomId}");
+            }
+            else
+            {
+                Debug.LogError($"Failed to create room: {message.CreateRoomResponse.ErrorMessage}");
+            }
+        }
+        else if (message.JoinRoomResponse != null)
+        {
+            OnJoinRoomResponse?.Invoke(message.JoinRoomResponse);
+            if (message.JoinRoomResponse.Success)
+            {
+                Debug.Log("Joined room successfully");
+            }
+            else
+            {
+                Debug.LogError($"Failed to join room: {message.JoinRoomResponse.ErrorMessage}");
+            }
+        }
+        else if (message.RoomInfo != null)
+        {
+            currentRoom = message.RoomInfo;
+            isHost = currentRoom.HostId == playerID;
+            OnRoomInfoUpdate?.Invoke(currentRoom);
+            Debug.Log($"Room info updated: {currentRoom.RoomName} ({currentRoom.PlayerIds.Count}/{currentRoom.MaxPlayers})");
         }
     }
 
@@ -147,10 +203,35 @@ public class NetworkManager : SingletonMono<NetworkManager>
         Debug.Log("Receive thread ended");
     }
 
+    // 创建房间
+    public void CreateRoom(string roomName , int maxPlayers)
+    {
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot create room: not connected");
+            return;
+        }
+
+        var message = MessageSerializer.CreateRoomRequestMessage(roomName, maxPlayers);
+        SendMessage(message);
+    }
+
+    // 加入房间
+    public void JoinRoom(string roomId)
+    {
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot join room: not connected");
+            return;
+        }
+
+        var message = MessageSerializer.CreateJoinRoomRequestMessage(roomId);
+        SendMessage(message);
+    }
+
     // 发送玩家输入
     public void SendPlayerInput(InputType inputType)
     {
-       
         if (!isConnected)
         {
             Debug.LogWarning("Cannot send input: not connected");
@@ -185,13 +266,24 @@ public class NetworkManager : SingletonMono<NetworkManager>
             Debug.LogError($"Send error: {e.Message}");
         }
     }
+    
+    public void Disconnect()
+    {
+        shouldStopThread = true;
+        isConnected = false;
+        stream?.Close();
+        tcpClient?.Close();
+        if (receiveThread != null && receiveThread.IsAlive)
+        {
+            receiveThread.Join(1000); // 等待线程结束，最多1秒
+        }
+    }
 
     void OnDestroy()
     {
-        if (NetworkManager.Instance != null)
-        {
-            NetworkManager.Instance.OnGameStart -= OnGameStart;
-        }
+        OnConnectSuccess -= SetPlayerID;
+        
+       
         shouldStopThread = true;
         isConnected = false;
 
@@ -209,23 +301,5 @@ public class NetworkManager : SingletonMono<NetworkManager>
         OnDestroy();
     }
 
-    void OnGameStartFun(GameStart gameStart)
-    {
-        Debug.Log($"Game started! Room: {gameStart.RoomId}, Players: {string.Join(",", gameStart.PlayerIds)}");
-        foreach (var playerId in gameStart.PlayerIds)
-        {
-            if (!GameStateManager.Instance. playerTanks.ContainsKey(playerId))
-            {
-                GameStateManager.Instance.CreatePlayerTank(playerId);
-                
-            }
-        }
-        // 用服务器下发的随机种子初始化Unity随机数
-        UnityEngine.Random.InitState((int)gameStart.RandomSeed);
-        // 随机生成一个敌人坦克
-        Vector2 enemyPos = new Vector2(UnityEngine.Random.Range(3, 8), UnityEngine.Random.Range(3, 8));
-        GameObject enemyTank = GameObject.Instantiate(GameManager.Instance.tankPrefab, enemyPos, Quaternion.identity);
-        enemyTank.GetComponent<Renderer>().material.color = Color.red; // 敌人坦克用红色区分
-        enemyTank.name = "EnemyTank";
-    }
+
 }

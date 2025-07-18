@@ -10,6 +10,44 @@ message ConnectSuccess {
   string your_player_id = 1;
 }
 
+// 房间信息
+message RoomInfo {
+  string room_id = 1;
+  repeated string player_ids = 2;
+  string status = 3; // "waiting", "playing", "ended"
+  string host_id = 4; // 房主ID
+  int32 max_players = 5; // 最大玩家数
+  string room_name = 6; // 房间名称
+}
+
+// 房间列表
+message RoomList {
+  repeated RoomInfo rooms = 1;
+}
+
+// 创建房间请求
+message CreateRoomRequest {
+  string room_name = 1;
+  int32 max_players = 2;
+}
+
+// 创建房间响应
+message CreateRoomResponse {
+  bool success = 1;
+  string room_id = 2;
+  string error_message = 3;
+}
+
+// 加入房间请求
+message JoinRoomRequest {
+  string room_id = 1;
+}
+
+// 加入房间响应
+message JoinRoomResponse {
+  bool success = 1;
+  string error_message = 2;
+}
 
 // 玩家输入类型
 enum InputType {
@@ -35,13 +73,6 @@ message FrameInputs {
   repeated PlayerInput inputs = 2;
 }
 
-// 房间信息
-message RoomInfo {
-  string room_id = 1;
-  repeated string player_ids = 2;
-  string status = 3; // "waiting", "playing", "ended"
-}
-
 // 游戏开始
 message GameStart {
   string room_id = 1;
@@ -56,6 +87,9 @@ message ServerMessage {
     RoomInfo room_info = 2;
     GameStart game_start = 3;
     ConnectSuccess connect_success = 4;
+    RoomList room_list = 5;
+    CreateRoomResponse create_room_response = 6;
+    JoinRoomResponse join_room_response = 7;
   }
 }
 
@@ -63,5 +97,7 @@ message ServerMessage {
 message ClientMessage {
   oneof data {
     PlayerInput player_input = 1;
+    CreateRoomRequest create_room_request = 2;
+    JoinRoomRequest join_room_request = 3;
   }
 }
