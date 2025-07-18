@@ -17,10 +17,17 @@ public class TankController : MonoBehaviour
     public int HP;
     public string Direction;
     public Vector2Int Pos; // 权威格子坐标
-   
+    public Animator animator;
 
     public bool isLocalPlayer;
+    public float animStartTime;
+    
+    // 动画控制相关
+    public bool isMoving = false;
 
+    public float animSpeed = 0.8f;
+
+    public float animTime = 0.5f;
     public void Initialize(string playerID, int initialHP = 3)
     {
         PlayerID = playerID;
@@ -28,13 +35,24 @@ public class TankController : MonoBehaviour
         Direction ="up";
         isLocalPlayer = playerID == NetworkManager.Instance.playerID;
         Pos = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+     
+        
+        // 确保animator已赋值
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
     }
 
     void Update()
     {
+        // 检查移动状态
+        CheckMovementState();
         if (!isLocalPlayer || HP <= 0) return;
         HandleMovementInput();
         HandleShootInput();
+        
+        
     }
 
     void HandleMovementInput()
@@ -79,12 +97,15 @@ public class TankController : MonoBehaviour
     // 帧同步推进调用
     public void MoveBy(int dx, int dy, string direction)
     {
+        
         // 停止当前动画，防止插值冲突
         transform.DOKill();
         Vector2Int  targetPos=Pos + new Vector2Int(dx, dy);
         if (MapManager.Instance.IsWalkable( targetPos.x,  targetPos.y))
         {
             Pos=targetPos;
+            isMoving = true;
+            animStartTime=Time.time;
             transform.DOMove((Vector2)targetPos, moveDuration).SetEase(Ease.Linear);
         }
         Direction = direction;
@@ -108,13 +129,33 @@ public class TankController : MonoBehaviour
         
     }
 
-    public void TakeDamage(int newHP)
+    void CheckMovementState()
+    {
+        if (isMoving)
+        {
+                animator.speed = animSpeed;
+            
+            if (Time.time - animStartTime > moveDuration)
+            {
+                isMoving = false;
+                animator.speed = 0;
+            }
+        }
+        else
+        {
+            animator.speed = 0;
+        }
+    }
+
+    public void SetHP(int newHP)
     {
         HP = newHP;
         if (HP <= 0)
         {
-            GetComponent<Renderer>().material.color = Color.black;
-            gameObject.SetActive(false);
+            Pos=Vector2Int.zero;
+            animator.speed = 1;
+            animator.Play("BigBoom");
+            Destroy(gameObject, animTime);
         }
     }
 }

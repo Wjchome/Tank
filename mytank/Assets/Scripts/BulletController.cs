@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening; // 新增
+using DG.Tweening;
+using Random =UnityEngine.Random;
 
 public class BulletController : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class BulletController : MonoBehaviour
     
     private bool isLocal; // 是否由本地客户端创建
 
-    private float moveInterval = 0.3f;
+    public float moveInterval = 0.3f;
     
     private float lastMoveTime;
 
@@ -20,7 +21,10 @@ public class BulletController : MonoBehaviour
     public Vector2Int Pos; // 权威格子坐标
    
     public float moveDuration = 0.3f; // DOTween动画时长
+    public Animator animator;
     
+    public bool isShouldDestroy = false;
+    public float animTime = 0.3f;
     public void Initialize(string id, string direction, string ownerID, bool local = false)
     {
         BulletID = id;
@@ -57,6 +61,7 @@ public class BulletController : MonoBehaviour
 
     private void Update()
     {
+        if (isShouldDestroy) return;
         if (Time.time - lastMoveTime > moveInterval)
         {
             lastMoveTime = Time.time;
@@ -70,7 +75,9 @@ public class BulletController : MonoBehaviour
             }
             else if (tank != null && tank.PlayerID != OwnerID)
             {
-                Destroy(gameObject);
+                tank.SetHP(tank.HP-1);
+                isShouldDestroy = true;
+      
             }
             else if (MapManager.Instance.IsBulletPassable(newX, newY))
             {
@@ -79,13 +86,31 @@ public class BulletController : MonoBehaviour
             }
             else if (mapType == MapType.breakableWall)
             {
-                Destroy(gameObject);
+                isShouldDestroy = true;
+                
+                
                 MapManager.Instance.SetWallType(newX, newY, MapType.floor);
             }
             else
             {
-                Destroy(gameObject);
+                isShouldDestroy = true;
+                
+             
             }
         }
+
+        if (isShouldDestroy)
+        {
+            DestroyBullet();
+        }
+        
+    }
+
+    public void DestroyBullet()
+    {
+        Vector2 randomPos=new Vector2(Random.Range(0f,dir.x), Random.Range(0f,dir.y ));
+        transform.position += (Vector3)randomPos;
+        animator.Play("SmallBoom");
+        Destroy(gameObject,animTime);
     }
 }
