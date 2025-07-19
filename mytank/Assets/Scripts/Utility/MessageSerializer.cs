@@ -4,7 +4,6 @@ using UnityEngine;
 using Tankgame;
 using Google.Protobuf;
 
-
 public static class MessageSerializer
 {
     // 序列化客户端消息为protobuf
@@ -46,56 +45,6 @@ public static class MessageSerializer
         {
             Debug.LogError($"Failed to deserialize server message: {e.Message}");
             return null;
-        }
-    }
-
-    // 创建玩家输入消息
-    public static ClientMessage CreatePlayerInputMessage(string playerId, InputType inputType, long frameNumber)
-    {
-        return new ClientMessage
-        {
-            PlayerInput = new PlayerInput
-            {
-                PlayerId = playerId,
-                InputType = inputType,
-                FrameNumber = frameNumber,
-                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
-            }
-        };
-    }
-
-   
-
-    // 创建加入房间请求消息
-    public static ClientMessage CreateJoinRoomRequestMessage(string roomId)
-    {
-        return new ClientMessage
-        {
-            JoinRoomRequest = new JoinRoomRequest
-            {
-                RoomId = roomId
-            }
-        };
-    }
-
-    // 创建离开房间请求消息
-    public static ClientMessage CreateLeaveRoomRequestMessage(string roomId)
-    {
-        return new ClientMessage
-        {
-            LeaveRoomRequest = new LeaveRoomRequest
-            {
-                RoomId = roomId
-            }
-        };
-    }
-  
-    // 打印消息内容（调试用）
-    public static void LogMessage(string prefix, object message)
-    {
-        if (message != null)
-        {
-            Debug.Log($"{prefix}: {message}");
         }
     }
 }

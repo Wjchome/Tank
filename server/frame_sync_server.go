@@ -87,9 +87,6 @@ func (s *Server) handleClient(conn net.Conn) {
 	}
 	s.sendMessage(conn, connectMsg)
 
-	// 发送房间列表
-	s.sendRoomList(conn)
-
 	reader := bufio.NewReader(conn)
 	for {
 		lengthBytes := make([]byte, 4)
@@ -412,6 +409,7 @@ func (s *Server) sendRoomList(conn net.Conn) {
 		room.Mutex.Lock()
 		playerIDs := make([]string, 0, len(room.Clients))
 		playerInfos := make([]*myproto.PlayerInfo, 0, len(room.Clients))
+		var hostName string
 		for _, c := range room.Clients {
 			playerIDs = append(playerIDs, c.ID)
 			playerInfos = append(playerInfos, &myproto.PlayerInfo{
@@ -421,6 +419,10 @@ func (s *Server) sendRoomList(conn net.Conn) {
 				ColorG:     c.ColorG,
 				ColorB:     c.ColorB,
 			})
+			// 获取房主名字
+			if c.ID == room.HostID {
+				hostName = c.Name
+			}
 		}
 		roomInfo := &myproto.RoomInfo{
 			RoomId:      room.ID,
@@ -430,6 +432,7 @@ func (s *Server) sendRoomList(conn net.Conn) {
 			MaxPlayers:  room.MaxPlayers,
 			RoomName:    room.Name,
 			PlayerInfos: playerInfos, // 添加玩家详细信息
+			HostName:    hostName,    // 添加房主名字
 		}
 		rooms = append(rooms, roomInfo)
 		room.Mutex.Unlock()
@@ -450,6 +453,7 @@ func (s *Server) broadcastRoomInfo(room *Room) {
 	room.Mutex.Lock()
 	playerIDs := make([]string, 0, len(room.Clients))
 	playerInfos := make([]*myproto.PlayerInfo, 0, len(room.Clients))
+	var hostName string
 	for _, c := range room.Clients {
 		playerIDs = append(playerIDs, c.ID)
 		playerInfos = append(playerInfos, &myproto.PlayerInfo{
@@ -459,6 +463,10 @@ func (s *Server) broadcastRoomInfo(room *Room) {
 			ColorG:     c.ColorG,
 			ColorB:     c.ColorB,
 		})
+		// 获取房主名字
+		if c.ID == room.HostID {
+			hostName = c.Name
+		}
 	}
 	roomInfo := &myproto.RoomInfo{
 		RoomId:      room.ID,
@@ -468,6 +476,7 @@ func (s *Server) broadcastRoomInfo(room *Room) {
 		MaxPlayers:  room.MaxPlayers,
 		RoomName:    room.Name,
 		PlayerInfos: playerInfos, // 添加玩家详细信息
+		HostName:    hostName,    // 添加房主名字
 	}
 	room.Mutex.Unlock()
 
@@ -503,6 +512,7 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 		room.Mutex.Lock()
 		playerIDs := make([]string, 0, len(room.Clients))
 		playerInfos := make([]*myproto.PlayerInfo, 0, len(room.Clients))
+		var hostName string
 		for _, c := range room.Clients {
 			playerIDs = append(playerIDs, c.ID)
 			playerInfos = append(playerInfos, &myproto.PlayerInfo{
@@ -512,6 +522,10 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 				ColorG:     c.ColorG,
 				ColorB:     c.ColorB,
 			})
+			// 获取房主名字
+			if c.ID == room.HostID {
+				hostName = c.Name
+			}
 		}
 		roomInfo = &myproto.RoomInfo{
 			RoomId:      room.ID,
@@ -521,6 +535,7 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 			MaxPlayers:  room.MaxPlayers,
 			RoomName:    room.Name,
 			PlayerInfos: playerInfos, // 添加玩家详细信息
+			HostName:    hostName,    // 添加房主名字
 		}
 		room.Mutex.Unlock()
 		if errMsg != "" {

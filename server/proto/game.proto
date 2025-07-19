@@ -28,6 +28,7 @@ message RoomInfo {
   int32 max_players = 5; // 最大玩家数
   string room_name = 6; // 房间名称
   repeated PlayerInfo player_infos = 7; // 玩家详细信息
+  string host_name = 8; // 房主名字
 }
 
 // 房间列表

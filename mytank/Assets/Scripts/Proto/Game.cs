@@ -27,51 +27,52 @@ namespace Tankgame {
             "ChBwcm90by9nYW1lLnByb3RvEgh0YW5rZ2FtZSIoCg5Db25uZWN0U3VjY2Vz",
             "cxIWCg55b3VyX3BsYXllcl9pZBgBIAEoCSJnCgpQbGF5ZXJJbmZvEhEKCXBs",
             "YXllcl9pZBgBIAEoCRITCgtwbGF5ZXJfbmFtZRgCIAEoCRIPCgdjb2xvcl9y",
-            "GAMgASgFEg8KB2NvbG9yX2cYBCABKAUSDwoHY29sb3JfYhgFIAEoBSKkAQoI",
+            "GAMgASgFEg8KB2NvbG9yX2cYBCABKAUSDwoHY29sb3JfYhgFIAEoBSK3AQoI",
             "Um9vbUluZm8SDwoHcm9vbV9pZBgBIAEoCRISCgpwbGF5ZXJfaWRzGAIgAygJ",
             "Eg4KBnN0YXR1cxgDIAEoCRIPCgdob3N0X2lkGAQgASgJEhMKC21heF9wbGF5",
             "ZXJzGAUgASgFEhEKCXJvb21fbmFtZRgGIAEoCRIqCgxwbGF5ZXJfaW5mb3MY",
-            "ByADKAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvIi0KCFJvb21MaXN0EiEKBXJv",
-            "b21zGAEgAygLMhIudGFua2dhbWUuUm9vbUluZm8igwEKEUNyZWF0ZVJvb21S",
-            "ZXF1ZXN0EhEKCXJvb21fbmFtZRgBIAEoCRITCgttYXhfcGxheWVycxgCIAEo",
-            "BRITCgtwbGF5ZXJfbmFtZRgDIAEoCRIPCgdjb2xvcl9yGAQgASgFEg8KB2Nv",
-            "bG9yX2cYBSABKAUSDwoHY29sb3JfYhgGIAEoBSJqCg9Kb2luUm9vbVJlcXVl",
-            "c3QSDwoHcm9vbV9pZBgBIAEoCRITCgtwbGF5ZXJfbmFtZRgCIAEoCRIPCgdj",
-            "b2xvcl9yGAMgASgFEg8KB2NvbG9yX2cYBCABKAUSDwoHY29sb3JfYhgFIAEo",
-            "BSIjChBMZWF2ZVJvb21SZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkiPgoRS2lj",
-            "a1BsYXllclJlcXVlc3QSDwoHcm9vbV9pZBgBIAEoCRIYChB0YXJnZXRfcGxh",
-            "eWVyX2lkGAIgASgJInIKC1BsYXllcklucHV0EhEKCXBsYXllcl9pZBgBIAEo",
-            "CRInCgppbnB1dF90eXBlGAIgASgOMhMudGFua2dhbWUuSW5wdXRUeXBlEhQK",
-            "DGZyYW1lX251bWJlchgDIAEoAxIRCgl0aW1lc3RhbXAYBCABKAMiSgoLRnJh",
-            "bWVJbnB1dHMSFAoMZnJhbWVfbnVtYmVyGAEgASgDEiUKBmlucHV0cxgCIAMo",
-            "CzIVLnRhbmtnYW1lLlBsYXllcklucHV0IkUKCUdhbWVTdGFydBIPCgdyb29t",
-            "X2lkGAEgASgJEhIKCnBsYXllcl9pZHMYAiADKAkSEwoLcmFuZG9tX3NlZWQY",
-            "AyABKAMiEQoPUm9vbUxpc3RSZXF1ZXN0IiMKEEdhbWVTdGFydFJlcXVlc3QS",
-            "DwoHcm9vbV9pZBgBIAEoCSL4AQoNU2VydmVyTWVzc2FnZRItCgxmcmFtZV9p",
-            "bnB1dHMYASABKAsyFS50YW5rZ2FtZS5GcmFtZUlucHV0c0gAEicKCXJvb21f",
-            "aW5mbxgCIAEoCzISLnRhbmtnYW1lLlJvb21JbmZvSAASKQoKZ2FtZV9zdGFy",
-            "dBgDIAEoCzITLnRhbmtnYW1lLkdhbWVTdGFydEgAEjMKD2Nvbm5lY3Rfc3Vj",
-            "Y2VzcxgEIAEoCzIYLnRhbmtnYW1lLkNvbm5lY3RTdWNjZXNzSAASJwoJcm9v",
-            "bV9saXN0GAUgASgLMhIudGFua2dhbWUuUm9vbUxpc3RIAEIGCgRkYXRhIqID",
-            "Cg1DbGllbnRNZXNzYWdlEi0KDHBsYXllcl9pbnB1dBgBIAEoCzIVLnRhbmtn",
-            "YW1lLlBsYXllcklucHV0SAASOgoTY3JlYXRlX3Jvb21fcmVxdWVzdBgCIAEo",
-            "CzIbLnRhbmtnYW1lLkNyZWF0ZVJvb21SZXF1ZXN0SAASNgoRam9pbl9yb29t",
-            "X3JlcXVlc3QYAyABKAsyGS50YW5rZ2FtZS5Kb2luUm9vbVJlcXVlc3RIABI4",
-            "ChJsZWF2ZV9yb29tX3JlcXVlc3QYBCABKAsyGi50YW5rZ2FtZS5MZWF2ZVJv",
-            "b21SZXF1ZXN0SAASNgoRcm9vbV9saXN0X3JlcXVlc3QYBSABKAsyGS50YW5r",
-            "Z2FtZS5Sb29tTGlzdFJlcXVlc3RIABI4ChJnYW1lX3N0YXJ0X3JlcXVlc3QY",
-            "BiABKAsyGi50YW5rZ2FtZS5HYW1lU3RhcnRSZXF1ZXN0SAASOgoTa2lja19w",
-            "bGF5ZXJfcmVxdWVzdBgHIAEoCzIbLnRhbmtnYW1lLktpY2tQbGF5ZXJSZXF1",
-            "ZXN0SABCBgoEZGF0YSp/CglJbnB1dFR5cGUSDgoKSU5QVVRfTk9ORRAAEhEK",
-            "DUlOUFVUX01PVkVfVVAQARITCg9JTlBVVF9NT1ZFX0RPV04QAhITCg9JTlBV",
-            "VF9NT1ZFX0xFRlQQAxIUChBJTlBVVF9NT1ZFX1JJR0hUEAQSDwoLSU5QVVRf",
-            "U0hPT1QQBUIOWgxzZXJ2ZXIvcHJvdG9iBnByb3RvMw=="));
+            "ByADKAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvEhEKCWhvc3RfbmFtZRgIIAEo",
+            "CSItCghSb29tTGlzdBIhCgVyb29tcxgBIAMoCzISLnRhbmtnYW1lLlJvb21J",
+            "bmZvIoMBChFDcmVhdGVSb29tUmVxdWVzdBIRCglyb29tX25hbWUYASABKAkS",
+            "EwoLbWF4X3BsYXllcnMYAiABKAUSEwoLcGxheWVyX25hbWUYAyABKAkSDwoH",
+            "Y29sb3JfchgEIAEoBRIPCgdjb2xvcl9nGAUgASgFEg8KB2NvbG9yX2IYBiAB",
+            "KAUiagoPSm9pblJvb21SZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSEwoLcGxh",
+            "eWVyX25hbWUYAiABKAkSDwoHY29sb3JfchgDIAEoBRIPCgdjb2xvcl9nGAQg",
+            "ASgFEg8KB2NvbG9yX2IYBSABKAUiIwoQTGVhdmVSb29tUmVxdWVzdBIPCgdy",
+            "b29tX2lkGAEgASgJIj4KEUtpY2tQbGF5ZXJSZXF1ZXN0Eg8KB3Jvb21faWQY",
+            "ASABKAkSGAoQdGFyZ2V0X3BsYXllcl9pZBgCIAEoCSJyCgtQbGF5ZXJJbnB1",
+            "dBIRCglwbGF5ZXJfaWQYASABKAkSJwoKaW5wdXRfdHlwZRgCIAEoDjITLnRh",
+            "bmtnYW1lLklucHV0VHlwZRIUCgxmcmFtZV9udW1iZXIYAyABKAMSEQoJdGlt",
+            "ZXN0YW1wGAQgASgDIkoKC0ZyYW1lSW5wdXRzEhQKDGZyYW1lX251bWJlchgB",
+            "IAEoAxIlCgZpbnB1dHMYAiADKAsyFS50YW5rZ2FtZS5QbGF5ZXJJbnB1dCJF",
+            "CglHYW1lU3RhcnQSDwoHcm9vbV9pZBgBIAEoCRISCgpwbGF5ZXJfaWRzGAIg",
+            "AygJEhMKC3JhbmRvbV9zZWVkGAMgASgDIhEKD1Jvb21MaXN0UmVxdWVzdCIj",
+            "ChBHYW1lU3RhcnRSZXF1ZXN0Eg8KB3Jvb21faWQYASABKAki+AEKDVNlcnZl",
+            "ck1lc3NhZ2USLQoMZnJhbWVfaW5wdXRzGAEgASgLMhUudGFua2dhbWUuRnJh",
+            "bWVJbnB1dHNIABInCglyb29tX2luZm8YAiABKAsyEi50YW5rZ2FtZS5Sb29t",
+            "SW5mb0gAEikKCmdhbWVfc3RhcnQYAyABKAsyEy50YW5rZ2FtZS5HYW1lU3Rh",
+            "cnRIABIzCg9jb25uZWN0X3N1Y2Nlc3MYBCABKAsyGC50YW5rZ2FtZS5Db25u",
+            "ZWN0U3VjY2Vzc0gAEicKCXJvb21fbGlzdBgFIAEoCzISLnRhbmtnYW1lLlJv",
+            "b21MaXN0SABCBgoEZGF0YSKiAwoNQ2xpZW50TWVzc2FnZRItCgxwbGF5ZXJf",
+            "aW5wdXQYASABKAsyFS50YW5rZ2FtZS5QbGF5ZXJJbnB1dEgAEjoKE2NyZWF0",
+            "ZV9yb29tX3JlcXVlc3QYAiABKAsyGy50YW5rZ2FtZS5DcmVhdGVSb29tUmVx",
+            "dWVzdEgAEjYKEWpvaW5fcm9vbV9yZXF1ZXN0GAMgASgLMhkudGFua2dhbWUu",
+            "Sm9pblJvb21SZXF1ZXN0SAASOAoSbGVhdmVfcm9vbV9yZXF1ZXN0GAQgASgL",
+            "MhoudGFua2dhbWUuTGVhdmVSb29tUmVxdWVzdEgAEjYKEXJvb21fbGlzdF9y",
+            "ZXF1ZXN0GAUgASgLMhkudGFua2dhbWUuUm9vbUxpc3RSZXF1ZXN0SAASOAoS",
+            "Z2FtZV9zdGFydF9yZXF1ZXN0GAYgASgLMhoudGFua2dhbWUuR2FtZVN0YXJ0",
+            "UmVxdWVzdEgAEjoKE2tpY2tfcGxheWVyX3JlcXVlc3QYByABKAsyGy50YW5r",
+            "Z2FtZS5LaWNrUGxheWVyUmVxdWVzdEgAQgYKBGRhdGEqfwoJSW5wdXRUeXBl",
+            "Eg4KCklOUFVUX05PTkUQABIRCg1JTlBVVF9NT1ZFX1VQEAESEwoPSU5QVVRf",
+            "TU9WRV9ET1dOEAISEwoPSU5QVVRfTU9WRV9MRUZUEAMSFAoQSU5QVVRfTU9W",
+            "RV9SSUdIVBAEEg8KC0lOUFVUX1NIT09UEAVCDloMc2VydmVyL3Byb3RvYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tankgame.InputType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ConnectSuccess), global::Tankgame.ConnectSuccess.Parser, new[]{ "YourPlayerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.PlayerInfo), global::Tankgame.PlayerInfo.Parser, new[]{ "PlayerId", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomInfo), global::Tankgame.RoomInfo.Parser, new[]{ "RoomId", "PlayerIds", "Status", "HostId", "MaxPlayers", "RoomName", "PlayerInfos" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomInfo), global::Tankgame.RoomInfo.Parser, new[]{ "RoomId", "PlayerIds", "Status", "HostId", "MaxPlayers", "RoomName", "PlayerInfos", "HostName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomList), global::Tankgame.RoomList.Parser, new[]{ "Rooms" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.CreateRoomRequest), global::Tankgame.CreateRoomRequest.Parser, new[]{ "RoomName", "MaxPlayers", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.JoinRoomRequest), global::Tankgame.JoinRoomRequest.Parser, new[]{ "RoomId", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
@@ -700,6 +701,7 @@ namespace Tankgame {
       maxPlayers_ = other.maxPlayers_;
       roomName_ = other.roomName_;
       playerInfos_ = other.playerInfos_.Clone();
+      hostName_ = other.hostName_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -806,6 +808,21 @@ namespace Tankgame {
       get { return playerInfos_; }
     }
 
+    /// <summary>Field number for the "host_name" field.</summary>
+    public const int HostNameFieldNumber = 8;
+    private string hostName_ = "";
+    /// <summary>
+    /// 房主名字
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string HostName {
+      get { return hostName_; }
+      set {
+        hostName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -828,6 +845,7 @@ namespace Tankgame {
       if (MaxPlayers != other.MaxPlayers) return false;
       if (RoomName != other.RoomName) return false;
       if(!playerInfos_.Equals(other.playerInfos_)) return false;
+      if (HostName != other.HostName) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -842,6 +860,7 @@ namespace Tankgame {
       if (MaxPlayers != 0) hash ^= MaxPlayers.GetHashCode();
       if (RoomName.Length != 0) hash ^= RoomName.GetHashCode();
       hash ^= playerInfos_.GetHashCode();
+      if (HostName.Length != 0) hash ^= HostName.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -882,6 +901,10 @@ namespace Tankgame {
         output.WriteString(RoomName);
       }
       playerInfos_.WriteTo(output, _repeated_playerInfos_codec);
+      if (HostName.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(HostName);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -914,6 +937,10 @@ namespace Tankgame {
         output.WriteString(RoomName);
       }
       playerInfos_.WriteTo(ref output, _repeated_playerInfos_codec);
+      if (HostName.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(HostName);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -941,6 +968,9 @@ namespace Tankgame {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomName);
       }
       size += playerInfos_.CalculateSize(_repeated_playerInfos_codec);
+      if (HostName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(HostName);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -970,6 +1000,9 @@ namespace Tankgame {
         RoomName = other.RoomName;
       }
       playerInfos_.Add(other.playerInfos_);
+      if (other.HostName.Length != 0) {
+        HostName = other.HostName;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1017,6 +1050,10 @@ namespace Tankgame {
             playerInfos_.AddEntriesFrom(input, _repeated_playerInfos_codec);
             break;
           }
+          case 66: {
+            HostName = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -1062,6 +1099,10 @@ namespace Tankgame {
           }
           case 58: {
             playerInfos_.AddEntriesFrom(ref input, _repeated_playerInfos_codec);
+            break;
+          }
+          case 66: {
+            HostName = input.ReadString();
             break;
           }
         }

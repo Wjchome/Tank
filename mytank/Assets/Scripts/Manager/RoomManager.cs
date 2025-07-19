@@ -76,26 +76,27 @@ public class RoomManager : SingletonMono<RoomManager>
     void SubscribeToEvents()
     {
         // 主菜单按钮 - 只负责UI切换
-        createRoomButton.onClick.AddListener(ShowCreateRoom);
-        joinRoomButton.onClick.AddListener(ShowRoomList);
-        quitButton.onClick.AddListener(QuitGame);
-        myColorR.onValueChanged.AddListener(ColorShow);
+        createRoomButton.onClick.AddListener(ShowCreateRoom);    //本地切换创建页面
+        joinRoomButton.onClick.AddListener(SendRoomListRequest); //仅发送房间列表请求
+        quitButton.onClick.AddListener(QuitGame);                //本地退出
+        myColorR.onValueChanged.AddListener(ColorShow);          
         myColorG.onValueChanged.AddListener(ColorShow);
         myColorB.onValueChanged.AddListener(ColorShow);
         
         // 创建房间按钮 - 只发送请求
-        createButton.onClick.AddListener(SendCreateRoomRequest);
-        cancelCreateButton.onClick.AddListener(ShowMainMenu);
+        createButton.onClick.AddListener(SendCreateRoomRequest); //发出创建列表请求
+        cancelCreateButton.onClick.AddListener(ShowMainMenu);    //本地切回主菜单
         
         // 房间列表按钮 - 只发送请求
-        refreshRoomListButton.onClick.AddListener(SendRoomListRequest);
-        backToMainButton.onClick.AddListener(ShowMainMenu);
+        refreshRoomListButton.onClick.AddListener(SendRoomListRequest);//发出房间列表请求
+        backToMainButton.onClick.AddListener(ShowMainMenu); //本地切回主页面
         
         // 房间内按钮 - 只发送请求
-        leaveRoomButton.onClick.AddListener(SendLeaveRoomRequest);
-        startGameButton.onClick.AddListener(SendStartGameRequest);
+        leaveRoomButton.onClick.AddListener(SendLeaveRoomRequest); //发送离开请求
+        startGameButton.onClick.AddListener(SendStartGameRequest); //发送游戏开始
         
         // 网络事件 - 处理UI更新
+        
         NetworkManager.Instance.OnRoomListReceived += OnRoomListReceived;
         NetworkManager.Instance.OnRoomInfoUpdate += OnRoomInfoUpdate;
         NetworkManager.Instance.OnGameStart += OnGameStartRoom;
@@ -104,21 +105,23 @@ public class RoomManager : SingletonMono<RoomManager>
     
     void OnDestroy()
     {
-        if (NetworkManager.Instance != null)
-        {
-            NetworkManager.Instance.OnRoomListReceived -= OnRoomListReceived;
+        
+            NetworkManager.Instance.OnRoomListReceived -=  OnRoomListReceived;
           NetworkManager.Instance.OnRoomInfoUpdate -= OnRoomInfoUpdate;
             NetworkManager.Instance.OnGameStart -= OnGameStartRoom;
             NetworkManager.Instance.OnGameStart -= OnGameStartFun;
-        }
+        
     }
 
     void ColorShow(float colorValue)
     {
         colorShow.color=new Color(myColorR.value,myColorG.value,myColorB.value);
     }
+
+    #region UI显示控制
+
     
-    // UI显示控制
+
     void ShowMainMenu()
     {
         mainMenuPanel.SetActive(true);
@@ -127,15 +130,7 @@ public class RoomManager : SingletonMono<RoomManager>
         roomPanel.SetActive(false);
       
     }
-    
-  
-    
-   
 
-    void QuitGame()
-    {
-        Application.Quit();
-    }
     void ShowCreateRoom()
     {
         mainMenuPanel.SetActive(false);
@@ -150,33 +145,35 @@ public class RoomManager : SingletonMono<RoomManager>
         roomListPanel.SetActive(true);
         createRoomPanel.SetActive(false);
         roomPanel.SetActive(false);
-        ClearRoomList(); // 清空UI
-        SendRoomListRequest(); // 自动请求房间列表
+        
+        
     }
     
     void ShowRoom()
     {
         
         mainMenuPanel.SetActive(false);
-        
         roomListPanel.SetActive(false);
         createRoomPanel.SetActive(false);
         roomPanel.SetActive(true);
         
-        if (NetworkManager.Instance.currentRoom.HostId != NetworkManager.Instance.playerID)
+        if (NetworkManager.Instance.isHost)
         {
-            Debug.Log("I'm not the host, disabling start button");
-            startGameButton.interactable = false;
+            startGameButton.interactable = true;
         }
         else
         {
-            Debug.Log("I'm the host, enabling start button");
-            startGameButton.interactable = true;
+            startGameButton.interactable = false;
         }
-        Debug.Log("=== ShowRoom completed ===");
     }
     
-    // 房间操作 - 纯发送请求，不包含UI逻辑
+    #endregion
+
+    #region 发送消息
+
+    
+
+    // 发送创建房间请求
     void SendCreateRoomRequest()
     {
         string roomName = roomNameInput.text;
@@ -186,22 +183,24 @@ public class RoomManager : SingletonMono<RoomManager>
         }
         
         int maxPlayers = maxPlayersDropdown.value + 1;
-        NetworkManager.Instance.CreateRoom(roomName, maxPlayers);
+        var (playerName, colorR, colorG, colorB) = GetPlayerInfo();
+        
+        NetworkManager.Instance.CreateRoom(roomName, maxPlayers, playerName, colorR, colorG, colorB);
     }
     
+    // 发送房间列表请求
     void SendRoomListRequest()
     {
         NetworkManager.Instance.RequestRoomList();
     }
-    
+    //发送离开房间请求
     void SendLeaveRoomRequest()
     {
-        if (NetworkManager.Instance.currentRoom != null)
-        {
-            NetworkManager.Instance.LeaveRoom(NetworkManager.Instance.currentRoom.RoomId);
-        }
+        
+        NetworkManager.Instance.LeaveRoom(NetworkManager.Instance.currentRoom.RoomId);
+        
     }
-    
+    //发送开始游戏请求
     void SendStartGameRequest()
     {
         if (NetworkManager.Instance.currentRoom != null)
@@ -209,21 +208,31 @@ public class RoomManager : SingletonMono<RoomManager>
             NetworkManager.Instance.GameStartRequest(NetworkManager.Instance.currentRoom.RoomId);
         }
     }
-    
-    void JoinRoom(string roomId)
+    //发送加入房间请求
+    void SendJoinRoom(string roomId)
     {
-        NetworkManager.Instance.JoinRoom(roomId);
+        var (playerName, colorR, colorG, colorB) = GetPlayerInfo();
+        NetworkManager.Instance.JoinRoom(roomId, playerName, colorR, colorG, colorB);
     }
+    #endregion
     
-    void ClearRoomList()
+    // 获取玩家信息的辅助方法
+    (string playerName, int colorR, int colorG, int colorB) GetPlayerInfo()
     {
-        // 清空UI，等待OnRoomListReceived刷新
-        foreach (var item in roomItems)
+        string playerName = myNameInput.text;
+        if (string.IsNullOrEmpty(playerName))
         {
-            Destroy(item.gameObject);
+            playerName = "Player";
         }
-        roomItems.Clear();
+        
+        int colorR = (int)(myColorR.value * 255);
+        int colorG = (int)(myColorG.value * 255);
+        int colorB = (int)(myColorB.value * 255);
+        
+        return (playerName, colorR, colorG, colorB);
     }
+    
+
     
     void CreateRoomUIItem(RoomInfo room,int index)
     {
@@ -235,7 +244,9 @@ public class RoomManager : SingletonMono<RoomManager>
     
         roomUIItem.roomNameText.text = room.RoomName;
         roomUIItem.playerCountText.text = $"{room.PlayerIds.Count}/{room.MaxPlayers}";
-        roomUIItem.hostText.text = $"Host: {room.HostId.Substring(0, 8)}...";
+        
+        // 使用HostName，如果没有则使用截断的HostId
+        roomUIItem.hostText.text = $"Host: {room.HostName}";
         
         // 如果房间满了，禁用加入按钮
         if (room.PlayerIds.Count >= room.MaxPlayers)
@@ -245,7 +256,7 @@ public class RoomManager : SingletonMono<RoomManager>
         }
         else
         {
-            roomUIItem.joinButton.onClick.AddListener(() => JoinRoom(room.RoomId));
+            roomUIItem.joinButton.onClick.AddListener(() => SendJoinRoom(room.RoomId));
         }
         //设置房间位置
         RectTransform rectTransform = roomUIItem.transform.GetComponent<RectTransform>();
@@ -263,69 +274,96 @@ public class RoomManager : SingletonMono<RoomManager>
         }
         playerUIItems.Clear();
         
-        if (NetworkManager.Instance.currentRoom == null) return;
+     
+        //
         int index = 0;
+        foreach (var playerInfo in NetworkManager.Instance.currentRoom.PlayerInfos)
+        {
+            PlayerUIItem playerUIItem =  Instantiate(playerUIItemPrefab, playerListContent).GetComponent<PlayerUIItem>();
+            playerUIItems.Add(playerUIItem);
+        
+            // 设置基本信息
+            playerUIItem.playerNameText.text = playerInfo.PlayerName;
+            SetPlayerStatus(playerUIItem);
+            SetupKickButton(playerUIItem, playerInfo.PlayerId);
+        
+            // 设置位置
+            RectTransform rectTransform = playerUIItem.transform.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(0, -100 * index++);
+            // 设置玩家颜色
+            Color playerColor = new Color(
+                playerInfo.ColorR / 255f,
+                playerInfo.ColorG / 255f,
+                playerInfo.ColorB / 255f
+            );
+            playerUIItem.playerColor.color = playerColor;
+        }
         
        
-            bool isHost = NetworkManager.Instance.playerID == NetworkManager.Instance.currentRoom.HostId;
-            foreach (var playerInfo in NetworkManager.Instance.currentRoom.PlayerInfos)
-            {
-                PlayerUIItem playerUIItem = Instantiate(playerUIItemPrefab, playerListContent).GetComponent<PlayerUIItem>();
-                playerUIItems.Add(playerUIItem);
-                
-                // 显示玩家名字
-                playerUIItem.playerNameText.text = playerInfo.PlayerName;
-                
-                // 设置玩家颜色
-                Color playerColor = new Color(
-                    playerInfo.ColorR / 255f,
-                    playerInfo.ColorG / 255f,
-                    playerInfo.ColorB / 255f
-                );
-               
-                playerUIItem.playerColor.color = playerColor;
-                if (playerInfo.PlayerId == NetworkManager.Instance.currentRoom.HostId)
-                {
-                    playerUIItem.playerStatusText.text = "Host";
-                    playerUIItem.playerStatusText.color = Color.yellow;
-                    
-                }
-                else
-                {
-                    playerUIItem.playerStatusText.text = "Player";
-                    playerUIItem.playerStatusText.color = Color.white;
-                }
-
-                if (isHost&&playerInfo.PlayerId != NetworkManager.Instance.currentRoom.HostId)
-                {
-                    playerUIItem.kickButton.interactable = true;
-                    playerUIItem.kickButton.onClick.AddListener(()=>
-                        NetworkManager.Instance.KickPlayer(NetworkManager.Instance.currentRoom.RoomId,playerInfo.PlayerId ));
-                }
-                else
-                {
-                    playerUIItem.kickButton.interactable = false;
-                }
-                
-                RectTransform rectTransform = playerUIItem.transform.GetComponent<RectTransform>();
-                rectTransform.anchoredPosition = new Vector2(0, -100 * index++);
-            }
-        
-        
     }
     
+
+    
+
+   
+    
+    void SetPlayerStatus(PlayerUIItem playerUIItem)
+    {
+        if (NetworkManager.Instance.isHost)
+        {
+            playerUIItem.playerStatusText.text = "Host";
+            playerUIItem.playerStatusText.color = Color.yellow;
+        }
+        else
+        {
+            playerUIItem.playerStatusText.text = "Player";
+            playerUIItem.playerStatusText.color = Color.white;
+        }
+    }
+    
+    void SetupKickButton(PlayerUIItem playerUIItem, string playerId)
+    {
+        // 设置踢人按钮（只有房主可以看到，且不能踢自己）
+        bool isHost = NetworkManager.Instance.isHost;
+        bool isSelf = playerId == NetworkManager.Instance.playerID;
+        bool canKick = isHost && !isSelf && playerId != NetworkManager.Instance.currentRoom.HostId;
+        
+        playerUIItem.kickButton.gameObject.SetActive(canKick);
+        if (canKick)
+        {
+            // 清除之前的监听器，避免重复添加
+            playerUIItem.kickButton.onClick.RemoveAllListeners();
+            // 添加踢人监听器
+            string targetPlayerId = playerId; // 捕获变量
+            playerUIItem.kickButton.onClick.AddListener(() => {
+                NetworkManager.Instance.KickPlayerRequest(NetworkManager.Instance.currentRoom.RoomId, targetPlayerId);
+            });
+        }
+    }
+
+    #region Event
+
+    
+
     // 事件处理
     void OnRoomListReceived(List<RoomInfo> rooms)
     {
-        // 刷新房间列表后，重新创建UI项
+        ShowRoomList();
+        // 清空UI，等待OnRoomListReceived刷新
+        foreach (var item in roomItems)
+        {
+            Destroy(item.gameObject);
+        }
+        roomItems.Clear();
         int index = 0;
-        foreach (var room in NetworkManager.Instance.availableRooms)
+        foreach (var room in rooms)
         {
             if (room.Status == "waiting")
             {
-                CreateRoomUIItem(room,index++);
+                CreateRoomUIItem(room, index++);
             }
         }
+        
     }
     
  
@@ -334,31 +372,29 @@ public class RoomManager : SingletonMono<RoomManager>
     
     void OnRoomInfoUpdate(RoomInfo roomInfo)
     {
-        if (roomInfo == null)
+       
+        
+        // 更新当前房间信息
+        NetworkManager.Instance.currentRoom = roomInfo;
+        
+        // 如果房间信息有错误状态，显示错误
+        if (roomInfo.Status == "error")
         {
-            // 可能是离开房间成功，也可能是操作失败
-            Debug.Log("=== RoomInfo is null ===");
-            
-            // 如果当前不在房间中，显示主菜单
-            if (NetworkManager.Instance.currentRoom == null)
-            {
-                ShowMainMenu();
-            }
+            Debug.LogError($"Room error: {roomInfo.RoomName}");
+            // 错误处理：恢复按钮状态或显示错误信息
             return;
         }
         
-      
-        
-        NetworkManager.Instance.currentRoom = roomInfo;
-        
+        // 成功响应：显示房间界面并更新信息
         ShowRoom();
         
         // 更新房间信息显示
         roomNameText.text = roomInfo.RoomName;
         playerCountText.text = $"{roomInfo.PlayerIds.Count}/{roomInfo.MaxPlayers}";
-        hostText.text = $"Host: {roomInfo.HostId.Substring(0, 8)}...";
         
-        Debug.Log("Calling UpdatePlayerList()...");
+        // 使用HostName，如果没有则使用截断的HostId
+        hostText.text = $"Host: {roomInfo.HostName }";
+        
         // 更新玩家列表
         UpdatePlayerList();
         
@@ -394,5 +430,14 @@ public class RoomManager : SingletonMono<RoomManager>
         GameObject enemyTank = GameObject.Instantiate(GameManager.Instance.tankPrefab, enemyPos, Quaternion.identity);
         enemyTank.GetComponent<Renderer>().material.color = Color.red; // 敌人坦克用红色区分
         enemyTank.name = "EnemyTank";
+    }
+    
+    #endregion
+    
+    
+    
+    void QuitGame()
+    {
+        Application.Quit();
     }
 } 

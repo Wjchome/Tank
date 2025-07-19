@@ -212,6 +212,7 @@ type RoomInfo struct {
 	MaxPlayers    int32                  `protobuf:"varint,5,opt,name=max_players,json=maxPlayers,proto3" json:"max_players,omitempty"`   // 最大玩家数
 	RoomName      string                 `protobuf:"bytes,6,opt,name=room_name,json=roomName,proto3" json:"room_name,omitempty"`          // 房间名称
 	PlayerInfos   []*PlayerInfo          `protobuf:"bytes,7,rep,name=player_infos,json=playerInfos,proto3" json:"player_infos,omitempty"` // 玩家详细信息
+	HostName      string                 `protobuf:"bytes,8,opt,name=host_name,json=hostName,proto3" json:"host_name,omitempty"`          // 房主名字
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -293,6 +294,13 @@ func (x *RoomInfo) GetPlayerInfos() []*PlayerInfo {
 		return x.PlayerInfos
 	}
 	return nil
+}
+
+func (x *RoomInfo) GetHostName() string {
+	if x != nil {
+		return x.HostName
+	}
+	return ""
 }
 
 // 房间列表
@@ -1171,7 +1179,7 @@ const file_proto_game_proto_rawDesc = "" +
 	"playerName\x12\x17\n" +
 	"\acolor_r\x18\x03 \x01(\x05R\x06colorR\x12\x17\n" +
 	"\acolor_g\x18\x04 \x01(\x05R\x06colorG\x12\x17\n" +
-	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\"\xea\x01\n" +
+	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\"\x87\x02\n" +
 	"\bRoomInfo\x12\x17\n" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1d\n" +
 	"\n" +
@@ -1181,7 +1189,8 @@ const file_proto_game_proto_rawDesc = "" +
 	"\vmax_players\x18\x05 \x01(\x05R\n" +
 	"maxPlayers\x12\x1b\n" +
 	"\troom_name\x18\x06 \x01(\tR\broomName\x127\n" +
-	"\fplayer_infos\x18\a \x03(\v2\x14.tankgame.PlayerInfoR\vplayerInfos\"4\n" +
+	"\fplayer_infos\x18\a \x03(\v2\x14.tankgame.PlayerInfoR\vplayerInfos\x12\x1b\n" +
+	"\thost_name\x18\b \x01(\tR\bhostName\"4\n" +
 	"\bRoomList\x12(\n" +
 	"\x05rooms\x18\x01 \x03(\v2\x12.tankgame.RoomInfoR\x05rooms\"\xbd\x01\n" +
 	"\x11CreateRoomRequest\x12\x1b\n" +

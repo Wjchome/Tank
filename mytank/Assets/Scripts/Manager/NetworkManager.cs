@@ -9,22 +9,17 @@ using Tankgame;
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
-    private TcpClient tcpClient;
-    private NetworkStream stream;
+    private TcpClient tcpClient;//代表自己的连接
+    private NetworkStream stream;//网络流
     private bool isConnected = false;
     
     public string playerID;
     public long currentFrame = 0;
 
-    void SetPlayerID(ConnectSuccess connectSuccess)
-    {
-        playerID = connectSuccess.YourPlayerId;
-    }
-    
-    // 房间管理相关
+
     public List<RoomInfo> availableRooms = new List<RoomInfo>();
-    public RoomInfo currentRoom;
-    public bool isHost = false;
+    public RoomInfo currentRoom;//自己所在的房间
+    public bool isHost =>currentRoom?.HostId == playerID;
 
     // 事件定义
     public event Action<FrameInputs> OnFrameInputs;
@@ -45,8 +40,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     }
     
     
-    
-    public void ConnectToServer()
+    void ConnectToServer()
     {
         try
         {
@@ -107,7 +101,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     // 处理服务器消息
     void ProcessServerMessage(ServerMessage message)
     {
-        MessageSerializer.LogMessage("[Server]", message);
+        LogMessage("[Server]", message);
 
         if (message.FrameInputs != null)
         {
@@ -126,14 +120,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             availableRooms = new List<RoomInfo>(message.RoomList.Rooms);
             
-            // 如果当前在房间中，说明是离开房间的响应
-            if (currentRoom != null)
-            {
-                Debug.Log("=== Left room successfully (received room list) ===");
-                currentRoom = null;
-                isHost = false;
-                OnRoomInfoUpdate?.Invoke(null);
-            }
+            
             
             OnRoomListReceived?.Invoke(availableRooms);
             Debug.Log($"Received {availableRooms.Count} available rooms");
@@ -153,7 +140,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 // 成功响应：更新房间信息
                 currentRoom = message.RoomInfo;
-                isHost = currentRoom.HostId == playerID;
                 Debug.Log($"Setting isHost to: {isHost} (my ID: {playerID}, host ID: {currentRoom.HostId})");
                 Debug.Log($"Invoking OnRoomInfoUpdate event...");
                 OnRoomInfoUpdate?.Invoke(currentRoom);
@@ -234,7 +220,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         SendMessage(msg);
     }
     // 请求创建房间
-    public void CreateRoom(string roomName , int maxPlayers)
+    public void CreateRoom(string roomName, int maxPlayers, string playerName, int colorR, int colorG, int colorB)
     {
         if (!isConnected)
         {
@@ -248,17 +234,17 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 RoomName = roomName,
                 MaxPlayers = maxPlayers,
-                PlayerName = RoomManager.Instance.myNameInput.text,
-                ColorR = (int)(RoomManager.Instance.myColorR.value * 255),
-                ColorG = (int)(RoomManager.Instance.myColorG.value * 255),
-                ColorB = (int)(RoomManager.Instance.myColorB.value * 255),
-
+                PlayerName = playerName,
+                ColorR = colorR,
+                ColorG = colorG,
+                ColorB = colorB,
             }
         };
         SendMessage(message);
     }
+    
     // 请求加入房间
-    public void JoinRoom(string roomId)
+    public void JoinRoom(string roomId, string playerName, int colorR, int colorG, int colorB)
     {
         if (!isConnected)
         {
@@ -271,10 +257,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
             JoinRoomRequest = new JoinRoomRequest
             {
                 RoomId = roomId,
-                PlayerName = RoomManager.Instance.myNameInput.text,
-                ColorR = (int)(RoomManager.Instance.myColorR.value * 255),
-                ColorG = (int)(RoomManager.Instance.myColorG.value * 255),
-                ColorB = (int)(RoomManager.Instance.myColorB.value * 255),
+                PlayerName = playerName,
+                ColorR = colorR,
+                ColorG = colorG,
+                ColorB = colorB,
             }
         };
         SendMessage(message);
@@ -289,22 +275,36 @@ public class NetworkManager : SingletonMono<NetworkManager>
             return;
         }
 
-        var message = MessageSerializer.CreateLeaveRoomRequestMessage(roomId);
+        var message = new ClientMessage
+        {
+            LeaveRoomRequest = new LeaveRoomRequest
+            {
+                RoomId = roomId
+            }
+        };
         SendMessage(message);
     }
 
-    public void KickPlayer(string roomId, string playerId)
+    // 请求踢人
+    public void KickPlayerRequest(string roomId, string targetPlayerId)
     {
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot kick player: not connected");
+            return;
+        }
+
         var message = new ClientMessage
         {
             KickPlayerRequest = new KickPlayerRequest
             {
                 RoomId = roomId,
-                TargetPlayerId = playerId
+                TargetPlayerId = targetPlayerId
             }
         };
         SendMessage(message);
     }
+    
     // 发送玩家输入
     public void SendPlayerInput(InputType inputType)
     {
@@ -314,7 +314,16 @@ public class NetworkManager : SingletonMono<NetworkManager>
             return;
         }
 
-        var message = MessageSerializer.CreatePlayerInputMessage(playerID, inputType, currentFrame);
+        var message = new ClientMessage
+        {
+            PlayerInput = new PlayerInput
+            {
+                PlayerId = playerID,
+                InputType = inputType,
+                FrameNumber = currentFrame,
+                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+            }
+        };
         SendMessage(message);
     }
     // 请求开始游戏
@@ -352,12 +361,21 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 stream.Write(data, 0, data.Length);
                 stream.Flush();
-                MessageSerializer.LogMessage("[Client]", message);
+                LogMessage("[Client]", message);
             }
         }
         catch (Exception e)
         {
             Debug.LogError($"Send error: {e.Message}");
+        }
+    }
+    
+    // 打印消息内容（调试用）
+    private void LogMessage(string prefix, object message)
+    {
+        if (message != null)
+        {
+            Debug.Log($"{prefix}: {message}");
         }
     }
     
@@ -371,6 +389,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             receiveThread.Join(1000); // 等待线程结束，最多1秒
         }
+    }
+    
+    void SetPlayerID(ConnectSuccess connectSuccess)
+    {
+        playerID = connectSuccess.YourPlayerId;
     }
 
     void OnDestroy()
