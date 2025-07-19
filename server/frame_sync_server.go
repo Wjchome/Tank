@@ -119,6 +119,10 @@ func (s *Server) handleClient(conn net.Conn) {
 			s.sendRoomList(client.Conn)
 		case *myproto.ClientMessage_GameStartRequest:
 			s.startGame(s.Rooms[client.RoomID])
+		case *myproto.ClientMessage_LeaveRoomRequest:
+			s.handleLeaveRoomRequest(client, data.LeaveRoomRequest)
+		default:
+			log.Printf("Unknown message type from client %s", client.ID)
 		}
 	}
 
@@ -223,6 +227,60 @@ func (s *Server) handleJoinRoom(client *Client, req *myproto.JoinRoomRequest) {
 	}
 
 	fmt.Printf("Client %s joined room %s\n", client.ID, room.ID)
+}
+
+func (s *Server) handleLeaveRoomRequest(client *Client, req *myproto.LeaveRoomRequest) {
+	fmt.Println("leave room request")
+
+	if client.RoomID == "" {
+		// 客户端不在任何房间中
+		s.sendRoomInfo(client.Conn, nil, "Not in any room")
+		return
+	}
+
+	s.Mutex.Lock()
+	room, exists := s.Rooms[client.RoomID]
+	s.Mutex.Unlock()
+
+	if !exists {
+		// 房间不存在
+		s.sendRoomInfo(client.Conn, nil, "Room not found")
+		return
+	}
+
+	room.Mutex.Lock()
+
+	// 从房间中移除客户端
+	delete(room.Clients, client.ID)
+	client.RoomID = ""
+	client.IsHost = false
+
+	// 如果房主离开，选择新的房主
+	if room.HostID == client.ID && len(room.Clients) > 0 {
+		for _, c := range room.Clients {
+			c.IsHost = true
+			room.HostID = c.ID
+			break
+		}
+	}
+
+	room.Mutex.Unlock()
+
+	// 如果房间空了，删除房间
+	if len(room.Clients) == 0 {
+		s.Mutex.Lock()
+		delete(s.Rooms, room.ID)
+		s.Mutex.Unlock()
+		fmt.Printf("Room %s deleted (empty)\n", room.ID)
+	} else {
+		// 广播房间信息更新给剩余玩家
+		s.broadcastRoomInfo(room)
+	}
+
+	// 发送房间列表给离开的客户端，表示已成功离开房间
+	s.sendRoomList(client.Conn)
+
+	fmt.Printf("Client %s left room %s\n", client.ID, req.RoomId)
 }
 
 func (s *Server) handleClientDisconnect(client *Client) {

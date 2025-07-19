@@ -134,7 +134,7 @@ public class RoomManager : SingletonMono<RoomManager>
         roomListPanel.SetActive(true);
         createRoomPanel.SetActive(false);
         roomPanel.SetActive(false);
-        RefreshRoomList(); // 清空UI
+        ClearRoomList(); // 清空UI
         RequestRoomListFromServer(); // 主动请求服务器获取房间列表
     }
     
@@ -183,12 +183,15 @@ public class RoomManager : SingletonMono<RoomManager>
     
     void LeaveRoom()
     {
-        // 断开网络连接，服务器会自动把你从房间移除
-        NetworkManager.Instance.Disconnect();
-        NetworkManager.Instance.currentRoom = null;
+        if (NetworkManager.Instance.currentRoom != null)
+        {
+            // 发送离开房间请求
+            NetworkManager.Instance.LeaveRoom(NetworkManager.Instance.currentRoom.RoomId);
+            NetworkManager.Instance.currentRoom = null;
+        }
+        
+        // 返回主菜单
         ShowMainMenu();
-        // 重新连接服务器，刷新房间列表
-        NetworkManager.Instance.ConnectToServer();
     }
     
     void StartGame()
@@ -197,7 +200,7 @@ public class RoomManager : SingletonMono<RoomManager>
         
     }
     
-    void RefreshRoomList()
+    void ClearRoomList()
     {
         // 不再主动刷新本地缓存，而是等服务器返回
         // 这里只清空UI，等待OnRoomListReceived刷新
@@ -247,7 +250,7 @@ public class RoomManager : SingletonMono<RoomManager>
         playerUIItems.Clear();
         
         if (NetworkManager.Instance.currentRoom == null) return;
-        
+        int index = 0;
         // 显示房间内玩家
         foreach (var playerId in NetworkManager.Instance.currentRoom.PlayerIds)
         {
@@ -266,13 +269,18 @@ public class RoomManager : SingletonMono<RoomManager>
                 playerUIItem.playerStatusText.text = "Player";
                 playerUIItem.playerStatusText.color = Color.white;
             }
+            
+            
+        RectTransform rectTransform = playerUIItem.transform.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition=new Vector2(0,-100*index++);
+            
         }
     }
     
     // 事件处理
     void OnRoomListReceived(List<RoomInfo> rooms)
     {
-        RefreshRoomList();
+        ClearRoomList();
         // 刷新房间列表后，重新创建UI项
         int index = 0;
         foreach (var room in NetworkManager.Instance.availableRooms)
@@ -290,6 +298,14 @@ public class RoomManager : SingletonMono<RoomManager>
     
     void OnRoomInfoUpdate(RoomInfo roomInfo)
     {
+        if (roomInfo == null)
+        {
+            // 离开房间成功
+            Debug.Log("=== Left room successfully ===");
+            ShowMainMenu();
+            return;
+        }
+        
         Debug.Log($"=== OnRoomInfoUpdate called ===");
         Debug.Log($"RoomId: {roomInfo.RoomId}");
         Debug.Log($"RoomName: {roomInfo.RoomName}");

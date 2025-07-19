@@ -37,6 +37,10 @@ message JoinRoomRequest {
   string room_id = 1;
 }
 
+// 离开房间请求
+message LeaveRoomRequest {
+  string room_id = 1;
+}
 
 
 // 玩家输入类型
@@ -98,7 +102,8 @@ message ClientMessage {
     PlayerInput player_input = 1;
     CreateRoomRequest create_room_request = 2;
     JoinRoomRequest join_room_request = 3;
-    RoomListRequest room_list_request = 4;
-    GameStartRequest game_start_request=5;
+    LeaveRoomRequest leave_room_request = 4;
+    RoomListRequest room_list_request = 5;
+    GameStartRequest game_start_request=6;
   }
 }

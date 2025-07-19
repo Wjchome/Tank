@@ -88,6 +88,18 @@ public static class MessageSerializer
             }
         };
     }
+
+    // 创建离开房间请求消息
+    public static ClientMessage CreateLeaveRoomRequestMessage(string roomId)
+    {
+        return new ClientMessage
+        {
+            LeaveRoomRequest = new LeaveRoomRequest
+            {
+                RoomId = roomId
+            }
+        };
+    }
   
     // 打印消息内容（调试用）
     public static void LogMessage(string prefix, object message)

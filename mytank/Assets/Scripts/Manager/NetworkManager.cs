@@ -48,11 +48,27 @@ public class NetworkManager : SingletonMono<NetworkManager>
     {
         try
         {
+            // 检查是否是ParrelSync克隆的实例
+            string projectName = Application.productName;
+            string clientId = "";
+            
+            // 如果是克隆实例，添加唯一标识
+            if (projectName.Contains("Clone"))
+            {
+                // 从项目名中提取克隆编号
+                string[] parts = projectName.Split('_');
+                if (parts.Length > 1 && int.TryParse(parts[parts.Length - 1], out int cloneNumber))
+                {
+                    clientId = $"Clone_{cloneNumber}";
+                    Debug.Log($"Clone instance detected: {clientId}");
+                }
+            }
+            
             tcpClient = new TcpClient("localhost", 8080);
             stream = tcpClient.GetStream();
             isConnected = true;
             
-            Debug.Log("Connected to frame sync server");
+            Debug.Log($"Connected to frame sync server (Client: {clientId})");
 
             // 启动独立线程读取消息
             receiveThread = new Thread(ReceiveMessagesThread);
@@ -107,6 +123,16 @@ public class NetworkManager : SingletonMono<NetworkManager>
         else if (message.RoomList != null)
         {
             availableRooms = new List<RoomInfo>(message.RoomList.Rooms);
+            
+            // 如果当前在房间中，说明是离开房间的响应
+            if (currentRoom != null)
+            {
+                Debug.Log("=== Left room successfully (received room list) ===");
+                currentRoom = null;
+                isHost = false;
+                OnRoomInfoUpdate?.Invoke(null);
+            }
+            
             OnRoomListReceived?.Invoke(availableRooms);
             Debug.Log($"Received {availableRooms.Count} available rooms");
         }
@@ -224,6 +250,19 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
 
         var message = MessageSerializer.CreateJoinRoomRequestMessage(roomId);
+        SendMessage(message);
+    }
+    
+    // 请求离开房间
+    public void LeaveRoom(string roomId)
+    {
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot leave room: not connected");
+            return;
+        }
+
+        var message = MessageSerializer.CreateLeaveRoomRequestMessage(roomId);
         SendMessage(message);
     }
     // 发送玩家输入
