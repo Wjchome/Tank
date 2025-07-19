@@ -42,6 +42,7 @@ type Server struct {
 	Mutex sync.Mutex
 }
 
+// 服务器唯一
 func NewServer() *Server {
 	return &Server{
 		Rooms: make(map[string]*Room),
@@ -62,6 +63,7 @@ func (s *Server) Start() {
 			log.Println("Accept error:", err)
 			continue
 		}
+		//监测到客户端连接，执行逻辑
 		go s.handleClient(conn)
 	}
 }
@@ -113,6 +115,10 @@ func (s *Server) handleClient(conn net.Conn) {
 			s.handleCreateRoom(client, data.CreateRoomRequest)
 		case *myproto.ClientMessage_JoinRoomRequest:
 			s.handleJoinRoom(client, data.JoinRoomRequest)
+		case *myproto.ClientMessage_RoomListRequest:
+			s.sendRoomList(client.Conn)
+		case *myproto.ClientMessage_GameStartRequest:
+			s.startGame(s.Rooms[client.RoomID])
 		}
 	}
 
@@ -134,6 +140,7 @@ func (s *Server) handlePlayerInput(client *Client, input *myproto.PlayerInput) {
 	}
 
 	room.Mutex.Lock()
+	//将客户端的输入添加到房间的输入缓冲区
 	room.InputBuffer = append(room.InputBuffer, input)
 	room.Mutex.Unlock()
 }
@@ -167,92 +174,52 @@ func (s *Server) handleCreateRoom(client *Client, req *myproto.CreateRoomRequest
 	client.IsHost = true
 	room.Clients[client.ID] = client
 
-	// 发送创建成功响应
-	response := &myproto.ServerMessage{
-		Data: &myproto.ServerMessage_CreateRoomResponse{
-			CreateRoomResponse: &myproto.CreateRoomResponse{
-				Success:      true,
-				RoomId:       roomID,
-				ErrorMessage: "",
-			},
-		},
-	}
-	s.sendMessage(client.Conn, response)
+	// 直接返回RoomInfo
+	s.sendRoomInfo(client.Conn, room, "")
 
-	// 广播房间信息更新
-	s.broadcastRoomInfo(room)
+	// 检查房间是否满员，如果满员则开始游戏
+	/*	if int32(len(room.Clients)) == room.MaxPlayers {
+		s.startGame(room)
+	}*/
 
 	fmt.Printf("Client %s created room %s (%s)\n", client.ID, roomID, roomName)
 }
 
 func (s *Server) handleJoinRoom(client *Client, req *myproto.JoinRoomRequest) {
+	fmt.Println("join")
 	s.Mutex.Lock()
 	room, exists := s.Rooms[req.RoomId]
 	s.Mutex.Unlock()
 
 	if !exists {
-		response := &myproto.ServerMessage{
-			Data: &myproto.ServerMessage_JoinRoomResponse{
-				JoinRoomResponse: &myproto.JoinRoomResponse{
-					Success:      false,
-					ErrorMessage: "Room not found",
-				},
-			},
-		}
-		s.sendMessage(client.Conn, response)
+		// 返回空RoomInfo或带错误信息
+		s.sendRoomInfo(client.Conn, nil, "Room not found")
 		return
 	}
 
 	room.Mutex.Lock()
-	defer room.Mutex.Unlock()
 
 	if room.Status != "waiting" {
-		response := &myproto.ServerMessage{
-			Data: &myproto.ServerMessage_JoinRoomResponse{
-				JoinRoomResponse: &myproto.JoinRoomResponse{
-					Success:      false,
-					ErrorMessage: "Room is not available",
-				},
-			},
-		}
-		s.sendMessage(client.Conn, response)
+		room.Mutex.Unlock()
+		s.sendRoomInfo(client.Conn, room, "Room is not available")
 		return
 	}
 
 	if int32(len(room.Clients)) >= room.MaxPlayers {
-		response := &myproto.ServerMessage{
-			Data: &myproto.ServerMessage_JoinRoomResponse{
-				JoinRoomResponse: &myproto.JoinRoomResponse{
-					Success:      false,
-					ErrorMessage: "Room is full",
-				},
-			},
-		}
-		s.sendMessage(client.Conn, response)
+		room.Mutex.Unlock()
+		s.sendRoomInfo(client.Conn, room, "Room is full")
 		return
 	}
 
 	// 加入房间
 	client.RoomID = room.ID
 	room.Clients[client.ID] = client
+	room.Mutex.Unlock() // 释放房间锁，避免死锁
 
-	// 发送加入成功响应
-	response := &myproto.ServerMessage{
-		Data: &myproto.ServerMessage_JoinRoomResponse{
-			JoinRoomResponse: &myproto.JoinRoomResponse{
-				Success:      true,
-				ErrorMessage: "",
-			},
-		},
-	}
-	s.sendMessage(client.Conn, response)
-
-	// 广播房间信息更新
-	s.broadcastRoomInfo(room)
-
-	// 检查房间是否满员，如果满员则开始游戏
-	if int32(len(room.Clients)) == room.MaxPlayers {
-		s.startGame(room)
+	fmt.Println("send")
+	// 广播给房间内所有客户端
+	for _, c := range room.Clients {
+		s.sendRoomInfo(c.Conn, room, "")
 	}
 
 	fmt.Printf("Client %s joined room %s\n", client.ID, room.ID)
@@ -395,6 +362,7 @@ func (s *Server) broadcastRoomInfo(room *Room) {
 	}
 }
 
+// 发送给客户端的消息
 func (s *Server) sendMessage(conn net.Conn, msg *myproto.ServerMessage) {
 	data, err := proto.Marshal(msg)
 	if err != nil {
@@ -405,6 +373,43 @@ func (s *Server) sendMessage(conn net.Conn, msg *myproto.ServerMessage) {
 	binary.BigEndian.PutUint32(lengthBytes, uint32(len(data)))
 	conn.Write(lengthBytes)
 	conn.Write(data)
+}
+
+// 发送RoomInfo（Room对象或错误信息）
+func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
+	var roomInfo *myproto.RoomInfo
+	if room != nil {
+		room.Mutex.Lock()
+		playerIDs := make([]string, 0, len(room.Clients))
+		for _, c := range room.Clients {
+			playerIDs = append(playerIDs, c.ID)
+		}
+		roomInfo = &myproto.RoomInfo{
+			RoomId:     room.ID,
+			PlayerIds:  playerIDs,
+			Status:     room.Status,
+			HostId:     room.HostID,
+			MaxPlayers: room.MaxPlayers,
+			RoomName:   room.Name,
+		}
+		room.Mutex.Unlock()
+		if errMsg != "" {
+			roomInfo.Status = "error"
+			roomInfo.RoomName = errMsg
+		}
+	} else {
+		roomInfo = &myproto.RoomInfo{
+			RoomId:   "",
+			Status:   "error",
+			RoomName: errMsg,
+		}
+	}
+	serverMsg := &myproto.ServerMessage{
+		Data: &myproto.ServerMessage_RoomInfo{
+			RoomInfo: roomInfo,
+		},
+	}
+	s.sendMessage(conn, serverMsg)
 }
 
 func (room *Room) frameLoop() {

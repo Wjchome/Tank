@@ -42,6 +42,8 @@ public class RoomManager : SingletonMono<RoomManager>
     
     private List<RoomUIItem> roomItems = new List<RoomUIItem>();
     private List<PlayerUIItem> playerUIItems = new List<PlayerUIItem>();
+
+   
     
     void Start()
     {
@@ -56,7 +58,7 @@ public class RoomManager : SingletonMono<RoomManager>
     {
         // 设置最大玩家数下拉菜单
         maxPlayersDropdown.ClearOptions();
-        maxPlayersDropdown.AddOptions(new List<string> { "2", "3", "4" });
+        maxPlayersDropdown.AddOptions(new List<string> { "1","2", "3", "4" });
         maxPlayersDropdown.value = 0; // 默认2人
         
         // 设置默认房间名
@@ -75,7 +77,7 @@ public class RoomManager : SingletonMono<RoomManager>
         cancelCreateButton.onClick.AddListener(ShowMainMenu);
         
         // 房间列表按钮
-        refreshRoomListButton.onClick.AddListener(RefreshRoomList);
+        refreshRoomListButton.onClick.AddListener(RequestRoomListFromServer);
         backToMainButton.onClick.AddListener(ShowMainMenu);
         
         // 房间内按钮
@@ -84,11 +86,14 @@ public class RoomManager : SingletonMono<RoomManager>
         
         // 网络事件
         NetworkManager.Instance.OnRoomListReceived += OnRoomListReceived;
-        NetworkManager.Instance.OnCreateRoomResponse += OnCreateRoomResponse;
-        NetworkManager.Instance.OnJoinRoomResponse += OnJoinRoomResponse;
-        NetworkManager.Instance.OnRoomInfoUpdate += OnRoomInfoUpdate;
+       NetworkManager.Instance.OnRoomInfoUpdate += OnRoomInfoUpdate;
         NetworkManager.Instance.OnGameStart += OnGameStartRoom;
         NetworkManager.Instance.OnGameStart += OnGameStartFun;
+    }
+
+    void RequestRoomListFromServer()
+    {
+        NetworkManager.Instance.RequestRoomList();
     }
     
     void OnDestroy()
@@ -96,9 +101,7 @@ public class RoomManager : SingletonMono<RoomManager>
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.OnRoomListReceived -= OnRoomListReceived;
-            NetworkManager.Instance.OnCreateRoomResponse -= OnCreateRoomResponse;
-            NetworkManager.Instance.OnJoinRoomResponse -= OnJoinRoomResponse;
-            NetworkManager.Instance.OnRoomInfoUpdate -= OnRoomInfoUpdate;
+          NetworkManager.Instance.OnRoomInfoUpdate -= OnRoomInfoUpdate;
             NetworkManager.Instance.OnGameStart -= OnGameStartRoom;
             NetworkManager.Instance.OnGameStart -= OnGameStartFun;
         }
@@ -131,15 +134,33 @@ public class RoomManager : SingletonMono<RoomManager>
         roomListPanel.SetActive(true);
         createRoomPanel.SetActive(false);
         roomPanel.SetActive(false);
-        RefreshRoomList();
+        RefreshRoomList(); // 清空UI
+        RequestRoomListFromServer(); // 主动请求服务器获取房间列表
     }
     
     void ShowRoom()
     {
+        Debug.Log("=== ShowRoom called ===");
+        Debug.Log($"Setting mainMenuPanel.active = false");
         mainMenuPanel.SetActive(false);
+        Debug.Log($"Setting roomListPanel.active = false");
         roomListPanel.SetActive(false);
+        Debug.Log($"Setting createRoomPanel.active = false");
         createRoomPanel.SetActive(false);
+        Debug.Log($"Setting roomPanel.active = true");
         roomPanel.SetActive(true);
+        
+        if (NetworkManager.Instance.currentRoom.HostId != NetworkManager.Instance.playerID)
+        {
+            Debug.Log("I'm not the host, disabling start button");
+            startGameButton.interactable = false;
+        }
+        else
+        {
+            Debug.Log("I'm the host, enabling start button");
+            startGameButton.interactable = true;
+        }
+        Debug.Log("=== ShowRoom completed ===");
     }
     
     // 房间操作
@@ -151,7 +172,7 @@ public class RoomManager : SingletonMono<RoomManager>
             roomName = $"Room_{Random.Range(1000, 9999)}";
         }
         
-        int maxPlayers = maxPlayersDropdown.value + 2; // 2, 3, 4
+        int maxPlayers = maxPlayersDropdown.value + 1; //1， 2, 3, 4
         NetworkManager.Instance.CreateRoom(roomName, maxPlayers);
     }
     
@@ -172,28 +193,19 @@ public class RoomManager : SingletonMono<RoomManager>
     
     void StartGame()
     {
-        // 只有房主可以开始游戏，这里暂时不实现
-        Debug.Log("Start game button clicked");
+        NetworkManager.Instance.GameStartRequest(NetworkManager.Instance.currentRoom.RoomId);
+        
     }
     
     void RefreshRoomList()
     {
-        // 清空现有房间列表
+        // 不再主动刷新本地缓存，而是等服务器返回
+        // 这里只清空UI，等待OnRoomListReceived刷新
         foreach (var item in roomItems)
         {
-            Destroy(item);
+            Destroy(item.gameObject);
         }
         roomItems.Clear();
-        
-        // 显示可用房间
-        int index = 0;
-        foreach (var room in NetworkManager.Instance.availableRooms)
-        {
-            if (room.Status == "waiting")
-            {
-                CreateRoomUIItem(room,index++);
-            }
-        }
     }
     
     void CreateRoomUIItem(RoomInfo room,int index)
@@ -230,7 +242,7 @@ public class RoomManager : SingletonMono<RoomManager>
         // 清空现有玩家列表
         foreach (var item in playerUIItems)
         {
-            Destroy(item);
+            Destroy(item.gameObject);
         }
         playerUIItems.Clear();
         
@@ -261,39 +273,31 @@ public class RoomManager : SingletonMono<RoomManager>
     void OnRoomListReceived(List<RoomInfo> rooms)
     {
         RefreshRoomList();
-    }
-    
-    void OnCreateRoomResponse(CreateRoomResponse response)
-    {
-        if (response.Success)
+        // 刷新房间列表后，重新创建UI项
+        int index = 0;
+        foreach (var room in NetworkManager.Instance.availableRooms)
         {
-            Debug.Log($"Room created: {response.RoomId}");
-            // 创建房间成功后会自动收到房间信息更新
-        }
-        else
-        {
-            Debug.LogError($"Failed to create room: {response.ErrorMessage}");
-            // 可以显示错误提示
+            if (room.Status == "waiting")
+            {
+                CreateRoomUIItem(room,index++);
+            }
         }
     }
     
-    void OnJoinRoomResponse(JoinRoomResponse response)
-    {
-        if (response.Success)
-        {
-            Debug.Log("Joined room successfully");
-            // 加入房间成功后会自动收到房间信息更新
-        }
-        else
-        {
-            Debug.LogError($"Failed to join room: {response.ErrorMessage}");
-            // 可以显示错误提示
-        }
-    }
+ 
+    
+   
     
     void OnRoomInfoUpdate(RoomInfo roomInfo)
     {
+        Debug.Log($"=== OnRoomInfoUpdate called ===");
+        Debug.Log($"RoomId: {roomInfo.RoomId}");
+        Debug.Log($"RoomName: {roomInfo.RoomName}");
+        Debug.Log($"Status: {roomInfo.Status}");
+        Debug.Log($"PlayerCount: {roomInfo.PlayerIds.Count}/{roomInfo.MaxPlayers}");
+        
         NetworkManager.Instance.currentRoom = roomInfo;
+        Debug.Log("Calling ShowRoom()...");
         ShowRoom();
         
         // 更新房间信息显示
@@ -301,11 +305,13 @@ public class RoomManager : SingletonMono<RoomManager>
         playerCountText.text = $"{roomInfo.PlayerIds.Count}/{roomInfo.MaxPlayers}";
         hostText.text = $"Host: {roomInfo.HostId.Substring(0, 8)}...";
         
+        Debug.Log("Calling UpdatePlayerList()...");
         // 更新玩家列表
         UpdatePlayerList();
         
         // 只有房主可以开始游戏
         startGameButton.gameObject.SetActive(NetworkManager.Instance.isHost);
+        Debug.Log($"Start button active: {NetworkManager.Instance.isHost}");
     }
     
     void OnGameStartRoom(GameStart gameStart)

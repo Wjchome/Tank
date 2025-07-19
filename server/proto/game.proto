@@ -31,23 +31,13 @@ message CreateRoomRequest {
   int32 max_players = 2;
 }
 
-// 创建房间响应
-message CreateRoomResponse {
-  bool success = 1;
-  string room_id = 2;
-  string error_message = 3;
-}
 
 // 加入房间请求
 message JoinRoomRequest {
   string room_id = 1;
 }
 
-// 加入房间响应
-message JoinRoomResponse {
-  bool success = 1;
-  string error_message = 2;
-}
+
 
 // 玩家输入类型
 enum InputType {
@@ -80,6 +70,13 @@ message GameStart {
   int64 random_seed = 3; // 新增
 }
 
+message RoomListRequest {}
+
+message GameStartRequest{
+  string room_id = 1;
+}
+
+
 // 服务器消息
 message ServerMessage {
   oneof data {
@@ -88,10 +85,12 @@ message ServerMessage {
     GameStart game_start = 3;
     ConnectSuccess connect_success = 4;
     RoomList room_list = 5;
-    CreateRoomResponse create_room_response = 6;
-    JoinRoomResponse join_room_response = 7;
+
   }
 }
+
+
+
 
 // 客户端消息
 message ClientMessage {
@@ -99,5 +98,7 @@ message ClientMessage {
     PlayerInput player_input = 1;
     CreateRoomRequest create_room_request = 2;
     JoinRoomRequest join_room_request = 3;
+    RoomListRequest room_list_request = 4;
+    GameStartRequest game_start_request=5;
   }
 }

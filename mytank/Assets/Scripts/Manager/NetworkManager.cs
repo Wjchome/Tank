@@ -29,10 +29,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     // 事件定义
     public event Action<FrameInputs> OnFrameInputs;
     public event Action<ConnectSuccess> OnConnectSuccess;
-    
     public event Action<List<RoomInfo>> OnRoomListReceived;
-    public event Action<CreateRoomResponse> OnCreateRoomResponse;
-    public event Action<JoinRoomResponse> OnJoinRoomResponse;
     public event Action<RoomInfo> OnRoomInfoUpdate;
     public event Action<GameStart> OnGameStart;
     
@@ -47,8 +44,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         ConnectToServer();
     }
     
-
-    void ConnectToServer()
+    public void ConnectToServer()
     {
         try
         {
@@ -68,6 +64,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
             Debug.LogError("Failed to connect: " + e.Message);
         }
     }
+
+    
     
     //每帧处理一个服务端传输来的消息
     void Update()
@@ -105,7 +103,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
         else if (message.ConnectSuccess != null)
         {
            OnConnectSuccess?.Invoke(message.ConnectSuccess);
-          
         }
         else if (message.RoomList != null)
         {
@@ -113,36 +110,28 @@ public class NetworkManager : SingletonMono<NetworkManager>
             OnRoomListReceived?.Invoke(availableRooms);
             Debug.Log($"Received {availableRooms.Count} available rooms");
         }
-        else if (message.CreateRoomResponse != null)
-        {
-            OnCreateRoomResponse?.Invoke(message.CreateRoomResponse);
-            if (message.CreateRoomResponse.Success)
-            {
-                Debug.Log($"Room created successfully: {message.CreateRoomResponse.RoomId}");
-            }
-            else
-            {
-                Debug.LogError($"Failed to create room: {message.CreateRoomResponse.ErrorMessage}");
-            }
-        }
-        else if (message.JoinRoomResponse != null)
-        {
-            OnJoinRoomResponse?.Invoke(message.JoinRoomResponse);
-            if (message.JoinRoomResponse.Success)
-            {
-                Debug.Log("Joined room successfully");
-            }
-            else
-            {
-                Debug.LogError($"Failed to join room: {message.JoinRoomResponse.ErrorMessage}");
-            }
-        }
         else if (message.RoomInfo != null)
         {
+          
+            
             currentRoom = message.RoomInfo;
-            isHost = currentRoom.HostId == playerID;
-            OnRoomInfoUpdate?.Invoke(currentRoom);
-            Debug.Log($"Room info updated: {currentRoom.RoomName} ({currentRoom.PlayerIds.Count}/{currentRoom.MaxPlayers})");
+            if (currentRoom.Status == "error")
+            {
+                Debug.LogError($"Room error: {currentRoom.RoomName}");
+                // TODO: 这里可以弹窗提示错误
+            }
+            else
+            {
+                isHost = currentRoom.HostId == playerID;
+                Debug.Log($"Setting isHost to: {isHost} (my ID: {playerID}, host ID: {currentRoom.HostId})");
+                Debug.Log($"Invoking OnRoomInfoUpdate event...");
+                OnRoomInfoUpdate?.Invoke(currentRoom);
+                Debug.Log($"Room info updated: {currentRoom.RoomName} ({currentRoom.PlayerIds.Count}/{currentRoom.MaxPlayers})");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Received unknown message type");
         }
     }
 
@@ -203,7 +192,17 @@ public class NetworkManager : SingletonMono<NetworkManager>
         Debug.Log("Receive thread ended");
     }
 
-    // 创建房间
+    #region ClientRequest
+
+    
+
+    // 请求房间列表
+    public void RequestRoomList()
+    {
+        var msg = new ClientMessage { RoomListRequest = new RoomListRequest() };
+        SendMessage(msg);
+    }
+    // 请求创建房间
     public void CreateRoom(string roomName , int maxPlayers)
     {
         if (!isConnected)
@@ -215,8 +214,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         var message = MessageSerializer.CreateRoomRequestMessage(roomName, maxPlayers);
         SendMessage(message);
     }
-
-    // 加入房间
+    // 请求加入房间
     public void JoinRoom(string roomId)
     {
         if (!isConnected)
@@ -228,7 +226,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
         var message = MessageSerializer.CreateJoinRoomRequestMessage(roomId);
         SendMessage(message);
     }
-
     // 发送玩家输入
     public void SendPlayerInput(InputType inputType)
     {
@@ -241,6 +238,24 @@ public class NetworkManager : SingletonMono<NetworkManager>
         var message = MessageSerializer.CreatePlayerInputMessage(playerID, inputType, currentFrame);
         SendMessage(message);
     }
+    // 请求开始游戏
+
+    public void GameStartRequest(string roomId)
+    {
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot send input: not connected");
+            return;
+        }
+
+        var message =new ClientMessage { GameStartRequest = new GameStartRequest()
+        {
+            RoomId = roomId
+        }};
+        SendMessage(message);
+    }
+    
+    #endregion
 
     // 发送消息到服务器
     public void SendMessage(ClientMessage message)
@@ -282,14 +297,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
     void OnDestroy()
     {
         OnConnectSuccess -= SetPlayerID;
-        
-       
         shouldStopThread = true;
         isConnected = false;
-
         stream?.Close();
         tcpClient?.Close();
-
         if (receiveThread != null && receiveThread.IsAlive)
         {
             receiveThread.Join(1000); // 等待线程结束，最多1秒
@@ -300,6 +311,4 @@ public class NetworkManager : SingletonMono<NetworkManager>
     {
         OnDestroy();
     }
-
-
 }

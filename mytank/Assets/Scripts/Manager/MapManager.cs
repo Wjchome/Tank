@@ -45,7 +45,7 @@
                 { MapType.river, riverPrefab },      // 河流
                 { MapType.tree, treePrefab },       // 树荫
             };
-            gridObjects = new GameObject[mapWidth, mapHeight];
+            
         }
         
         void LoadMapFromWallsParent()
