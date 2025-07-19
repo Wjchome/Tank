@@ -44,6 +44,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
         ConnectToServer();
     }
     
+    
+    
     public void ConnectToServer()
     {
         try
@@ -143,11 +145,14 @@ public class NetworkManager : SingletonMono<NetworkManager>
             currentRoom = message.RoomInfo;
             if (currentRoom.Status == "error")
             {
-                Debug.LogError($"Room error: {currentRoom.RoomName}");
-                // TODO: 这里可以弹窗提示错误
+                Debug.LogError($"Room error: {message.RoomInfo.RoomName}");
+                // 错误处理：恢复按钮状态
+                OnRoomInfoUpdate?.Invoke(null);
             }
             else
             {
+                // 成功响应：更新房间信息
+                currentRoom = message.RoomInfo;
                 isHost = currentRoom.HostId == playerID;
                 Debug.Log($"Setting isHost to: {isHost} (my ID: {playerID}, host ID: {currentRoom.HostId})");
                 Debug.Log($"Invoking OnRoomInfoUpdate event...");
@@ -237,7 +242,19 @@ public class NetworkManager : SingletonMono<NetworkManager>
             return;
         }
 
-        var message = MessageSerializer.CreateRoomRequestMessage(roomName, maxPlayers);
+        var message = new ClientMessage()
+        {
+            CreateRoomRequest = new CreateRoomRequest()
+            {
+                RoomName = roomName,
+                MaxPlayers = maxPlayers,
+                PlayerName = RoomManager.Instance.myNameInput.text,
+                ColorR = (int)(RoomManager.Instance.myColorR.value * 255),
+                ColorG = (int)(RoomManager.Instance.myColorG.value * 255),
+                ColorB = (int)(RoomManager.Instance.myColorB.value * 255),
+
+            }
+        };
         SendMessage(message);
     }
     // 请求加入房间
@@ -249,7 +266,17 @@ public class NetworkManager : SingletonMono<NetworkManager>
             return;
         }
 
-        var message = MessageSerializer.CreateJoinRoomRequestMessage(roomId);
+        var message = new ClientMessage
+        {
+            JoinRoomRequest = new JoinRoomRequest
+            {
+                RoomId = roomId,
+                PlayerName = RoomManager.Instance.myNameInput.text,
+                ColorR = (int)(RoomManager.Instance.myColorR.value * 255),
+                ColorG = (int)(RoomManager.Instance.myColorG.value * 255),
+                ColorB = (int)(RoomManager.Instance.myColorB.value * 255),
+            }
+        };
         SendMessage(message);
     }
     
@@ -263,6 +290,19 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
 
         var message = MessageSerializer.CreateLeaveRoomRequestMessage(roomId);
+        SendMessage(message);
+    }
+
+    public void KickPlayer(string roomId, string playerId)
+    {
+        var message = new ClientMessage
+        {
+            KickPlayerRequest = new KickPlayerRequest
+            {
+                RoomId = roomId,
+                TargetPlayerId = playerId
+            }
+        };
         SendMessage(message);
     }
     // 发送玩家输入

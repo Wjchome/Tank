@@ -25,54 +25,65 @@ namespace Tankgame {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChBwcm90by9nYW1lLnByb3RvEgh0YW5rZ2FtZSIoCg5Db25uZWN0U3VjY2Vz",
-            "cxIWCg55b3VyX3BsYXllcl9pZBgBIAEoCSJ4CghSb29tSW5mbxIPCgdyb29t",
-            "X2lkGAEgASgJEhIKCnBsYXllcl9pZHMYAiADKAkSDgoGc3RhdHVzGAMgASgJ",
-            "Eg8KB2hvc3RfaWQYBCABKAkSEwoLbWF4X3BsYXllcnMYBSABKAUSEQoJcm9v",
-            "bV9uYW1lGAYgASgJIi0KCFJvb21MaXN0EiEKBXJvb21zGAEgAygLMhIudGFu",
-            "a2dhbWUuUm9vbUluZm8iOwoRQ3JlYXRlUm9vbVJlcXVlc3QSEQoJcm9vbV9u",
-            "YW1lGAEgASgJEhMKC21heF9wbGF5ZXJzGAIgASgFIiIKD0pvaW5Sb29tUmVx",
-            "dWVzdBIPCgdyb29tX2lkGAEgASgJIiMKEExlYXZlUm9vbVJlcXVlc3QSDwoH",
-            "cm9vbV9pZBgBIAEoCSJyCgtQbGF5ZXJJbnB1dBIRCglwbGF5ZXJfaWQYASAB",
-            "KAkSJwoKaW5wdXRfdHlwZRgCIAEoDjITLnRhbmtnYW1lLklucHV0VHlwZRIU",
-            "CgxmcmFtZV9udW1iZXIYAyABKAMSEQoJdGltZXN0YW1wGAQgASgDIkoKC0Zy",
-            "YW1lSW5wdXRzEhQKDGZyYW1lX251bWJlchgBIAEoAxIlCgZpbnB1dHMYAiAD",
-            "KAsyFS50YW5rZ2FtZS5QbGF5ZXJJbnB1dCJFCglHYW1lU3RhcnQSDwoHcm9v",
-            "bV9pZBgBIAEoCRISCgpwbGF5ZXJfaWRzGAIgAygJEhMKC3JhbmRvbV9zZWVk",
-            "GAMgASgDIhEKD1Jvb21MaXN0UmVxdWVzdCIjChBHYW1lU3RhcnRSZXF1ZXN0",
-            "Eg8KB3Jvb21faWQYASABKAki+AEKDVNlcnZlck1lc3NhZ2USLQoMZnJhbWVf",
-            "aW5wdXRzGAEgASgLMhUudGFua2dhbWUuRnJhbWVJbnB1dHNIABInCglyb29t",
-            "X2luZm8YAiABKAsyEi50YW5rZ2FtZS5Sb29tSW5mb0gAEikKCmdhbWVfc3Rh",
-            "cnQYAyABKAsyEy50YW5rZ2FtZS5HYW1lU3RhcnRIABIzCg9jb25uZWN0X3N1",
-            "Y2Nlc3MYBCABKAsyGC50YW5rZ2FtZS5Db25uZWN0U3VjY2Vzc0gAEicKCXJv",
-            "b21fbGlzdBgFIAEoCzISLnRhbmtnYW1lLlJvb21MaXN0SABCBgoEZGF0YSLm",
-            "AgoNQ2xpZW50TWVzc2FnZRItCgxwbGF5ZXJfaW5wdXQYASABKAsyFS50YW5r",
-            "Z2FtZS5QbGF5ZXJJbnB1dEgAEjoKE2NyZWF0ZV9yb29tX3JlcXVlc3QYAiAB",
-            "KAsyGy50YW5rZ2FtZS5DcmVhdGVSb29tUmVxdWVzdEgAEjYKEWpvaW5fcm9v",
-            "bV9yZXF1ZXN0GAMgASgLMhkudGFua2dhbWUuSm9pblJvb21SZXF1ZXN0SAAS",
-            "OAoSbGVhdmVfcm9vbV9yZXF1ZXN0GAQgASgLMhoudGFua2dhbWUuTGVhdmVS",
-            "b29tUmVxdWVzdEgAEjYKEXJvb21fbGlzdF9yZXF1ZXN0GAUgASgLMhkudGFu",
-            "a2dhbWUuUm9vbUxpc3RSZXF1ZXN0SAASOAoSZ2FtZV9zdGFydF9yZXF1ZXN0",
-            "GAYgASgLMhoudGFua2dhbWUuR2FtZVN0YXJ0UmVxdWVzdEgAQgYKBGRhdGEq",
-            "fwoJSW5wdXRUeXBlEg4KCklOUFVUX05PTkUQABIRCg1JTlBVVF9NT1ZFX1VQ",
-            "EAESEwoPSU5QVVRfTU9WRV9ET1dOEAISEwoPSU5QVVRfTU9WRV9MRUZUEAMS",
-            "FAoQSU5QVVRfTU9WRV9SSUdIVBAEEg8KC0lOUFVUX1NIT09UEAVCDloMc2Vy",
-            "dmVyL3Byb3RvYgZwcm90bzM="));
+            "cxIWCg55b3VyX3BsYXllcl9pZBgBIAEoCSJnCgpQbGF5ZXJJbmZvEhEKCXBs",
+            "YXllcl9pZBgBIAEoCRITCgtwbGF5ZXJfbmFtZRgCIAEoCRIPCgdjb2xvcl9y",
+            "GAMgASgFEg8KB2NvbG9yX2cYBCABKAUSDwoHY29sb3JfYhgFIAEoBSKkAQoI",
+            "Um9vbUluZm8SDwoHcm9vbV9pZBgBIAEoCRISCgpwbGF5ZXJfaWRzGAIgAygJ",
+            "Eg4KBnN0YXR1cxgDIAEoCRIPCgdob3N0X2lkGAQgASgJEhMKC21heF9wbGF5",
+            "ZXJzGAUgASgFEhEKCXJvb21fbmFtZRgGIAEoCRIqCgxwbGF5ZXJfaW5mb3MY",
+            "ByADKAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvIi0KCFJvb21MaXN0EiEKBXJv",
+            "b21zGAEgAygLMhIudGFua2dhbWUuUm9vbUluZm8igwEKEUNyZWF0ZVJvb21S",
+            "ZXF1ZXN0EhEKCXJvb21fbmFtZRgBIAEoCRITCgttYXhfcGxheWVycxgCIAEo",
+            "BRITCgtwbGF5ZXJfbmFtZRgDIAEoCRIPCgdjb2xvcl9yGAQgASgFEg8KB2Nv",
+            "bG9yX2cYBSABKAUSDwoHY29sb3JfYhgGIAEoBSJqCg9Kb2luUm9vbVJlcXVl",
+            "c3QSDwoHcm9vbV9pZBgBIAEoCRITCgtwbGF5ZXJfbmFtZRgCIAEoCRIPCgdj",
+            "b2xvcl9yGAMgASgFEg8KB2NvbG9yX2cYBCABKAUSDwoHY29sb3JfYhgFIAEo",
+            "BSIjChBMZWF2ZVJvb21SZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkiPgoRS2lj",
+            "a1BsYXllclJlcXVlc3QSDwoHcm9vbV9pZBgBIAEoCRIYChB0YXJnZXRfcGxh",
+            "eWVyX2lkGAIgASgJInIKC1BsYXllcklucHV0EhEKCXBsYXllcl9pZBgBIAEo",
+            "CRInCgppbnB1dF90eXBlGAIgASgOMhMudGFua2dhbWUuSW5wdXRUeXBlEhQK",
+            "DGZyYW1lX251bWJlchgDIAEoAxIRCgl0aW1lc3RhbXAYBCABKAMiSgoLRnJh",
+            "bWVJbnB1dHMSFAoMZnJhbWVfbnVtYmVyGAEgASgDEiUKBmlucHV0cxgCIAMo",
+            "CzIVLnRhbmtnYW1lLlBsYXllcklucHV0IkUKCUdhbWVTdGFydBIPCgdyb29t",
+            "X2lkGAEgASgJEhIKCnBsYXllcl9pZHMYAiADKAkSEwoLcmFuZG9tX3NlZWQY",
+            "AyABKAMiEQoPUm9vbUxpc3RSZXF1ZXN0IiMKEEdhbWVTdGFydFJlcXVlc3QS",
+            "DwoHcm9vbV9pZBgBIAEoCSL4AQoNU2VydmVyTWVzc2FnZRItCgxmcmFtZV9p",
+            "bnB1dHMYASABKAsyFS50YW5rZ2FtZS5GcmFtZUlucHV0c0gAEicKCXJvb21f",
+            "aW5mbxgCIAEoCzISLnRhbmtnYW1lLlJvb21JbmZvSAASKQoKZ2FtZV9zdGFy",
+            "dBgDIAEoCzITLnRhbmtnYW1lLkdhbWVTdGFydEgAEjMKD2Nvbm5lY3Rfc3Vj",
+            "Y2VzcxgEIAEoCzIYLnRhbmtnYW1lLkNvbm5lY3RTdWNjZXNzSAASJwoJcm9v",
+            "bV9saXN0GAUgASgLMhIudGFua2dhbWUuUm9vbUxpc3RIAEIGCgRkYXRhIqID",
+            "Cg1DbGllbnRNZXNzYWdlEi0KDHBsYXllcl9pbnB1dBgBIAEoCzIVLnRhbmtn",
+            "YW1lLlBsYXllcklucHV0SAASOgoTY3JlYXRlX3Jvb21fcmVxdWVzdBgCIAEo",
+            "CzIbLnRhbmtnYW1lLkNyZWF0ZVJvb21SZXF1ZXN0SAASNgoRam9pbl9yb29t",
+            "X3JlcXVlc3QYAyABKAsyGS50YW5rZ2FtZS5Kb2luUm9vbVJlcXVlc3RIABI4",
+            "ChJsZWF2ZV9yb29tX3JlcXVlc3QYBCABKAsyGi50YW5rZ2FtZS5MZWF2ZVJv",
+            "b21SZXF1ZXN0SAASNgoRcm9vbV9saXN0X3JlcXVlc3QYBSABKAsyGS50YW5r",
+            "Z2FtZS5Sb29tTGlzdFJlcXVlc3RIABI4ChJnYW1lX3N0YXJ0X3JlcXVlc3QY",
+            "BiABKAsyGi50YW5rZ2FtZS5HYW1lU3RhcnRSZXF1ZXN0SAASOgoTa2lja19w",
+            "bGF5ZXJfcmVxdWVzdBgHIAEoCzIbLnRhbmtnYW1lLktpY2tQbGF5ZXJSZXF1",
+            "ZXN0SABCBgoEZGF0YSp/CglJbnB1dFR5cGUSDgoKSU5QVVRfTk9ORRAAEhEK",
+            "DUlOUFVUX01PVkVfVVAQARITCg9JTlBVVF9NT1ZFX0RPV04QAhITCg9JTlBV",
+            "VF9NT1ZFX0xFRlQQAxIUChBJTlBVVF9NT1ZFX1JJR0hUEAQSDwoLSU5QVVRf",
+            "U0hPT1QQBUIOWgxzZXJ2ZXIvcHJvdG9iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tankgame.InputType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ConnectSuccess), global::Tankgame.ConnectSuccess.Parser, new[]{ "YourPlayerId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomInfo), global::Tankgame.RoomInfo.Parser, new[]{ "RoomId", "PlayerIds", "Status", "HostId", "MaxPlayers", "RoomName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.PlayerInfo), global::Tankgame.PlayerInfo.Parser, new[]{ "PlayerId", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomInfo), global::Tankgame.RoomInfo.Parser, new[]{ "RoomId", "PlayerIds", "Status", "HostId", "MaxPlayers", "RoomName", "PlayerInfos" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomList), global::Tankgame.RoomList.Parser, new[]{ "Rooms" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.CreateRoomRequest), global::Tankgame.CreateRoomRequest.Parser, new[]{ "RoomName", "MaxPlayers" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.JoinRoomRequest), global::Tankgame.JoinRoomRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.CreateRoomRequest), global::Tankgame.CreateRoomRequest.Parser, new[]{ "RoomName", "MaxPlayers", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.JoinRoomRequest), global::Tankgame.JoinRoomRequest.Parser, new[]{ "RoomId", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.LeaveRoomRequest), global::Tankgame.LeaveRoomRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.KickPlayerRequest), global::Tankgame.KickPlayerRequest.Parser, new[]{ "RoomId", "TargetPlayerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.PlayerInput), global::Tankgame.PlayerInput.Parser, new[]{ "PlayerId", "InputType", "FrameNumber", "Timestamp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.FrameInputs), global::Tankgame.FrameInputs.Parser, new[]{ "FrameNumber", "Inputs" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStart), global::Tankgame.GameStart.Parser, new[]{ "RoomId", "PlayerIds", "RandomSeed" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomListRequest), global::Tankgame.RoomListRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStartRequest), global::Tankgame.GameStartRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ServerMessage), global::Tankgame.ServerMessage.Parser, new[]{ "FrameInputs", "RoomInfo", "GameStart", "ConnectSuccess", "RoomList" }, new[]{ "Data" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ClientMessage), global::Tankgame.ClientMessage.Parser, new[]{ "PlayerInput", "CreateRoomRequest", "JoinRoomRequest", "LeaveRoomRequest", "RoomListRequest", "GameStartRequest" }, new[]{ "Data" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ClientMessage), global::Tankgame.ClientMessage.Parser, new[]{ "PlayerInput", "CreateRoomRequest", "JoinRoomRequest", "LeaveRoomRequest", "RoomListRequest", "GameStartRequest", "KickPlayerRequest" }, new[]{ "Data" }, null, null, null)
           }));
     }
     #endregion
@@ -296,6 +307,355 @@ namespace Tankgame {
   }
 
   /// <summary>
+  /// 玩家信息
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class PlayerInfo : pb::IMessage<PlayerInfo>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<PlayerInfo> _parser = new pb::MessageParser<PlayerInfo>(() => new PlayerInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<PlayerInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PlayerInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PlayerInfo(PlayerInfo other) : this() {
+      playerId_ = other.playerId_;
+      playerName_ = other.playerName_;
+      colorR_ = other.colorR_;
+      colorG_ = other.colorG_;
+      colorB_ = other.colorB_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PlayerInfo Clone() {
+      return new PlayerInfo(this);
+    }
+
+    /// <summary>Field number for the "player_id" field.</summary>
+    public const int PlayerIdFieldNumber = 1;
+    private string playerId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PlayerId {
+      get { return playerId_; }
+      set {
+        playerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "player_name" field.</summary>
+    public const int PlayerNameFieldNumber = 2;
+    private string playerName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PlayerName {
+      get { return playerName_; }
+      set {
+        playerName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "color_r" field.</summary>
+    public const int ColorRFieldNumber = 3;
+    private int colorR_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorR {
+      get { return colorR_; }
+      set {
+        colorR_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "color_g" field.</summary>
+    public const int ColorGFieldNumber = 4;
+    private int colorG_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorG {
+      get { return colorG_; }
+      set {
+        colorG_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "color_b" field.</summary>
+    public const int ColorBFieldNumber = 5;
+    private int colorB_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorB {
+      get { return colorB_; }
+      set {
+        colorB_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as PlayerInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(PlayerInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (PlayerId != other.PlayerId) return false;
+      if (PlayerName != other.PlayerName) return false;
+      if (ColorR != other.ColorR) return false;
+      if (ColorG != other.ColorG) return false;
+      if (ColorB != other.ColorB) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
+      if (PlayerName.Length != 0) hash ^= PlayerName.GetHashCode();
+      if (ColorR != 0) hash ^= ColorR.GetHashCode();
+      if (ColorG != 0) hash ^= ColorG.GetHashCode();
+      if (ColorB != 0) hash ^= ColorB.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (PlayerId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(PlayerId);
+      }
+      if (PlayerName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(PlayerName);
+      }
+      if (ColorR != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ColorR);
+      }
+      if (ColorG != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(ColorG);
+      }
+      if (ColorB != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ColorB);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (PlayerId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(PlayerId);
+      }
+      if (PlayerName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(PlayerName);
+      }
+      if (ColorR != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ColorR);
+      }
+      if (ColorG != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(ColorG);
+      }
+      if (ColorB != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ColorB);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (PlayerId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerId);
+      }
+      if (PlayerName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerName);
+      }
+      if (ColorR != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorR);
+      }
+      if (ColorG != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorG);
+      }
+      if (ColorB != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorB);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(PlayerInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.PlayerId.Length != 0) {
+        PlayerId = other.PlayerId;
+      }
+      if (other.PlayerName.Length != 0) {
+        PlayerName = other.PlayerName;
+      }
+      if (other.ColorR != 0) {
+        ColorR = other.ColorR;
+      }
+      if (other.ColorG != 0) {
+        ColorG = other.ColorG;
+      }
+      if (other.ColorB != 0) {
+        ColorB = other.ColorB;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            PlayerId = input.ReadString();
+            break;
+          }
+          case 18: {
+            PlayerName = input.ReadString();
+            break;
+          }
+          case 24: {
+            ColorR = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            ColorG = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ColorB = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            PlayerId = input.ReadString();
+            break;
+          }
+          case 18: {
+            PlayerName = input.ReadString();
+            break;
+          }
+          case 24: {
+            ColorR = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            ColorG = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ColorB = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
   /// 房间信息
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -313,7 +673,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -339,6 +699,7 @@ namespace Tankgame {
       hostId_ = other.hostId_;
       maxPlayers_ = other.maxPlayers_;
       roomName_ = other.roomName_;
+      playerInfos_ = other.playerInfos_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -431,6 +792,20 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "player_infos" field.</summary>
+    public const int PlayerInfosFieldNumber = 7;
+    private static readonly pb::FieldCodec<global::Tankgame.PlayerInfo> _repeated_playerInfos_codec
+        = pb::FieldCodec.ForMessage(58, global::Tankgame.PlayerInfo.Parser);
+    private readonly pbc::RepeatedField<global::Tankgame.PlayerInfo> playerInfos_ = new pbc::RepeatedField<global::Tankgame.PlayerInfo>();
+    /// <summary>
+    /// 玩家详细信息
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::Tankgame.PlayerInfo> PlayerInfos {
+      get { return playerInfos_; }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -452,6 +827,7 @@ namespace Tankgame {
       if (HostId != other.HostId) return false;
       if (MaxPlayers != other.MaxPlayers) return false;
       if (RoomName != other.RoomName) return false;
+      if(!playerInfos_.Equals(other.playerInfos_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -465,6 +841,7 @@ namespace Tankgame {
       if (HostId.Length != 0) hash ^= HostId.GetHashCode();
       if (MaxPlayers != 0) hash ^= MaxPlayers.GetHashCode();
       if (RoomName.Length != 0) hash ^= RoomName.GetHashCode();
+      hash ^= playerInfos_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -504,6 +881,7 @@ namespace Tankgame {
         output.WriteRawTag(50);
         output.WriteString(RoomName);
       }
+      playerInfos_.WriteTo(output, _repeated_playerInfos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -535,6 +913,7 @@ namespace Tankgame {
         output.WriteRawTag(50);
         output.WriteString(RoomName);
       }
+      playerInfos_.WriteTo(ref output, _repeated_playerInfos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -561,6 +940,7 @@ namespace Tankgame {
       if (RoomName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomName);
       }
+      size += playerInfos_.CalculateSize(_repeated_playerInfos_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -589,6 +969,7 @@ namespace Tankgame {
       if (other.RoomName.Length != 0) {
         RoomName = other.RoomName;
       }
+      playerInfos_.Add(other.playerInfos_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -630,6 +1011,10 @@ namespace Tankgame {
           }
           case 50: {
             RoomName = input.ReadString();
+            break;
+          }
+          case 58: {
+            playerInfos_.AddEntriesFrom(input, _repeated_playerInfos_codec);
             break;
           }
         }
@@ -675,6 +1060,10 @@ namespace Tankgame {
             RoomName = input.ReadString();
             break;
           }
+          case 58: {
+            playerInfos_.AddEntriesFrom(ref input, _repeated_playerInfos_codec);
+            break;
+          }
         }
       }
     }
@@ -700,7 +1089,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -890,7 +1279,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -912,6 +1301,10 @@ namespace Tankgame {
     public CreateRoomRequest(CreateRoomRequest other) : this() {
       roomName_ = other.roomName_;
       maxPlayers_ = other.maxPlayers_;
+      playerName_ = other.playerName_;
+      colorR_ = other.colorR_;
+      colorG_ = other.colorG_;
+      colorB_ = other.colorB_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -945,6 +1338,66 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "player_name" field.</summary>
+    public const int PlayerNameFieldNumber = 3;
+    private string playerName_ = "";
+    /// <summary>
+    /// 玩家名字
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PlayerName {
+      get { return playerName_; }
+      set {
+        playerName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "color_r" field.</summary>
+    public const int ColorRFieldNumber = 4;
+    private int colorR_;
+    /// <summary>
+    /// 颜色R分量
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorR {
+      get { return colorR_; }
+      set {
+        colorR_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "color_g" field.</summary>
+    public const int ColorGFieldNumber = 5;
+    private int colorG_;
+    /// <summary>
+    /// 颜色G分量
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorG {
+      get { return colorG_; }
+      set {
+        colorG_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "color_b" field.</summary>
+    public const int ColorBFieldNumber = 6;
+    private int colorB_;
+    /// <summary>
+    /// 颜色B分量
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorB {
+      get { return colorB_; }
+      set {
+        colorB_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -962,6 +1415,10 @@ namespace Tankgame {
       }
       if (RoomName != other.RoomName) return false;
       if (MaxPlayers != other.MaxPlayers) return false;
+      if (PlayerName != other.PlayerName) return false;
+      if (ColorR != other.ColorR) return false;
+      if (ColorG != other.ColorG) return false;
+      if (ColorB != other.ColorB) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -971,6 +1428,10 @@ namespace Tankgame {
       int hash = 1;
       if (RoomName.Length != 0) hash ^= RoomName.GetHashCode();
       if (MaxPlayers != 0) hash ^= MaxPlayers.GetHashCode();
+      if (PlayerName.Length != 0) hash ^= PlayerName.GetHashCode();
+      if (ColorR != 0) hash ^= ColorR.GetHashCode();
+      if (ColorG != 0) hash ^= ColorG.GetHashCode();
+      if (ColorB != 0) hash ^= ColorB.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -997,6 +1458,22 @@ namespace Tankgame {
         output.WriteRawTag(16);
         output.WriteInt32(MaxPlayers);
       }
+      if (PlayerName.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(PlayerName);
+      }
+      if (ColorR != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(ColorR);
+      }
+      if (ColorG != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ColorG);
+      }
+      if (ColorB != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(ColorB);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1015,6 +1492,22 @@ namespace Tankgame {
         output.WriteRawTag(16);
         output.WriteInt32(MaxPlayers);
       }
+      if (PlayerName.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(PlayerName);
+      }
+      if (ColorR != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(ColorR);
+      }
+      if (ColorG != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ColorG);
+      }
+      if (ColorB != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(ColorB);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1030,6 +1523,18 @@ namespace Tankgame {
       }
       if (MaxPlayers != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxPlayers);
+      }
+      if (PlayerName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerName);
+      }
+      if (ColorR != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorR);
+      }
+      if (ColorG != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorG);
+      }
+      if (ColorB != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorB);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1048,6 +1553,18 @@ namespace Tankgame {
       }
       if (other.MaxPlayers != 0) {
         MaxPlayers = other.MaxPlayers;
+      }
+      if (other.PlayerName.Length != 0) {
+        PlayerName = other.PlayerName;
+      }
+      if (other.ColorR != 0) {
+        ColorR = other.ColorR;
+      }
+      if (other.ColorG != 0) {
+        ColorG = other.ColorG;
+      }
+      if (other.ColorB != 0) {
+        ColorB = other.ColorB;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1076,6 +1593,22 @@ namespace Tankgame {
             MaxPlayers = input.ReadInt32();
             break;
           }
+          case 26: {
+            PlayerName = input.ReadString();
+            break;
+          }
+          case 32: {
+            ColorR = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ColorG = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            ColorB = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -1101,6 +1634,22 @@ namespace Tankgame {
           }
           case 16: {
             MaxPlayers = input.ReadInt32();
+            break;
+          }
+          case 26: {
+            PlayerName = input.ReadString();
+            break;
+          }
+          case 32: {
+            ColorR = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ColorG = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            ColorB = input.ReadInt32();
             break;
           }
         }
@@ -1128,7 +1677,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1149,6 +1698,10 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public JoinRoomRequest(JoinRoomRequest other) : this() {
       roomId_ = other.roomId_;
+      playerName_ = other.playerName_;
+      colorR_ = other.colorR_;
+      colorG_ = other.colorG_;
+      colorB_ = other.colorB_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1170,6 +1723,66 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "player_name" field.</summary>
+    public const int PlayerNameFieldNumber = 2;
+    private string playerName_ = "";
+    /// <summary>
+    /// 玩家名字
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PlayerName {
+      get { return playerName_; }
+      set {
+        playerName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "color_r" field.</summary>
+    public const int ColorRFieldNumber = 3;
+    private int colorR_;
+    /// <summary>
+    /// 颜色R分量
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorR {
+      get { return colorR_; }
+      set {
+        colorR_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "color_g" field.</summary>
+    public const int ColorGFieldNumber = 4;
+    private int colorG_;
+    /// <summary>
+    /// 颜色G分量
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorG {
+      get { return colorG_; }
+      set {
+        colorG_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "color_b" field.</summary>
+    public const int ColorBFieldNumber = 5;
+    private int colorB_;
+    /// <summary>
+    /// 颜色B分量
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ColorB {
+      get { return colorB_; }
+      set {
+        colorB_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1186,6 +1799,10 @@ namespace Tankgame {
         return true;
       }
       if (RoomId != other.RoomId) return false;
+      if (PlayerName != other.PlayerName) return false;
+      if (ColorR != other.ColorR) return false;
+      if (ColorG != other.ColorG) return false;
+      if (ColorB != other.ColorB) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1194,6 +1811,10 @@ namespace Tankgame {
     public override int GetHashCode() {
       int hash = 1;
       if (RoomId.Length != 0) hash ^= RoomId.GetHashCode();
+      if (PlayerName.Length != 0) hash ^= PlayerName.GetHashCode();
+      if (ColorR != 0) hash ^= ColorR.GetHashCode();
+      if (ColorG != 0) hash ^= ColorG.GetHashCode();
+      if (ColorB != 0) hash ^= ColorB.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1216,6 +1837,22 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(RoomId);
       }
+      if (PlayerName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(PlayerName);
+      }
+      if (ColorR != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ColorR);
+      }
+      if (ColorG != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(ColorG);
+      }
+      if (ColorB != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ColorB);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1230,6 +1867,22 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(RoomId);
       }
+      if (PlayerName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(PlayerName);
+      }
+      if (ColorR != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ColorR);
+      }
+      if (ColorG != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(ColorG);
+      }
+      if (ColorB != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ColorB);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1242,6 +1895,18 @@ namespace Tankgame {
       int size = 0;
       if (RoomId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomId);
+      }
+      if (PlayerName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerName);
+      }
+      if (ColorR != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorR);
+      }
+      if (ColorG != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorG);
+      }
+      if (ColorB != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorB);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1257,6 +1922,18 @@ namespace Tankgame {
       }
       if (other.RoomId.Length != 0) {
         RoomId = other.RoomId;
+      }
+      if (other.PlayerName.Length != 0) {
+        PlayerName = other.PlayerName;
+      }
+      if (other.ColorR != 0) {
+        ColorR = other.ColorR;
+      }
+      if (other.ColorG != 0) {
+        ColorG = other.ColorG;
+      }
+      if (other.ColorB != 0) {
+        ColorB = other.ColorB;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1281,6 +1958,22 @@ namespace Tankgame {
             RoomId = input.ReadString();
             break;
           }
+          case 18: {
+            PlayerName = input.ReadString();
+            break;
+          }
+          case 24: {
+            ColorR = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            ColorG = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ColorB = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -1302,6 +1995,22 @@ namespace Tankgame {
             break;
           case 10: {
             RoomId = input.ReadString();
+            break;
+          }
+          case 18: {
+            PlayerName = input.ReadString();
+            break;
+          }
+          case 24: {
+            ColorR = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            ColorG = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ColorB = input.ReadInt32();
             break;
           }
         }
@@ -1329,7 +2038,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1513,6 +2222,247 @@ namespace Tankgame {
   }
 
   /// <summary>
+  /// 踢人请求
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class KickPlayerRequest : pb::IMessage<KickPlayerRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<KickPlayerRequest> _parser = new pb::MessageParser<KickPlayerRequest>(() => new KickPlayerRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<KickPlayerRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KickPlayerRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KickPlayerRequest(KickPlayerRequest other) : this() {
+      roomId_ = other.roomId_;
+      targetPlayerId_ = other.targetPlayerId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KickPlayerRequest Clone() {
+      return new KickPlayerRequest(this);
+    }
+
+    /// <summary>Field number for the "room_id" field.</summary>
+    public const int RoomIdFieldNumber = 1;
+    private string roomId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RoomId {
+      get { return roomId_; }
+      set {
+        roomId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "target_player_id" field.</summary>
+    public const int TargetPlayerIdFieldNumber = 2;
+    private string targetPlayerId_ = "";
+    /// <summary>
+    /// 被踢的玩家ID
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string TargetPlayerId {
+      get { return targetPlayerId_; }
+      set {
+        targetPlayerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as KickPlayerRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(KickPlayerRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (RoomId != other.RoomId) return false;
+      if (TargetPlayerId != other.TargetPlayerId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (RoomId.Length != 0) hash ^= RoomId.GetHashCode();
+      if (TargetPlayerId.Length != 0) hash ^= TargetPlayerId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (RoomId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(RoomId);
+      }
+      if (TargetPlayerId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(TargetPlayerId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (RoomId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(RoomId);
+      }
+      if (TargetPlayerId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(TargetPlayerId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (RoomId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomId);
+      }
+      if (TargetPlayerId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetPlayerId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(KickPlayerRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.RoomId.Length != 0) {
+        RoomId = other.RoomId;
+      }
+      if (other.TargetPlayerId.Length != 0) {
+        TargetPlayerId = other.TargetPlayerId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            RoomId = input.ReadString();
+            break;
+          }
+          case 18: {
+            TargetPlayerId = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            RoomId = input.ReadString();
+            break;
+          }
+          case 18: {
+            TargetPlayerId = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
   /// 玩家输入
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -1530,7 +2480,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1842,7 +2792,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2069,7 +3019,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2333,7 +3283,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[9]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2494,7 +3444,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[10]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2695,7 +3645,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[11]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3151,7 +4101,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[12]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3189,6 +4139,9 @@ namespace Tankgame {
           break;
         case DataOneofCase.GameStartRequest:
           GameStartRequest = other.GameStartRequest.Clone();
+          break;
+        case DataOneofCase.KickPlayerRequest:
+          KickPlayerRequest = other.KickPlayerRequest.Clone();
           break;
       }
 
@@ -3273,6 +4226,18 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "kick_player_request" field.</summary>
+    public const int KickPlayerRequestFieldNumber = 7;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Tankgame.KickPlayerRequest KickPlayerRequest {
+      get { return dataCase_ == DataOneofCase.KickPlayerRequest ? (global::Tankgame.KickPlayerRequest) data_ : null; }
+      set {
+        data_ = value;
+        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.KickPlayerRequest;
+      }
+    }
+
     private object data_;
     /// <summary>Enum of possible cases for the "data" oneof.</summary>
     public enum DataOneofCase {
@@ -3283,6 +4248,7 @@ namespace Tankgame {
       LeaveRoomRequest = 4,
       RoomListRequest = 5,
       GameStartRequest = 6,
+      KickPlayerRequest = 7,
     }
     private DataOneofCase dataCase_ = DataOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3319,6 +4285,7 @@ namespace Tankgame {
       if (!object.Equals(LeaveRoomRequest, other.LeaveRoomRequest)) return false;
       if (!object.Equals(RoomListRequest, other.RoomListRequest)) return false;
       if (!object.Equals(GameStartRequest, other.GameStartRequest)) return false;
+      if (!object.Equals(KickPlayerRequest, other.KickPlayerRequest)) return false;
       if (DataCase != other.DataCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3333,6 +4300,7 @@ namespace Tankgame {
       if (dataCase_ == DataOneofCase.LeaveRoomRequest) hash ^= LeaveRoomRequest.GetHashCode();
       if (dataCase_ == DataOneofCase.RoomListRequest) hash ^= RoomListRequest.GetHashCode();
       if (dataCase_ == DataOneofCase.GameStartRequest) hash ^= GameStartRequest.GetHashCode();
+      if (dataCase_ == DataOneofCase.KickPlayerRequest) hash ^= KickPlayerRequest.GetHashCode();
       hash ^= (int) dataCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3376,6 +4344,10 @@ namespace Tankgame {
         output.WriteRawTag(50);
         output.WriteMessage(GameStartRequest);
       }
+      if (dataCase_ == DataOneofCase.KickPlayerRequest) {
+        output.WriteRawTag(58);
+        output.WriteMessage(KickPlayerRequest);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3410,6 +4382,10 @@ namespace Tankgame {
         output.WriteRawTag(50);
         output.WriteMessage(GameStartRequest);
       }
+      if (dataCase_ == DataOneofCase.KickPlayerRequest) {
+        output.WriteRawTag(58);
+        output.WriteMessage(KickPlayerRequest);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3437,6 +4413,9 @@ namespace Tankgame {
       }
       if (dataCase_ == DataOneofCase.GameStartRequest) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(GameStartRequest);
+      }
+      if (dataCase_ == DataOneofCase.KickPlayerRequest) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(KickPlayerRequest);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3486,6 +4465,12 @@ namespace Tankgame {
             GameStartRequest = new global::Tankgame.GameStartRequest();
           }
           GameStartRequest.MergeFrom(other.GameStartRequest);
+          break;
+        case DataOneofCase.KickPlayerRequest:
+          if (KickPlayerRequest == null) {
+            KickPlayerRequest = new global::Tankgame.KickPlayerRequest();
+          }
+          KickPlayerRequest.MergeFrom(other.KickPlayerRequest);
           break;
       }
 
@@ -3562,6 +4547,15 @@ namespace Tankgame {
             GameStartRequest = subBuilder;
             break;
           }
+          case 58: {
+            global::Tankgame.KickPlayerRequest subBuilder = new global::Tankgame.KickPlayerRequest();
+            if (dataCase_ == DataOneofCase.KickPlayerRequest) {
+              subBuilder.MergeFrom(KickPlayerRequest);
+            }
+            input.ReadMessage(subBuilder);
+            KickPlayerRequest = subBuilder;
+            break;
+          }
         }
       }
     #endif
@@ -3633,6 +4627,15 @@ namespace Tankgame {
             }
             input.ReadMessage(subBuilder);
             GameStartRequest = subBuilder;
+            break;
+          }
+          case 58: {
+            global::Tankgame.KickPlayerRequest subBuilder = new global::Tankgame.KickPlayerRequest();
+            if (dataCase_ == DataOneofCase.KickPlayerRequest) {
+              subBuilder.MergeFrom(KickPlayerRequest);
+            }
+            input.ReadMessage(subBuilder);
+            KickPlayerRequest = subBuilder;
             break;
           }
         }

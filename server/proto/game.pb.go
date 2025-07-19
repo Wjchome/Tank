@@ -125,22 +125,100 @@ func (x *ConnectSuccess) GetYourPlayerId() string {
 	return ""
 }
 
+// 玩家信息
+type PlayerInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PlayerId      string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
+	PlayerName    string                 `protobuf:"bytes,2,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"`
+	ColorR        int32                  `protobuf:"varint,3,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`
+	ColorG        int32                  `protobuf:"varint,4,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`
+	ColorB        int32                  `protobuf:"varint,5,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PlayerInfo) Reset() {
+	*x = PlayerInfo{}
+	mi := &file_proto_game_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PlayerInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PlayerInfo) ProtoMessage() {}
+
+func (x *PlayerInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_game_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PlayerInfo.ProtoReflect.Descriptor instead.
+func (*PlayerInfo) Descriptor() ([]byte, []int) {
+	return file_proto_game_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *PlayerInfo) GetPlayerId() string {
+	if x != nil {
+		return x.PlayerId
+	}
+	return ""
+}
+
+func (x *PlayerInfo) GetPlayerName() string {
+	if x != nil {
+		return x.PlayerName
+	}
+	return ""
+}
+
+func (x *PlayerInfo) GetColorR() int32 {
+	if x != nil {
+		return x.ColorR
+	}
+	return 0
+}
+
+func (x *PlayerInfo) GetColorG() int32 {
+	if x != nil {
+		return x.ColorG
+	}
+	return 0
+}
+
+func (x *PlayerInfo) GetColorB() int32 {
+	if x != nil {
+		return x.ColorB
+	}
+	return 0
+}
+
 // 房间信息
 type RoomInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomId        string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
 	PlayerIds     []string               `protobuf:"bytes,2,rep,name=player_ids,json=playerIds,proto3" json:"player_ids,omitempty"`
-	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`                            // "waiting", "playing", "ended"
-	HostId        string                 `protobuf:"bytes,4,opt,name=host_id,json=hostId,proto3" json:"host_id,omitempty"`              // 房主ID
-	MaxPlayers    int32                  `protobuf:"varint,5,opt,name=max_players,json=maxPlayers,proto3" json:"max_players,omitempty"` // 最大玩家数
-	RoomName      string                 `protobuf:"bytes,6,opt,name=room_name,json=roomName,proto3" json:"room_name,omitempty"`        // 房间名称
+	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`                              // "waiting", "playing", "ended"
+	HostId        string                 `protobuf:"bytes,4,opt,name=host_id,json=hostId,proto3" json:"host_id,omitempty"`                // 房主ID
+	MaxPlayers    int32                  `protobuf:"varint,5,opt,name=max_players,json=maxPlayers,proto3" json:"max_players,omitempty"`   // 最大玩家数
+	RoomName      string                 `protobuf:"bytes,6,opt,name=room_name,json=roomName,proto3" json:"room_name,omitempty"`          // 房间名称
+	PlayerInfos   []*PlayerInfo          `protobuf:"bytes,7,rep,name=player_infos,json=playerInfos,proto3" json:"player_infos,omitempty"` // 玩家详细信息
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *RoomInfo) Reset() {
 	*x = RoomInfo{}
-	mi := &file_proto_game_proto_msgTypes[1]
+	mi := &file_proto_game_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -152,7 +230,7 @@ func (x *RoomInfo) String() string {
 func (*RoomInfo) ProtoMessage() {}
 
 func (x *RoomInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[1]
+	mi := &file_proto_game_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -165,7 +243,7 @@ func (x *RoomInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomInfo.ProtoReflect.Descriptor instead.
 func (*RoomInfo) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{1}
+	return file_proto_game_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *RoomInfo) GetRoomId() string {
@@ -210,6 +288,13 @@ func (x *RoomInfo) GetRoomName() string {
 	return ""
 }
 
+func (x *RoomInfo) GetPlayerInfos() []*PlayerInfo {
+	if x != nil {
+		return x.PlayerInfos
+	}
+	return nil
+}
+
 // 房间列表
 type RoomList struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -220,7 +305,7 @@ type RoomList struct {
 
 func (x *RoomList) Reset() {
 	*x = RoomList{}
-	mi := &file_proto_game_proto_msgTypes[2]
+	mi := &file_proto_game_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -232,7 +317,7 @@ func (x *RoomList) String() string {
 func (*RoomList) ProtoMessage() {}
 
 func (x *RoomList) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[2]
+	mi := &file_proto_game_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -245,7 +330,7 @@ func (x *RoomList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomList.ProtoReflect.Descriptor instead.
 func (*RoomList) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{2}
+	return file_proto_game_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *RoomList) GetRooms() []*RoomInfo {
@@ -260,13 +345,17 @@ type CreateRoomRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomName      string                 `protobuf:"bytes,1,opt,name=room_name,json=roomName,proto3" json:"room_name,omitempty"`
 	MaxPlayers    int32                  `protobuf:"varint,2,opt,name=max_players,json=maxPlayers,proto3" json:"max_players,omitempty"`
+	PlayerName    string                 `protobuf:"bytes,3,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"` // 玩家名字
+	ColorR        int32                  `protobuf:"varint,4,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`            // 颜色R分量
+	ColorG        int32                  `protobuf:"varint,5,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`            // 颜色G分量
+	ColorB        int32                  `protobuf:"varint,6,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`            // 颜色B分量
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateRoomRequest) Reset() {
 	*x = CreateRoomRequest{}
-	mi := &file_proto_game_proto_msgTypes[3]
+	mi := &file_proto_game_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -278,7 +367,7 @@ func (x *CreateRoomRequest) String() string {
 func (*CreateRoomRequest) ProtoMessage() {}
 
 func (x *CreateRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[3]
+	mi := &file_proto_game_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -291,7 +380,7 @@ func (x *CreateRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRoomRequest.ProtoReflect.Descriptor instead.
 func (*CreateRoomRequest) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{3}
+	return file_proto_game_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateRoomRequest) GetRoomName() string {
@@ -308,17 +397,49 @@ func (x *CreateRoomRequest) GetMaxPlayers() int32 {
 	return 0
 }
 
+func (x *CreateRoomRequest) GetPlayerName() string {
+	if x != nil {
+		return x.PlayerName
+	}
+	return ""
+}
+
+func (x *CreateRoomRequest) GetColorR() int32 {
+	if x != nil {
+		return x.ColorR
+	}
+	return 0
+}
+
+func (x *CreateRoomRequest) GetColorG() int32 {
+	if x != nil {
+		return x.ColorG
+	}
+	return 0
+}
+
+func (x *CreateRoomRequest) GetColorB() int32 {
+	if x != nil {
+		return x.ColorB
+	}
+	return 0
+}
+
 // 加入房间请求
 type JoinRoomRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomId        string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+	PlayerName    string                 `protobuf:"bytes,2,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"` // 玩家名字
+	ColorR        int32                  `protobuf:"varint,3,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`            // 颜色R分量
+	ColorG        int32                  `protobuf:"varint,4,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`            // 颜色G分量
+	ColorB        int32                  `protobuf:"varint,5,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`            // 颜色B分量
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JoinRoomRequest) Reset() {
 	*x = JoinRoomRequest{}
-	mi := &file_proto_game_proto_msgTypes[4]
+	mi := &file_proto_game_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -330,7 +451,7 @@ func (x *JoinRoomRequest) String() string {
 func (*JoinRoomRequest) ProtoMessage() {}
 
 func (x *JoinRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[4]
+	mi := &file_proto_game_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -343,7 +464,7 @@ func (x *JoinRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JoinRoomRequest.ProtoReflect.Descriptor instead.
 func (*JoinRoomRequest) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{4}
+	return file_proto_game_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *JoinRoomRequest) GetRoomId() string {
@@ -351,6 +472,34 @@ func (x *JoinRoomRequest) GetRoomId() string {
 		return x.RoomId
 	}
 	return ""
+}
+
+func (x *JoinRoomRequest) GetPlayerName() string {
+	if x != nil {
+		return x.PlayerName
+	}
+	return ""
+}
+
+func (x *JoinRoomRequest) GetColorR() int32 {
+	if x != nil {
+		return x.ColorR
+	}
+	return 0
+}
+
+func (x *JoinRoomRequest) GetColorG() int32 {
+	if x != nil {
+		return x.ColorG
+	}
+	return 0
+}
+
+func (x *JoinRoomRequest) GetColorB() int32 {
+	if x != nil {
+		return x.ColorB
+	}
+	return 0
 }
 
 // 离开房间请求
@@ -363,7 +512,7 @@ type LeaveRoomRequest struct {
 
 func (x *LeaveRoomRequest) Reset() {
 	*x = LeaveRoomRequest{}
-	mi := &file_proto_game_proto_msgTypes[5]
+	mi := &file_proto_game_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -375,7 +524,7 @@ func (x *LeaveRoomRequest) String() string {
 func (*LeaveRoomRequest) ProtoMessage() {}
 
 func (x *LeaveRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[5]
+	mi := &file_proto_game_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -388,12 +537,65 @@ func (x *LeaveRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaveRoomRequest.ProtoReflect.Descriptor instead.
 func (*LeaveRoomRequest) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{5}
+	return file_proto_game_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *LeaveRoomRequest) GetRoomId() string {
 	if x != nil {
 		return x.RoomId
+	}
+	return ""
+}
+
+// 踢人请求
+type KickPlayerRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	RoomId         string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+	TargetPlayerId string                 `protobuf:"bytes,2,opt,name=target_player_id,json=targetPlayerId,proto3" json:"target_player_id,omitempty"` // 被踢的玩家ID
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *KickPlayerRequest) Reset() {
+	*x = KickPlayerRequest{}
+	mi := &file_proto_game_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *KickPlayerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*KickPlayerRequest) ProtoMessage() {}
+
+func (x *KickPlayerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_game_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use KickPlayerRequest.ProtoReflect.Descriptor instead.
+func (*KickPlayerRequest) Descriptor() ([]byte, []int) {
+	return file_proto_game_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *KickPlayerRequest) GetRoomId() string {
+	if x != nil {
+		return x.RoomId
+	}
+	return ""
+}
+
+func (x *KickPlayerRequest) GetTargetPlayerId() string {
+	if x != nil {
+		return x.TargetPlayerId
 	}
 	return ""
 }
@@ -411,7 +613,7 @@ type PlayerInput struct {
 
 func (x *PlayerInput) Reset() {
 	*x = PlayerInput{}
-	mi := &file_proto_game_proto_msgTypes[6]
+	mi := &file_proto_game_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -423,7 +625,7 @@ func (x *PlayerInput) String() string {
 func (*PlayerInput) ProtoMessage() {}
 
 func (x *PlayerInput) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[6]
+	mi := &file_proto_game_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -436,7 +638,7 @@ func (x *PlayerInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerInput.ProtoReflect.Descriptor instead.
 func (*PlayerInput) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{6}
+	return file_proto_game_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PlayerInput) GetPlayerId() string {
@@ -478,7 +680,7 @@ type FrameInputs struct {
 
 func (x *FrameInputs) Reset() {
 	*x = FrameInputs{}
-	mi := &file_proto_game_proto_msgTypes[7]
+	mi := &file_proto_game_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -490,7 +692,7 @@ func (x *FrameInputs) String() string {
 func (*FrameInputs) ProtoMessage() {}
 
 func (x *FrameInputs) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[7]
+	mi := &file_proto_game_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -503,7 +705,7 @@ func (x *FrameInputs) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FrameInputs.ProtoReflect.Descriptor instead.
 func (*FrameInputs) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{7}
+	return file_proto_game_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *FrameInputs) GetFrameNumber() int64 {
@@ -532,7 +734,7 @@ type GameStart struct {
 
 func (x *GameStart) Reset() {
 	*x = GameStart{}
-	mi := &file_proto_game_proto_msgTypes[8]
+	mi := &file_proto_game_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -544,7 +746,7 @@ func (x *GameStart) String() string {
 func (*GameStart) ProtoMessage() {}
 
 func (x *GameStart) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[8]
+	mi := &file_proto_game_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -557,7 +759,7 @@ func (x *GameStart) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameStart.ProtoReflect.Descriptor instead.
 func (*GameStart) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{8}
+	return file_proto_game_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GameStart) GetRoomId() string {
@@ -589,7 +791,7 @@ type RoomListRequest struct {
 
 func (x *RoomListRequest) Reset() {
 	*x = RoomListRequest{}
-	mi := &file_proto_game_proto_msgTypes[9]
+	mi := &file_proto_game_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -601,7 +803,7 @@ func (x *RoomListRequest) String() string {
 func (*RoomListRequest) ProtoMessage() {}
 
 func (x *RoomListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[9]
+	mi := &file_proto_game_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -614,7 +816,7 @@ func (x *RoomListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomListRequest.ProtoReflect.Descriptor instead.
 func (*RoomListRequest) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{9}
+	return file_proto_game_proto_rawDescGZIP(), []int{11}
 }
 
 type GameStartRequest struct {
@@ -626,7 +828,7 @@ type GameStartRequest struct {
 
 func (x *GameStartRequest) Reset() {
 	*x = GameStartRequest{}
-	mi := &file_proto_game_proto_msgTypes[10]
+	mi := &file_proto_game_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -638,7 +840,7 @@ func (x *GameStartRequest) String() string {
 func (*GameStartRequest) ProtoMessage() {}
 
 func (x *GameStartRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[10]
+	mi := &file_proto_game_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -651,7 +853,7 @@ func (x *GameStartRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameStartRequest.ProtoReflect.Descriptor instead.
 func (*GameStartRequest) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{10}
+	return file_proto_game_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GameStartRequest) GetRoomId() string {
@@ -678,7 +880,7 @@ type ServerMessage struct {
 
 func (x *ServerMessage) Reset() {
 	*x = ServerMessage{}
-	mi := &file_proto_game_proto_msgTypes[11]
+	mi := &file_proto_game_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -690,7 +892,7 @@ func (x *ServerMessage) String() string {
 func (*ServerMessage) ProtoMessage() {}
 
 func (x *ServerMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[11]
+	mi := &file_proto_game_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -703,7 +905,7 @@ func (x *ServerMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerMessage.ProtoReflect.Descriptor instead.
 func (*ServerMessage) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{11}
+	return file_proto_game_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ServerMessage) GetData() isServerMessage_Data {
@@ -803,6 +1005,7 @@ type ClientMessage struct {
 	//	*ClientMessage_LeaveRoomRequest
 	//	*ClientMessage_RoomListRequest
 	//	*ClientMessage_GameStartRequest
+	//	*ClientMessage_KickPlayerRequest
 	Data          isClientMessage_Data `protobuf_oneof:"data"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -810,7 +1013,7 @@ type ClientMessage struct {
 
 func (x *ClientMessage) Reset() {
 	*x = ClientMessage{}
-	mi := &file_proto_game_proto_msgTypes[12]
+	mi := &file_proto_game_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -822,7 +1025,7 @@ func (x *ClientMessage) String() string {
 func (*ClientMessage) ProtoMessage() {}
 
 func (x *ClientMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_game_proto_msgTypes[12]
+	mi := &file_proto_game_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -835,7 +1038,7 @@ func (x *ClientMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClientMessage.ProtoReflect.Descriptor instead.
 func (*ClientMessage) Descriptor() ([]byte, []int) {
-	return file_proto_game_proto_rawDescGZIP(), []int{12}
+	return file_proto_game_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ClientMessage) GetData() isClientMessage_Data {
@@ -899,6 +1102,15 @@ func (x *ClientMessage) GetGameStartRequest() *GameStartRequest {
 	return nil
 }
 
+func (x *ClientMessage) GetKickPlayerRequest() *KickPlayerRequest {
+	if x != nil {
+		if x, ok := x.Data.(*ClientMessage_KickPlayerRequest); ok {
+			return x.KickPlayerRequest
+		}
+	}
+	return nil
+}
+
 type isClientMessage_Data interface {
 	isClientMessage_Data()
 }
@@ -927,6 +1139,10 @@ type ClientMessage_GameStartRequest struct {
 	GameStartRequest *GameStartRequest `protobuf:"bytes,6,opt,name=game_start_request,json=gameStartRequest,proto3,oneof"`
 }
 
+type ClientMessage_KickPlayerRequest struct {
+	KickPlayerRequest *KickPlayerRequest `protobuf:"bytes,7,opt,name=kick_player_request,json=kickPlayerRequest,proto3,oneof"`
+}
+
 func (*ClientMessage_PlayerInput) isClientMessage_Data() {}
 
 func (*ClientMessage_CreateRoomRequest) isClientMessage_Data() {}
@@ -939,13 +1155,23 @@ func (*ClientMessage_RoomListRequest) isClientMessage_Data() {}
 
 func (*ClientMessage_GameStartRequest) isClientMessage_Data() {}
 
+func (*ClientMessage_KickPlayerRequest) isClientMessage_Data() {}
+
 var File_proto_game_proto protoreflect.FileDescriptor
 
 const file_proto_game_proto_rawDesc = "" +
 	"\n" +
 	"\x10proto/game.proto\x12\btankgame\"6\n" +
 	"\x0eConnectSuccess\x12$\n" +
-	"\x0eyour_player_id\x18\x01 \x01(\tR\fyourPlayerId\"\xb1\x01\n" +
+	"\x0eyour_player_id\x18\x01 \x01(\tR\fyourPlayerId\"\x95\x01\n" +
+	"\n" +
+	"PlayerInfo\x12\x1b\n" +
+	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\x12\x1f\n" +
+	"\vplayer_name\x18\x02 \x01(\tR\n" +
+	"playerName\x12\x17\n" +
+	"\acolor_r\x18\x03 \x01(\x05R\x06colorR\x12\x17\n" +
+	"\acolor_g\x18\x04 \x01(\x05R\x06colorG\x12\x17\n" +
+	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\"\xea\x01\n" +
 	"\bRoomInfo\x12\x17\n" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1d\n" +
 	"\n" +
@@ -954,17 +1180,31 @@ const file_proto_game_proto_rawDesc = "" +
 	"\ahost_id\x18\x04 \x01(\tR\x06hostId\x12\x1f\n" +
 	"\vmax_players\x18\x05 \x01(\x05R\n" +
 	"maxPlayers\x12\x1b\n" +
-	"\troom_name\x18\x06 \x01(\tR\broomName\"4\n" +
+	"\troom_name\x18\x06 \x01(\tR\broomName\x127\n" +
+	"\fplayer_infos\x18\a \x03(\v2\x14.tankgame.PlayerInfoR\vplayerInfos\"4\n" +
 	"\bRoomList\x12(\n" +
-	"\x05rooms\x18\x01 \x03(\v2\x12.tankgame.RoomInfoR\x05rooms\"Q\n" +
+	"\x05rooms\x18\x01 \x03(\v2\x12.tankgame.RoomInfoR\x05rooms\"\xbd\x01\n" +
 	"\x11CreateRoomRequest\x12\x1b\n" +
 	"\troom_name\x18\x01 \x01(\tR\broomName\x12\x1f\n" +
 	"\vmax_players\x18\x02 \x01(\x05R\n" +
-	"maxPlayers\"*\n" +
+	"maxPlayers\x12\x1f\n" +
+	"\vplayer_name\x18\x03 \x01(\tR\n" +
+	"playerName\x12\x17\n" +
+	"\acolor_r\x18\x04 \x01(\x05R\x06colorR\x12\x17\n" +
+	"\acolor_g\x18\x05 \x01(\x05R\x06colorG\x12\x17\n" +
+	"\acolor_b\x18\x06 \x01(\x05R\x06colorB\"\x96\x01\n" +
 	"\x0fJoinRoomRequest\x12\x17\n" +
-	"\aroom_id\x18\x01 \x01(\tR\x06roomId\"+\n" +
+	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1f\n" +
+	"\vplayer_name\x18\x02 \x01(\tR\n" +
+	"playerName\x12\x17\n" +
+	"\acolor_r\x18\x03 \x01(\x05R\x06colorR\x12\x17\n" +
+	"\acolor_g\x18\x04 \x01(\x05R\x06colorG\x12\x17\n" +
+	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\"+\n" +
 	"\x10LeaveRoomRequest\x12\x17\n" +
-	"\aroom_id\x18\x01 \x01(\tR\x06roomId\"\x9f\x01\n" +
+	"\aroom_id\x18\x01 \x01(\tR\x06roomId\"V\n" +
+	"\x11KickPlayerRequest\x12\x17\n" +
+	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12(\n" +
+	"\x10target_player_id\x18\x02 \x01(\tR\x0etargetPlayerId\"\x9f\x01\n" +
 	"\vPlayerInput\x12\x1b\n" +
 	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\x122\n" +
 	"\n" +
@@ -990,14 +1230,15 @@ const file_proto_game_proto_rawDesc = "" +
 	"game_start\x18\x03 \x01(\v2\x13.tankgame.GameStartH\x00R\tgameStart\x12C\n" +
 	"\x0fconnect_success\x18\x04 \x01(\v2\x18.tankgame.ConnectSuccessH\x00R\x0econnectSuccess\x121\n" +
 	"\troom_list\x18\x05 \x01(\v2\x12.tankgame.RoomListH\x00R\broomListB\x06\n" +
-	"\x04data\"\xcc\x03\n" +
+	"\x04data\"\x9b\x04\n" +
 	"\rClientMessage\x12:\n" +
 	"\fplayer_input\x18\x01 \x01(\v2\x15.tankgame.PlayerInputH\x00R\vplayerInput\x12M\n" +
 	"\x13create_room_request\x18\x02 \x01(\v2\x1b.tankgame.CreateRoomRequestH\x00R\x11createRoomRequest\x12G\n" +
 	"\x11join_room_request\x18\x03 \x01(\v2\x19.tankgame.JoinRoomRequestH\x00R\x0fjoinRoomRequest\x12J\n" +
 	"\x12leave_room_request\x18\x04 \x01(\v2\x1a.tankgame.LeaveRoomRequestH\x00R\x10leaveRoomRequest\x12G\n" +
 	"\x11room_list_request\x18\x05 \x01(\v2\x19.tankgame.RoomListRequestH\x00R\x0froomListRequest\x12J\n" +
-	"\x12game_start_request\x18\x06 \x01(\v2\x1a.tankgame.GameStartRequestH\x00R\x10gameStartRequestB\x06\n" +
+	"\x12game_start_request\x18\x06 \x01(\v2\x1a.tankgame.GameStartRequestH\x00R\x10gameStartRequest\x12M\n" +
+	"\x13kick_player_request\x18\a \x01(\v2\x1b.tankgame.KickPlayerRequestH\x00R\x11kickPlayerRequestB\x06\n" +
 	"\x04data*\x7f\n" +
 	"\tInputType\x12\x0e\n" +
 	"\n" +
@@ -1021,43 +1262,47 @@ func file_proto_game_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_game_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_game_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_proto_game_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_proto_game_proto_goTypes = []any{
 	(InputType)(0),            // 0: tankgame.InputType
 	(*ConnectSuccess)(nil),    // 1: tankgame.ConnectSuccess
-	(*RoomInfo)(nil),          // 2: tankgame.RoomInfo
-	(*RoomList)(nil),          // 3: tankgame.RoomList
-	(*CreateRoomRequest)(nil), // 4: tankgame.CreateRoomRequest
-	(*JoinRoomRequest)(nil),   // 5: tankgame.JoinRoomRequest
-	(*LeaveRoomRequest)(nil),  // 6: tankgame.LeaveRoomRequest
-	(*PlayerInput)(nil),       // 7: tankgame.PlayerInput
-	(*FrameInputs)(nil),       // 8: tankgame.FrameInputs
-	(*GameStart)(nil),         // 9: tankgame.GameStart
-	(*RoomListRequest)(nil),   // 10: tankgame.RoomListRequest
-	(*GameStartRequest)(nil),  // 11: tankgame.GameStartRequest
-	(*ServerMessage)(nil),     // 12: tankgame.ServerMessage
-	(*ClientMessage)(nil),     // 13: tankgame.ClientMessage
+	(*PlayerInfo)(nil),        // 2: tankgame.PlayerInfo
+	(*RoomInfo)(nil),          // 3: tankgame.RoomInfo
+	(*RoomList)(nil),          // 4: tankgame.RoomList
+	(*CreateRoomRequest)(nil), // 5: tankgame.CreateRoomRequest
+	(*JoinRoomRequest)(nil),   // 6: tankgame.JoinRoomRequest
+	(*LeaveRoomRequest)(nil),  // 7: tankgame.LeaveRoomRequest
+	(*KickPlayerRequest)(nil), // 8: tankgame.KickPlayerRequest
+	(*PlayerInput)(nil),       // 9: tankgame.PlayerInput
+	(*FrameInputs)(nil),       // 10: tankgame.FrameInputs
+	(*GameStart)(nil),         // 11: tankgame.GameStart
+	(*RoomListRequest)(nil),   // 12: tankgame.RoomListRequest
+	(*GameStartRequest)(nil),  // 13: tankgame.GameStartRequest
+	(*ServerMessage)(nil),     // 14: tankgame.ServerMessage
+	(*ClientMessage)(nil),     // 15: tankgame.ClientMessage
 }
 var file_proto_game_proto_depIdxs = []int32{
-	2,  // 0: tankgame.RoomList.rooms:type_name -> tankgame.RoomInfo
-	0,  // 1: tankgame.PlayerInput.input_type:type_name -> tankgame.InputType
-	7,  // 2: tankgame.FrameInputs.inputs:type_name -> tankgame.PlayerInput
-	8,  // 3: tankgame.ServerMessage.frame_inputs:type_name -> tankgame.FrameInputs
-	2,  // 4: tankgame.ServerMessage.room_info:type_name -> tankgame.RoomInfo
-	9,  // 5: tankgame.ServerMessage.game_start:type_name -> tankgame.GameStart
-	1,  // 6: tankgame.ServerMessage.connect_success:type_name -> tankgame.ConnectSuccess
-	3,  // 7: tankgame.ServerMessage.room_list:type_name -> tankgame.RoomList
-	7,  // 8: tankgame.ClientMessage.player_input:type_name -> tankgame.PlayerInput
-	4,  // 9: tankgame.ClientMessage.create_room_request:type_name -> tankgame.CreateRoomRequest
-	5,  // 10: tankgame.ClientMessage.join_room_request:type_name -> tankgame.JoinRoomRequest
-	6,  // 11: tankgame.ClientMessage.leave_room_request:type_name -> tankgame.LeaveRoomRequest
-	10, // 12: tankgame.ClientMessage.room_list_request:type_name -> tankgame.RoomListRequest
-	11, // 13: tankgame.ClientMessage.game_start_request:type_name -> tankgame.GameStartRequest
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	2,  // 0: tankgame.RoomInfo.player_infos:type_name -> tankgame.PlayerInfo
+	3,  // 1: tankgame.RoomList.rooms:type_name -> tankgame.RoomInfo
+	0,  // 2: tankgame.PlayerInput.input_type:type_name -> tankgame.InputType
+	9,  // 3: tankgame.FrameInputs.inputs:type_name -> tankgame.PlayerInput
+	10, // 4: tankgame.ServerMessage.frame_inputs:type_name -> tankgame.FrameInputs
+	3,  // 5: tankgame.ServerMessage.room_info:type_name -> tankgame.RoomInfo
+	11, // 6: tankgame.ServerMessage.game_start:type_name -> tankgame.GameStart
+	1,  // 7: tankgame.ServerMessage.connect_success:type_name -> tankgame.ConnectSuccess
+	4,  // 8: tankgame.ServerMessage.room_list:type_name -> tankgame.RoomList
+	9,  // 9: tankgame.ClientMessage.player_input:type_name -> tankgame.PlayerInput
+	5,  // 10: tankgame.ClientMessage.create_room_request:type_name -> tankgame.CreateRoomRequest
+	6,  // 11: tankgame.ClientMessage.join_room_request:type_name -> tankgame.JoinRoomRequest
+	7,  // 12: tankgame.ClientMessage.leave_room_request:type_name -> tankgame.LeaveRoomRequest
+	12, // 13: tankgame.ClientMessage.room_list_request:type_name -> tankgame.RoomListRequest
+	13, // 14: tankgame.ClientMessage.game_start_request:type_name -> tankgame.GameStartRequest
+	8,  // 15: tankgame.ClientMessage.kick_player_request:type_name -> tankgame.KickPlayerRequest
+	16, // [16:16] is the sub-list for method output_type
+	16, // [16:16] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_proto_game_proto_init() }
@@ -1065,20 +1310,21 @@ func file_proto_game_proto_init() {
 	if File_proto_game_proto != nil {
 		return
 	}
-	file_proto_game_proto_msgTypes[11].OneofWrappers = []any{
+	file_proto_game_proto_msgTypes[13].OneofWrappers = []any{
 		(*ServerMessage_FrameInputs)(nil),
 		(*ServerMessage_RoomInfo)(nil),
 		(*ServerMessage_GameStart)(nil),
 		(*ServerMessage_ConnectSuccess)(nil),
 		(*ServerMessage_RoomList)(nil),
 	}
-	file_proto_game_proto_msgTypes[12].OneofWrappers = []any{
+	file_proto_game_proto_msgTypes[14].OneofWrappers = []any{
 		(*ClientMessage_PlayerInput)(nil),
 		(*ClientMessage_CreateRoomRequest)(nil),
 		(*ClientMessage_JoinRoomRequest)(nil),
 		(*ClientMessage_LeaveRoomRequest)(nil),
 		(*ClientMessage_RoomListRequest)(nil),
 		(*ClientMessage_GameStartRequest)(nil),
+		(*ClientMessage_KickPlayerRequest)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1086,7 +1332,7 @@ func file_proto_game_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_game_proto_rawDesc), len(file_proto_game_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   13,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

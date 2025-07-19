@@ -150,6 +150,8 @@ public class TankController : MonoBehaviour
     public void SetHP(int newHP)
     {
         HP = newHP;
+        //UpdateUI(); // 更新血量显示
+        
         if (HP <= 0)
         {
             Pos=Vector2Int.zero;

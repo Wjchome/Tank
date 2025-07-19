@@ -10,6 +10,15 @@ message ConnectSuccess {
   string your_player_id = 1;
 }
 
+// 玩家信息
+message PlayerInfo {
+  string player_id = 1;
+  string player_name = 2;
+  int32 color_r = 3;
+  int32 color_g = 4;
+  int32 color_b = 5;
+}
+
 // 房间信息
 message RoomInfo {
   string room_id = 1;
@@ -18,6 +27,7 @@ message RoomInfo {
   string host_id = 4; // 房主ID
   int32 max_players = 5; // 最大玩家数
   string room_name = 6; // 房间名称
+  repeated PlayerInfo player_infos = 7; // 玩家详细信息
 }
 
 // 房间列表
@@ -29,18 +39,34 @@ message RoomList {
 message CreateRoomRequest {
   string room_name = 1;
   int32 max_players = 2;
+  string player_name = 3;  // 玩家名字
+  int32 color_r = 4;       // 颜色R分量
+  int32 color_g = 5;       // 颜色G分量
+  int32 color_b = 6;       // 颜色B分量
 }
 
 
 // 加入房间请求
 message JoinRoomRequest {
   string room_id = 1;
+  string player_name = 2;  // 玩家名字
+  int32 color_r = 3;       // 颜色R分量
+  int32 color_g = 4;       // 颜色G分量
+  int32 color_b = 5;       // 颜色B分量
 }
 
 // 离开房间请求
 message LeaveRoomRequest {
   string room_id = 1;
 }
+
+// 踢人请求
+message KickPlayerRequest {
+  string room_id = 1;
+  string target_player_id = 2; // 被踢的玩家ID
+}
+
+
 
 
 // 玩家输入类型
@@ -89,7 +115,6 @@ message ServerMessage {
     GameStart game_start = 3;
     ConnectSuccess connect_success = 4;
     RoomList room_list = 5;
-
   }
 }
 
@@ -104,6 +129,7 @@ message ClientMessage {
     JoinRoomRequest join_room_request = 3;
     LeaveRoomRequest leave_room_request = 4;
     RoomListRequest room_list_request = 5;
-    GameStartRequest game_start_request=6;
+    GameStartRequest game_start_request = 6;
+    KickPlayerRequest kick_player_request = 7;
   }
 }

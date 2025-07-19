@@ -7,4 +7,6 @@
     {
         public TextMeshProUGUI playerNameText;
         public TextMeshProUGUI playerStatusText;
+        public Image playerColor;
+        public Button kickButton;
     }

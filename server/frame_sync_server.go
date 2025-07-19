@@ -22,7 +22,11 @@ type Client struct {
 	ID     string
 	Conn   net.Conn
 	RoomID string
-	IsHost bool // 是否是房主
+	IsHost bool   // 是否是房主
+	Name   string // 玩家名字
+	ColorR int32  // 颜色R分量
+	ColorG int32  // 颜色G分量
+	ColorB int32  // 颜色B分量
 }
 
 type Room struct {
@@ -121,6 +125,8 @@ func (s *Server) handleClient(conn net.Conn) {
 			s.startGame(s.Rooms[client.RoomID])
 		case *myproto.ClientMessage_LeaveRoomRequest:
 			s.handleLeaveRoomRequest(client, data.LeaveRoomRequest)
+		case *myproto.ClientMessage_KickPlayerRequest:
+			s.handleKickPlayerRequest(client, data.KickPlayerRequest)
 		default:
 			log.Printf("Unknown message type from client %s", client.ID)
 		}
@@ -160,6 +166,12 @@ func (s *Server) handleCreateRoom(client *Client, req *myproto.CreateRoomRequest
 		maxPlayers = MAX_ROOM_PLAYERS
 	}
 
+	// 保存玩家信息
+	client.Name = req.PlayerName
+	client.ColorR = req.ColorR
+	client.ColorG = req.ColorG
+	client.ColorB = req.ColorB
+
 	room := &Room{
 		ID:         roomID,
 		Name:       roomName,
@@ -180,11 +192,6 @@ func (s *Server) handleCreateRoom(client *Client, req *myproto.CreateRoomRequest
 
 	// 直接返回RoomInfo
 	s.sendRoomInfo(client.Conn, room, "")
-
-	// 检查房间是否满员，如果满员则开始游戏
-	/*	if int32(len(room.Clients)) == room.MaxPlayers {
-		s.startGame(room)
-	}*/
 
 	fmt.Printf("Client %s created room %s (%s)\n", client.ID, roomID, roomName)
 }
@@ -214,6 +221,12 @@ func (s *Server) handleJoinRoom(client *Client, req *myproto.JoinRoomRequest) {
 		s.sendRoomInfo(client.Conn, room, "Room is full")
 		return
 	}
+
+	// 保存玩家信息
+	client.Name = req.PlayerName
+	client.ColorR = req.ColorR
+	client.ColorG = req.ColorG
+	client.ColorB = req.ColorB
 
 	// 加入房间
 	client.RoomID = room.ID
@@ -281,6 +294,38 @@ func (s *Server) handleLeaveRoomRequest(client *Client, req *myproto.LeaveRoomRe
 	s.sendRoomList(client.Conn)
 
 	fmt.Printf("Client %s left room %s\n", client.ID, req.RoomId)
+}
+
+func (s *Server) handleKickPlayerRequest(client *Client, req *myproto.KickPlayerRequest) {
+	fmt.Printf("Kick player request from %s to kick %s\n", client.ID, req.TargetPlayerId)
+
+	s.Mutex.Lock()
+	room, exists := s.Rooms[client.RoomID]
+	if !exists {
+		fmt.Printf("Room %s not found\n", client.RoomID)
+		return
+	}
+	s.Mutex.Unlock()
+
+	room.Mutex.Lock()
+
+	// 检查目标玩家是否存在
+	targetClient := room.Clients[req.TargetPlayerId]
+
+	// 从房间中移除目标玩家
+	delete(room.Clients, req.TargetPlayerId)
+	targetClient.RoomID = ""
+	targetClient.IsHost = false
+
+	room.Mutex.Unlock()
+
+	// 发送房间列表给被踢的玩家
+	s.sendRoomList(targetClient.Conn)
+
+	// 广播房间信息更新给剩余玩家
+	s.broadcastRoomInfo(room)
+
+	fmt.Printf("Player %s was kicked from room %s by host %s\n", req.TargetPlayerId, room.ID, client.ID)
 }
 
 func (s *Server) handleClientDisconnect(client *Client) {
@@ -366,16 +411,25 @@ func (s *Server) sendRoomList(conn net.Conn) {
 	for _, room := range s.Rooms {
 		room.Mutex.Lock()
 		playerIDs := make([]string, 0, len(room.Clients))
+		playerInfos := make([]*myproto.PlayerInfo, 0, len(room.Clients))
 		for _, c := range room.Clients {
 			playerIDs = append(playerIDs, c.ID)
+			playerInfos = append(playerInfos, &myproto.PlayerInfo{
+				PlayerId:   c.ID,
+				PlayerName: c.Name,
+				ColorR:     c.ColorR,
+				ColorG:     c.ColorG,
+				ColorB:     c.ColorB,
+			})
 		}
 		roomInfo := &myproto.RoomInfo{
-			RoomId:     room.ID,
-			PlayerIds:  playerIDs,
-			Status:     room.Status,
-			HostId:     room.HostID,
-			MaxPlayers: room.MaxPlayers,
-			RoomName:   room.Name,
+			RoomId:      room.ID,
+			PlayerIds:   playerIDs,
+			Status:      room.Status,
+			HostId:      room.HostID,
+			MaxPlayers:  room.MaxPlayers,
+			RoomName:    room.Name,
+			PlayerInfos: playerInfos, // 添加玩家详细信息
 		}
 		rooms = append(rooms, roomInfo)
 		room.Mutex.Unlock()
@@ -395,16 +449,25 @@ func (s *Server) sendRoomList(conn net.Conn) {
 func (s *Server) broadcastRoomInfo(room *Room) {
 	room.Mutex.Lock()
 	playerIDs := make([]string, 0, len(room.Clients))
+	playerInfos := make([]*myproto.PlayerInfo, 0, len(room.Clients))
 	for _, c := range room.Clients {
 		playerIDs = append(playerIDs, c.ID)
+		playerInfos = append(playerInfos, &myproto.PlayerInfo{
+			PlayerId:   c.ID,
+			PlayerName: c.Name,
+			ColorR:     c.ColorR,
+			ColorG:     c.ColorG,
+			ColorB:     c.ColorB,
+		})
 	}
 	roomInfo := &myproto.RoomInfo{
-		RoomId:     room.ID,
-		PlayerIds:  playerIDs,
-		Status:     room.Status,
-		HostId:     room.HostID,
-		MaxPlayers: room.MaxPlayers,
-		RoomName:   room.Name,
+		RoomId:      room.ID,
+		PlayerIds:   playerIDs,
+		Status:      room.Status,
+		HostId:      room.HostID,
+		MaxPlayers:  room.MaxPlayers,
+		RoomName:    room.Name,
+		PlayerInfos: playerInfos, // 添加玩家详细信息
 	}
 	room.Mutex.Unlock()
 
@@ -439,16 +502,25 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 	if room != nil {
 		room.Mutex.Lock()
 		playerIDs := make([]string, 0, len(room.Clients))
+		playerInfos := make([]*myproto.PlayerInfo, 0, len(room.Clients))
 		for _, c := range room.Clients {
 			playerIDs = append(playerIDs, c.ID)
+			playerInfos = append(playerInfos, &myproto.PlayerInfo{
+				PlayerId:   c.ID,
+				PlayerName: c.Name,
+				ColorR:     c.ColorR,
+				ColorG:     c.ColorG,
+				ColorB:     c.ColorB,
+			})
 		}
 		roomInfo = &myproto.RoomInfo{
-			RoomId:     room.ID,
-			PlayerIds:  playerIDs,
-			Status:     room.Status,
-			HostId:     room.HostID,
-			MaxPlayers: room.MaxPlayers,
-			RoomName:   room.Name,
+			RoomId:      room.ID,
+			PlayerIds:   playerIDs,
+			Status:      room.Status,
+			HostId:      room.HostID,
+			MaxPlayers:  room.MaxPlayers,
+			RoomName:    room.Name,
+			PlayerInfos: playerInfos, // 添加玩家详细信息
 		}
 		room.Mutex.Unlock()
 		if errMsg != "" {

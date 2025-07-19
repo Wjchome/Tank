@@ -34,6 +34,21 @@ public class GameStateManager : SingletonMono<GameStateManager>
         GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, new Vector2(1, 1), Quaternion.identity);
         TankController tank = tankObj.GetComponent<TankController>();
         tank.Initialize(playerId, 3);
+        
+        // 设置玩家信息
+      /*  if (playerId == NetworkManager.Instance.playerID)
+        {
+            // 本地玩家
+            tank.playerName = NetworkManager.Instance.playerName;
+            tank.playerColor = NetworkManager.Instance.playerColor;
+        }
+        else
+        {
+            // 其他玩家，暂时使用默认值，后续可以从网络消息中获取
+            tank.playerName = $"Player_{playerId.Substring(0, 4)}";
+            tank.playerColor = Color.red;
+        }*/
+        
         playerTanks[playerId] = tank;
         return tank;
     }
