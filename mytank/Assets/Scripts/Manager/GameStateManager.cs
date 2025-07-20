@@ -39,16 +39,16 @@ public class GameStateManager : SingletonMono<GameStateManager>
         switch (input.InputType)
         {
             case InputType.InputMoveUp:
-                tank.MoveBy(0, 1, "up");
+                tank.MoveBy(0, 1, Direction.Up);
                 break;
             case InputType.InputMoveDown:
-                tank.MoveBy(0, -1, "down");
+                tank.MoveBy(0, -1, Direction.Down);
                 break;
             case InputType.InputMoveLeft:
-                tank.MoveBy(-1, 0, "left");
+                tank.MoveBy(-1, 0, Direction.Left);
                 break;
             case InputType.InputMoveRight:
-                tank.MoveBy(1, 0, "right");
+                tank.MoveBy(1, 0, Direction.Right);
                 break;
             case InputType.InputShoot:
                 tank.Shoot();
@@ -109,4 +109,6 @@ public class GameStateManager : SingletonMono<GameStateManager>
             Debug.Log($"Created tank for player {playerInfo.PlayerName} ({playerInfo.PlayerId}) at position ({spawnPoint.x}, {spawnPoint.y})");
         }
     }
+    
+   
 } 

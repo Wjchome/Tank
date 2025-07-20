@@ -305,7 +305,7 @@ public class RoomManager : SingletonMono<RoomManager>
         
             // 设置基本信息
             playerUIItem.playerNameText.text = playerInfo.PlayerName;
-            SetPlayerStatus(playerUIItem);
+            SetPlayerStatus(playerUIItem,playerInfo.PlayerId);
             SetupKickButton(playerUIItem, playerInfo.PlayerId);
         
             // 设置位置
@@ -328,9 +328,9 @@ public class RoomManager : SingletonMono<RoomManager>
 
    
     
-    void SetPlayerStatus(PlayerUIItem playerUIItem)
+    void SetPlayerStatus(PlayerUIItem playerUIItem,string playerId)
     {
-        if (NetworkManager.Instance.isHost)
+        if (playerId== NetworkManager.Instance.currentRoom.HostId)
         {
             playerUIItem.playerStatusText.text = "Host";
             playerUIItem.playerStatusText.color = Color.yellow;

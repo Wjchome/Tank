@@ -8,7 +8,7 @@ using Random =UnityEngine.Random;
 public class BulletController : MonoBehaviour
 {
     public string BulletID { get; private set; }
-    public string Direction { get; private set; }
+    public Direction Direction { get; private set; }
     public string OwnerID { get; private set; }
     
     private bool isLocal; // 是否由本地客户端创建
@@ -18,14 +18,22 @@ public class BulletController : MonoBehaviour
     private float lastMoveTime;
 
     private Vector2Int dir;
-    public Vector2Int Pos; // 权威格子坐标
+    public Vector2Int Pos; // 子弹左下角坐标（2x2占地）
+    
+    // 坐标系统辅助方法
+    public Vector2Int GetTopLeft() => new Vector2Int(Pos.x, Pos.y + 1);
+    public Vector2Int GetTopRight() => new Vector2Int(Pos.x + 1, Pos.y + 1);
+    public Vector2Int GetBottomLeft() => Pos; // 左下角就是Pos
+    public Vector2Int GetBottomRight() => new Vector2Int(Pos.x + 1, Pos.y);
+    public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
+
    
     public float moveDuration = 0.3f; // DOTween动画时长
     public Animator animator;
     
     public bool isShouldDestroy = false;
     public float animTime = 0.3f;
-    public void Initialize(string id, string direction, string ownerID, bool local = false)
+    public void Initialize(string id, Direction direction, string ownerID, bool local = false)
     {
         BulletID = id;
         Direction = direction;
@@ -33,76 +41,145 @@ public class BulletController : MonoBehaviour
         isLocal = local;
         // 设置子弹朝向
         SetBulletRotation();
-        Pos = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+        
+        // 根据坦克位置计算子弹初始位置
+        TankController ownerTank = GameStateManager.Instance.playerTanks[ownerID];
+        if (ownerTank != null)
+        {
+            Pos = ownerTank.Pos;
+            
+            // 设置子弹中心位置
+            transform.position = GetCenter();
+        }
     }
     
-    void SetBulletRotation()
+    private void SetBulletRotation()
     {
         Vector3 rotation = Vector3.zero;
         switch (Direction)
         {
-            case "up": rotation = new Vector3(0, 0, 0);
-                dir = new Vector2Int(0, 1);  break;
-            case "down": rotation = new Vector3(0, 0, 180);  dir = new Vector2Int(0, -1); break;
-            case "left": rotation = new Vector3(0, 0, 90);  dir = new Vector2Int(-1,0); break;
-            case "right": rotation = new Vector3(0, 0, -90);  dir = new Vector2Int(1, 0); break;
+            case Direction.Up: 
+                rotation = new Vector3(0, 0, 0);
+                dir = Direction.ToVector2Int();  
+                break;
+            case Direction.Down: 
+                rotation = new Vector3(0, 0, 180);  
+                dir = Direction.ToVector2Int(); 
+                break;
+            case Direction.Left: 
+                rotation = new Vector3(0, 0, 90);  
+                dir = Direction.ToVector2Int(); 
+                break;
+            case Direction.Right: 
+                rotation = new Vector3(0, 0, -90);  
+                dir = Direction.ToVector2Int(); 
+                break;
         }
         transform.rotation = Quaternion.Euler(rotation);
     }
     
-    // 在帧同步系统中，子弹位置由服务器控制，客户端只负责显示
-    // 这个方法会被GameStateManager调用来更新子弹位置
+  
     public void UpdatePosition(int x, int y)
     {
         Pos = new Vector2Int(x, y);
         transform.DOKill();
-        transform.DOMove(new Vector2(x, y), moveDuration).SetEase(Ease.Linear);
+        transform.DOMove(GetCenter(), moveDuration).SetEase(Ease.Linear);
     }
 
     private void Update()
     {
         if (isShouldDestroy) return;
+       
         if (Time.time - lastMoveTime > moveInterval)
         {
             lastMoveTime = Time.time;
-            int newX = Pos.x + dir.x;
-            int newY = Pos.y + dir.y;
-            MapType mapType = MapManager.Instance.GetWallType(newX, newY);
-            var tank = MapManager.Instance.GetTankController(newX, newY);
+            bool isShouldMove = false;
+            
+            Vector2Int newPos = Pos + dir;
+            
+            // 检查2x2区域碰撞
+            var tank = MapManager.Instance.GetTankInArea(newPos.x, newPos.y, 2, 2);
+            
             if (tank != null && tank.PlayerID == OwnerID)
             {
-                UpdatePosition(newX, newY);
+                isShouldMove=true;
             }
             else if (tank != null && tank.PlayerID != OwnerID)
             {
                 tank.SetHP(tank.HP-1);
                 isShouldDestroy = true;
-      
             }
-            else if (MapManager.Instance.IsBulletPassable(newX, newY))
+            if (MapManager.Instance.IsAreaBulletPassable(newPos.x, newPos.y, 2, 2))
             {
-                UpdatePosition(newX, newY);
+                isShouldMove=true;
+                
 
-            }
-            else if (mapType == MapType.breakableWall)
-            {
-                isShouldDestroy = true;
-                
-                
-                MapManager.Instance.SetWallType(newX, newY, MapType.floor);
             }
             else
             {
+                if (dir == new Vector2Int(0, -1))
+                {
+                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y - 1) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x, Pos.y - 1, MapType.floor);
+                    }
+
+                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y - 1) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x+1, Pos.y - 1, MapType.floor);
+                    }
+                }
+                else if (dir == new Vector2Int(0, 1))
+                {
+                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y +2) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x, Pos.y +2, MapType.floor);
+                    }
+
+                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y +2) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x+1, Pos.y +2, MapType.floor);
+                    }
+                }
+                else if (dir == new Vector2Int(1, 0))
+                {
+                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y ) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x+2, Pos.y , MapType.floor);
+                    }
+
+                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y +1) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x+2, Pos.y +1, MapType.floor);
+                    }
+                }
+                else if (dir == new Vector2Int(-1, 0))
+                {
+                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y ) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x-1, Pos.y , MapType.floor);
+                    }
+
+                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y +1) == MapType.breakableWall)
+                    {
+                        MapManager.Instance.SetWallType(Pos.x+-1, Pos.y +1, MapType.floor);
+                    }
+                }
                 isShouldDestroy = true;
-                
-             
+            }
+            if (isShouldMove)
+            {
+                UpdatePosition(newPos.x, newPos.y);
+            
+            }
+            
+            if (isShouldDestroy)
+            {
+                DestroyBullet();
             }
         }
 
-        if (isShouldDestroy)
-        {
-            DestroyBullet();
-        }
+        
         
     }
 

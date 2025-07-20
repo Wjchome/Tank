@@ -2,7 +2,43 @@
     using UnityEngine;
     using System.Collections.Generic;
 
-    public enum MapType
+public enum Direction
+{
+    Up,
+    Down,
+    Left,
+    Right
+}
+
+// Direction枚举的扩展方法
+public static class DirectionExtensions
+{
+    public static Vector2Int ToVector2Int(this Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return Vector2Int.up;
+            case Direction.Down: return Vector2Int.down;
+            case Direction.Left: return Vector2Int.left;
+            case Direction.Right: return Vector2Int.right;
+            default: return Vector2Int.zero;
+        }
+    }
+    
+    public static Direction Opposite(this Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Up: return Direction.Down;
+            case Direction.Down: return Direction.Up;
+            case Direction.Left: return Direction.Right;
+            case Direction.Right: return Direction.Left;
+            default: return Direction.Up;
+        }
+    }
+}
+
+public enum MapType
     {
         error=-1,
         floor,
@@ -254,12 +290,90 @@
             Vector2Int[] defaultSpawnPoints = new Vector2Int[]
             {
                 new Vector2Int(1, 1),                    // 左下角
-                new Vector2Int(mapWidth - 2, 1),         // 右下角
-                new Vector2Int(1, mapHeight - 2),        // 左上角
-                new Vector2Int(mapWidth - 2, mapHeight - 2) // 右上角
+                new Vector2Int(mapWidth - 3, 1),         // 右下角
+                new Vector2Int(1, mapHeight - 3),        // 左上角
+                new Vector2Int(mapWidth - 3, mapHeight - 3) // 右上角
             };
             
             int index = playerIndex % defaultSpawnPoints.Length;
             return defaultSpawnPoints[index];
+        }
+
+        // 检查2x2区域是否可通行
+        public bool IsAreaWalkable(int startX, int startY, int width, int height,string selfID)
+        {
+            // 检查区域内的每个格子
+            for (int x = startX; x < startX + width; x++)
+            {
+                for (int y = startY; y < startY + height; y++)
+                {
+                    // 检查边界
+                    if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+                        return false;
+                    
+                    // 检查地形
+                    MapType wallType = GetWallType(x, y);
+                    if (wallType != MapType.floor && wallType != MapType.tree)
+                        return false;
+                    
+                    // 检查坦克碰撞
+                    foreach (var kv in GameStateManager.Instance.playerTanks)
+                    {
+                        var tank = kv.Value;
+                        if(tank.PlayerID==selfID)continue;
+                        if (IsRectOverlap(startX, startY, width, height, 
+                                        tank.Pos.x, tank.Pos.y, 2, 2))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        
+        // 检查2x2区域子弹是否可通过
+        public bool IsAreaBulletPassable(int startX, int startY, int width, int height)
+        {
+            for (int x = startX; x < startX + width; x++)
+            {
+                for (int y = startY; y < startY + height; y++)
+                {
+                    if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+                        return false;
+                    
+                    MapType wallType = GetWallType(x, y);
+                    if (wallType != MapType.floor && wallType != MapType.river && wallType != MapType.tree)
+                        return false;
+                }
+            }
+            return true;
+        }
+        
+        // 获取区域内的坦克
+        public TankController GetTankInArea(int startX, int startY, int width, int height)
+        {
+            foreach (var kv in GameStateManager.Instance.playerTanks)
+            {
+                var tank = kv.Value;
+                if (IsRectOverlap(startX, startY, width, height, 
+                                tank.Pos.x, tank.Pos.y, 2, 2))
+                {
+                    return tank;
+                }
+            }
+            return null;
+        }
+        
+        
+        
+       
+        
+        // 检查两个矩形是否重叠
+        private bool IsRectOverlap(int x1, int y1, int w1, int h1, 
+                                 int x2, int y2, int w2, int h2)
+        {
+            return !(x1 + w1 <= x2 || x2 + w2 <= x1 || 
+                    y1 + h1 <= y2 || y2 + h2 <= y1);
         }
     }

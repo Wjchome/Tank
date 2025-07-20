@@ -15,8 +15,16 @@ public class TankController : MonoBehaviour
     public float moveDuration = 0.05f; // DOTween动画时长
     public string PlayerID { get; private set; }
     public int HP;
-    public string Direction;
-    public Vector2Int Pos; // 权威格子坐标
+    public Direction Direction;
+    public Vector2Int Pos; // 坦克左下角坐标（2x2占地）
+    // 坐标系统辅助方法
+    public Vector2Int GetTopLeft() => new Vector2Int(Pos.x, Pos.y + 1);
+    public Vector2Int GetTopRight() => new Vector2Int(Pos.x + 1, Pos.y + 1);
+    public Vector2Int GetBottomLeft() => Pos; // 左下角就是Pos
+    public Vector2Int GetBottomRight() => new Vector2Int(Pos.x + 1, Pos.y);
+    public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
+    
+  
     public Animator animator;
 
     public bool isLocalPlayer;
@@ -32,32 +40,18 @@ public class TankController : MonoBehaviour
     public float animSpeed = 0.8f;
 
     public float animTime = 0.5f;
-    public void Initialize(string playerID, int initialHP = 3)
-    {
-        PlayerID = playerID;
-        HP = initialHP;
-        Direction ="up";
-        isLocalPlayer = playerID == NetworkManager.Instance.playerID;
-        Pos = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
-     
-        
-        // 确保animator已赋值
-        if (animator == null)
-        {
-            animator = GetComponent<Animator>();
-        }
-    }
+   
     
     public void Initialize(string playerID, int x, int y, int initialHP = 3)
     {
         PlayerID = playerID;
         HP = initialHP;
-        Direction = "up";
+        Direction = Direction.Up;
         isLocalPlayer = playerID == NetworkManager.Instance.playerID;
-        Pos = new Vector2Int(x, y);
+        Pos = new Vector2Int(x, y); // 左下角坐标
         
-        // 设置位置
-        transform.position = new Vector2(x, y);
+        // 设置坦克中心位置
+        transform.position = GetCenter();
         
         // 确保animator已赋值
         if (animator == null)
@@ -117,27 +111,34 @@ public class TankController : MonoBehaviour
     }
 
     // 帧同步推进调用
-    public void MoveBy(int dx, int dy, string direction)
+    public void MoveBy(int dx, int dy, Direction direction)
     {
-        
         // 停止当前动画，防止插值冲突
         transform.DOKill();
-        Vector2Int  targetPos=Pos + new Vector2Int(dx, dy);
-        if (MapManager.Instance.IsWalkable( targetPos.x,  targetPos.y))
+        
+        Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
+        
+        // 检查2x2区域是否可通行
+        if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,PlayerID))
         {
-            Pos=targetPos;
+            Pos = targetPos;
+            
+            // 计算坦克中心位置
+            Vector2 centerPos = GetCenter();
+            
             isMoving = true;
-            animStartTime=Time.time;
-            transform.DOMove((Vector2)targetPos, moveDuration).SetEase(Ease.Linear);
+            animStartTime = Time.time;
+            transform.DOMove(centerPos, moveDuration).SetEase(Ease.Linear);
         }
+        
         Direction = direction;
         Vector3 rotation = Vector3.zero;
         switch (direction)
         {
-            case "up": rotation = new Vector3(0, 0, 0); break;
-            case "down": rotation = new Vector3(0, 0, 180); break;
-            case "left": rotation = new Vector3(0, 0, 90); break;
-            case "right": rotation = new Vector3(0, 0, -90); break;
+            case Direction.Up: rotation = new Vector3(0, 0, 0); break;
+            case Direction.Down: rotation = new Vector3(0, 0, 180); break;
+            case Direction.Left: rotation = new Vector3(0, 0, 90); break;
+            case Direction.Right: rotation = new Vector3(0, 0, -90); break;
         }
         // 旋转也用DOTween
         transform.DORotate(rotation, moveDuration * 0.5f).SetEase(Ease.OutQuad);
@@ -145,10 +146,11 @@ public class TankController : MonoBehaviour
   
     public void Shoot()
     {
-        GameObject bullet=Instantiate(GameManager.Instance.bulletPrefab, transform.position, transform.rotation);
+        GameObject bullet = Instantiate(GameManager.Instance.bulletPrefab, transform.position, transform.rotation);
         BulletController bulletController = bullet.GetComponent<BulletController>();
-        bulletController.Initialize("",Direction,PlayerID);
+        bulletController.Initialize("", Direction, PlayerID);
         
+       
     }
 
     void CheckMovementState()
