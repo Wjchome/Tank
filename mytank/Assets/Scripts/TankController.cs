@@ -22,6 +22,10 @@ public class TankController : MonoBehaviour
     public bool isLocalPlayer;
     public float animStartTime;
     
+    // 玩家信息
+    public string playerName;
+    public Color playerColor;
+    
     // 动画控制相关
     public bool isMoving = false;
 
@@ -36,6 +40,24 @@ public class TankController : MonoBehaviour
         isLocalPlayer = playerID == NetworkManager.Instance.playerID;
         Pos = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
      
+        
+        // 确保animator已赋值
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
+    }
+    
+    public void Initialize(string playerID, int x, int y, int initialHP = 3)
+    {
+        PlayerID = playerID;
+        HP = initialHP;
+        Direction = "up";
+        isLocalPlayer = playerID == NetworkManager.Instance.playerID;
+        Pos = new Vector2Int(x, y);
+        
+        // 设置位置
+        transform.position = new Vector2(x, y);
         
         // 确保animator已赋值
         if (animator == null)

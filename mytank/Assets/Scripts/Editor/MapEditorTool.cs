@@ -96,7 +96,28 @@ public class MapEditorTool : EditorWindow
             ClearMap();
         }
         
-      
+        EditorGUILayout.EndHorizontal();
+        
+        EditorGUILayout.BeginHorizontal();
+        
+        if (GUILayout.Button("导出地图"))
+        {
+            ExportMap();
+        }
+        
+        if (GUILayout.Button("导入地图"))
+        {
+            ImportMap();
+        }
+        
+        EditorGUILayout.EndHorizontal();
+        
+        EditorGUILayout.BeginHorizontal();
+        
+        if (GUILayout.Button("导出为Level"))
+        {
+            ExportAsLevel();
+        }
         
         EditorGUILayout.EndHorizontal();
         
@@ -107,7 +128,17 @@ public class MapEditorTool : EditorWindow
         EditorGUILayout.HelpBox(
             "1. 启用编辑模式\n" +
             "2. 选择编辑工具\n" +
-            "3. 在Scene视图中点击网格进行编辑\n" ,
+            "3. 在Scene视图中点击网格进行编辑\n" +
+            "4. 使用导出地图将当前地图复制到剪贴板\n" +
+            "5. 使用导入地图从剪贴板加载地图数据\n" +
+            "6. 使用导出为Level创建ScriptableObject资源\n\n" +
+            "数据格式说明:\n" +
+            "0=空地, 1=墙, 2=可破坏墙, 3=河流, 4=树荫\n\n" +
+            "示例:\n" +
+            "1111111111\n" +
+            "1000000001\n" +
+            "1000000001\n" +
+            "1111111111",
             MessageType.Info);
         
         EditorGUILayout.EndVertical();
@@ -236,10 +267,10 @@ public class MapEditorTool : EditorWindow
             return;
         }
         
-        Vector2 position = new Vector2(x, y);
+        Vector2Int placePosition = new Vector2Int(x, y);
         
         // 先清除该位置的现有墙
-        ClearWallAtPosition(position);
+        ClearWallAtPosition(placePosition);
         
         // 根据选择的工具放置墙
         GameObject prefab = null;
@@ -274,10 +305,9 @@ public class MapEditorTool : EditorWindow
         if (prefab != null)
         {
             GameObject wall = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
-            wall.transform.position = new Vector3(position.x * mapManager.gridSize, position.y * mapManager.gridSize, 0);
+            wall.transform.position = new Vector3(placePosition.x * mapManager.gridSize, placePosition.y * mapManager.gridSize, 0);
             wall.transform.SetParent(mapManager.wallsParent);
             wall.tag = tag;
-            
             // 标记场景为已修改
             EditorUtility.SetDirty(wall);
             EditorUtility.SetDirty(mapManager.wallsParent);
@@ -287,7 +317,7 @@ public class MapEditorTool : EditorWindow
         }
     }
     
-    private void ClearWallAtPosition(Vector2 position)
+    private void ClearWallAtPosition(Vector2Int placePosition)
     {
         if (mapManager.wallsParent == null) return;
         
@@ -295,7 +325,7 @@ public class MapEditorTool : EditorWindow
         {
             Transform child = mapManager.wallsParent.GetChild(i);
             Vector2 childPos = new Vector2(child.position.x, child.position.y);
-            Vector2 targetPos = new Vector2(position.x * mapManager.gridSize, position.y * mapManager.gridSize);
+            Vector2 targetPos = new Vector2(placePosition.x * mapManager.gridSize, placePosition.y * mapManager.gridSize);
             if (Vector2.Distance(childPos, targetPos) < mapManager.gridSize * 0.1f)
             {
                 Undo.DestroyObjectImmediate(child.gameObject);
@@ -336,5 +366,188 @@ public class MapEditorTool : EditorWindow
                 }
             }
         }
+    }
+    
+    // 导出地图数据为字符串
+    private void ExportMap()
+    {
+        if (mapManager == null || mapManager.wallsParent == null) return;
+        
+        string mapData = GetMapDataString();
+        
+        // 复制到剪贴板
+        EditorGUIUtility.systemCopyBuffer = mapData;
+        
+        // 显示导出结果
+        Debug.Log($"地图已导出到剪贴板！\n地图尺寸: {mapManager.mapWidth}x{mapManager.mapHeight}\n数据:\n{mapData}");
+        
+        // 显示对话框
+        EditorUtility.DisplayDialog("地图导出成功", 
+            $"地图数据已复制到剪贴板！\n\n地图尺寸: {mapManager.mapWidth}x{mapManager.mapHeight}\n\n数据格式说明:\n0=空地, 1=墙, 2=可破坏墙, 3=河流, 4=树荫", 
+            "确定");
+    }
+    
+    // 导入地图数据
+    private void ImportMap()
+    {
+        if (mapManager == null) return;
+        
+        // 从剪贴板读取数据
+        string mapData = EditorGUIUtility.systemCopyBuffer;
+        
+        if (string.IsNullOrEmpty(mapData))
+        {
+            EditorUtility.DisplayDialog("导入失败", "剪贴板中没有地图数据！", "确定");
+            return;
+        }
+        
+        // 解析数据
+        string[] rows = mapData.Split('\n');
+        if (rows.Length == 0)
+        {
+            EditorUtility.DisplayDialog("导入失败", "地图数据格式错误！", "确定");
+            return;
+        }
+        
+        int height = rows.Length;
+        int width = rows[0].Length;
+        
+        // 检查数据一致性
+        for (int i = 0; i < rows.Length; i++)
+        {
+            if (rows[i].Length != width)
+            {
+                EditorUtility.DisplayDialog("导入失败", $"第{i+1}行长度不一致！", "确定");
+                return;
+            }
+        }
+        
+        // 更新地图尺寸
+        mapManager.mapWidth = width;
+        mapManager.mapHeight = height;
+        
+        // 清除现有地图
+        ClearMap();
+        
+        // 导入数据
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                char tileChar = rows[y][x];
+                if (int.TryParse(tileChar.ToString(), out int tileType))
+                {
+                    if (tileType >= 0 && tileType <= 4)
+                    {
+                        PlaceWall(x, y, tileType);
+                    }
+                }
+            }
+        }
+        
+        Debug.Log($"地图导入成功！\n地图尺寸: {width}x{height}");
+        EditorUtility.DisplayDialog("地图导入成功", 
+            $"地图数据导入成功！\n\n地图尺寸: {width}x{height}\n\n数据格式说明:\n0=空地, 1=墙, 2=可破坏墙, 3=河流, 4=树荫", 
+            "确定");
+    }
+    
+    // 导出为Level ScriptableObject
+    private void ExportAsLevel()
+    {
+        if (mapManager == null || mapManager.wallsParent == null) return;
+        
+        // 获取地图数据字符串
+        string mapData = GetMapDataString();
+        
+        // 创建Level资源
+        Level level = ScriptableObject.CreateInstance<Level>();
+        level.levelName = $"Level_{System.DateTime.Now:yyyyMMdd_HHmmss}";
+        level.width = mapManager.mapWidth;
+        level.height = mapManager.mapHeight;
+        level.mapData = mapData;
+        
+        // 保存资源
+        string path = EditorUtility.SaveFilePanelInProject(
+            "保存Level资源", 
+            level.levelName, 
+            "asset", 
+            "选择保存位置"
+        );
+        
+        if (!string.IsNullOrEmpty(path))
+        {
+            AssetDatabase.CreateAsset(level, path);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            
+            Debug.Log($"Level资源已保存到: {path}");
+          
+        }
+    }
+    
+    // 获取地图数据字符串
+    private string GetMapDataString()
+    {
+        // 创建临时地图数组（一维数组）
+        MapType[] tempMap = new MapType[mapManager.mapWidth * mapManager.mapHeight];
+        
+        // 初始化为空地
+        for (int i = 0; i < tempMap.Length; i++)
+        {
+            tempMap[i] = MapType.floor;
+        }
+        
+        // 从wallsParent读取所有子对象
+        foreach (Transform child in mapManager.wallsParent)
+        {
+            Vector2 position = child.position;
+            int x = Mathf.RoundToInt(position.x / mapManager.gridSize);
+            int y = Mathf.RoundToInt(position.y / mapManager.gridSize);
+            
+            // 检查位置是否在地图范围内
+            if (x >= 0 && x < mapManager.mapWidth && y >= 0 && y < mapManager.mapHeight)
+            {
+                int index = y * mapManager.mapWidth + x;
+                if (child.CompareTag("Wall"))
+                {
+                    tempMap[index] = MapType.wall;
+                }
+                else if (child.CompareTag("BreakableWall"))
+                {
+                    tempMap[index] = MapType.breakableWall;
+                }
+                else if (child.CompareTag("Floor"))
+                {
+                    tempMap[index] = MapType.floor;
+                }
+                else if (child.CompareTag("River"))
+                {
+                    tempMap[index] = MapType.river;
+                }
+                else if (child.CompareTag("Tree"))
+                {
+                    tempMap[index] = MapType.tree;
+                }
+            }
+        }
+        
+        // 生成导出字符串
+        string mapData = "";
+        for (int y = 0; y < mapManager.mapHeight; y++)
+        {
+            string row = "";
+            for (int x = 0; x < mapManager.mapWidth; x++)
+            {
+                int index = y * mapManager.mapWidth + x;
+                row += ((int)tempMap[index]).ToString();
+            }
+            mapData += row;
+            if (y < mapManager.mapHeight - 1)
+            {
+                mapData += "\n";
+            }
+        }
+        
+        return mapData;
     }
 } 

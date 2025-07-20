@@ -20,6 +20,10 @@
         public float gridSize = 1f;
         private MapType[,] map;
         
+        [Header("Level Data")]
+        public List<Level> availableLevels = new List<Level>();
+        public int currentLevel = 0;
+        
         [Header("Prefabs")]
         public GameObject floorPrefab;
         public GameObject wallPrefab;
@@ -29,14 +33,12 @@
         public Transform wallsParent;
         
         
-       public Dictionary<MapType,GameObject> typeToPrefab;
+        public Dictionary<MapType,GameObject> typeToPrefab;
         
         private GameObject[,] gridObjects; // 记录每个格子的实例
         
         private void Awake()
         {
-            // 在运行时从wallsParent读取地图数据
-            LoadMapFromWallsParent();
             typeToPrefab = new Dictionary<MapType, GameObject>()
             {
                 { MapType.floor, floorPrefab },
@@ -46,81 +48,10 @@
                 { MapType.tree, treePrefab },       // 树荫
             };
             
+            
         }
         
-        void LoadMapFromWallsParent()
-        {
-            if (wallsParent == null)
-            {
-                Debug.LogWarning("WallsParent is null! Cannot load map.");
-                return;
-            }
-            
-            map = new MapType[mapWidth, mapHeight];
-            if (gridObjects == null)
-                gridObjects = new GameObject[mapWidth, mapHeight];
-            // 清理原有实例
-            for (int x = 0; x < mapWidth; x++)
-            {
-                for (int y = 0; y < mapHeight; y++)
-                {
-                    if (gridObjects[x, y] != null)
-                    {
-                        Destroy(gridObjects[x, y]);
-                        gridObjects[x, y] = null;
-                    }
-                }
-            }
-            
-            // 初始化地图为空
-            for (int x = 0; x < mapWidth; x++)
-            {
-                for (int y = 0; y < mapHeight; y++)
-                {
-                    map[x, y] = 0;
-                }
-            }
-            
-            // 从wallsParent读取所有子对象
-            foreach (Transform child in wallsParent)
-            {
-                Vector2 position = child.position;
-                int x = Mathf.RoundToInt(position.x);
-                int y = Mathf.RoundToInt(position.y);
-                
-                // 检查位置是否在地图范围内
-                if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight)
-                {
-                    if (child.CompareTag("Wall"))
-                    {
-                        map[x, y] = MapType.wall; // 不可破坏墙
-                        gridObjects[x, y] = child.gameObject;
-                    }
-                    else if (child.CompareTag("BreakableWall"))
-                    {
-                        map[x, y] = MapType.breakableWall; // 可破坏墙
-                        gridObjects[x, y] = child.gameObject;
-                    }
-                    else if (child.CompareTag("Floor"))
-                    {
-                        map[x, y] = MapType.floor;//空地
-                        gridObjects[x, y] = child.gameObject;
-                    }
-                    else if (child.CompareTag("River"))
-                    {
-                        map[x, y] = MapType.river; // 河流
-                        gridObjects[x, y] = child.gameObject;
-                    }
-                    else if (child.CompareTag("Tree"))
-                    {
-                        map[x, y] = MapType.tree; // 树荫
-                        gridObjects[x, y] = child.gameObject;
-                    }
-                }
-            }
-            
-            Debug.Log("Map loaded from WallsParent successfully!");
-        }
+       
         
         // 获取指定位置的墙类型
         public MapType GetWallType(int x, int y)
@@ -150,6 +81,36 @@
                 gridObjects[x, y] = obj;
                     
             }
+        }
+
+        // 清除地图
+        public void ClearMap()
+        {
+            if (wallsParent == null) return;
+            
+            // 清除所有子对象
+            while (wallsParent.childCount > 0)
+            {
+                DestroyImmediate(wallsParent.GetChild(0).gameObject);
+            }
+            
+            // 重置地图数据
+            if (map != null)
+            {
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    for (int y = 0; y < mapHeight; y++)
+                    {
+                        map[x, y] = MapType.floor;
+                        if (gridObjects[x, y] != null)
+                        {
+                            gridObjects[x, y] = null;
+                        }
+                    }
+                }
+            }
+            
+            Debug.Log("Map cleared successfully!");
         }
 
         public TankController GetTankController(int x, int y)
@@ -193,8 +154,112 @@
             return wallType == MapType.floor|| wallType == MapType.tree;
         }
 
+        // 加载关卡
+        public void LoadLevel(Level level)
+        {
+            if (level == null) return;
+            
+            // 设置地图尺寸
+            mapWidth = level.width;
+            mapHeight = level.height;
+            
+            // 清除现有地图
+            ClearMap();
+            
+            // 解析地图数据
+            LoadMapFromString(level.mapData);
+            
+            Debug.Log($"Level {level.levelName} loaded successfully!");
+        }
         
-       
+        // 从字符串加载地图
+        public void LoadMapFromString(string mapData)
+        {
+            if (string.IsNullOrEmpty(mapData))
+            {
+                Debug.LogError("Map data is empty!");
+                return;
+            }
+            
+            // 解析地图数据
+            string[] rows = mapData.Split('\n');
+            if (rows.Length == 0)
+            {
+                Debug.LogError("Invalid map data format!");
+                return;
+            }
+            
+            int height = rows.Length;
+            int width = rows[0].Length;
+            
+            // 检查数据一致性
+            for (int i = 0; i < rows.Length; i++)
+            {
+                if (rows[i].Length != width)
+                {
+                    Debug.LogError($"Row {i+1} has inconsistent length!");
+                    return;
+                }
+            }
+            
+            // 更新地图尺寸
+            mapWidth = width;
+            mapHeight = height;
+            
+            // 重新初始化数组
+            map = new MapType[mapWidth, mapHeight];
+            gridObjects = new GameObject[mapWidth, mapHeight];
+            
+            // 解析瓦片数据
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    char tileChar = rows[y][x];
+                    if (int.TryParse(tileChar.ToString(), out int tileType))
+                    {
+                        if (tileType >= 0 && tileType <= 4)
+                        {
+                            SetWallType(x, y, (MapType)tileType);
+                        }
+                    }
+                }
+            }
+        }
         
-       
+        // 获取当前关卡
+        public Level GetCurrentLevel()
+        {
+            if (currentLevel >= 0 && currentLevel < availableLevels.Count)
+            {
+                return availableLevels[currentLevel];
+            }
+            return null;
+        }
+        
+        // 设置当前关卡
+        public void SetCurrentLevel(int levelIndex)
+        {
+            if (levelIndex >= 0 && levelIndex < availableLevels.Count)
+            {
+                currentLevel = levelIndex;
+                LoadLevel(availableLevels[currentLevel]);
+            }
+        }
+        
+        // 获取出生点
+        public Vector2Int GetSpawnPoint(int playerIndex)
+        {
+            // 默认出生点（四个角落）
+            Vector2Int[] defaultSpawnPoints = new Vector2Int[]
+            {
+                new Vector2Int(1, 1),                    // 左下角
+                new Vector2Int(mapWidth - 2, 1),         // 右下角
+                new Vector2Int(1, mapHeight - 2),        // 左上角
+                new Vector2Int(mapWidth - 2, mapHeight - 2) // 右上角
+            };
+            
+            int index = playerIndex % defaultSpawnPoints.Length;
+            return defaultSpawnPoints[index];
+        }
     }

@@ -119,7 +119,7 @@ func (s *Server) handleClient(conn net.Conn) {
 		case *myproto.ClientMessage_RoomListRequest:
 			s.sendRoomList(client.Conn)
 		case *myproto.ClientMessage_GameStartRequest:
-			s.startGame(s.Rooms[client.RoomID])
+			s.startGame(s.Rooms[client.RoomID], data.GameStartRequest.Level)
 		case *myproto.ClientMessage_LeaveRoomRequest:
 			s.handleLeaveRoomRequest(client, data.LeaveRoomRequest)
 		case *myproto.ClientMessage_KickPlayerRequest:
@@ -367,23 +367,30 @@ func (s *Server) handleClientDisconnect(client *Client) {
 	fmt.Printf("Client %s left room %s\n", client.ID, room.ID)
 }
 
-func (s *Server) startGame(room *Room) {
+func (s *Server) startGame(room *Room, level int32) {
 	room.Status = "playing"
 
 	// 生成随机种子
 	randomSeed := time.Now().UnixNano()
 
-	// 收集玩家ID
-	playerIDs := make([]string, 0, len(room.Clients))
+	// 收集玩家信息
+	playerInfos := make([]*myproto.PlayerInfo, 0, len(room.Clients))
 	for _, c := range room.Clients {
-		playerIDs = append(playerIDs, c.ID)
+		playerInfos = append(playerInfos, &myproto.PlayerInfo{
+			PlayerId:   c.ID,
+			PlayerName: c.Name,
+			ColorR:     c.ColorR,
+			ColorG:     c.ColorG,
+			ColorB:     c.ColorB,
+		})
 	}
 
 	// 发送游戏开始消息
 	gameStart := &myproto.GameStart{
-		RoomId:     room.ID,
-		PlayerIds:  playerIDs,
-		RandomSeed: randomSeed,
+		RoomId:      room.ID,
+		PlayerInfos: playerInfos,
+		RandomSeed:  randomSeed,
+		Level:       level,
 	}
 	serverMsg := &myproto.ServerMessage{
 		Data: &myproto.ServerMessage_GameStart{

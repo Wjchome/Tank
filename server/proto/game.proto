@@ -97,14 +97,16 @@ message FrameInputs {
 // 游戏开始
 message GameStart {
   string room_id = 1;
-  repeated string player_ids = 2;
+  repeated PlayerInfo player_infos = 2;
   int64 random_seed = 3; // 新增
+  int32 level = 4; // 关卡索引
 }
 
 message RoomListRequest {}
 
 message GameStartRequest{
   string room_id = 1;
+  int32 level = 2; // 关卡索引
 }
 
 

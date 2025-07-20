@@ -45,6 +45,8 @@ public class RoomManager : SingletonMono<RoomManager>
     public GameObject playerUIItemPrefab;
     public Button leaveRoomButton;
     public Button startGameButton;
+    public TMP_Dropdown levelDropdown;
+  
     
     private List<RoomUIItem> roomItems = new List<RoomUIItem>();
     private List<PlayerUIItem> playerUIItems = new List<PlayerUIItem>();
@@ -70,8 +72,21 @@ public class RoomManager : SingletonMono<RoomManager>
         // 设置默认房间名
         roomNameInput.text = $"Room_{Random.Range(1000, 9999)}";
         
-   
+      
+        levelDropdown.ClearOptions();
+        List<string> levelOptions = new List<string>();
+        for (int i = 0; i < MapManager.Instance.availableLevels.Count; i++)
+        {
+            var level = MapManager.Instance.availableLevels[i];
+            levelOptions.Add($"{i + 1}. {level.levelName}");
+        }
+        levelDropdown.AddOptions(levelOptions);
+        levelDropdown.value = 0; // 默认选择第一个关卡
+        
     }
+    
+
+
     
     void SubscribeToEvents()
     {
@@ -159,11 +174,16 @@ public class RoomManager : SingletonMono<RoomManager>
         
         if (NetworkManager.Instance.isHost)
         {
-            startGameButton.interactable = true;
+            startGameButton.gameObject.SetActive( true);
+            // 房主可以看到关卡选择
+            levelDropdown.gameObject.SetActive(true);
         }
         else
         {
-            startGameButton.interactable = false;
+            startGameButton.gameObject.SetActive(false);
+
+            // 非房主看不到关卡选择
+            levelDropdown.gameObject.SetActive(false);
         }
     }
     
@@ -205,7 +225,8 @@ public class RoomManager : SingletonMono<RoomManager>
     {
         if (NetworkManager.Instance.currentRoom != null)
         {
-            NetworkManager.Instance.GameStartRequest(NetworkManager.Instance.currentRoom.RoomId);
+            int selectedLevel = levelDropdown.value; // 获取选中的关卡索引
+            NetworkManager.Instance.GameStartRequest(NetworkManager.Instance.currentRoom.RoomId, selectedLevel);
         }
     }
     //发送加入房间请求
@@ -398,8 +419,7 @@ public class RoomManager : SingletonMono<RoomManager>
         // 更新玩家列表
         UpdatePlayerList();
         
-        // 只有房主可以开始游戏
-        startGameButton.gameObject.SetActive(NetworkManager.Instance.isHost);
+        
         Debug.Log($"Start button active: {NetworkManager.Instance.isHost}");
     }
     
@@ -415,14 +435,7 @@ public class RoomManager : SingletonMono<RoomManager>
     
     void OnGameStartFun(GameStart gameStart)
     {
-        Debug.Log($"Game started! Room: {gameStart.RoomId}, Players: {string.Join(",", gameStart.PlayerIds)}");
-        foreach (var playerId in gameStart.PlayerIds)
-        {
-            if (!GameStateManager.Instance.playerTanks.ContainsKey(playerId))
-            {
-                GameStateManager.Instance.CreatePlayerTank(playerId);
-            }
-        }
+       
         // 用服务器下发的随机种子初始化Unity随机数
         UnityEngine.Random.InitState((int)gameStart.RandomSeed);
         // 随机生成一个敌人坦克

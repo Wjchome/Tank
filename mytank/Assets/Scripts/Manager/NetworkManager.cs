@@ -328,7 +328,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     }
     // 请求开始游戏
 
-    public void GameStartRequest(string roomId)
+    public void GameStartRequest(string roomId, int level = 0)
     {
         if (!isConnected)
         {
@@ -336,9 +336,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
             return;
         }
 
-        var message =new ClientMessage { GameStartRequest = new GameStartRequest()
+        var message = new ClientMessage { GameStartRequest = new GameStartRequest()
         {
-            RoomId = roomId
+            RoomId = roomId,
+            Level = level
         }};
         SendMessage(message);
     }

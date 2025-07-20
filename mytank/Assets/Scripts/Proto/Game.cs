@@ -44,29 +44,30 @@ namespace Tankgame {
             "dBIRCglwbGF5ZXJfaWQYASABKAkSJwoKaW5wdXRfdHlwZRgCIAEoDjITLnRh",
             "bmtnYW1lLklucHV0VHlwZRIUCgxmcmFtZV9udW1iZXIYAyABKAMSEQoJdGlt",
             "ZXN0YW1wGAQgASgDIkoKC0ZyYW1lSW5wdXRzEhQKDGZyYW1lX251bWJlchgB",
-            "IAEoAxIlCgZpbnB1dHMYAiADKAsyFS50YW5rZ2FtZS5QbGF5ZXJJbnB1dCJF",
-            "CglHYW1lU3RhcnQSDwoHcm9vbV9pZBgBIAEoCRISCgpwbGF5ZXJfaWRzGAIg",
-            "AygJEhMKC3JhbmRvbV9zZWVkGAMgASgDIhEKD1Jvb21MaXN0UmVxdWVzdCIj",
-            "ChBHYW1lU3RhcnRSZXF1ZXN0Eg8KB3Jvb21faWQYASABKAki+AEKDVNlcnZl",
-            "ck1lc3NhZ2USLQoMZnJhbWVfaW5wdXRzGAEgASgLMhUudGFua2dhbWUuRnJh",
-            "bWVJbnB1dHNIABInCglyb29tX2luZm8YAiABKAsyEi50YW5rZ2FtZS5Sb29t",
-            "SW5mb0gAEikKCmdhbWVfc3RhcnQYAyABKAsyEy50YW5rZ2FtZS5HYW1lU3Rh",
-            "cnRIABIzCg9jb25uZWN0X3N1Y2Nlc3MYBCABKAsyGC50YW5rZ2FtZS5Db25u",
-            "ZWN0U3VjY2Vzc0gAEicKCXJvb21fbGlzdBgFIAEoCzISLnRhbmtnYW1lLlJv",
-            "b21MaXN0SABCBgoEZGF0YSKiAwoNQ2xpZW50TWVzc2FnZRItCgxwbGF5ZXJf",
-            "aW5wdXQYASABKAsyFS50YW5rZ2FtZS5QbGF5ZXJJbnB1dEgAEjoKE2NyZWF0",
-            "ZV9yb29tX3JlcXVlc3QYAiABKAsyGy50YW5rZ2FtZS5DcmVhdGVSb29tUmVx",
-            "dWVzdEgAEjYKEWpvaW5fcm9vbV9yZXF1ZXN0GAMgASgLMhkudGFua2dhbWUu",
-            "Sm9pblJvb21SZXF1ZXN0SAASOAoSbGVhdmVfcm9vbV9yZXF1ZXN0GAQgASgL",
-            "MhoudGFua2dhbWUuTGVhdmVSb29tUmVxdWVzdEgAEjYKEXJvb21fbGlzdF9y",
-            "ZXF1ZXN0GAUgASgLMhkudGFua2dhbWUuUm9vbUxpc3RSZXF1ZXN0SAASOAoS",
-            "Z2FtZV9zdGFydF9yZXF1ZXN0GAYgASgLMhoudGFua2dhbWUuR2FtZVN0YXJ0",
-            "UmVxdWVzdEgAEjoKE2tpY2tfcGxheWVyX3JlcXVlc3QYByABKAsyGy50YW5r",
-            "Z2FtZS5LaWNrUGxheWVyUmVxdWVzdEgAQgYKBGRhdGEqfwoJSW5wdXRUeXBl",
-            "Eg4KCklOUFVUX05PTkUQABIRCg1JTlBVVF9NT1ZFX1VQEAESEwoPSU5QVVRf",
-            "TU9WRV9ET1dOEAISEwoPSU5QVVRfTU9WRV9MRUZUEAMSFAoQSU5QVVRfTU9W",
-            "RV9SSUdIVBAEEg8KC0lOUFVUX1NIT09UEAVCDloMc2VydmVyL3Byb3RvYgZw",
-            "cm90bzM="));
+            "IAEoAxIlCgZpbnB1dHMYAiADKAsyFS50YW5rZ2FtZS5QbGF5ZXJJbnB1dCJs",
+            "CglHYW1lU3RhcnQSDwoHcm9vbV9pZBgBIAEoCRIqCgxwbGF5ZXJfaW5mb3MY",
+            "AiADKAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvEhMKC3JhbmRvbV9zZWVkGAMg",
+            "ASgDEg0KBWxldmVsGAQgASgFIhEKD1Jvb21MaXN0UmVxdWVzdCIyChBHYW1l",
+            "U3RhcnRSZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSDQoFbGV2ZWwYAiABKAUi",
+            "+AEKDVNlcnZlck1lc3NhZ2USLQoMZnJhbWVfaW5wdXRzGAEgASgLMhUudGFu",
+            "a2dhbWUuRnJhbWVJbnB1dHNIABInCglyb29tX2luZm8YAiABKAsyEi50YW5r",
+            "Z2FtZS5Sb29tSW5mb0gAEikKCmdhbWVfc3RhcnQYAyABKAsyEy50YW5rZ2Ft",
+            "ZS5HYW1lU3RhcnRIABIzCg9jb25uZWN0X3N1Y2Nlc3MYBCABKAsyGC50YW5r",
+            "Z2FtZS5Db25uZWN0U3VjY2Vzc0gAEicKCXJvb21fbGlzdBgFIAEoCzISLnRh",
+            "bmtnYW1lLlJvb21MaXN0SABCBgoEZGF0YSKiAwoNQ2xpZW50TWVzc2FnZRIt",
+            "CgxwbGF5ZXJfaW5wdXQYASABKAsyFS50YW5rZ2FtZS5QbGF5ZXJJbnB1dEgA",
+            "EjoKE2NyZWF0ZV9yb29tX3JlcXVlc3QYAiABKAsyGy50YW5rZ2FtZS5DcmVh",
+            "dGVSb29tUmVxdWVzdEgAEjYKEWpvaW5fcm9vbV9yZXF1ZXN0GAMgASgLMhku",
+            "dGFua2dhbWUuSm9pblJvb21SZXF1ZXN0SAASOAoSbGVhdmVfcm9vbV9yZXF1",
+            "ZXN0GAQgASgLMhoudGFua2dhbWUuTGVhdmVSb29tUmVxdWVzdEgAEjYKEXJv",
+            "b21fbGlzdF9yZXF1ZXN0GAUgASgLMhkudGFua2dhbWUuUm9vbUxpc3RSZXF1",
+            "ZXN0SAASOAoSZ2FtZV9zdGFydF9yZXF1ZXN0GAYgASgLMhoudGFua2dhbWUu",
+            "R2FtZVN0YXJ0UmVxdWVzdEgAEjoKE2tpY2tfcGxheWVyX3JlcXVlc3QYByAB",
+            "KAsyGy50YW5rZ2FtZS5LaWNrUGxheWVyUmVxdWVzdEgAQgYKBGRhdGEqfwoJ",
+            "SW5wdXRUeXBlEg4KCklOUFVUX05PTkUQABIRCg1JTlBVVF9NT1ZFX1VQEAES",
+            "EwoPSU5QVVRfTU9WRV9ET1dOEAISEwoPSU5QVVRfTU9WRV9MRUZUEAMSFAoQ",
+            "SU5QVVRfTU9WRV9SSUdIVBAEEg8KC0lOUFVUX1NIT09UEAVCDloMc2VydmVy",
+            "L3Byb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tankgame.InputType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -80,9 +81,9 @@ namespace Tankgame {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.KickPlayerRequest), global::Tankgame.KickPlayerRequest.Parser, new[]{ "RoomId", "TargetPlayerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.PlayerInput), global::Tankgame.PlayerInput.Parser, new[]{ "PlayerId", "InputType", "FrameNumber", "Timestamp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.FrameInputs), global::Tankgame.FrameInputs.Parser, new[]{ "FrameNumber", "Inputs" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStart), global::Tankgame.GameStart.Parser, new[]{ "RoomId", "PlayerIds", "RandomSeed" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStart), global::Tankgame.GameStart.Parser, new[]{ "RoomId", "PlayerInfos", "RandomSeed", "Level" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomListRequest), global::Tankgame.RoomListRequest.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStartRequest), global::Tankgame.GameStartRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStartRequest), global::Tankgame.GameStartRequest.Parser, new[]{ "RoomId", "Level" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ServerMessage), global::Tankgame.ServerMessage.Parser, new[]{ "FrameInputs", "RoomInfo", "GameStart", "ConnectSuccess", "RoomList" }, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ClientMessage), global::Tankgame.ClientMessage.Parser, new[]{ "PlayerInput", "CreateRoomRequest", "JoinRoomRequest", "LeaveRoomRequest", "RoomListRequest", "GameStartRequest", "KickPlayerRequest" }, new[]{ "Data" }, null, null, null)
           }));
@@ -3081,8 +3082,9 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GameStart(GameStart other) : this() {
       roomId_ = other.roomId_;
-      playerIds_ = other.playerIds_.Clone();
+      playerInfos_ = other.playerInfos_.Clone();
       randomSeed_ = other.randomSeed_;
+      level_ = other.level_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3104,15 +3106,15 @@ namespace Tankgame {
       }
     }
 
-    /// <summary>Field number for the "player_ids" field.</summary>
-    public const int PlayerIdsFieldNumber = 2;
-    private static readonly pb::FieldCodec<string> _repeated_playerIds_codec
-        = pb::FieldCodec.ForString(18);
-    private readonly pbc::RepeatedField<string> playerIds_ = new pbc::RepeatedField<string>();
+    /// <summary>Field number for the "player_infos" field.</summary>
+    public const int PlayerInfosFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Tankgame.PlayerInfo> _repeated_playerInfos_codec
+        = pb::FieldCodec.ForMessage(18, global::Tankgame.PlayerInfo.Parser);
+    private readonly pbc::RepeatedField<global::Tankgame.PlayerInfo> playerInfos_ = new pbc::RepeatedField<global::Tankgame.PlayerInfo>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<string> PlayerIds {
-      get { return playerIds_; }
+    public pbc::RepeatedField<global::Tankgame.PlayerInfo> PlayerInfos {
+      get { return playerInfos_; }
     }
 
     /// <summary>Field number for the "random_seed" field.</summary>
@@ -3127,6 +3129,21 @@ namespace Tankgame {
       get { return randomSeed_; }
       set {
         randomSeed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "level" field.</summary>
+    public const int LevelFieldNumber = 4;
+    private int level_;
+    /// <summary>
+    /// 关卡索引
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Level {
+      get { return level_; }
+      set {
+        level_ = value;
       }
     }
 
@@ -3146,8 +3163,9 @@ namespace Tankgame {
         return true;
       }
       if (RoomId != other.RoomId) return false;
-      if(!playerIds_.Equals(other.playerIds_)) return false;
+      if(!playerInfos_.Equals(other.playerInfos_)) return false;
       if (RandomSeed != other.RandomSeed) return false;
+      if (Level != other.Level) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3156,8 +3174,9 @@ namespace Tankgame {
     public override int GetHashCode() {
       int hash = 1;
       if (RoomId.Length != 0) hash ^= RoomId.GetHashCode();
-      hash ^= playerIds_.GetHashCode();
+      hash ^= playerInfos_.GetHashCode();
       if (RandomSeed != 0L) hash ^= RandomSeed.GetHashCode();
+      if (Level != 0) hash ^= Level.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3180,10 +3199,14 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(RoomId);
       }
-      playerIds_.WriteTo(output, _repeated_playerIds_codec);
+      playerInfos_.WriteTo(output, _repeated_playerInfos_codec);
       if (RandomSeed != 0L) {
         output.WriteRawTag(24);
         output.WriteInt64(RandomSeed);
+      }
+      if (Level != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Level);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3199,10 +3222,14 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(RoomId);
       }
-      playerIds_.WriteTo(ref output, _repeated_playerIds_codec);
+      playerInfos_.WriteTo(ref output, _repeated_playerInfos_codec);
       if (RandomSeed != 0L) {
         output.WriteRawTag(24);
         output.WriteInt64(RandomSeed);
+      }
+      if (Level != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Level);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3217,9 +3244,12 @@ namespace Tankgame {
       if (RoomId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomId);
       }
-      size += playerIds_.CalculateSize(_repeated_playerIds_codec);
+      size += playerInfos_.CalculateSize(_repeated_playerInfos_codec);
       if (RandomSeed != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(RandomSeed);
+      }
+      if (Level != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Level);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3236,9 +3266,12 @@ namespace Tankgame {
       if (other.RoomId.Length != 0) {
         RoomId = other.RoomId;
       }
-      playerIds_.Add(other.playerIds_);
+      playerInfos_.Add(other.playerInfos_);
       if (other.RandomSeed != 0L) {
         RandomSeed = other.RandomSeed;
+      }
+      if (other.Level != 0) {
+        Level = other.Level;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3264,11 +3297,15 @@ namespace Tankgame {
             break;
           }
           case 18: {
-            playerIds_.AddEntriesFrom(input, _repeated_playerIds_codec);
+            playerInfos_.AddEntriesFrom(input, _repeated_playerInfos_codec);
             break;
           }
           case 24: {
             RandomSeed = input.ReadInt64();
+            break;
+          }
+          case 32: {
+            Level = input.ReadInt32();
             break;
           }
         }
@@ -3295,11 +3332,15 @@ namespace Tankgame {
             break;
           }
           case 18: {
-            playerIds_.AddEntriesFrom(ref input, _repeated_playerIds_codec);
+            playerInfos_.AddEntriesFrom(ref input, _repeated_playerInfos_codec);
             break;
           }
           case 24: {
             RandomSeed = input.ReadInt64();
+            break;
+          }
+          case 32: {
+            Level = input.ReadInt32();
             break;
           }
         }
@@ -3506,6 +3547,7 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GameStartRequest(GameStartRequest other) : this() {
       roomId_ = other.roomId_;
+      level_ = other.level_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3527,6 +3569,21 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "level" field.</summary>
+    public const int LevelFieldNumber = 2;
+    private int level_;
+    /// <summary>
+    /// 关卡索引
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Level {
+      get { return level_; }
+      set {
+        level_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -3543,6 +3600,7 @@ namespace Tankgame {
         return true;
       }
       if (RoomId != other.RoomId) return false;
+      if (Level != other.Level) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3551,6 +3609,7 @@ namespace Tankgame {
     public override int GetHashCode() {
       int hash = 1;
       if (RoomId.Length != 0) hash ^= RoomId.GetHashCode();
+      if (Level != 0) hash ^= Level.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3573,6 +3632,10 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(RoomId);
       }
+      if (Level != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Level);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3587,6 +3650,10 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(RoomId);
       }
+      if (Level != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Level);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3599,6 +3666,9 @@ namespace Tankgame {
       int size = 0;
       if (RoomId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RoomId);
+      }
+      if (Level != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Level);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3614,6 +3684,9 @@ namespace Tankgame {
       }
       if (other.RoomId.Length != 0) {
         RoomId = other.RoomId;
+      }
+      if (other.Level != 0) {
+        Level = other.Level;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3638,6 +3711,10 @@ namespace Tankgame {
             RoomId = input.ReadString();
             break;
           }
+          case 16: {
+            Level = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -3659,6 +3736,10 @@ namespace Tankgame {
             break;
           case 10: {
             RoomId = input.ReadString();
+            break;
+          }
+          case 16: {
+            Level = input.ReadInt32();
             break;
           }
         }

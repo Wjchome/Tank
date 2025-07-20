@@ -9,6 +9,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
     void Start()
     {
         NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
+        NetworkManager.Instance.OnGameStart += OnGameStart;
     }
 
     void OnDestroy()
@@ -16,6 +17,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.OnFrameInputs -= OnFrameInputs;
+            NetworkManager.Instance.OnGameStart -= OnGameStart;
         }
     }
 
@@ -29,29 +31,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
-     public TankController CreatePlayerTank(string playerId)
-    {
-        GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, new Vector2(1, 1), Quaternion.identity);
-        TankController tank = tankObj.GetComponent<TankController>();
-        tank.Initialize(playerId, 3);
-        
-        // 设置玩家信息
-      /*  if (playerId == NetworkManager.Instance.playerID)
-        {
-            // 本地玩家
-            tank.playerName = NetworkManager.Instance.playerName;
-            tank.playerColor = NetworkManager.Instance.playerColor;
-        }
-        else
-        {
-            // 其他玩家，暂时使用默认值，后续可以从网络消息中获取
-            tank.playerName = $"Player_{playerId.Substring(0, 4)}";
-            tank.playerColor = Color.red;
-        }*/
-        
-        playerTanks[playerId] = tank;
-        return tank;
-    }
+
 
     void ApplyInputToTank(TankController tank, PlayerInput input)
     {
@@ -73,6 +53,60 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case InputType.InputShoot:
                 tank.Shoot();
                 break;
+        }
+    }
+
+    void OnGameStart(GameStart gameStart)
+    {
+        Debug.Log($"Game started! Level: {gameStart.Level}");
+        
+        // 加载关卡
+        MapManager.Instance.SetCurrentLevel(gameStart.Level);
+        // 创建所有玩家的坦克
+        CreateAllPlayerTanks(gameStart);
+    }
+    
+
+    
+    void CreateAllPlayerTanks(GameStart gameStart)
+    {
+        // 清空现有坦克
+        foreach (var tank in playerTanks.Values)
+        {
+            if (tank != null)
+            {
+                Destroy(tank.gameObject);
+            }
+        }
+        playerTanks.Clear();
+        
+        // 为每个玩家创建坦克
+        for (int i = 0; i < gameStart.PlayerInfos.Count; i++)
+        {
+            var playerInfo = gameStart.PlayerInfos[i];
+            
+            // 获取出生点
+            Vector2Int spawnPoint = MapManager.Instance.GetSpawnPoint(i);
+            
+            // 创建坦克
+            GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, 
+                new Vector2(spawnPoint.x, spawnPoint.y), Quaternion.identity);
+            TankController tank = tankObj.GetComponent<TankController>();
+            tank.Initialize(playerInfo.PlayerId, spawnPoint.x, spawnPoint.y);
+            
+            // 设置玩家信息
+            tank.playerName = playerInfo.PlayerName;
+            tank.playerColor = new Color(
+                playerInfo.ColorR / 255f,
+                playerInfo.ColorG / 255f,
+                playerInfo.ColorB / 255f
+            );
+            
+            // 设置坦克颜色
+            tank.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
+            
+            playerTanks[playerInfo.PlayerId] = tank;
+            Debug.Log($"Created tank for player {playerInfo.PlayerName} ({playerInfo.PlayerId}) at position ({spawnPoint.x}, {spawnPoint.y})");
         }
     }
 } 

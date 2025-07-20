@@ -734,8 +734,9 @@ func (x *FrameInputs) GetInputs() []*PlayerInput {
 type GameStart struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomId        string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
-	PlayerIds     []string               `protobuf:"bytes,2,rep,name=player_ids,json=playerIds,proto3" json:"player_ids,omitempty"`
+	PlayerInfos   []*PlayerInfo          `protobuf:"bytes,2,rep,name=player_infos,json=playerInfos,proto3" json:"player_infos,omitempty"`
 	RandomSeed    int64                  `protobuf:"varint,3,opt,name=random_seed,json=randomSeed,proto3" json:"random_seed,omitempty"` // 新增
+	Level         int32                  `protobuf:"varint,4,opt,name=level,proto3" json:"level,omitempty"`                             // 关卡索引
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -777,9 +778,9 @@ func (x *GameStart) GetRoomId() string {
 	return ""
 }
 
-func (x *GameStart) GetPlayerIds() []string {
+func (x *GameStart) GetPlayerInfos() []*PlayerInfo {
 	if x != nil {
-		return x.PlayerIds
+		return x.PlayerInfos
 	}
 	return nil
 }
@@ -787,6 +788,13 @@ func (x *GameStart) GetPlayerIds() []string {
 func (x *GameStart) GetRandomSeed() int64 {
 	if x != nil {
 		return x.RandomSeed
+	}
+	return 0
+}
+
+func (x *GameStart) GetLevel() int32 {
+	if x != nil {
+		return x.Level
 	}
 	return 0
 }
@@ -830,6 +838,7 @@ func (*RoomListRequest) Descriptor() ([]byte, []int) {
 type GameStartRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomId        string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+	Level         int32                  `protobuf:"varint,2,opt,name=level,proto3" json:"level,omitempty"` // 关卡索引
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -869,6 +878,13 @@ func (x *GameStartRequest) GetRoomId() string {
 		return x.RoomId
 	}
 	return ""
+}
+
+func (x *GameStartRequest) GetLevel() int32 {
+	if x != nil {
+		return x.Level
+	}
+	return 0
 }
 
 // 服务器消息
@@ -1222,16 +1238,17 @@ const file_proto_game_proto_rawDesc = "" +
 	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\"_\n" +
 	"\vFrameInputs\x12!\n" +
 	"\fframe_number\x18\x01 \x01(\x03R\vframeNumber\x12-\n" +
-	"\x06inputs\x18\x02 \x03(\v2\x15.tankgame.PlayerInputR\x06inputs\"d\n" +
+	"\x06inputs\x18\x02 \x03(\v2\x15.tankgame.PlayerInputR\x06inputs\"\x94\x01\n" +
 	"\tGameStart\x12\x17\n" +
-	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1d\n" +
-	"\n" +
-	"player_ids\x18\x02 \x03(\tR\tplayerIds\x12\x1f\n" +
+	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x127\n" +
+	"\fplayer_infos\x18\x02 \x03(\v2\x14.tankgame.PlayerInfoR\vplayerInfos\x12\x1f\n" +
 	"\vrandom_seed\x18\x03 \x01(\x03R\n" +
-	"randomSeed\"\x11\n" +
-	"\x0fRoomListRequest\"+\n" +
+	"randomSeed\x12\x14\n" +
+	"\x05level\x18\x04 \x01(\x05R\x05level\"\x11\n" +
+	"\x0fRoomListRequest\"A\n" +
 	"\x10GameStartRequest\x12\x17\n" +
-	"\aroom_id\x18\x01 \x01(\tR\x06roomId\"\xb4\x02\n" +
+	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x14\n" +
+	"\x05level\x18\x02 \x01(\x05R\x05level\"\xb4\x02\n" +
 	"\rServerMessage\x12:\n" +
 	"\fframe_inputs\x18\x01 \x01(\v2\x15.tankgame.FrameInputsH\x00R\vframeInputs\x121\n" +
 	"\troom_info\x18\x02 \x01(\v2\x12.tankgame.RoomInfoH\x00R\broomInfo\x124\n" +
@@ -1295,23 +1312,24 @@ var file_proto_game_proto_depIdxs = []int32{
 	3,  // 1: tankgame.RoomList.rooms:type_name -> tankgame.RoomInfo
 	0,  // 2: tankgame.PlayerInput.input_type:type_name -> tankgame.InputType
 	9,  // 3: tankgame.FrameInputs.inputs:type_name -> tankgame.PlayerInput
-	10, // 4: tankgame.ServerMessage.frame_inputs:type_name -> tankgame.FrameInputs
-	3,  // 5: tankgame.ServerMessage.room_info:type_name -> tankgame.RoomInfo
-	11, // 6: tankgame.ServerMessage.game_start:type_name -> tankgame.GameStart
-	1,  // 7: tankgame.ServerMessage.connect_success:type_name -> tankgame.ConnectSuccess
-	4,  // 8: tankgame.ServerMessage.room_list:type_name -> tankgame.RoomList
-	9,  // 9: tankgame.ClientMessage.player_input:type_name -> tankgame.PlayerInput
-	5,  // 10: tankgame.ClientMessage.create_room_request:type_name -> tankgame.CreateRoomRequest
-	6,  // 11: tankgame.ClientMessage.join_room_request:type_name -> tankgame.JoinRoomRequest
-	7,  // 12: tankgame.ClientMessage.leave_room_request:type_name -> tankgame.LeaveRoomRequest
-	12, // 13: tankgame.ClientMessage.room_list_request:type_name -> tankgame.RoomListRequest
-	13, // 14: tankgame.ClientMessage.game_start_request:type_name -> tankgame.GameStartRequest
-	8,  // 15: tankgame.ClientMessage.kick_player_request:type_name -> tankgame.KickPlayerRequest
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	2,  // 4: tankgame.GameStart.player_infos:type_name -> tankgame.PlayerInfo
+	10, // 5: tankgame.ServerMessage.frame_inputs:type_name -> tankgame.FrameInputs
+	3,  // 6: tankgame.ServerMessage.room_info:type_name -> tankgame.RoomInfo
+	11, // 7: tankgame.ServerMessage.game_start:type_name -> tankgame.GameStart
+	1,  // 8: tankgame.ServerMessage.connect_success:type_name -> tankgame.ConnectSuccess
+	4,  // 9: tankgame.ServerMessage.room_list:type_name -> tankgame.RoomList
+	9,  // 10: tankgame.ClientMessage.player_input:type_name -> tankgame.PlayerInput
+	5,  // 11: tankgame.ClientMessage.create_room_request:type_name -> tankgame.CreateRoomRequest
+	6,  // 12: tankgame.ClientMessage.join_room_request:type_name -> tankgame.JoinRoomRequest
+	7,  // 13: tankgame.ClientMessage.leave_room_request:type_name -> tankgame.LeaveRoomRequest
+	12, // 14: tankgame.ClientMessage.room_list_request:type_name -> tankgame.RoomListRequest
+	13, // 15: tankgame.ClientMessage.game_start_request:type_name -> tankgame.GameStartRequest
+	8,  // 16: tankgame.ClientMessage.kick_player_request:type_name -> tankgame.KickPlayerRequest
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_proto_game_proto_init() }
