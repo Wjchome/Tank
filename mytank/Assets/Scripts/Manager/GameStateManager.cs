@@ -23,14 +23,19 @@ public class GameStateManager : SingletonMono<GameStateManager>
 
     void OnFrameInputs(FrameInputs frameInputs)
     {
+        Debug.Log($"收到帧同步输入，输入数量: {frameInputs.Inputs.Count}");
         foreach (var input in frameInputs.Inputs)
         {
-           
-            // 推进本地状态
+            
             ApplyInputToTank(playerTanks[input.PlayerId], input);
+                
+           
+            
         }
-    }
+        
 
+    }
+    
 
 
     void ApplyInputToTank(TankController tank, PlayerInput input)
@@ -39,16 +44,16 @@ public class GameStateManager : SingletonMono<GameStateManager>
         switch (input.InputType)
         {
             case InputType.InputMoveUp:
-                tank.MoveBy(0, 1, Direction.Up);
+                tank.MoveBy(Direction.Up);
                 break;
             case InputType.InputMoveDown:
-                tank.MoveBy(0, -1, Direction.Down);
+                tank.MoveBy(Direction.Down);
                 break;
             case InputType.InputMoveLeft:
-                tank.MoveBy(-1, 0, Direction.Left);
+                tank.MoveBy( Direction.Left);
                 break;
             case InputType.InputMoveRight:
-                tank.MoveBy(1, 0, Direction.Right);
+                tank.MoveBy(Direction.Right);
                 break;
             case InputType.InputShoot:
                 tank.Shoot();
@@ -62,6 +67,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
         
         // 加载关卡
         MapManager.Instance.SetCurrentLevel(gameStart.Level);
+        
+     
         // 创建所有玩家的坦克
         CreateAllPlayerTanks(gameStart);
     }
@@ -70,15 +77,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
     
     void CreateAllPlayerTanks(GameStart gameStart)
     {
-        // 清空现有坦克
-        foreach (var tank in playerTanks.Values)
-        {
-            if (tank != null)
-            {
-                Destroy(tank.gameObject);
-            }
-        }
-        playerTanks.Clear();
+        
         
         // 为每个玩家创建坦克
         for (int i = 0; i < gameStart.PlayerInfos.Count; i++)
@@ -92,20 +91,17 @@ public class GameStateManager : SingletonMono<GameStateManager>
             GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, 
                 new Vector2(spawnPoint.x, spawnPoint.y), Quaternion.identity);
             TankController tank = tankObj.GetComponent<TankController>();
-            tank.Initialize(playerInfo.PlayerId, spawnPoint.x, spawnPoint.y);
             
             // 设置玩家信息
             tank.playerName = playerInfo.PlayerName;
-            tank.playerColor = new Color(
+            Color color= new Color(
                 playerInfo.ColorR / 255f,
                 playerInfo.ColorG / 255f,
                 playerInfo.ColorB / 255f
             );
+            tank.Initialize(playerInfo.PlayerId,  playerInfo.PlayerName,spawnPoint.x, spawnPoint.y,color);
+         
             
-            // 设置坦克颜色
-            tank.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
-            
-            playerTanks[playerInfo.PlayerId] = tank;
             Debug.Log($"Created tank for player {playerInfo.PlayerName} ({playerInfo.PlayerId}) at position ({spawnPoint.x}, {spawnPoint.y})");
         }
     }

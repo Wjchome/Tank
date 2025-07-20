@@ -115,7 +115,7 @@ public class RoomManager : SingletonMono<RoomManager>
         NetworkManager.Instance.OnRoomListReceived += OnRoomListReceived;
         NetworkManager.Instance.OnRoomInfoUpdate += OnRoomInfoUpdate;
         NetworkManager.Instance.OnGameStart += OnGameStartRoom;
-        NetworkManager.Instance.OnGameStart += OnGameStartFun;
+        
     }
     
     void OnDestroy()
@@ -124,7 +124,6 @@ public class RoomManager : SingletonMono<RoomManager>
             NetworkManager.Instance.OnRoomListReceived -=  OnRoomListReceived;
           NetworkManager.Instance.OnRoomInfoUpdate -= OnRoomInfoUpdate;
             NetworkManager.Instance.OnGameStart -= OnGameStartRoom;
-            NetworkManager.Instance.OnGameStart -= OnGameStartFun;
         
     }
 
@@ -425,26 +424,14 @@ public class RoomManager : SingletonMono<RoomManager>
     
     void OnGameStartRoom(GameStart gameStart)
     {
-        Debug.Log("Game starting...");
-        // 隐藏UI，开始游戏
+        
         mainMenuPanel.SetActive(false);
         roomListPanel.SetActive(false);
         createRoomPanel.SetActive(false);
         roomPanel.SetActive(false);
     }
     
-    void OnGameStartFun(GameStart gameStart)
-    {
-       
-        // 用服务器下发的随机种子初始化Unity随机数
-        UnityEngine.Random.InitState((int)gameStart.RandomSeed);
-        // 随机生成一个敌人坦克
-        Vector2 enemyPos = new Vector2(UnityEngine.Random.Range(3, 8), UnityEngine.Random.Range(3, 8));
-        GameObject enemyTank = GameObject.Instantiate(GameManager.Instance.tankPrefab, enemyPos, Quaternion.identity);
-        enemyTank.GetComponent<Renderer>().material.color = Color.red; // 敌人坦克用红色区分
-        enemyTank.name = "EnemyTank";
-    }
-    
+ 
     #endregion
     
     

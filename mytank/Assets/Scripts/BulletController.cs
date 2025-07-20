@@ -106,7 +106,7 @@ public class BulletController : MonoBehaviour
             }
             else if (tank != null && tank.PlayerID != OwnerID)
             {
-                tank.SetHP(tank.HP-1);
+                tank.DamageHP(1,OwnerID);
                 isShouldDestroy = true;
             }
             if (MapManager.Instance.IsAreaBulletPassable(newPos.x, newPos.y, 2, 2))

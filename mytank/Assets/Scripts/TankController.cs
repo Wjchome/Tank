@@ -2,61 +2,86 @@ using System;
 using UnityEngine;
 using Tankgame;
 using DG.Tweening;
-using UnityEngine.Serialization; // 新增
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random; // 新增
+
+
 
 public class TankController : MonoBehaviour
 {
-    
+    public TankData orignalData;
+    public TankData currentData;
 
-    public float moveInterval = 0.05f;
-    public float lastMoveTime;
-    public float shootInterval = 0.2f;
-    public float lastShootTime;
-    public float moveDuration = 0.05f; // DOTween动画时长
+   
     public string PlayerID { get; private set; }
-    public int HP;
-    public Direction Direction;
-    public Vector2Int Pos; // 坦克左下角坐标（2x2占地）
+    public Direction TankDirection{ get; private set; }
+    public Vector2Int Pos{ get; private set; }
     // 坐标系统辅助方法
     public Vector2Int GetTopLeft() => new Vector2Int(Pos.x, Pos.y + 1);
     public Vector2Int GetTopRight() => new Vector2Int(Pos.x + 1, Pos.y + 1);
     public Vector2Int GetBottomLeft() => Pos; // 左下角就是Pos
     public Vector2Int GetBottomRight() => new Vector2Int(Pos.x + 1, Pos.y);
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
+    //击杀数量
+    public int killNum=0;
     
-  
-    public Animator animator;
-
-    public bool isLocalPlayer;
-    public float animStartTime;
+    //是否是本机玩家
+    public bool IsLocalPlayer{ get; private set; }
+    //一些计时器
+    public float lastMoveTime;
+    public float lastShootTime;
+    public float lastAnimStartTime;
     
-    // 玩家信息
+    // 玩家自选名字
     public string playerName;
+    //玩家自选颜色
     public Color playerColor;
+    //是否是玩家 ，false代表是敌人ai
+    public bool isPlayer;
     
-    // 动画控制相关
+    // 控制动画
     public bool isMoving = false;
-
+    //动画速度
     public float animSpeed = 0.8f;
-
+    //死亡动画时间
     public float animTime = 0.5f;
-   
+    //只有玩家有UI
+    public PlayerPanelUI playerPanelUI;
+    //是否死亡
+    public bool isDead;
     
-    public void Initialize(string playerID, int x, int y, int initialHP = 3)
+    //本地动画机
+    private Animator animator;
+    
+    public void Initialize(string playerID,string playerName, int x, int y, Color color,bool isPlayer = true)
     {
+        animator = GetComponent<Animator>();
+
         PlayerID = playerID;
-        HP = initialHP;
-        Direction = Direction.Up;
-        isLocalPlayer = playerID == NetworkManager.Instance.playerID;
+        TankDirection = Direction.Up;
+        IsLocalPlayer = playerID == NetworkManager.Instance.playerID;
         Pos = new Vector2Int(x, y); // 左下角坐标
+        
+        this.isPlayer = isPlayer;
+        this.playerName = playerName;
         
         // 设置坦克中心位置
         transform.position = GetCenter();
+        playerColor= color;
+        GetComponent<SpriteRenderer>().material.color = color;
         
-        // 确保animator已赋值
-        if (animator == null)
+        
+        GameStateManager.Instance.playerTanks[playerID] = this;
+        
+        currentData=ScriptableObject.CreateInstance<TankData>();
+        currentData.InitializeTankData(orignalData);
+        
+        
+        if (isPlayer)
         {
-            animator = GetComponent<Animator>();
+            playerPanelUI= Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent).GetComponent<PlayerPanelUI>();
+            playerPanelUI.UpdateUI(this);
+            playerPanelUI.SetPos(GameStateManager.Instance.playerTanks.Count);   
         }
     }
 
@@ -64,16 +89,22 @@ public class TankController : MonoBehaviour
     {
         // 检查移动状态
         CheckMovementState();
-        if (!isLocalPlayer || HP <= 0) return;
-        HandleMovementInput();
-        HandleShootInput();
+        if (IsLocalPlayer && !isDead)
+        {
         
-        
+
+            HandleMovementInput();
+            HandleShootInput();
+        }
+        if (!isPlayer)
+        {
+            AiControls();
+        }
     }
 
     void HandleMovementInput()
     {
-        if (Time.time - lastMoveTime > moveInterval)
+        if (Time.time - lastMoveTime > currentData.moveInterval)
         {
             if (Input.GetKey(KeyCode.W))
             {
@@ -100,7 +131,7 @@ public class TankController : MonoBehaviour
 
     void HandleShootInput()
     {
-        if (Time.time - lastShootTime > shootInterval)
+        if (Time.time - lastShootTime > currentData.shootInterval)
         {
             if (Input.GetKey(KeyCode.Space))
             {
@@ -111,8 +142,25 @@ public class TankController : MonoBehaviour
     }
 
     // 帧同步推进调用
-    public void MoveBy(int dx, int dy, Direction direction)
+    public bool MoveBy( Direction direction)
     {
+        bool canMove = false;
+        int dx = 0, dy = 0;
+        switch (direction)
+        {
+            case Direction.Up:
+                dx = 0;dy = 1;
+                break;
+            case Direction.Down:
+                dx = 0;dy = -1;
+                break;
+            case Direction.Left:
+                dx = -1;dy = 0;
+                break;
+            case Direction.Right:
+                dx = 1;dy = 0;
+                break;
+        }
         // 停止当前动画，防止插值冲突
         transform.DOKill();
         
@@ -127,11 +175,12 @@ public class TankController : MonoBehaviour
             Vector2 centerPos = GetCenter();
             
             isMoving = true;
-            animStartTime = Time.time;
-            transform.DOMove(centerPos, moveDuration).SetEase(Ease.Linear);
+            lastAnimStartTime = Time.time;
+            transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
+            canMove = true;
         }
         
-        Direction = direction;
+        TankDirection = direction;
         Vector3 rotation = Vector3.zero;
         switch (direction)
         {
@@ -141,14 +190,15 @@ public class TankController : MonoBehaviour
             case Direction.Right: rotation = new Vector3(0, 0, -90); break;
         }
         // 旋转也用DOTween
-        transform.DORotate(rotation, moveDuration * 0.5f).SetEase(Ease.OutQuad);
+        transform.DORotate(rotation, currentData.moveInterval).SetEase(Ease.OutQuad);
+        return canMove;
     }
   
     public void Shoot()
     {
         GameObject bullet = Instantiate(GameManager.Instance.bulletPrefab, transform.position, transform.rotation);
         BulletController bulletController = bullet.GetComponent<BulletController>();
-        bulletController.Initialize("", Direction, PlayerID);
+        bulletController.Initialize("", TankDirection, PlayerID);
         
        
     }
@@ -159,7 +209,7 @@ public class TankController : MonoBehaviour
         {
                 animator.speed = animSpeed;
             
-            if (Time.time - animStartTime > moveDuration)
+            if (Time.time - lastAnimStartTime > currentData.moveInterval)
             {
                 isMoving = false;
                 animator.speed = 0;
@@ -171,18 +221,65 @@ public class TankController : MonoBehaviour
         }
     }
 
-    public void SetHP(int newHP)
+    public void DamageHP(int damage,string attackerID)
     {
-        HP = newHP;
-        //UpdateUI(); // 更新血量显示
+        currentData.HP -= damage;
+        playerPanelUI?.UpdateUI(this); // 更新血量显示
         
-        if (HP <= 0)
+        if (currentData.HP <= 0)
         {
+            isDead = true;
             Pos=Vector2Int.zero;
             animator.speed = 1;
             animator.Play("BigBoom");
+            //GameStateManager.Instance.playerTanks.Remove(PlayerID);
             Destroy(gameObject, animTime);
+            GameStateManager.Instance.playerTanks[attackerID].Kill();
+        }
+        
+        
+    }
+
+    public void Kill()
+    {
+        killNum++;
+        playerPanelUI?.UpdateUI(this); // 更新血量显示
+        
+    }
+
+
+
+    void AiControls()
+    {
+        if (Time.time - lastMoveTime > currentData.moveInterval)
+        {
+            if (!MoveBy(TankDirection))
+            {
+           
+                int a = Random.Range(0, 4);
+                
+                TankDirection = (Direction)a;
+              
+                
+                // 即使移动失败，也要更新时间，避免无限循环
+                lastMoveTime = Time.time;
+            }
+            else
+            {
+                // 移动成功
+                lastMoveTime = Time.time;
+            }
+
+        }
+
+        if (Time.time - lastShootTime > currentData.shootInterval)
+        {
+            Shoot();
+            lastShootTime=Time.time;
         }
     }
+    
+    
+    
 }
 

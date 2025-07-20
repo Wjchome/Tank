@@ -101,12 +101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2d230963024c06b6b6a45ff8d0373c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveInterval: 0.15
+  orignalData: {fileID: 11400000, guid: fd160f31b6d1647e5b30fb752773ce7b, type: 2}
+  currentData: {fileID: 0}
   lastMoveTime: 0
-  shootInterval: 0.3
   lastShootTime: 0
-  moveDuration: 0.15
-  HP: 0
   Direction: 0
   Pos: {x: 0, y: 0}
   animator: {fileID: 3787384962529946850}
@@ -117,6 +115,7 @@ MonoBehaviour:
   isMoving: 0
   animSpeed: 0.8
   animTime: 0.5
+  isPlayer: 0
 --- !u!95 &3787384962529946850
 Animator:
   serializedVersion: 7
