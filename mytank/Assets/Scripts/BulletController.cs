@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Random =UnityEngine.Random;
 
-public class BulletController : MonoBehaviour, IPoolable
+public class BulletController : MonoBehaviour
 {
     public string BulletID { get; private set; }
     public Direction Direction { get; private set; }
     public string OwnerID { get; private set; }
     
-    private bool isPlayerBullet; // 是否由本地客户端创建
+    private bool isLocal; // 是否由本地客户端创建
 
     public float moveInterval = 0.3f;
     
-    public float lastMoveTime;
+    private float lastMoveTime;
 
     private Vector2Int dir;
     public Vector2Int Pos; // 子弹左下角坐标（2x2占地）
@@ -33,12 +33,12 @@ public class BulletController : MonoBehaviour, IPoolable
     
     public bool isShouldDestroy = false;
     public float animTime = 0.3f;
-    public void Initialize(string id, Direction direction, string ownerID, bool isPlayerBullet)
+    public void Initialize(string id, Direction direction, string ownerID, bool local = false)
     {
         BulletID = id;
         Direction = direction;
         OwnerID = ownerID;
-        this.isPlayerBullet = isPlayerBullet;
+        isLocal = local;
         // 设置子弹朝向
         SetBulletRotation();
         
@@ -104,11 +104,11 @@ public class BulletController : MonoBehaviour, IPoolable
             // 检查2x2区域碰撞
             var tank = MapManager.Instance.GetTankInArea(newPos.x, newPos.y, 2, 2);
             
-            if (tank != null && tank.isPlayer == isPlayerBullet)
+            if (tank != null && tank.PlayerID == OwnerID)
             {
                 isShouldMove=true;
             }
-            else if (tank != null && tank.isPlayer != isPlayerBullet)
+            else if (tank != null && tank.PlayerID != OwnerID)
             {
                 tank.DamageHP(1,OwnerID);
                 isShouldDestroy = true;
@@ -192,22 +192,6 @@ public class BulletController : MonoBehaviour, IPoolable
         Vector2 randomPos=new Vector2(Random.Range(0f,dir.x), Random.Range(0f,dir.y ));
         transform.position += (Vector3)randomPos;
         animator.Play("SmallBoom");
-        // 使用工厂回收子弹
-        BulletFactory.Instance.RecycleBulletDelayed(this, animTime);
-    }
-
-    // IPoolable接口实现
-    public void OnSpawnFromPool()
-    {
-        // 对象从池中取出时的初始化
-        isShouldDestroy = false;
-        lastMoveTime = 0;
-        Pos = Vector2Int.zero;
-    }
-
-    public void OnReturnToPool()
-    {
-        // 对象返回池中时的清理
-        transform.DOKill();
+        Destroy(gameObject,animTime);
     }
 }

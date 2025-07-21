@@ -8,7 +8,7 @@ using Random = UnityEngine.Random; // 新增
 
 
 
-public class TankController : MonoBehaviour, IPoolable
+public class TankController : MonoBehaviour
 {
     public List<TankData> orignalData;
     public TankData currentData;
@@ -198,13 +198,11 @@ public class TankController : MonoBehaviour, IPoolable
   
     public void Shoot()
     {
-        // 使用工厂创建子弹
-        BulletController bulletController = BulletFactory.Instance.CreateBullet("", TankDirection, PlayerID, isPlayer);
-        if (bulletController != null)
-        {
-            bulletController.transform.position = transform.position;
-            bulletController.transform.rotation = transform.rotation;
-        }
+        GameObject bullet = Instantiate(GameManager.Instance.bulletPrefab, transform.position, transform.rotation);
+        BulletController bulletController = bullet.GetComponent<BulletController>();
+        bulletController.Initialize("", TankDirection, PlayerID);
+        
+       
     }
 
     void CheckMovementState()
@@ -243,8 +241,7 @@ public class TankController : MonoBehaviour, IPoolable
                 EnemyManager.Instance.RemoveEnemy(this);
             }
             
-            // 使用工厂回收坦克
-            TankFactory.Instance.RecycleTankDelayed(this, animTime);
+            Destroy(gameObject, animTime);
             GameStateManager.Instance.playerTanks[attackerID].Kill();
         }
     }
@@ -254,30 +251,6 @@ public class TankController : MonoBehaviour, IPoolable
         killNum++;
         playerPanelUI?.UpdateUI(this); // 更新血量显示
         
-    }
-
-    // IPoolable接口实现
-    public void OnSpawnFromPool()
-    {
-        // 对象从池中取出时的初始化
-        isDead = false;
-        isMoving = false;
-        lastMoveTime = 0;
-        lastShootTime = 0;
-        lastAnimStartTime = 0;
-        killNum = 0;
-        playerPanelUI = null;
-    }
-
-    public void OnReturnToPool()
-    {
-        // 对象返回池中时的清理
-        transform.DOKill();
-        if (playerPanelUI != null)
-        {
-            Destroy(playerPanelUI.gameObject);
-            playerPanelUI = null;
-        }
     }
 
 

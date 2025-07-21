@@ -13,73 +13,42 @@ public enum GameMode
 
 public class GameManager : SingletonMono<GameManager>
 {
-    [Header("预制体引用")]
-    public GameObject bulletPrefab;
+    [Header("Prefabs")]
     public GameObject tankPrefab;
+    public GameObject bulletPrefab;
     
-    [Header("工厂管理器")]
-    public FactoryManager factoryManager;
-    
-    protected override void Awake()
+    public bool gameStarted = false;
+    public GameObject gameOverPanel;
+    public TextMeshProUGUI winnerText;
+    public GameMode gameMode=GameMode.opponent;
+
+    void Start()
     {
-        base.Awake();
-        InitializeGameManager();
-    }
-    
-    private void InitializeGameManager()
-    {
-        // 确保工厂管理器已初始化
-        if (factoryManager == null)
-            factoryManager = FindObjectOfType<FactoryManager>();
-            
-        // 设置预制体引用
-        if (factoryManager != null && factoryManager.tankFactory != null)
-            factoryManager.tankFactory.tankPrefab = tankPrefab;
-            
-        if (factoryManager != null && factoryManager.bulletFactory != null)
-            factoryManager.bulletFactory.bulletPrefab = bulletPrefab;
-    }
-    
-    /// <summary>
-    /// 游戏开始时的初始化
-    /// </summary>
-    public void StartGame(GameStart gameStartData)
-    {
-        Debug.Log("GameManager: Starting game...");
+        if (gameOverPanel != null)
+            gameOverPanel.SetActive(false);
         
-        // 使用工厂管理器初始化游戏
-        factoryManager.InitializeGame(gameStartData);
+    }
+
+  
+
+    void HandleGameEnd(string winnerID)
+    {
+        Debug.Log($"Game Over! Winner: {winnerID}");
         
-        // 其他游戏初始化逻辑...
+        gameStarted = false;
+        
+        // 显示游戏结束界面
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+            if (winnerText != null)
+            {
+                string winnerName = winnerID == NetworkManager.Instance.playerID ? "You" : "Opponent";
+                winnerText.text = $"{winnerName} Won!";
+            }
+        }
     }
     
-    /// <summary>
-    /// 游戏结束时的清理
-    /// </summary>
-    public void EndGame()
-    {
-        Debug.Log("GameManager: Ending game...");
-        
-        // 清理所有游戏对象
-        factoryManager.ClearAllObjects();
-        
-        // 其他游戏结束逻辑...
-    }
-    
-    /// <summary>
-    /// 获取游戏统计信息
-    /// </summary>
-    public GameStats GetGameStats()
-    {
-        return factoryManager.GetGameStats();
-    }
-    
-    /// <summary>
-    /// 打印调试信息
-    /// </summary>
-    [ContextMenu("Log Game Stats")]
-    public void LogGameStats()
-    {
-        factoryManager.LogPoolStatus();
-    }
+
+
 }
