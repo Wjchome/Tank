@@ -4,7 +4,7 @@ using UnityEngine;
 using Tankgame;
 using DG.Tweening;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random; // 新增
+
 
 
 
@@ -54,6 +54,9 @@ public class TankController : MonoBehaviour
     //本地动画机
     public Animator animator;
     
+    public System.Random random = new System.Random();
+
+    public int animType = 1;
 
     void Update()
     {
@@ -145,7 +148,7 @@ public class TankController : MonoBehaviour
             Vector2 centerPos = GetCenter();
             
             isMoving = true;
-            animator.Play("Tank1");
+            animator.Play("Tank"+ animType);
             lastAnimStartTime = Time.time;
             transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
             canMove = true;
@@ -181,12 +184,12 @@ public class TankController : MonoBehaviour
             if (Time.time - lastAnimStartTime > currentData.moveInterval)
             {
                 isMoving = false;
-                animator.Play("Idle");
+                animator.Play("Idle" +animType);
             }
         }
         else
         {
-            animator.Play("Idle");
+            animator.Play("Idle"+animType);
         }
     }
 
@@ -198,7 +201,7 @@ public class TankController : MonoBehaviour
         if (currentData.HP <= 0)
         {
             isDead = true;
-            Pos=Vector2Int.zero;
+            Pos=new Vector2Int(-1,-1);
 
             GetComponent<SpriteRenderer>().material.color = Color.white;
             animator.Play("BigBoom");
@@ -238,10 +241,8 @@ public class TankController : MonoBehaviour
         {
             if (!MoveBy(TankDirection))
             {
-                // 使用帧数和PlayerID生成确定性随机数
-                int seed = (int)(currentFrame * 1000 + PlayerID.GetHashCode());
-                Random.InitState(seed);
-                int a = Random.Range(0, 4);
+            
+                int a = random.Next(0, 4);
                 
                 TankDirection = (Direction)a;
                 

@@ -55,13 +55,16 @@ public class TankFactory : SingletonMono<TankFactory>
         temp.  transform.position = temp. GetCenter();
         temp. playerColor= color;
         temp.  GetComponent<SpriteRenderer>().material.color = color;
-        
+        int seed = System.HashCode.Combine(
+            EnemyManager.Instance.randomSeed,
+            NetworkManager.Instance.currentFrame
+        );
+        temp.random = new System.Random( EnemyManager.Instance.randomSeed);
         
         GameStateManager.Instance.allTanks[playerID] = temp;
         
         temp. currentData=ScriptableObject.CreateInstance<TankData>();
         temp. currentData.InitializeTankData(orignalDatas[dataIndex]);
-        
         
         if (isPlayer)
         {
@@ -69,6 +72,11 @@ public class TankFactory : SingletonMono<TankFactory>
             temp. playerPanelUI= Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent).GetComponent<PlayerPanelUI>();
             temp. playerPanelUI.UpdateUI(temp);
             temp. playerPanelUI.SetPos(PlayerManager.Instance.activePlayers.Count);   
+        }
+        else
+        {
+            temp.animType = dataIndex;
+
         }
 
 

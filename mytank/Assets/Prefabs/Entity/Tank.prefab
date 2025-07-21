@@ -114,7 +114,7 @@ MonoBehaviour:
   playerColor: {r: 0, g: 0, b: 0, a: 0}
   isPlayer: 0
   isMoving: 0
-  animTime: 0.8
+  animTime: 0.7
   playerPanelUI: {fileID: 0}
   isDead: 0
   animator: {fileID: 8205607647078584822}

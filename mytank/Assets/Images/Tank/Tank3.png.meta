@@ -134,177 +134,177 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: enemy_3_0_0
+      name: Tank3_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 145
-        width: 42
-        height: 46
+        x: 0
+        y: 144
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1a8c6457f53ca8b60800000000000000
-      internalID: 7749220923601242273
+      spriteID: 0da25987e72df4ef2bafe2d0e9ec0304
+      internalID: 1789460938
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_3_0_1
+      name: Tank3_1
       rect:
         serializedVersion: 2
-        x: 51
-        y: 145
-        width: 42
-        height: 46
+        x: 48
+        y: 144
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b27bc02828ce82470800000000000000
-      internalID: 8370199952739841835
+      spriteID: 7f738e44b47924c0293ba0ec8897d65f
+      internalID: -2073734878
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_3_0_2
+      name: Tank3_2
       rect:
         serializedVersion: 2
-        x: 3
-        y: 97
-        width: 42
-        height: 46
+        x: 0
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: eb990044976ef60d0800000000000000
-      internalID: -3427267382899336770
+      spriteID: 745e9f1f8303644e88650e768fbee0fe
+      internalID: 1975918587
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_3_0_3
+      name: Tank3_3
       rect:
         serializedVersion: 2
-        x: 51
-        y: 97
-        width: 42
-        height: 46
+        x: 48
+        y: 96
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 69450136cff440bd0800000000000000
-      internalID: -2664917134084123498
+      spriteID: 884b12c6cbb564d7b88afc4f4ad57c2e
+      internalID: -869755481
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_3_0_4
+      name: Tank3_4
       rect:
         serializedVersion: 2
-        x: 1
-        y: 51
-        width: 46
-        height: 42
+        x: 0
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2993d9bc52c1f6a00800000000000000
-      internalID: 751850611449608594
+      spriteID: 158288f7d414844f68f4ee73b55a914d
+      internalID: -1907793339
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_3_0_5
+      name: Tank3_5
       rect:
         serializedVersion: 2
-        x: 49
-        y: 51
-        width: 46
-        height: 42
+        x: 48
+        y: 48
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7a48fa5c0d6368220800000000000000
-      internalID: 2487736114466489511
+      spriteID: c70df1260de6e46b78ef1b20ed1cc55d
+      internalID: -30590159
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_3_0_6
+      name: Tank3_6
       rect:
         serializedVersion: 2
-        x: 1
-        y: 3
-        width: 46
-        height: 42
+        x: 0
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7118f7a5d48b7a120800000000000000
-      internalID: 2425109566732599575
+      spriteID: 8f75235bb52504eea8d64c998672d31c
+      internalID: -1315212575
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: enemy_3_0_7
+      name: Tank3_7
       rect:
         serializedVersion: 2
-        x: 49
-        y: 3
-        width: 46
-        height: 42
+        x: 48
+        y: 0
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f0cd886383d09deb0800000000000000
-      internalID: -4694706601472762865
+      spriteID: 1914cef0d6a8e48ed859153640cc8424
+      internalID: 975473629
       vertices: []
       indices: 
       edges: []
@@ -313,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 4e781ffc6021e445e9f14dd9ebe952bd
     internalID: 0
     vertices: []
     indices: 
@@ -321,16 +321,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":2.0,"y":4.0},"gridSpriteSize":{"x":48.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      enemy_3_0_0: 7749220923601242273
-      enemy_3_0_1: 8370199952739841835
-      enemy_3_0_2: -3427267382899336770
-      enemy_3_0_3: -2664917134084123498
-      enemy_3_0_4: 751850611449608594
-      enemy_3_0_5: 2487736114466489511
-      enemy_3_0_6: 2425109566732599575
-      enemy_3_0_7: -4694706601472762865
+      Tank3_0: 1789460938
+      Tank3_1: -2073734878
+      Tank3_2: 1975918587
+      Tank3_3: -869755481
+      Tank3_4: -1907793339
+      Tank3_5: -30590159
+      Tank3_6: -1315212575
+      Tank3_7: 975473629
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -43939,6 +43939,7 @@ MonoBehaviour:
   leafEnemies: 0
   levelNameText: {fileID: 1608581425}
   enemyleafText: {fileID: 272430327}
+  randomSeed: 0
 --- !u!1001 &1702168676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44781,6 +44782,9 @@ MonoBehaviour:
   orignalDatas:
   - {fileID: 11400000, guid: fd160f31b6d1647e5b30fb752773ce7b, type: 2}
   - {fileID: 11400000, guid: 04c6ae03f8ed14d6a932636ad8d11e18, type: 2}
+  - {fileID: 11400000, guid: 9fc398549609548ebba66381e9559d40, type: 2}
+  - {fileID: 11400000, guid: e038be583b6354ea7b8172137cd1d406, type: 2}
+  - {fileID: 11400000, guid: a6623fde369f44043bdc3de491ea2105, type: 2}
 --- !u!1001 &1741473091
 PrefabInstance:
   m_ObjectHideFlags: 0

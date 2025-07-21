@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Tankgame;
 using TMPro;
-using Random = UnityEngine.Random;
+
 
 public class EnemyManager : SingletonMono<EnemyManager>
 {
@@ -18,7 +18,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
     private int enemyIndex = 0;
     public TextMeshProUGUI levelNameText;
     public TextMeshProUGUI enemyleafText;
-    
+    public int randomSeed = 0;
+    public System.Random random;
     void Start()
     {
         NetworkManager.Instance.OnGameStart += OnGameStart;
@@ -45,7 +46,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
         ClearAllEnemies();
         
         // 初始化随机种子
-        Random.InitState((int)gameStart.RandomSeed);
+         randomSeed=(int)gameStart.RandomSeed;
+         random = new System.Random(randomSeed);
         
         // 生成初始敌人
         SpawnInitialEnemies();
@@ -89,7 +91,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
        
         
         // 使用确定性随机选择生成点
-        int spawnIndex = Random.Range(0, tankPawnsPos.Count);
+        int spawnIndex = random.Next(0, tankPawnsPos.Count);
         Vector2Int spawnPos = tankPawnsPos[spawnIndex];
         
         // 检查生成点是否被占用
@@ -117,9 +119,10 @@ public class EnemyManager : SingletonMono<EnemyManager>
         // 创建敌人坦克
         string enemyID = $"enemy_{enemyIndex++}";
    
-
+// 使用确定性随机选择生成点
+        int spawnType= random.Next(1, 5);
         var  enemyTank= TankFactory.Instance.Initialize(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
-            Color.red, false, 1);
+            Color.red, false, spawnType);
         activeEnemies.Add(enemyTank);
         
         Debug.Log($"Spawned enemy {enemyID} at position {spawnPos}");
