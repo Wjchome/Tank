@@ -319,20 +319,7 @@ public enum MapType
             }
             return null;
         }
-        //获取区域内子弹
-        public BulletController GetBulletInArea(int startX, int startY, int width, int height)
-        {
-            foreach (var bullet in GameStateManager.Instance.allBullets)
-            {
-          
-                if (IsRectOverlap(startX, startY, width, height, 
-                        bullet.Pos.x, bullet.Pos.y, 2, 2))
-                {
-                    return bullet;
-                }
-            }
-            return null;
-        }
+     
         
         
         

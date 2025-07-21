@@ -7,7 +7,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
     public BulletController bulletPrefab; // 改为 TankController 类型
     public ObjectPool<BulletController> BulletPool { get; private set; }
 
-    
+    public List<BulletController> allBullets { get; private set; }
 
     private void Awake()
     {
@@ -16,6 +16,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
             onSpawn: CreateBullet,
             onDespawn: KillBullet
         );
+        allBullets = new List<BulletController>();
     }
 
     private void CreateBullet(BulletController bullet)
@@ -23,12 +24,16 @@ public class BulletFactory : SingletonMono<BulletFactory>
         bullet.gameObject.SetActive(true);
         bullet.isShouldDestroy=false;
         bullet.lastMoveTime = 0f;
-        bullet.animator.Play("New State");
+        bullet.animator.Play("Idle",0,0);
+        allBullets.Add(bullet);
+        
     }
 
     private void KillBullet(BulletController bullet)
     {
         bullet.gameObject.SetActive(false);
+        allBullets.Remove(bullet);
+        
     }
 
         
@@ -66,7 +71,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
             
             // 设置子弹中心位置
             bullet.transform.position = bullet.GetCenter();
-        
+     
     }
     
   

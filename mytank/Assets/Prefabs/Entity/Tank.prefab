@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7324162863934086598}
   - component: {fileID: 688619496750072981}
   - component: {fileID: -8170977891461103507}
-  - component: {fileID: 3787384962529946850}
+  - component: {fileID: 8205607647078584822}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -114,12 +114,11 @@ MonoBehaviour:
   playerColor: {r: 0, g: 0, b: 0, a: 0}
   isPlayer: 0
   isMoving: 0
-  animSpeed: 0.8
-  animTime: 0.5
+  animTime: 0.8
   playerPanelUI: {fileID: 0}
   isDead: 0
-  animator: {fileID: 3787384962529946850}
---- !u!95 &3787384962529946850
+  animator: {fileID: 8205607647078584822}
+--- !u!95 &8205607647078584822
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0

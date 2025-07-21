@@ -43,8 +43,7 @@ public class TankController : MonoBehaviour
     
     // 控制动画
     public bool isMoving = false;
-    //动画速度
-    public float animSpeed = 0.8f;
+ 
     //死亡动画时间
     public float animTime = 0.5f;
     //只有玩家有UI
@@ -67,7 +66,7 @@ public class TankController : MonoBehaviour
             HandleMovementInput();
             HandleShootInput();
         }
-        if (!isPlayer)
+        if (!isPlayer&&!isDead)
         {
             AiControls();
         }
@@ -146,6 +145,7 @@ public class TankController : MonoBehaviour
             Vector2 centerPos = GetCenter();
             
             isMoving = true;
+            animator.Play("Tank1");
             lastAnimStartTime = Time.time;
             transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
             canMove = true;
@@ -173,19 +173,20 @@ public class TankController : MonoBehaviour
 
     void CheckMovementState()
     {
+        if(isDead)return;
         if (isMoving)
         {
-                animator.speed = animSpeed;
+            
             
             if (Time.time - lastAnimStartTime > currentData.moveInterval)
             {
                 isMoving = false;
-                animator.speed = 0;
+                animator.Play("Idle");
             }
         }
         else
         {
-            animator.speed = 0;
+            animator.Play("Idle");
         }
     }
 
@@ -198,7 +199,8 @@ public class TankController : MonoBehaviour
         {
             isDead = true;
             Pos=Vector2Int.zero;
-            animator.speed = 1;
+
+            GetComponent<SpriteRenderer>().material.color = Color.white;
             animator.Play("BigBoom");
             
             // 如果是敌人，通知EnemyManager
@@ -206,11 +208,16 @@ public class TankController : MonoBehaviour
             {
                 EnemyManager.Instance.RemoveEnemy(this);
             }
-            
-            TankFactory.Instance.TankPool.ReturnObject(this);
+            DOVirtual.DelayedCall(animTime, () => 
+            {
+                TankFactory.Instance.TankPool.ReturnObject(this);
+
+            });
             GameStateManager.Instance.allTanks[attackerID].Kill();
         }
     }
+
+
 
     public void Kill()
     {

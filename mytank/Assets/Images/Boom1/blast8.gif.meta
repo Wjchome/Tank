@@ -1,22 +1,19 @@
 fileFormatVersion: 2
-guid: 40698ee44b2284a87930ff3a845f2fe0
+guid: 72bd1008ec7ac4ef4afa4c97dc217072
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6675653994060422039
-    second: boom_dynamic_0
+      213: 8912921647519300367
+    second: blast8_0
   - first:
-      213: -4683645298160437666
-    second: boom_dynamic_1
+      213: -768376334475923389
+    second: blast8_1
   - first:
-      213: -84512955605429405
-    second: boom_dynamic_2
+      213: 3671196783809396967
+    second: blast8_2
   - first:
-      213: -8357709045290183828
-    second: boom_dynamic_3
-  - first:
-      213: -8079409120352169260
-    second: boom_dynamic_4
+      213: -2133082468618607467
+    second: blast8_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,7 +55,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -125,13 +122,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: boom_dynamic_0
+      name: blast8_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 96
-        height: 96
+        width: 40
+        height: 40
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 79b936f30ffa4ac50800000000000000
-      internalID: 6675653994060422039
+      spriteID: f0bf647040f01bb70800000000000000
+      internalID: 8912921647519300367
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boom_dynamic_1
+      name: blast8_1
       rect:
         serializedVersion: 2
-        x: 96
-        y: 0
-        width: 96
-        height: 96
+        x: 0
+        y: 32
+        width: 7
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,20 +159,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e56f7359a69500fb0800000000000000
-      internalID: -4683645298160437666
+      spriteID: 340feb97bcd2655f0800000000000000
+      internalID: -768376334475923389
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boom_dynamic_2
+      name: blast8_2
       rect:
         serializedVersion: 2
-        x: 192
+        x: 0
         y: 0
-        width: 96
-        height: 96
+        width: 7
+        height: 7
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +181,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 36358362aefb3def0800000000000000
-      internalID: -84512955605429405
+      spriteID: 7e004872606b2f230800000000000000
+      internalID: 3671196783809396967
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: boom_dynamic_3
+      name: blast8_3
       rect:
         serializedVersion: 2
-        x: 288
+        x: 11
         y: 0
-        width: 96
-        height: 96
+        width: 6
+        height: 5
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,52 +203,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c63d86387e3730c80800000000000000
-      internalID: -8357709045290183828
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: boom_dynamic_4
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 0
-        width: 96
-        height: 96
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4d29b5a263c20ef80800000000000000
-      internalID: -8079409120352169260
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: boom_dynamic_5
-      rect:
-        serializedVersion: 2
-        x: 480
-        y: 0
-        width: 96
-        height: 96
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: da0bbf4c2d0a04ae2b3b8708337c069d
-      internalID: 1218811322
+      spriteID: 594ef5ddbc4c562e0800000000000000
+      internalID: -2133082468618607467
       vertices: []
       indices: 
       edges: []
@@ -260,7 +213,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 375ea8eb8cc4f4f3f8c39f28717e09aa
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -268,16 +221,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":1.0},"gridSpriteSize":{"x":96.0,"y":96.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      boom_dynamic_0: 6675653994060422039
-      boom_dynamic_1: -4683645298160437666
-      boom_dynamic_2: -84512955605429405
-      boom_dynamic_3: -8357709045290183828
-      boom_dynamic_4: -8079409120352169260
-      boom_dynamic_5: 1218811322
+      blast8_0: 8912921647519300367
+      blast8_1: -768376334475923389
+      blast8_2: 3671196783809396967
+      blast8_3: -2133082468618607467
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

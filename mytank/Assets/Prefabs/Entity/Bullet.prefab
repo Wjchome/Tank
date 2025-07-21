@@ -101,12 +101,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7717f86c3a584d1d9407c12a6e3e8b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  direction: 0
+  ownerID: 
+  isPlayerBullet: 0
   moveInterval: 0.1
+  lastMoveTime: 0
+  dir: {x: 0, y: 0}
   Pos: {x: 0, y: 0}
   moveDuration: 0.1
   animator: {fileID: 8540193828245787508}
   isShouldDestroy: 0
-  animTime: 0.3
+  animTime: 0.6
 --- !u!95 &8540193828245787508
 Animator:
   serializedVersion: 7

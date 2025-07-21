@@ -5,7 +5,6 @@ using Tankgame;
 public class GameStateManager : SingletonMono<GameStateManager>
 {
     public Dictionary<string, TankController> allTanks = new Dictionary<string, TankController>();
-    public List<BulletController> allBullets = new List<BulletController>();
     void Start()
     {
         NetworkManager.Instance.OnFrameInputs += OnFrameInputs;

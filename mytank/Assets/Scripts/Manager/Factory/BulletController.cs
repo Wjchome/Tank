@@ -62,7 +62,7 @@ public class BulletController : MonoBehaviour
             
             // 检查2x2区域碰撞
             var tank = MapManager.Instance.GetTankInArea(newPos.x, newPos.y, 2, 2);
-            var bullet=MapManager.Instance.GetBulletInArea(newPos.x, newPos.y, 2, 2);
+            
             
             if (tank != null && tank.isPlayer== isPlayerBullet)
             {
@@ -74,15 +74,19 @@ public class BulletController : MonoBehaviour
                 isShouldDestroy = true;
             }
 
-            if (bullet != null && isPlayerBullet == bullet.isPlayerBullet)
+            foreach (var bullet in BulletFactory.Instance.allBullets)
             {
-                isShouldMove = true;
+                if(bullet==this)continue;
+                if (bullet.Pos == Pos && bullet.isPlayerBullet != isPlayerBullet)
+                {
+                    isShouldDestroy=true;
+                    bullet.isShouldDestroy = true;
+                    bullet.DestroyBullet();
+                    break;
+                }
             }
-            else  if (bullet != null && isPlayerBullet != bullet.isPlayerBullet)
-            {
-                isShouldDestroy=true;
-                bullet.isShouldDestroy = true;
-            }
+      
+            
             if (MapManager.Instance.IsAreaBulletPassable(newPos.x, newPos.y, 2, 2))
             {
                 isShouldMove=true;

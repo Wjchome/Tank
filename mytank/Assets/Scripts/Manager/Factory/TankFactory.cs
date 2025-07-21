@@ -6,6 +6,8 @@ public class TankFactory : SingletonMono<TankFactory>
     public TankController tankPrefab; // 改为 TankController 类型
     public ObjectPool<TankController> TankPool { get; private set; }
 
+    public List<TankController> allTanks { get; private set; }
+    
     
     public List<TankData> orignalDatas;
     private void Awake()
@@ -15,16 +17,23 @@ public class TankFactory : SingletonMono<TankFactory>
             onSpawn: CreateTank,
             onDespawn: KillTank
         );
+        allTanks = new List<TankController>();
     }
 
     private void CreateTank(TankController tank)
     {
         tank.gameObject.SetActive(true);
+        tank.isDead=false;
+        allTanks.Add(tank);
+        
     }
 
     private void KillTank(TankController tank)
     {
         tank.gameObject.SetActive(false);
+        tank.playerPanelUI = null;
+        
+        allTanks.Remove(tank);
     }
 
 

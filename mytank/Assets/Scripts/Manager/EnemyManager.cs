@@ -116,14 +116,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
         
         // 创建敌人坦克
         string enemyID = $"enemy_{enemyIndex++}";
-     /*   TankController enemyTank = Instantiate(GameManager.Instance.tankPrefab, 
-            new Vector3(spawnPos.x + 0.5f, spawnPos.y + 0.5f, 0), 
-            Quaternion.identity).GetComponent<TankController>();
-        
-        enemyTank.Initialize(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y, 
-            Color.red, false, 1); // 使用红色，非玩家，数据索引1*/
+   
 
-   var  enemyTank= TankFactory.Instance.Initialize(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
+        var  enemyTank= TankFactory.Instance.Initialize(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
             Color.red, false, 1);
         activeEnemies.Add(enemyTank);
         
