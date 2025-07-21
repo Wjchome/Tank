@@ -1967,7 +1967,6 @@ MonoBehaviour:
   gameOverPanel: {fileID: 0}
   winnerText: {fileID: 0}
   gameMode: 0
-  randseed: 0
 --- !u!114 &88145161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6300,6 +6299,7 @@ Transform:
   - {fileID: 1981089054}
   - {fileID: 1760086396}
   - {fileID: 1382740090}
+  - {fileID: 1699277954}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &238723441
@@ -32443,7 +32443,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 700, y: 348}
+  m_AnchoredPosition: {x: 700, y: 404}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1229920800
@@ -43888,6 +43888,56 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6085855399756571354, guid: bde5abab5cf5644f28d5118931fa708e, type: 3}
   m_PrefabInstance: {fileID: 1699189675}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1699277953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1699277954}
+  - component: {fileID: 1699277955}
+  m_Layer: 0
+  m_Name: EnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1699277954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699277953}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 219629758}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1699277955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699277953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 402cfed182ab5465baa4d34c920d27bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sumEnemies: 0
+  maxEnemies: 3
+  enemySpawnInterval: 5
+  leafEnemies: 0
+  levelNameText: {fileID: 1608581425}
+  enemyleafText: {fileID: 272430327}
 --- !u!1001 &1702168676
 PrefabInstance:
   m_ObjectHideFlags: 0

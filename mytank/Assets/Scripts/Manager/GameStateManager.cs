@@ -26,15 +26,11 @@ public class GameStateManager : SingletonMono<GameStateManager>
         Debug.Log($"收到帧同步输入，输入数量: {frameInputs.Inputs.Count}");
         foreach (var input in frameInputs.Inputs)
         {
-            
             ApplyInputToTank(playerTanks[input.PlayerId], input);
-                
-           
-            
         }
-        
-
     }
+
+
     
 
 
@@ -66,7 +62,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
         Debug.Log($"Game started! Level: {gameStart.Level}");
         
         // 加载关卡
-        MapManager.Instance.SetCurrentLevel(gameStart.Level);
+        MapManager.Instance.currentLevel=gameStart.Level;
+        MapManager.Instance.LoadLevel(MapManager.Instance.availableLevels[ MapManager.Instance.currentLevel]);
         
      
         // 创建所有玩家的坦克
@@ -99,9 +96,9 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 playerInfo.ColorG / 255f,
                 playerInfo.ColorB / 255f
             );
-            tank.Initialize(playerInfo.PlayerId,  playerInfo.PlayerName,spawnPoint.x, spawnPoint.y,color);
+            tank.Initialize(playerInfo.PlayerId,  playerInfo.PlayerName,spawnPoint.x, spawnPoint.y,color,true,0);
          
-            
+            PlayerManager.Instance.activePlayers.Add(tank);
             Debug.Log($"Created tank for player {playerInfo.PlayerName} ({playerInfo.PlayerId}) at position ({spawnPoint.x}, {spawnPoint.y})");
         }
     }

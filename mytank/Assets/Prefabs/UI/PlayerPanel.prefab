@@ -56,7 +56,7 @@ MonoBehaviour:
   playerImage: {fileID: 3015880746909200540}
   playerHealthText: {fileID: 1087354249650376978}
   playerKillText: {fileID: 2081451077503536496}
-  interval: 100
+  interval: 200
 --- !u!1 &2492399232358576416
 GameObject:
   m_ObjectHideFlags: 0

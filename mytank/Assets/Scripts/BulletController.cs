@@ -90,9 +90,13 @@ public class BulletController : MonoBehaviour
     {
         if (isShouldDestroy) return;
        
-        if (Time.time - lastMoveTime > moveInterval)
+        // 使用帧数进行时间判断，确保所有客户端同步
+        long currentFrame = NetworkManager.Instance.currentFrame;
+        float frameTime = currentFrame * 0.05f; // 每帧0.05秒
+        
+        if (frameTime - lastMoveTime > moveInterval)
         {
-            lastMoveTime = Time.time;
+            lastMoveTime = frameTime;
             bool isShouldMove = false;
             
             Vector2Int newPos = Pos + dir;

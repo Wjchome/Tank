@@ -23,6 +23,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     // 事件定义
     public event Action<FrameInputs> OnFrameInputs;
+    public event Action<EmptyFrame> OnEmptyFrame;
     public event Action<ConnectSuccess> OnConnectSuccess;
     public event Action<List<RoomInfo>> OnRoomListReceived;
     public event Action<RoomInfo> OnRoomInfoUpdate;
@@ -107,6 +108,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             currentFrame = message.FrameInputs.FrameNumber;
             OnFrameInputs?.Invoke(message.FrameInputs);
+        }
+        else if (message.EmptyFrame != null)
+        {
+            currentFrame = message.EmptyFrame.FrameNumber;
+            OnEmptyFrame?.Invoke(message.EmptyFrame);
         }
         else if (message.GameStart != null)
         {

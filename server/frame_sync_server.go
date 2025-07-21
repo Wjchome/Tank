@@ -567,6 +567,8 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 func (room *Room) frameLoop() {
 	ticker := time.NewTicker(FRAME_INTERVAL)
 	defer ticker.Stop()
+	startTime := time.Now()
+
 	for range ticker.C {
 		room.Mutex.Lock()
 		inputs := room.InputBuffer
@@ -578,18 +580,37 @@ func (room *Room) frameLoop() {
 		}
 		room.Mutex.Unlock()
 
-		if len(inputs) == 0 || len(clients) == 0 {
+		if len(clients) == 0 {
 			continue
 		}
 
-		frameInputs := &myproto.FrameInputs{
-			FrameNumber: room.FrameNumber,
-			Inputs:      inputs,
-		}
-		serverMsg := &myproto.ServerMessage{
-			Data: &myproto.ServerMessage_FrameInputs{
-				FrameInputs: frameInputs,
-			},
+		// 计算服务器时间
+		serverTime := time.Since(startTime).Seconds()
+
+		var serverMsg *myproto.ServerMessage
+
+		if len(inputs) > 0 {
+			// 有输入时发送FrameInputs
+			frameInputs := &myproto.FrameInputs{
+				FrameNumber: room.FrameNumber,
+				Inputs:      inputs,
+			}
+			serverMsg = &myproto.ServerMessage{
+				Data: &myproto.ServerMessage_FrameInputs{
+					FrameInputs: frameInputs,
+				},
+			}
+		} else {
+			// 没有输入时发送EmptyFrame
+			emptyFrame := &myproto.EmptyFrame{
+				FrameNumber: room.FrameNumber,
+				ServerTime:  float32(serverTime),
+			}
+			serverMsg = &myproto.ServerMessage{
+				Data: &myproto.ServerMessage_EmptyFrame{
+					EmptyFrame: emptyFrame,
+				},
+			}
 		}
 
 		for _, client := range clients {

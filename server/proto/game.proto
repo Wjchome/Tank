@@ -94,6 +94,12 @@ message FrameInputs {
   repeated PlayerInput inputs = 2;
 }
 
+// 空帧同步（没有输入时发送）
+message EmptyFrame {
+  int64 frame_number = 1;
+  float server_time = 2;
+}
+
 // 游戏开始
 message GameStart {
   string room_id = 1;
@@ -118,6 +124,7 @@ message ServerMessage {
     GameStart game_start = 3;
     ConnectSuccess connect_success = 4;
     RoomList room_list = 5;
+    EmptyFrame empty_frame = 6;
   }
 }
 

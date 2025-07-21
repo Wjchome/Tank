@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Tankgame;
 using DG.Tweening;
@@ -9,7 +10,7 @@ using Random = UnityEngine.Random; // 新增
 
 public class TankController : MonoBehaviour
 {
-    public TankData orignalData;
+    public List<TankData> orignalData;
     public TankData currentData;
 
    
@@ -53,7 +54,7 @@ public class TankController : MonoBehaviour
     //本地动画机
     private Animator animator;
     
-    public void Initialize(string playerID,string playerName, int x, int y, Color color,bool isPlayer = true)
+    public void Initialize(string playerID,string playerName, int x, int y, Color color,bool isPlayer,int dataIndex)
     {
         animator = GetComponent<Animator>();
 
@@ -74,14 +75,15 @@ public class TankController : MonoBehaviour
         GameStateManager.Instance.playerTanks[playerID] = this;
         
         currentData=ScriptableObject.CreateInstance<TankData>();
-        currentData.InitializeTankData(orignalData);
+        currentData.InitializeTankData(orignalData[dataIndex]);
         
         
         if (isPlayer)
         {
+            
             playerPanelUI= Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent).GetComponent<PlayerPanelUI>();
             playerPanelUI.UpdateUI(this);
-            playerPanelUI.SetPos(GameStateManager.Instance.playerTanks.Count);   
+            playerPanelUI.SetPos(PlayerManager.Instance.activePlayers.Count);   
         }
     }
 
@@ -232,12 +234,16 @@ public class TankController : MonoBehaviour
             Pos=Vector2Int.zero;
             animator.speed = 1;
             animator.Play("BigBoom");
-            //GameStateManager.Instance.playerTanks.Remove(PlayerID);
+            
+            // 如果是敌人，通知EnemyManager
+            if (!isPlayer)
+            {
+                EnemyManager.Instance.RemoveEnemy(this);
+            }
+            
             Destroy(gameObject, animTime);
             GameStateManager.Instance.playerTanks[attackerID].Kill();
         }
-        
-        
     }
 
     public void Kill()
@@ -251,31 +257,35 @@ public class TankController : MonoBehaviour
 
     void AiControls()
     {
-        if (Time.time - lastMoveTime > currentData.moveInterval)
+        // 使用帧数进行时间判断，确保所有客户端同步
+        long currentFrame = NetworkManager.Instance.currentFrame;
+        float frameTime = currentFrame * 0.05f; // 每帧0.05秒
+        
+        if (frameTime - lastMoveTime > currentData.moveInterval)
         {
             if (!MoveBy(TankDirection))
             {
-           
+                // 使用帧数和PlayerID生成确定性随机数
+                int seed = (int)(currentFrame * 1000 + PlayerID.GetHashCode());
+                Random.InitState(seed);
                 int a = Random.Range(0, 4);
                 
                 TankDirection = (Direction)a;
-              
                 
-                // 即使移动失败，也要更新时间，避免无限循环
-                lastMoveTime = Time.time;
+                // 使用帧时间更新
+                lastMoveTime = frameTime;
             }
             else
             {
                 // 移动成功
-                lastMoveTime = Time.time;
+                lastMoveTime = frameTime;
             }
-
         }
 
-        if (Time.time - lastShootTime > currentData.shootInterval)
+        if (frameTime - lastShootTime > currentData.shootInterval)
         {
             Shoot();
-            lastShootTime=Time.time;
+            lastShootTime = frameTime;
         }
     }
     

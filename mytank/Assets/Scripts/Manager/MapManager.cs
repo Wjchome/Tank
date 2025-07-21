@@ -263,25 +263,6 @@ public enum MapType
             }
         }
         
-        // 获取当前关卡
-        public Level GetCurrentLevel()
-        {
-            if (currentLevel >= 0 && currentLevel < availableLevels.Count)
-            {
-                return availableLevels[currentLevel];
-            }
-            return null;
-        }
-        
-        // 设置当前关卡
-        public void SetCurrentLevel(int levelIndex)
-        {
-            if (levelIndex >= 0 && levelIndex < availableLevels.Count)
-            {
-                currentLevel = levelIndex;
-                LoadLevel(availableLevels[currentLevel]);
-            }
-        }
         
         // 获取出生点
         public Vector2Int GetSpawnPoint(int playerIndex)
