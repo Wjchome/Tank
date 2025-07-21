@@ -101,11 +101,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2d230963024c06b6b6a45ff8d0373c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orignalData:
-  - {fileID: 11400000, guid: fd160f31b6d1647e5b30fb752773ce7b, type: 2}
-  - {fileID: 11400000, guid: 04c6ae03f8ed14d6a932636ad8d11e18, type: 2}
   currentData: {fileID: 0}
+  PlayerID: 
+  TankDirection: 0
+  Pos: {x: 0, y: 0}
   killNum: 0
+  IsLocalPlayer: 0
   lastMoveTime: 0
   lastShootTime: 0
   lastAnimStartTime: 0
@@ -117,6 +118,7 @@ MonoBehaviour:
   animTime: 0.5
   playerPanelUI: {fileID: 0}
   isDead: 0
+  animator: {fileID: 3787384962529946850}
 --- !u!95 &3787384962529946850
 Animator:
   serializedVersion: 7

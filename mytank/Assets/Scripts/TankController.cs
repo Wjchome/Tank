@@ -10,13 +10,14 @@ using Random = UnityEngine.Random; // 新增
 
 public class TankController : MonoBehaviour
 {
-    public List<TankData> orignalData;
+
     public TankData currentData;
 
-   
-    public string PlayerID { get; private set; }
-    public Direction TankDirection{ get; private set; }
-    public Vector2Int Pos{ get; private set; }
+
+    public string PlayerID;
+    public Direction TankDirection;
+
+    public Vector2Int Pos;
     // 坐标系统辅助方法
     public Vector2Int GetTopLeft() => new Vector2Int(Pos.x, Pos.y + 1);
     public Vector2Int GetTopRight() => new Vector2Int(Pos.x + 1, Pos.y + 1);
@@ -27,7 +28,7 @@ public class TankController : MonoBehaviour
     public int killNum=0;
     
     //是否是本机玩家
-    public bool IsLocalPlayer{ get; private set; }
+    public bool IsLocalPlayer;
     //一些计时器
     public float lastMoveTime;
     public float lastShootTime;
@@ -52,40 +53,8 @@ public class TankController : MonoBehaviour
     public bool isDead;
     
     //本地动画机
-    private Animator animator;
+    public Animator animator;
     
-    public void Initialize(string playerID,string playerName, int x, int y, Color color,bool isPlayer,int dataIndex)
-    {
-        animator = GetComponent<Animator>();
-
-        PlayerID = playerID;
-        TankDirection = Direction.Up;
-        IsLocalPlayer = playerID == NetworkManager.Instance.playerID;
-        Pos = new Vector2Int(x, y); // 左下角坐标
-        
-        this.isPlayer = isPlayer;
-        this.playerName = playerName;
-        
-        // 设置坦克中心位置
-        transform.position = GetCenter();
-        playerColor= color;
-        GetComponent<SpriteRenderer>().material.color = color;
-        
-        
-        GameStateManager.Instance.playerTanks[playerID] = this;
-        
-        currentData=ScriptableObject.CreateInstance<TankData>();
-        currentData.InitializeTankData(orignalData[dataIndex]);
-        
-        
-        if (isPlayer)
-        {
-            
-            playerPanelUI= Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent).GetComponent<PlayerPanelUI>();
-            playerPanelUI.UpdateUI(this);
-            playerPanelUI.SetPos(PlayerManager.Instance.activePlayers.Count);   
-        }
-    }
 
     void Update()
     {
@@ -198,10 +167,7 @@ public class TankController : MonoBehaviour
   
     public void Shoot()
     {
-        GameObject bullet = Instantiate(GameManager.Instance.bulletPrefab, transform.position, transform.rotation);
-        BulletController bulletController = bullet.GetComponent<BulletController>();
-        bulletController.Initialize("", TankDirection, PlayerID);
-        
+        BulletFactory.Instance.Initialize(TankDirection,PlayerID,isPlayer);
        
     }
 
@@ -241,8 +207,8 @@ public class TankController : MonoBehaviour
                 EnemyManager.Instance.RemoveEnemy(this);
             }
             
-            Destroy(gameObject, animTime);
-            GameStateManager.Instance.playerTanks[attackerID].Kill();
+            TankFactory.Instance.TankPool.ReturnObject(this);
+            GameStateManager.Instance.allTanks[attackerID].Kill();
         }
     }
 

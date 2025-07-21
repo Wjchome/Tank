@@ -4,8 +4,8 @@ using Tankgame;
 
 public class GameStateManager : SingletonMono<GameStateManager>
 {
-    public Dictionary<string, TankController> playerTanks = new Dictionary<string, TankController>();
-
+    public Dictionary<string, TankController> allTanks = new Dictionary<string, TankController>();
+    public List<BulletController> allBullets = new List<BulletController>();
     void Start()
     {
         NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
@@ -26,7 +26,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         Debug.Log($"收到帧同步输入，输入数量: {frameInputs.Inputs.Count}");
         foreach (var input in frameInputs.Inputs)
         {
-            ApplyInputToTank(playerTanks[input.PlayerId], input);
+            ApplyInputToTank(allTanks[input.PlayerId], input);
         }
     }
 
@@ -85,19 +85,25 @@ public class GameStateManager : SingletonMono<GameStateManager>
             Vector2Int spawnPoint = MapManager.Instance.GetSpawnPoint(i);
             
             // 创建坦克
-            GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, 
+       /*     GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, 
                 new Vector2(spawnPoint.x, spawnPoint.y), Quaternion.identity);
             TankController tank = tankObj.GetComponent<TankController>();
             
-            // 设置玩家信息
-            tank.playerName = playerInfo.PlayerName;
+            
             Color color= new Color(
                 playerInfo.ColorR / 255f,
                 playerInfo.ColorG / 255f,
                 playerInfo.ColorB / 255f
             );
             tank.Initialize(playerInfo.PlayerId,  playerInfo.PlayerName,spawnPoint.x, spawnPoint.y,color,true,0);
-         
+         */
+       Color color= new Color(
+           playerInfo.ColorR / 255f,
+           playerInfo.ColorG / 255f,
+           playerInfo.ColorB / 255f
+       );
+       var tank = TankFactory.Instance.Initialize(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
+           spawnPoint.y, color, true, 0);
             PlayerManager.Instance.activePlayers.Add(tank);
             Debug.Log($"Created tank for player {playerInfo.PlayerName} ({playerInfo.PlayerId}) at position ({spawnPoint.x}, {spawnPoint.y})");
         }

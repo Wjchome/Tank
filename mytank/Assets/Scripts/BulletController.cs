@@ -3,21 +3,22 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEngine.Serialization;
 using Random =UnityEngine.Random;
 
 public class BulletController : MonoBehaviour
 {
-    public string BulletID { get; private set; }
-    public Direction Direction { get; private set; }
-    public string OwnerID { get; private set; }
-    
-    private bool isLocal; // 是否由本地客户端创建
+
+    public Direction direction;
+     public string ownerID;
+
+    public bool isPlayerBullet;
 
     public float moveInterval = 0.3f;
     
-    private float lastMoveTime;
+    public float lastMoveTime;
 
-    private Vector2Int dir;
+    public Vector2Int dir;
     public Vector2Int Pos; // 子弹左下角坐标（2x2占地）
     
     // 坐标系统辅助方法
@@ -33,54 +34,12 @@ public class BulletController : MonoBehaviour
     
     public bool isShouldDestroy = false;
     public float animTime = 0.3f;
-    public void Initialize(string id, Direction direction, string ownerID, bool local = false)
-    {
-        BulletID = id;
-        Direction = direction;
-        OwnerID = ownerID;
-        isLocal = local;
-        // 设置子弹朝向
-        SetBulletRotation();
-        
-        // 根据坦克位置计算子弹初始位置
-        TankController ownerTank = GameStateManager.Instance.playerTanks[ownerID];
-        if (ownerTank != null)
-        {
-            Pos = ownerTank.Pos;
-            
-            // 设置子弹中心位置
-            transform.position = GetCenter();
-        }
-    }
-    
-    private void SetBulletRotation()
-    {
-        Vector3 rotation = Vector3.zero;
-        switch (Direction)
-        {
-            case Direction.Up: 
-                rotation = new Vector3(0, 0, 0);
-                dir = Direction.ToVector2Int();  
-                break;
-            case Direction.Down: 
-                rotation = new Vector3(0, 0, 180);  
-                dir = Direction.ToVector2Int(); 
-                break;
-            case Direction.Left: 
-                rotation = new Vector3(0, 0, 90);  
-                dir = Direction.ToVector2Int(); 
-                break;
-            case Direction.Right: 
-                rotation = new Vector3(0, 0, -90);  
-                dir = Direction.ToVector2Int(); 
-                break;
-        }
-        transform.rotation = Quaternion.Euler(rotation);
-    }
+   
     
   
     public void UpdatePosition(int x, int y)
     {
+        direction.ToVector2Int().Set(x,y);
         Pos = new Vector2Int(x, y);
         transform.DOKill();
         transform.DOMove(GetCenter(), moveDuration).SetEase(Ease.Linear);
@@ -103,15 +62,26 @@ public class BulletController : MonoBehaviour
             
             // 检查2x2区域碰撞
             var tank = MapManager.Instance.GetTankInArea(newPos.x, newPos.y, 2, 2);
+            var bullet=MapManager.Instance.GetBulletInArea(newPos.x, newPos.y, 2, 2);
             
-            if (tank != null && tank.PlayerID == OwnerID)
+            if (tank != null && tank.isPlayer== isPlayerBullet)
             {
                 isShouldMove=true;
             }
-            else if (tank != null && tank.PlayerID != OwnerID)
+            else if (tank != null && tank.isPlayer!= isPlayerBullet)
             {
-                tank.DamageHP(1,OwnerID);
+                tank.DamageHP(1,ownerID);
                 isShouldDestroy = true;
+            }
+
+            if (bullet != null && isPlayerBullet == bullet.isPlayerBullet)
+            {
+                isShouldMove = true;
+            }
+            else  if (bullet != null && isPlayerBullet != bullet.isPlayerBullet)
+            {
+                isShouldDestroy=true;
+                bullet.isShouldDestroy = true;
             }
             if (MapManager.Instance.IsAreaBulletPassable(newPos.x, newPos.y, 2, 2))
             {
@@ -192,6 +162,11 @@ public class BulletController : MonoBehaviour
         Vector2 randomPos=new Vector2(Random.Range(0f,dir.x), Random.Range(0f,dir.y ));
         transform.position += (Vector3)randomPos;
         animator.Play("SmallBoom");
-        Destroy(gameObject,animTime);
+        DOVirtual.DelayedCall(animTime, () => 
+        {
+            BulletFactory.Instance.BulletPool.ReturnObject(this);
+        });
     }
+    
+    
 }

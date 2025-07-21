@@ -6300,6 +6300,7 @@ Transform:
   - {fileID: 1760086396}
   - {fileID: 1382740090}
   - {fileID: 1699277954}
+  - {fileID: 1738175250}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &238723441
@@ -44718,6 +44719,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6085855399756571354, guid: bde5abab5cf5644f28d5118931fa708e, type: 3}
   m_PrefabInstance: {fileID: 1737817960}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1738175249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1738175250}
+  - component: {fileID: 1738175252}
+  - component: {fileID: 1738175251}
+  m_Layer: 0
+  m_Name: Factory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1738175250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738175249}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 219629758}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1738175251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738175249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55ee2cb7cef34951abb8662008462f96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: -5286829672375745056, guid: da13715faeeea46bf996f1ca451e933c, type: 3}
+--- !u!114 &1738175252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738175249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc5ea3efaa4b4b7d99c773e20e04480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tankPrefab: {fileID: -8170977891461103507, guid: f04e0bd1079d84378a7069370189a33a, type: 3}
+  orignalDatas:
+  - {fileID: 11400000, guid: fd160f31b6d1647e5b30fb752773ce7b, type: 2}
+  - {fileID: 11400000, guid: 04c6ae03f8ed14d6a932636ad8d11e18, type: 2}
 --- !u!1001 &1741473091
 PrefabInstance:
   m_ObjectHideFlags: 0

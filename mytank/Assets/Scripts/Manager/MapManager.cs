@@ -10,33 +10,7 @@ public enum Direction
     Right
 }
 
-// Direction枚举的扩展方法
-public static class DirectionExtensions
-{
-    public static Vector2Int ToVector2Int(this Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.Up: return Vector2Int.up;
-            case Direction.Down: return Vector2Int.down;
-            case Direction.Left: return Vector2Int.left;
-            case Direction.Right: return Vector2Int.right;
-            default: return Vector2Int.zero;
-        }
-    }
-    
-    public static Direction Opposite(this Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.Up: return Direction.Down;
-            case Direction.Down: return Direction.Up;
-            case Direction.Left: return Direction.Right;
-            case Direction.Right: return Direction.Left;
-            default: return Direction.Up;
-        }
-    }
-}
+
 
 public enum MapType
     {
@@ -151,7 +125,7 @@ public enum MapType
 
         public TankController GetTankController(int x, int y)
         {
-            foreach (var kv in GameStateManager.Instance.playerTanks)
+            foreach (var kv in GameStateManager.Instance.allTanks)
             {
                 var tank = kv.Value;
                 
@@ -174,7 +148,7 @@ public enum MapType
         // 检查位置是否可通行（保持原有方法兼容性）
         public bool IsWalkable(int x, int y)
         {
-            foreach (var kv in GameStateManager.Instance.playerTanks)
+            foreach (var kv in GameStateManager.Instance.allTanks)
             {
                 var tank = kv.Value;
                 
@@ -298,7 +272,7 @@ public enum MapType
                         return false;
                     
                     // 检查坦克碰撞
-                    foreach (var kv in GameStateManager.Instance.playerTanks)
+                    foreach (var kv in GameStateManager.Instance.allTanks)
                     {
                         var tank = kv.Value;
                         if(tank.PlayerID==selfID)continue;
@@ -334,13 +308,27 @@ public enum MapType
         // 获取区域内的坦克
         public TankController GetTankInArea(int startX, int startY, int width, int height)
         {
-            foreach (var kv in GameStateManager.Instance.playerTanks)
+            foreach (var kv in GameStateManager.Instance.allTanks)
             {
                 var tank = kv.Value;
                 if (IsRectOverlap(startX, startY, width, height, 
                                 tank.Pos.x, tank.Pos.y, 2, 2))
                 {
                     return tank;
+                }
+            }
+            return null;
+        }
+        //获取区域内子弹
+        public BulletController GetBulletInArea(int startX, int startY, int width, int height)
+        {
+            foreach (var bullet in GameStateManager.Instance.allBullets)
+            {
+          
+                if (IsRectOverlap(startX, startY, width, height, 
+                        bullet.Pos.x, bullet.Pos.y, 2, 2))
+                {
+                    return bullet;
                 }
             }
             return null;
