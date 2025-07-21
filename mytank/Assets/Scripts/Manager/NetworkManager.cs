@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Tankgame;
 
@@ -17,7 +18,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
     public long currentFrame = 0;
 
 
-    public List<RoomInfo> availableRooms = new List<RoomInfo>();
     public RoomInfo currentRoom;//自己所在的房间
     public bool isHost =>currentRoom?.HostId == playerID;
 
@@ -124,12 +124,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
         else if (message.RoomList != null)
         {
-            availableRooms = new List<RoomInfo>(message.RoomList.Rooms);
-            
-            
-            
-            OnRoomListReceived?.Invoke(availableRooms);
-            Debug.Log($"Received {availableRooms.Count} available rooms");
+         
+            OnRoomListReceived?.Invoke(message.RoomList.Rooms.ToList());
+           
         }
         else if (message.RoomInfo != null)
         {
@@ -144,12 +141,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
             }
             else
             {
-                // 成功响应：更新房间信息
-                currentRoom = message.RoomInfo;
-                Debug.Log($"Setting isHost to: {isHost} (my ID: {playerID}, host ID: {currentRoom.HostId})");
-                Debug.Log($"Invoking OnRoomInfoUpdate event...");
+               
                 OnRoomInfoUpdate?.Invoke(currentRoom);
-                Debug.Log($"Room info updated: {currentRoom.RoomName} ({currentRoom.PlayerIds.Count}/{currentRoom.MaxPlayers})");
             }
         }
         else
@@ -386,17 +379,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
     }
     
-    public void Disconnect()
-    {
-        shouldStopThread = true;
-        isConnected = false;
-        stream?.Close();
-        tcpClient?.Close();
-        if (receiveThread != null && receiveThread.IsAlive)
-        {
-            receiveThread.Join(1000); // 等待线程结束，最多1秒
-        }
-    }
+   
     
     void SetPlayerID(ConnectSuccess connectSuccess)
     {
