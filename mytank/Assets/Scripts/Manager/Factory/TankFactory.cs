@@ -22,9 +22,13 @@ public class TankFactory : SingletonMono<TankFactory>
 
     private void CreateTank(TankController tank)
     {
-        tank.gameObject.SetActive(true);
         tank.isDead=false;
+        tank.lastMoveTime=0;
+        tank.lastShootTime = 0;
+        tank.lastAnimStartTime = 0;
         allTanks.Add(tank);
+        tank.gameObject.SetActive(true);
+        
         
     }
 

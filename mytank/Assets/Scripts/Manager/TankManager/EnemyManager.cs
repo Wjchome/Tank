@@ -17,7 +17,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public float enemySpawnInterval = 5f; // 敌人生成间隔
     private List<TankController> activeEnemies = new List<TankController>();//激活的敌人坦克
     public int leafEnemies = 0;
-    private float lastSpawnTime = 0f;
+    [SerializeField]private float lastSpawnTime = 0f;
     
     private int enemyIndex = 0;
     public TextMeshProUGUI enemyleafText;
@@ -32,6 +32,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         leafEnemies=sumEnemies;
         lastSpawnTime = 0f;
         enemyleafText.text= leafEnemies.ToString();
+        enemyIndex = 0;
         
         // 清理现有敌人
         ClearAllEnemies();
@@ -144,7 +145,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         {
             if (enemy != null)
             {
-                Destroy(enemy.gameObject);
+                TankFactory.Instance.TankPool.ReturnObject(enemy);
             }
         }
         activeEnemies.Clear();

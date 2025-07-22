@@ -10,20 +10,10 @@
     {
         public List<TankController> activePlayers = new List<TankController>();
 
-        private void Start()
-        {
-            NetworkManager.Instance.OnGameStart += OnGameStart;
+       
 
-        }
-
-        private void OnDestroy()
-        {
-            NetworkManager.Instance.OnGameStart -= OnGameStart;
-
-        }
-
-
-        void OnGameStart(GameStart gameStart)
+        
+        public void OnGameStart(GameStart gameStart)
         {
             //      清除
             ClearAllPlayers();
@@ -38,7 +28,8 @@
             {
                 if (enemy != null)
                 {
-                    Destroy(enemy.gameObject);
+                    TankFactory.Instance.TankPool.ReturnObject(enemy);
+
                 }
             }
             activePlayers.Clear();

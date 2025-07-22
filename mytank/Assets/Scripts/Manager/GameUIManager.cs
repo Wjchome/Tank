@@ -18,6 +18,7 @@ using UnityEngine;
         private void Awake()
         {
             gameOverButton.onClick.AddListener(()=>Gameover());
+            gameOverButton.gameObject.SetActive(false);
             
         }
 
@@ -26,13 +27,23 @@ using UnityEngine;
             playerPanelParent.GetComponent<RectTransform>().DOAnchorPos(firstPos,0.5f).SetEase(Ease.OutQuad);
             NetworkManager.Instance.LeaveRoom(NetworkManager.Instance.currentRoom.RoomId);
             gameOverButton.gameObject.SetActive(false);
-            DOVirtual.DelayedCall(0.5f, () => 
+            DOVirtual.DelayedCall(0.5f, () =>
             {
-                for (int i = playerPanelParent.childCount - 1; i >= 0; i--)
-                {
-                    Destroy(playerPanelParent.GetChild(i).gameObject);
-                }
+                ResetGame();
 
             });
+        }
+
+
+        private void ResetGame()
+        {
+            for (int i = playerPanelParent.childCount - 1; i >= 0; i--)
+            {
+                Destroy(playerPanelParent.GetChild(i).gameObject);
+                
+            }
+
+            LevelManager.Instance.levelNameText.text = "";
+            
         }
     }

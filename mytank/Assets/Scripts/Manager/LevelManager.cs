@@ -26,6 +26,7 @@
                 levelNameText.text = currentLevel.levelName;
                 MapManager.Instance.LoadLevel(currentLevel);
                 EnemyManager.Instance.LoadLevel(currentLevel);
+               PlayerManager.Instance.   OnGameStart(gameStart);
         }
 
         

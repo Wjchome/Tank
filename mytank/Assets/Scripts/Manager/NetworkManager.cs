@@ -115,6 +115,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             seed = message.GameStart.RandomSeed;
             isGameing = true;
+            currentFrame = 0;
             OnGameStart?.Invoke(message.GameStart);
         }
         else if (message.ConnectSuccess != null)
