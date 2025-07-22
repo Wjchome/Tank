@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using Tankgame;
 using TMPro;
@@ -20,6 +21,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public TextMeshProUGUI enemyleafText;
     public int randomSeed = 0;
     public System.Random random;
+    
+    public int playerNum = 0;
     void Start()
     {
         NetworkManager.Instance.OnGameStart += OnGameStart;
@@ -35,6 +38,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     
     void OnGameStart(GameStart gameStart)
     {
+        playerNum = gameStart.PlayerInfos.Count;
         sumEnemies=MapManager.Instance.availableLevels[gameStart.Level].enemyNum;
         leafEnemies=sumEnemies;
         lastSpawnTime = 0f;
@@ -74,7 +78,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     void CheckEnemySpawn()
     {
-        if (activeEnemies.Count >= maxEnemies) return;
+        if (activeEnemies.Count >= maxEnemies||enemyIndex>=sumEnemies||playerNum<=0) return;
         
         long currentFrame = NetworkManager.Instance.currentFrame;
         float currentTime = currentFrame * 0.05f; // 每帧0.05秒
@@ -140,6 +144,23 @@ public class EnemyManager : SingletonMono<EnemyManager>
         activeEnemies.Remove(enemy);
         leafEnemies--;
         enemyleafText.text= leafEnemies.ToString();
+
+
+
+        if (leafEnemies == 0)
+        {
+            GameSuccess();
+        }
+        
+    }
+
+    public void RemovePlayer(TankController player)
+    {
+        playerNum--;
+        if (playerNum <= 0)
+        {
+            GameFail();
+        }
         
     }
     
@@ -154,6 +175,28 @@ public class EnemyManager : SingletonMono<EnemyManager>
         }
         activeEnemies.Clear();
     }
+
+
+    public void GameSuccess()
+    {
+       GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>().
+           DOAnchorPos( GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
+       GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = "You Win!";
+       GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
+    }
+
+    public void GameFail()
+    {
+       GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>().
+           DOAnchorPos(GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
+       GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = "You Lose!";
+       GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
+
+       
+    }
+    
+    
+    
     
    
 } 

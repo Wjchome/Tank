@@ -55,11 +55,11 @@ public class TankFactory : SingletonMono<TankFactory>
         temp.  transform.position = temp. GetCenter();
         temp. playerColor= color;
         temp.  GetComponent<SpriteRenderer>().material.color = color;
-        int seed = System.HashCode.Combine(
-            EnemyManager.Instance.randomSeed,
-            NetworkManager.Instance.currentFrame
-        );
-        temp.random = new System.Random( EnemyManager.Instance.randomSeed);
+        int seed =
+            EnemyManager.Instance.randomSeed +
+            (int)NetworkManager.Instance.currentFrame;
+        
+        temp.random = new System.Random( seed );
         
         GameStateManager.Instance.allTanks[playerID] = temp;
         

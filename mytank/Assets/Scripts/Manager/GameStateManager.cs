@@ -5,6 +5,7 @@ using Tankgame;
 public class GameStateManager : SingletonMono<GameStateManager>
 {
     public Dictionary<string, TankController> allTanks = new Dictionary<string, TankController>();
+
     void Start()
     {
         NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
@@ -73,29 +74,17 @@ public class GameStateManager : SingletonMono<GameStateManager>
     
     void CreateAllPlayerTanks(GameStart gameStart)
     {
-        
-        
+
+   
         // 为每个玩家创建坦克
-        for (int i = 0; i < gameStart.PlayerInfos.Count; i++)
+        for (int i = 0; i <gameStart.PlayerInfos.Count; i++)
         {
             var playerInfo = gameStart.PlayerInfos[i];
             
             // 获取出生点
             Vector2Int spawnPoint = MapManager.Instance.GetSpawnPoint(i);
             
-            // 创建坦克
-       /*     GameObject tankObj = Instantiate(GameManager.Instance.tankPrefab, 
-                new Vector2(spawnPoint.x, spawnPoint.y), Quaternion.identity);
-            TankController tank = tankObj.GetComponent<TankController>();
-            
-            
-            Color color= new Color(
-                playerInfo.ColorR / 255f,
-                playerInfo.ColorG / 255f,
-                playerInfo.ColorB / 255f
-            );
-            tank.Initialize(playerInfo.PlayerId,  playerInfo.PlayerName,spawnPoint.x, spawnPoint.y,color,true,0);
-         */
+    
        Color color= new Color(
            playerInfo.ColorR / 255f,
            playerInfo.ColorG / 255f,

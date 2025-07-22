@@ -211,6 +211,10 @@ public class TankController : MonoBehaviour
             {
                 EnemyManager.Instance.RemoveEnemy(this);
             }
+            else
+            {
+                EnemyManager.Instance.RemovePlayer(this);
+            }
             DOVirtual.DelayedCall(animTime, () => 
             {
                 TankFactory.Instance.TankPool.ReturnObject(this);
