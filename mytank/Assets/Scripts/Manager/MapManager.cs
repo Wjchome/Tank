@@ -30,9 +30,7 @@ public enum MapType
         public float gridSize = 1f;
         private MapType[,] map;
         
-        [Header("Level Data")]
-        public List<Level> availableLevels = new List<Level>();
-        public int currentLevel = 0;
+       
         
         [Header("Prefabs")]
         public GameObject floorPrefab;
@@ -171,59 +169,30 @@ public enum MapType
             
             // 设置地图尺寸
             mapWidth = level.width;
-            mapHeight = level.height;
+             mapHeight = level.height;
             
             // 清除现有地图
-            ClearMap();
+             ClearMap();
             
             // 解析地图数据
             LoadMapFromString(level.mapData);
             
-            Debug.Log($"Level {level.levelName} loaded successfully!");
+        
         }
         
         // 从字符串加载地图
         public void LoadMapFromString(string mapData)
         {
-            if (string.IsNullOrEmpty(mapData))
-            {
-                Debug.LogError("Map data is empty!");
-                return;
-            }
             
-            // 解析地图数据
-            string[] rows = mapData.Split('\n');
-            if (rows.Length == 0)
-            {
-                Debug.LogError("Invalid map data format!");
-                return;
-            }
-            
-            int height = rows.Length;
-            int width = rows[0].Length;
-            
-            // 检查数据一致性
-            for (int i = 0; i < rows.Length; i++)
-            {
-                if (rows[i].Length != width)
-                {
-                    Debug.LogError($"Row {i+1} has inconsistent length!");
-                    return;
-                }
-            }
-            
-            // 更新地图尺寸
-            mapWidth = width;
-            mapHeight = height;
             
             // 重新初始化数组
             map = new MapType[mapWidth, mapHeight];
             gridObjects = new GameObject[mapWidth, mapHeight];
-            
+            string[] rows = mapData.Split('\n');
             // 解析瓦片数据
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < mapHeight; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < mapWidth; x++)
                 {
                     char tileChar = rows[y][x];
                     if (int.TryParse(tileChar.ToString(), out int tileType))

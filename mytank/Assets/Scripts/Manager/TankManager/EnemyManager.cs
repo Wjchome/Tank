@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using Tankgame;
@@ -10,55 +11,38 @@ public class EnemyManager : SingletonMono<EnemyManager>
 {
     
     public int sumEnemies = 0;//总敌人数量
+    private List<Vector2Int> tankPawnsPos;
+    
     public int maxEnemies = 3; // 场上最大敌人数量
     public float enemySpawnInterval = 5f; // 敌人生成间隔
-    private List<TankController> activeEnemies = new List<TankController>();
+    private List<TankController> activeEnemies = new List<TankController>();//激活的敌人坦克
     public int leafEnemies = 0;
     private float lastSpawnTime = 0f;
-    private List<Vector2Int> tankPawnsPos;
+    
     private int enemyIndex = 0;
-    public TextMeshProUGUI levelNameText;
     public TextMeshProUGUI enemyleafText;
-    public int randomSeed = 0;
     public System.Random random;
     
-    public int playerNum = 0;
-    void Start()
+ 
+
+    public void LoadLevel(Level levelData)
     {
-        NetworkManager.Instance.OnGameStart += OnGameStart;
-    }
-    
-    void OnDestroy()
-    {
-        if (NetworkManager.Instance != null)
-        {
-            NetworkManager.Instance.OnGameStart -= OnGameStart;
-        }
-    }
-    
-    void OnGameStart(GameStart gameStart)
-    {
-        playerNum = gameStart.PlayerInfos.Count;
-        sumEnemies=MapManager.Instance.availableLevels[gameStart.Level].enemyNum;
+        sumEnemies = levelData.enemyNum;
+        tankPawnsPos=levelData.tankPawns.ToList();
         leafEnemies=sumEnemies;
         lastSpawnTime = 0f;
-        tankPawnsPos = MapManager.Instance.availableLevels[MapManager.Instance.currentLevel].tankPawns;
-        levelNameText.text = MapManager.Instance.availableLevels[MapManager.Instance.currentLevel].levelName;
-        enemyleafText.text = leafEnemies.ToString();
+        enemyleafText.text= leafEnemies.ToString();
         
         // 清理现有敌人
         ClearAllEnemies();
         
         // 初始化随机种子
-         randomSeed=(int)gameStart.RandomSeed;
-         random = new System.Random(randomSeed);
+        random = new System.Random((int)NetworkManager.Instance.seed);
         
         // 生成初始敌人
         SpawnInitialEnemies();
     }
-    
-   
-    
+  
     void SpawnInitialEnemies()
     {
 
@@ -78,7 +62,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     void CheckEnemySpawn()
     {
-        if (activeEnemies.Count >= maxEnemies||enemyIndex>=sumEnemies||playerNum<=0) return;
+        if (activeEnemies.Count >= maxEnemies||enemyIndex>=sumEnemies|!NetworkManager.Instance.isGameing) return;
         
         long currentFrame = NetworkManager.Instance.currentFrame;
         float currentTime = currentFrame * 0.05f; // 每帧0.05秒
@@ -144,9 +128,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         activeEnemies.Remove(enemy);
         leafEnemies--;
         enemyleafText.text= leafEnemies.ToString();
-
-
-
+        
         if (leafEnemies == 0)
         {
             GameSuccess();
@@ -154,15 +136,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         
     }
 
-    public void RemovePlayer(TankController player)
-    {
-        playerNum--;
-        if (playerNum <= 0)
-        {
-            GameFail();
-        }
-        
-    }
+  
     
     public void ClearAllEnemies()
     {
@@ -183,17 +157,11 @@ public class EnemyManager : SingletonMono<EnemyManager>
            DOAnchorPos( GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
        GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = "You Win!";
        GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
-    }
-
-    public void GameFail()
-    {
-       GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>().
-           DOAnchorPos(GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
-       GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = "You Lose!";
-       GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
-
+            NetworkManager.Instance.isGameing = false;
        
     }
+
+  
     
     
     

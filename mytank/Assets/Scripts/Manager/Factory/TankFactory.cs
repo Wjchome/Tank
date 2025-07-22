@@ -56,8 +56,8 @@ public class TankFactory : SingletonMono<TankFactory>
         temp. playerColor= color;
         temp.  GetComponent<SpriteRenderer>().material.color = color;
         int seed =
-            EnemyManager.Instance.randomSeed +
-            (int)NetworkManager.Instance.currentFrame;
+            (int)(NetworkManager.Instance.seed +
+            NetworkManager.Instance.currentFrame);
         
         temp.random = new System.Random( seed );
         

@@ -22152,6 +22152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 
   currentFrame: 0
+  serverIP: 10.30.12.191
+  serverPort: 8080
 --- !u!1 &843415143
 GameObject:
   m_ObjectHideFlags: 0
@@ -36997,6 +36999,8 @@ MonoBehaviour:
   playerPanelParent: {fileID: 1224834234}
   playerPanelPrefab: {fileID: 268154198779758875, guid: b6f4146acb25d44f68a769af2a22c794, type: 3}
   gameOverButton: {fileID: 1692776427}
+  firstPos: {x: 700, y: 400}
+  secondPos: {x: 0, y: 400}
 --- !u!1 &1383004454
 GameObject:
   m_ObjectHideFlags: 0

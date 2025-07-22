@@ -9,7 +9,6 @@ public class GameStateManager : SingletonMono<GameStateManager>
     void Start()
     {
         NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
-        NetworkManager.Instance.OnGameStart += OnGameStart;
     }
 
     void OnDestroy()
@@ -17,22 +16,16 @@ public class GameStateManager : SingletonMono<GameStateManager>
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.OnFrameInputs -= OnFrameInputs;
-            NetworkManager.Instance.OnGameStart -= OnGameStart;
         }
     }
 
     void OnFrameInputs(FrameInputs frameInputs)
     {
-        Debug.Log($"收到帧同步输入，输入数量: {frameInputs.Inputs.Count}");
         foreach (var input in frameInputs.Inputs)
         {
             ApplyInputToTank(allTanks[input.PlayerId], input);
         }
     }
-
-
-    
-
 
     void ApplyInputToTank(TankController tank, PlayerInput input)
     {
@@ -57,45 +50,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
-    void OnGameStart(GameStart gameStart)
-    {
-        Debug.Log($"Game started! Level: {gameStart.Level}");
-        
-        // 加载关卡
-        MapManager.Instance.currentLevel=gameStart.Level;
-        MapManager.Instance.LoadLevel(MapManager.Instance.availableLevels[ MapManager.Instance.currentLevel]);
-        
-     
-        // 创建所有玩家的坦克
-        CreateAllPlayerTanks(gameStart);
-    }
-    
 
-    
-    void CreateAllPlayerTanks(GameStart gameStart)
-    {
-
-   
-        // 为每个玩家创建坦克
-        for (int i = 0; i <gameStart.PlayerInfos.Count; i++)
-        {
-            var playerInfo = gameStart.PlayerInfos[i];
-            
-            // 获取出生点
-            Vector2Int spawnPoint = MapManager.Instance.GetSpawnPoint(i);
-            
-    
-       Color color= new Color(
-           playerInfo.ColorR / 255f,
-           playerInfo.ColorG / 255f,
-           playerInfo.ColorB / 255f
-       );
-       var tank = TankFactory.Instance.Initialize(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
-           spawnPoint.y, color, true, 0);
-            PlayerManager.Instance.activePlayers.Add(tank);
-            Debug.Log($"Created tank for player {playerInfo.PlayerName} ({playerInfo.PlayerId}) at position ({spawnPoint.x}, {spawnPoint.y})");
-        }
-    }
     
    
 } 

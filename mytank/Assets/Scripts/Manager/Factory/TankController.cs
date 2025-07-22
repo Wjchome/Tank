@@ -213,7 +213,7 @@ public class TankController : MonoBehaviour
             }
             else
             {
-                EnemyManager.Instance.RemovePlayer(this);
+                PlayerManager.Instance.RemovePlayer(this);
             }
             DOVirtual.DelayedCall(animTime, () => 
             {

@@ -4,8 +4,10 @@ using System.Net.Sockets;
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Tankgame;
+using System.Threading.Tasks;
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
@@ -13,14 +15,13 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private NetworkStream stream;//网络流
     private bool isConnected = false;
     
-    public string playerID;
-    public long currentFrame = 0;
-
-
-    public List<RoomInfo> availableRooms = new List<RoomInfo>();
-    public RoomInfo currentRoom;//自己所在的房间
+    public string playerID;//连接成功就赋值
+    public long currentFrame = 0;//收到输入和空帧就赋值
+    public RoomInfo currentRoom;//收到房间信息就赋值
     public bool isHost =>currentRoom?.HostId == playerID;
+    public bool isGameing = false;
 
+    public long seed;
     // 事件定义
     public event Action<FrameInputs> OnFrameInputs;
     public event Action<EmptyFrame> OnEmptyFrame;
@@ -34,43 +35,39 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private Thread receiveThread;
     private bool shouldStopThread = false;
 
+    public string serverIP = "192.168.1.100";
+    public int serverPort = 8080;
     private void Start()
     {
-        OnConnectSuccess += SetPlayerID;
         ConnectToServer();
+        
+        
     }
     
     
-    void ConnectToServer()
+    private async void ConnectToServer()
     {
         try
         {
-            // 检查是否是ParrelSync克隆的实例
-            string projectName = Application.productName;
-            string clientId = "";
-            
-            // 如果是克隆实例，添加唯一标识
-            if (projectName.Contains("Clone"))
+            tcpClient = new TcpClient();
+            var connectTask = tcpClient.ConnectAsync(serverIP, serverPort);
+            float timeout = 5f; // 5秒超时
+            if (await Task.WhenAny(connectTask, Task.Delay(TimeSpan.FromSeconds(timeout))) == connectTask)
             {
-                // 从项目名中提取克隆编号
-                string[] parts = projectName.Split('_');
-                if (parts.Length > 1 && int.TryParse(parts[parts.Length - 1], out int cloneNumber))
-                {
-                    clientId = $"Clone_{cloneNumber}";
-                    Debug.Log($"Clone instance detected: {clientId}");
-                }
+                // 连接成功
+                stream = tcpClient.GetStream();
+                isConnected = true;
+                Debug.Log($"Connected to frame sync server ({serverIP}:{serverPort})");
+                // 启动独立线程读取消息
+                receiveThread = new Thread(ReceiveMessagesThread);
+                receiveThread.IsBackground = true;
+                receiveThread.Start();
             }
-            
-            tcpClient = new TcpClient("localhost", 8080);
-            stream = tcpClient.GetStream();
-            isConnected = true;
-            
-            Debug.Log($"Connected to frame sync server (Client: {clientId})");
-
-            // 启动独立线程读取消息
-            receiveThread = new Thread(ReceiveMessagesThread);
-            receiveThread.IsBackground = true;
-            receiveThread.Start();
+            else
+            {
+                Debug.LogError($"Connect timeout! ({serverIP}:{serverPort})");
+                // 这里可以弹窗提示用户
+            }
         }
         catch (Exception e)
         {
@@ -96,10 +93,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
         if (msg != null)
         {
             ProcessServerMessage(msg);
+    
         }
     }
 
-    // 处理服务器消息
     void ProcessServerMessage(ServerMessage message)
     {
         LogMessage("[Server]", message);
@@ -116,41 +113,28 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
         else if (message.GameStart != null)
         {
+            seed = message.GameStart.RandomSeed;
+            isGameing = true;
             OnGameStart?.Invoke(message.GameStart);
         }
         else if (message.ConnectSuccess != null)
         {
+             playerID = message.ConnectSuccess.YourPlayerId;
+            
            OnConnectSuccess?.Invoke(message.ConnectSuccess);
         }
         else if (message.RoomList != null)
         {
-            availableRooms = new List<RoomInfo>(message.RoomList.Rooms);
-            
-            
-            
-            OnRoomListReceived?.Invoke(availableRooms);
-            Debug.Log($"Received {availableRooms.Count} available rooms");
+            OnRoomListReceived?.Invoke(message.RoomList.Rooms.ToList());
         }
         else if (message.RoomInfo != null)
         {
           
             
             currentRoom = message.RoomInfo;
-            if (currentRoom.Status == "error")
-            {
-                Debug.LogError($"Room error: {message.RoomInfo.RoomName}");
-                // 错误处理：恢复按钮状态
-                OnRoomInfoUpdate?.Invoke(null);
-            }
-            else
-            {
-                // 成功响应：更新房间信息
-                currentRoom = message.RoomInfo;
-                Debug.Log($"Setting isHost to: {isHost} (my ID: {playerID}, host ID: {currentRoom.HostId})");
-                Debug.Log($"Invoking OnRoomInfoUpdate event...");
-                OnRoomInfoUpdate?.Invoke(currentRoom);
-                Debug.Log($"Room info updated: {currentRoom.RoomName} ({currentRoom.PlayerIds.Count}/{currentRoom.MaxPlayers})");
-            }
+         
+            OnRoomInfoUpdate?.Invoke(currentRoom);
+            
         }
         else
         {
@@ -385,27 +369,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
             Debug.Log($"{prefix}: {message}");
         }
     }
-    
-    public void Disconnect()
-    {
-        shouldStopThread = true;
-        isConnected = false;
-        stream?.Close();
-        tcpClient?.Close();
-        if (receiveThread != null && receiveThread.IsAlive)
-        {
-            receiveThread.Join(1000); // 等待线程结束，最多1秒
-        }
-    }
-    
-    void SetPlayerID(ConnectSuccess connectSuccess)
-    {
-        playerID = connectSuccess.YourPlayerId;
-    }
 
     void OnDestroy()
     {
-        OnConnectSuccess -= SetPlayerID;
+       
         shouldStopThread = true;
         isConnected = false;
         stream?.Close();

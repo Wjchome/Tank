@@ -75,9 +75,9 @@ public class RoomManager : SingletonMono<RoomManager>
       
         levelDropdown.ClearOptions();
         List<string> levelOptions = new List<string>();
-        for (int i = 0; i < MapManager.Instance.availableLevels.Count; i++)
+        for (int i = 0; i < LevelManager.Instance.availableLevels.Count; i++)
         {
-            var level = MapManager.Instance.availableLevels[i];
+            var level = LevelManager.Instance.availableLevels[i];
             levelOptions.Add($"{i + 1}. {level.levelName}");
         }
         levelDropdown.AddOptions(levelOptions);
