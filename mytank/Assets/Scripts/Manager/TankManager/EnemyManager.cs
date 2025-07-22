@@ -28,7 +28,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public void LoadLevel(Level levelData)
     {
         sumEnemies = levelData.enemyNum;
-        tankPawnsPos=levelData.tankPawns.ToList();
+        tankPawnsPos=levelData.enemyTankPawns.ToList();
         leafEnemies=sumEnemies;
         lastSpawnTime = 0f;
         enemyleafText.text= leafEnemies.ToString();

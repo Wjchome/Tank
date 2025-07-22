@@ -20,6 +20,7 @@ public enum MapType
         breakableWall,
         river,
         tree,
+        home
     }
    
     public class MapManager : SingletonMono<MapManager>
@@ -38,6 +39,7 @@ public enum MapType
         public GameObject breakableWallPrefab;
         public GameObject riverPrefab;    // 新增：河流预制体
         public GameObject treePrefab;     // 新增：树荫预制体
+        public GameObject homePrefab;
         public Transform wallsParent;
         
         
@@ -54,6 +56,7 @@ public enum MapType
                 { MapType.breakableWall, breakableWallPrefab },
                 { MapType.river, riverPrefab },      // 河流
                 { MapType.tree, treePrefab },       // 树荫
+                { MapType.home, homePrefab },       // 树荫
             };
             
             
@@ -136,32 +139,7 @@ public enum MapType
             return null;
         }
 
-        // 检查子弹是否可以通过（子弹不能过墙，但可以过河流和树荫）
-        public bool IsBulletPassable(int x, int y)
-        {
-            MapType wallType = GetWallType(x, y);
-            return wallType == MapType.floor || wallType == MapType.river || wallType == MapType.tree; // 空地、河流、树荫可通过
-        }
-        
-        // 检查位置是否可通行（保持原有方法兼容性）
-        public bool IsWalkable(int x, int y)
-        {
-            foreach (var kv in GameStateManager.Instance.allTanks)
-            {
-                var tank = kv.Value;
-                
-
-                if (tank.Pos.x == x && tank.Pos.y == y)
-                {
-                    return false;
-                }
-            }
-
-            MapType wallType = GetWallType(x, y);
-            
-            return wallType == MapType.floor|| wallType == MapType.tree;
-        }
-
+      
         // 加载关卡
         public void LoadLevel(Level level)
         {
@@ -194,6 +172,12 @@ public enum MapType
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
+                    if ((x == 12 || x == 13) && (y == 1 || y == 2))
+                    {
+                        map[x, y] =MapType.home;
+                        
+                        continue;
+                    } 
                     char tileChar = rows[y][x];
                     if (int.TryParse(tileChar.ToString(), out int tileType))
                     {
@@ -207,21 +191,7 @@ public enum MapType
         }
         
         
-        // 获取出生点
-        public Vector2Int GetSpawnPoint(int playerIndex)
-        {
-            // 默认出生点（四个角落）
-            Vector2Int[] defaultSpawnPoints = new Vector2Int[]
-            {
-                new Vector2Int(1, 1),                    // 左下角
-                new Vector2Int(mapWidth - 3, 1),         // 右下角
-                new Vector2Int(1, mapHeight - 3),        // 左上角
-                new Vector2Int(mapWidth - 3, mapHeight - 3) // 右上角
-            };
-            
-            int index = playerIndex % defaultSpawnPoints.Length;
-            return defaultSpawnPoints[index];
-        }
+      
 
         // 检查2x2区域是否可通行
         public bool IsAreaWalkable(int startX, int startY, int width, int height,string selfID)
@@ -272,6 +242,22 @@ public enum MapType
                 }
             }
             return true;
+        }
+        public bool IsHintHome(int startX, int startY, int width, int height)
+        {
+            for (int x = startX; x < startX + width; x++)
+            {
+                for (int y = startY; y < startY + height; y++)
+                {
+                    if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+                        return false;
+                    
+                    MapType wallType = GetWallType(x, y);
+                    if (wallType ==MapType.home)
+                        return true;
+                }
+            }
+            return false;
         }
         
         // 获取区域内的坦克

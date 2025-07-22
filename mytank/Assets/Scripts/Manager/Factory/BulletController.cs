@@ -93,6 +93,10 @@ public class BulletController : MonoBehaviour
                 
 
             }
+            else if (MapManager.Instance.IsHintHome(newPos.x, newPos.y, 2, 2))
+            {
+                PlayerManager.Instance.GameFail();
+            }
             else
             {
                 if (dir == new Vector2Int(0, -1))
@@ -163,6 +167,7 @@ public class BulletController : MonoBehaviour
 
     public void DestroyBullet()
     {
+        Pos=new Vector2Int(-1, -1);
         Vector2 randomPos=new Vector2(Random.Range(0f,dir.x), Random.Range(0f,dir.y ));
         transform.position += (Vector3)randomPos;
         animator.Play("SmallBoom");

@@ -45,7 +45,7 @@
                 var playerInfo = gameStart.PlayerInfos[i];
             
                 // 获取出生点
-                Vector2Int spawnPoint = MapManager.Instance.GetSpawnPoint(i);
+                Vector2Int spawnPoint = LevelManager.Instance.currentLevel.playerTankPawns[i];
             
     
                 Color color= new Color(

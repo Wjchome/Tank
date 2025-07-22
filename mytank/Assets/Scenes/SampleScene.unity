@@ -6280,8 +6280,8 @@ Transform:
   - {fileID: 1981089054}
   - {fileID: 1760086396}
   - {fileID: 1382740090}
-  - {fileID: 1699277954}
   - {fileID: 1738175250}
+  - {fileID: 844532307}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &238723441
@@ -7210,7 +7210,7 @@ GameObject:
   - component: {fileID: 272430328}
   - component: {fileID: 272430327}
   m_Layer: 5
-  m_Name: LevelSum
+  m_Name: EnemyLeaf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7255,7 +7255,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: LevelSum
+  m_text: EnemyLeaf
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -22152,6 +22152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerID: 
   currentFrame: 0
+  isGameing: 0
+  seed: 0
   serverIP: 10.30.12.191
   serverPort: 8080
 --- !u!1 &843415143
@@ -22290,6 +22292,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 843415143}
   m_CullTransparentMesh: 1
+--- !u!1 &844532306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844532307}
+  - component: {fileID: 844532308}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &844532307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844532306}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 219629758}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &844532308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844532306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76e6c7bbca14625bbe633344640bd24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableLevels:
+  - {fileID: 11400000, guid: 065ceb967801b4f4b9dbd2c27a7e41d4, type: 2}
+  currentLevel: {fileID: 0}
+  levelNameText: {fileID: 1608581425}
 --- !u!1001 &844871204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32558,8 +32608,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1692776426}
+  m_Children: []
   m_Father: {fileID: 1814831118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -39827,6 +39876,7 @@ RectTransform:
   m_Children:
   - {fileID: 1620212391}
   - {fileID: 1814831118}
+  - {fileID: 1692776426}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -43906,17 +43956,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692776425}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 764159898}
-  m_Father: {fileID: 1224834234}
+  m_Father: {fileID: 1480527955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 246, y: -178}
+  m_AnchoredPosition: {x: 506, y: 232}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1692776427
@@ -44133,58 +44183,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6085855399756571354, guid: bde5abab5cf5644f28d5118931fa708e, type: 3}
   m_PrefabInstance: {fileID: 1699189675}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1699277953
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1699277954}
-  - component: {fileID: 1699277955}
-  m_Layer: 0
-  m_Name: EnemyManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1699277954
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1699277953}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 219629758}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1699277955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1699277953}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 402cfed182ab5465baa4d34c920d27bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sumEnemies: 0
-  maxEnemies: 3
-  enemySpawnInterval: 5
-  leafEnemies: 0
-  levelNameText: {fileID: 1608581425}
-  enemyleafText: {fileID: 272430327}
-  randomSeed: 0
-  playerNum: 0
 --- !u!1001 &1702168676
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44976,6 +44974,8 @@ GameObject:
   - component: {fileID: 1738175250}
   - component: {fileID: 1738175252}
   - component: {fileID: 1738175251}
+  - component: {fileID: 1738175254}
+  - component: {fileID: 1738175253}
   m_Layer: 0
   m_Name: Factory
   m_TagString: Untagged
@@ -45030,6 +45030,37 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9fc398549609548ebba66381e9559d40, type: 2}
   - {fileID: 11400000, guid: e038be583b6354ea7b8172137cd1d406, type: 2}
   - {fileID: 11400000, guid: a6623fde369f44043bdc3de491ea2105, type: 2}
+--- !u!114 &1738175253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738175249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 402cfed182ab5465baa4d34c920d27bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sumEnemies: 0
+  maxEnemies: 3
+  enemySpawnInterval: 5
+  leafEnemies: 0
+  lastSpawnTime: 0
+  enemyleafText: {fileID: 272430327}
+--- !u!114 &1738175254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738175249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdad6162e99b48a8afc76020aca65a60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activePlayers: []
 --- !u!1001 &1741473091
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51612,9 +51643,6 @@ MonoBehaviour:
   mapWidth: 26
   mapHeight: 26
   gridSize: 1
-  availableLevels:
-  - {fileID: 11400000, guid: 065ceb967801b4f4b9dbd2c27a7e41d4, type: 2}
-  currentLevel: 0
   floorPrefab: {fileID: 4558498362905121571, guid: bde5abab5cf5644f28d5118931fa708e, type: 3}
   wallPrefab: {fileID: 53463468377720036, guid: a764f54121fe64e738afd506325621c4, type: 3}
   breakableWallPrefab: {fileID: 7641732748996446786, guid: 1c11e25523fd9486195e7714cd810597, type: 3}
