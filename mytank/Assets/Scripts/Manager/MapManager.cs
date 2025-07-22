@@ -20,6 +20,7 @@ public enum MapType
         breakableWall,
         river,
         tree,
+        ice,
         home
     }
    
@@ -37,8 +38,9 @@ public enum MapType
         public GameObject floorPrefab;
         public GameObject wallPrefab;
         public GameObject breakableWallPrefab;
-        public GameObject riverPrefab;    // 新增：河流预制体
-        public GameObject treePrefab;     // 新增：树荫预制体
+        public GameObject riverPrefab;   
+        public GameObject treePrefab;     
+        public GameObject icePrefab;
         public GameObject homePrefab;
         public Transform wallsParent;
         
@@ -56,14 +58,30 @@ public enum MapType
                 { MapType.breakableWall, breakableWallPrefab },
                 { MapType.river, riverPrefab },      // 河流
                 { MapType.tree, treePrefab },       // 树荫
+                { MapType.ice, icePrefab },       // 树荫
                 { MapType.home, homePrefab },       // 树荫
             };
             
             
         }
-        
-       
-        
+
+
+        public bool HasTankInIce(int x, int y)
+        {
+            MapType type = GetWallType(x, y);
+            if (type == MapType.ice)
+                return true;
+            type=GetWallType(x, y+1);
+            if (type == MapType.ice)
+                return true;
+            type=GetWallType(x+1, y+1);
+            if (type == MapType.ice)
+                return true;
+            type=GetWallType(x+1, y);
+            if (type == MapType.ice)
+                return true;
+            return false;
+        }
         // 获取指定位置的墙类型
         public MapType GetWallType(int x, int y)
         {
@@ -181,7 +199,7 @@ public enum MapType
                     char tileChar = rows[y][x];
                     if (int.TryParse(tileChar.ToString(), out int tileType))
                     {
-                        if (tileType >= 0 && tileType <= 4)
+                        if (tileType >= 0 && tileType <= 6)
                         {
                             SetWallType(x, y, (MapType)tileType);
                         }
@@ -207,7 +225,7 @@ public enum MapType
                     
                     // 检查地形
                     MapType wallType = GetWallType(x, y);
-                    if (wallType != MapType.floor && wallType != MapType.tree)
+                    if (wallType != MapType.floor && wallType != MapType.tree&& wallType != MapType.ice)
                         return false;
                     
                     // 检查坦克碰撞
@@ -237,7 +255,8 @@ public enum MapType
                         return false;
                     
                     MapType wallType = GetWallType(x, y);
-                    if (wallType != MapType.floor && wallType != MapType.river && wallType != MapType.tree)
+                    if (wallType != MapType.floor && wallType != MapType.river 
+                                                  && wallType != MapType.tree&& wallType != MapType.ice)
                         return false;
                 }
             }

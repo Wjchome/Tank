@@ -74,5 +74,15 @@ public class BulletFactory : SingletonMono<BulletFactory>
      
     }
     
+    public void ClearAllBullets()
+    {
+        // 创建副本，避免遍历时修改集合
+        var bullets = new List<BulletController>(allBullets);
+        foreach (var bullet in bullets)
+        {
+            BulletPool.ReturnObject(bullet);
+        }
+        allBullets.Clear();
+    }
   
 }

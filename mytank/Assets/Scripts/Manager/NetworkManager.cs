@@ -99,7 +99,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     void ProcessServerMessage(ServerMessage message)
     {
-        LogMessage("[Server]", message);
+        if(message.EmptyFrame == null)
+            LogMessage("[Server]", message);
 
         if (message.FrameInputs != null)
         {

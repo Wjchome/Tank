@@ -21,9 +21,10 @@
 
         public void GameStart(GameStart gameStart)
         {
-            
+            Debug.Log(gameStart.Level);
                 currentLevel = availableLevels [gameStart.Level];
                 levelNameText.text = currentLevel.levelName;
+                BulletFactory.Instance.ClearAllBullets();
                 MapManager.Instance.LoadLevel(currentLevel);
                 EnemyManager.Instance.LoadLevel(currentLevel);
                PlayerManager.Instance.   OnGameStart(gameStart);

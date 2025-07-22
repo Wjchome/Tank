@@ -5,7 +5,7 @@ public class MapEditorTool : EditorWindow
 {
     private MapManager mapManager;
     private int selectedTool = 0; // 0清除, 1=不可破坏墙, 2=可破坏墙, 3=河流, 4=树荫
-    private string[] toolNames = { "清除", "不可破坏墙", "可破坏墙", "河流", "树荫" };
+    private string[] toolNames = { "清除", "不可破坏墙", "可破坏墙", "河流", "树荫","冰" };
     private bool isEditing = false;
     
     [MenuItem("Tools/Map Editor")]
@@ -78,6 +78,8 @@ public class MapEditorTool : EditorWindow
         mapManager.floorPrefab = (GameObject)EditorGUILayout.ObjectField("地面", mapManager.floorPrefab, typeof(GameObject), false);
         mapManager.riverPrefab = (GameObject)EditorGUILayout.ObjectField("河流", mapManager.riverPrefab, typeof(GameObject), false);
         mapManager.treePrefab = (GameObject)EditorGUILayout.ObjectField("树荫", mapManager.treePrefab, typeof(GameObject), false);
+        mapManager.icePrefab = (GameObject)EditorGUILayout.ObjectField("冰", mapManager.icePrefab, typeof(GameObject), false);
+        
         mapManager.wallsParent = (Transform)EditorGUILayout.ObjectField("墙父对象", mapManager.wallsParent, typeof(Transform), true);
         
         EditorGUILayout.Space();
@@ -293,6 +295,10 @@ public class MapEditorTool : EditorWindow
             case 4: // 树荫
                 prefab = mapManager.treePrefab;
                 tag = "Tree";
+                break;
+            case 5: // 
+                prefab = mapManager.icePrefab;
+                tag = "Ice";
                 break;
             case 0: // 清除
                 prefab = mapManager.floorPrefab;
@@ -527,6 +533,10 @@ public class MapEditorTool : EditorWindow
                 else if (child.CompareTag("Tree"))
                 {
                     tempMap[index] = MapType.tree;
+                }
+                else if (child.CompareTag("Ice"))
+                {
+                    tempMap[index] = MapType.ice;
                 }
             }
         }
