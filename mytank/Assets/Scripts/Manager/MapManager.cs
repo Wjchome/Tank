@@ -306,4 +306,23 @@ public enum MapType
             return !(x1 + w1 <= x2 || x2 + w2 <= x1 || 
                     y1 + h1 <= y2 || y2 + h2 <= y1);
         }
+
+
+
+        public List<Vector2Int> GetEmptyPositions()
+        {
+            var emptyPositions = new List<Vector2Int>();
+            for (int x = 0; x < mapWidth; x++)
+            {
+                for (int y = 0; y < mapHeight; y++)
+                {
+                    if (map[x, y] == MapType.floor)
+                    {
+                        emptyPositions.Add(new Vector2Int(x, y));
+                    }
+                }
+            }
+            return emptyPositions;
+        }
+        
     }

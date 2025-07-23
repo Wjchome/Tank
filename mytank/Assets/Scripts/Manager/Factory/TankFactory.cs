@@ -6,7 +6,7 @@ public class TankFactory : SingletonMono<TankFactory>
     public TankController tankPrefab; // 改为 TankController 类型
     public ObjectPool<TankController> TankPool { get; private set; }
 
-    public List<TankController> allTanks { get; private set; }
+    public List<TankController> activeTanks;
     
     
     public List<TankData> orignalDatas;
@@ -17,7 +17,7 @@ public class TankFactory : SingletonMono<TankFactory>
             onSpawn: CreateTank,
             onDespawn: KillTank
         );
-        allTanks = new List<TankController>();
+        activeTanks = new List<TankController>();
     }
 
     private void CreateTank(TankController tank)
@@ -26,7 +26,7 @@ public class TankFactory : SingletonMono<TankFactory>
         tank.lastMoveTime=0;
         tank.lastShootTime = 0;
         tank.lastAnimStartTime = 0;
-        allTanks.Add(tank);
+        activeTanks.Add(tank);
         tank.gameObject.SetActive(true);
         
         
@@ -40,10 +40,10 @@ public class TankFactory : SingletonMono<TankFactory>
         if (a != null)
         {
             Destroy(a);
-            FoodFactory.Instance.Initialize();
+            FoodFactory.Instance.Initialize(tank.random);
         }
         
-        allTanks.Remove(tank);
+        activeTanks.Remove(tank);
     }
 
 

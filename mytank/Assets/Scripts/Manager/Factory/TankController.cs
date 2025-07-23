@@ -154,7 +154,17 @@ public class TankController : MonoBehaviour
                 transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
                 canMove = true;
             }
-        
+
+            if (isPlayer)
+            {
+                var food = FoodFactory.Instance.HasFoodOn(targetPos.x, targetPos.y);
+                if (food != null)
+                {
+                    food.OnPropPickup(this);
+                }
+            }
+            
+            
             targetPos = Pos + new Vector2Int(dx, dy);
             
             if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,PlayerID))
@@ -170,7 +180,16 @@ public class TankController : MonoBehaviour
                 transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
                 canMove = true;
             }
+            if (isPlayer)
+            { var food = FoodFactory.Instance.HasFoodOn(targetPos.x, targetPos.y);
+                if (food != null)
+                {
+                    food.OnPropPickup(this);
+                }
+                
+            }
             
+           
             
             TankDirection = direction;
             Vector3 rotation = Vector3.zero;
@@ -203,7 +222,16 @@ public class TankController : MonoBehaviour
                 transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
                 canMove = true;
             }
-        
+
+            if (isPlayer)
+            {
+                var food = FoodFactory.Instance.HasFoodOn(targetPos.x, targetPos.y);
+                if (food != null)
+                {
+                    food.OnPropPickup(this);
+                }
+            }
+           
             TankDirection = direction;
             Vector3 rotation = Vector3.zero;
             switch (direction)
@@ -245,6 +273,13 @@ public class TankController : MonoBehaviour
         }
     }
 
+    public void AddHP(int num)
+    {
+        currentData.HP += num;
+        playerPanelUI?.UpdateUI(this); // 更新血量显示
+        
+    }
+    
     public void DamageHP(int damage,string attackerID)
     {
         currentData.HP -= damage;

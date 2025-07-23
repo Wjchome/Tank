@@ -74,7 +74,7 @@ public class BulletController : MonoBehaviour
                 isShouldDestroy = true;
             }
 
-            foreach (var bullet in BulletFactory.Instance.allBullets)
+            foreach (var bullet in BulletFactory.Instance.activeBullets)
             {
                 if(bullet==this)continue;
                 if (bullet.Pos == Pos && bullet.isPlayerBullet != isPlayerBullet)
