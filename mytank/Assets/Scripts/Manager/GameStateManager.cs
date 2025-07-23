@@ -4,7 +4,7 @@ using Tankgame;
 
 public class GameStateManager : SingletonMono<GameStateManager>
 {
-    public Dictionary<string, TankController> allTanks = new Dictionary<string, TankController>();
+    
 
     void Start()
     {
@@ -24,7 +24,15 @@ public class GameStateManager : SingletonMono<GameStateManager>
     {
         foreach (var input in frameInputs.Inputs)
         {
-            ApplyInputToTank(allTanks[input.PlayerId], input);
+            foreach (var tank in PlayerManager.Instance.activePlayers)
+            {
+                if (tank.tankID == input.PlayerId)
+                {
+                    ApplyInputToTank(tank, input);
+                    
+                }
+                
+            }
         }
     }
 

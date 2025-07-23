@@ -37,12 +37,12 @@ public class BulletFactory : SingletonMono<BulletFactory>
     }
 
         
-    public void Initialize(Direction direction, string ownerID, bool isPlayerBullet )
+    public void Initialize(Direction direction, TankController tank )
     {
         BulletController bullet = BulletPool.GetObject();
         bullet.direction = direction;
-        bullet.ownerID = ownerID;
-        bullet.isPlayerBullet=isPlayerBullet;
+        bullet.ownerTank=tank;
+        bullet.isPlayerBullet = tank.isPlayer;
         // 设置子弹朝向
         Vector3 rotation = Vector3.zero;
         bullet.dir = direction.ToVector2Int();  
@@ -64,14 +64,13 @@ public class BulletFactory : SingletonMono<BulletFactory>
         }
         bullet.transform.rotation = Quaternion.Euler(rotation);
         
-        // 根据坦克位置计算子弹初始位置
-        TankController ownerTank = GameStateManager.Instance.allTanks[ownerID];
+     
        
-        bullet.Pos = ownerTank.Pos;
+        bullet.Pos = tank.Pos;
             
             // 设置子弹中心位置
             bullet.transform.position = bullet.GetCenter();
-     bullet.isCanBreakWall=ownerTank.isCanBreakWall;
+     bullet.isCanBreakWall=tank.isCanBreakWall;
     }
     
     public void ClearAllBullets()

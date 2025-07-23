@@ -10,7 +10,7 @@ public class BulletController : MonoBehaviour
 {
 
     public Direction direction;
-     public string ownerID;
+     public TankController ownerTank;
 
     public bool isPlayerBullet;
 
@@ -71,7 +71,7 @@ public class BulletController : MonoBehaviour
             }
             else if (tank != null && tank.isPlayer!= isPlayerBullet)
             {
-                tank.DamageHP(1,ownerID);
+                tank.DamageHP(1,ownerTank);
                 isShouldDestroy = true;
             }
 

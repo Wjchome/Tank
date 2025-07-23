@@ -23,7 +23,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public TextMeshProUGUI enemyleafText;
     public System.Random random;
 
-    public int specialRange = 1;
+    public int specialRange = 5;
 
     public long pauseEndFrame=0;
     
@@ -116,21 +116,18 @@ public class EnemyManager : SingletonMono<EnemyManager>
         int spawnType= random.Next(1, 5);
         //随机坦克是否特殊
         int a = random.Next(0, specialRange);
-        TankController enemyTank=null;
+      
         if (a == 0)
         {
-            enemyTank= TankFactory.Instance.InitializeSpecial(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
+            TankFactory.Instance.InitialSpecialEnemy(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
                  spawnType);
         }
         else
         {
-            enemyTank= TankFactory.Instance.Initialize(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
-                Color.red, false, spawnType);
+            TankFactory.Instance.InitialEnemy(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
+                Color.red, spawnType);
         }
         
-        activeEnemies.Add(enemyTank);
-        
-        Debug.Log($"Spawned enemy {enemyID} at position {spawnPos}");
     }
     
     bool IsPositionOccupied(Vector2Int pos)
@@ -159,10 +156,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
     {
         foreach (var enemy in activeEnemies)
         {
-            if (enemy != null)
-            {
+            
                 TankFactory.Instance.TankPool.ReturnObject(enemy);
-            }
+            
         }
         activeEnemies.Clear();
     }
@@ -178,6 +174,13 @@ public class EnemyManager : SingletonMono<EnemyManager>
        
             BulletFactory.Instance.ClearAllBullets();
             FoodFactory.Instance.ClearAllFoods();
+            TankFactory.Instance.ClearAllTank();
+            PlayerManager.Instance.activePlayers.Clear();
+            EnemyManager.Instance.activeEnemies.Clear();
+            
+            
+            Debug.Log(TankFactory.Instance.TankPool.GetSize());
+            Debug.Log(TankFactory.Instance.activeTanks.Count);
     }
 
   

@@ -61,7 +61,7 @@
         {
             foreach (var enemy in EnemyManager.Instance.activeEnemies.ToList())
             {
-                enemy.Dead(tank.PlayerID);
+                enemy.Dead(tank);
             }
 
         }
@@ -71,7 +71,7 @@
             int targetTime = 10;
             long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(targetTime/Constant.FrameInterval);
          
-            tank.InvincibleFrame=targetFrame;
+            tank.invincibleFrame=targetFrame;
 
         }
 

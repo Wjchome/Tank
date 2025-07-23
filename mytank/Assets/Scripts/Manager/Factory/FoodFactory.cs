@@ -13,13 +13,7 @@ public enum FoodType
     Shovel,
     Star,
     Pistol
-    /*战车 +1h
-    怀表 暂停敌方
-    炸弹 秒杀全场
-    钢盔 10秒无敌
-    工兵铲 基地附近变刚
-    星星 一次射击两次 
-    手枪 二次可打刚*/
+
 }
     public class FoodFactory:SingletonMono<FoodFactory>
     {
@@ -33,7 +27,7 @@ public enum FoodType
            foodPool = new ObjectPool<FoodController>(
                prefab:foodPrefab,
                onSpawn:CreateFood,
-               onDespawn:KillBullet
+               onDespawn:KillFood
            );
            foodToSprite = new Dictionary<FoodType, Sprite>()
            {
@@ -54,7 +48,7 @@ public enum FoodType
        }
 
 
-    private void KillBullet(FoodController food)
+    private void KillFood(FoodController food)
     {
         food.gameObject.SetActive(false);
         activeFood.Remove(food);

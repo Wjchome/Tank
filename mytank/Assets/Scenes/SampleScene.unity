@@ -23336,10 +23336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   availableLevels:
-  - {fileID: 11400000, guid: 065ceb967801b4f4b9dbd2c27a7e41d4, type: 2}
-  - {fileID: 11400000, guid: 052ae4250cb194bdea2f41bb14d8ab22, type: 2}
-  - {fileID: 11400000, guid: 2ff2ba278b5df4d69b4c182c108a6ffa, type: 2}
-  - {fileID: 11400000, guid: 50f1dffb7d90c44c0978d80ca4c3ba5d, type: 2}
+  - {fileID: 11400000, guid: 0909b9851c129425cb9bf0ba7c8c28b5, type: 2}
   currentLevel: {fileID: 0}
   levelNameText: {fileID: 1608581425}
 --- !u!1001 &846078338
@@ -44700,7 +44697,7 @@ MonoBehaviour:
   leafEnemies: 0
   lastSpawnTime: 0
   enemyleafText: {fileID: 272430327}
-  specialRange: 1
+  specialRange: 5
   pauseEndFrame: 0
 --- !u!114 &1738175254
 MonoBehaviour:

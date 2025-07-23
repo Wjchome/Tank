@@ -30,7 +30,7 @@ public class TankFactory : SingletonMono<TankFactory>
         tank.lastAnimStartTime = 0;
         tank.isCanBreakWall = false;
         tank.isCanShootTwice = false;
-        tank.InvincibleFrame = 0;
+        tank.invincibleFrame = 0;
         tank.killNum = 0;
         activeTanks.Add(tank);
         tank.gameObject.SetActive(true);
@@ -46,26 +46,28 @@ public class TankFactory : SingletonMono<TankFactory>
         if (a != null)
         {
             Destroy(a);
-            FoodFactory.Instance.Initialize(tank.random);
+            if(NetworkManager.Instance.isGameing)
+                FoodFactory.Instance.Initialize(tank.random);
         }
         
         activeTanks.Remove(tank);
     }
 
 
-    public TankController Initialize(string playerID, string playerName, int x, int y, Color color, bool isPlayer,
-        int dataIndex)
+  
+    
+    public TankController InitialPlayer(string tankID, string tankName, int x, int y, Color color)
     {
         TankController temp=TankPool.GetObject();
 
 
-        temp. PlayerID = playerID;
-        temp. TankDirection = Direction.Up;
-        temp. IsLocalPlayer = playerID == NetworkManager.Instance.playerID;
+        temp. tankID = tankID;
+        temp. tankDirection = Direction.Up;
+        temp. IsLocalPlayer = tankID == NetworkManager.Instance.playerID;
         temp. Pos = new Vector2Int(x, y); // 左下角坐标
         
-        temp. isPlayer = isPlayer;
-        temp. playerName = playerName;
+        temp. isPlayer = true;
+        temp. playerName = tankName;
         
         // 设置坦克中心位置
         temp.  transform.position = temp. GetCenter();
@@ -73,43 +75,75 @@ public class TankFactory : SingletonMono<TankFactory>
         temp.  GetComponent<SpriteRenderer>().material.color = color;
         int seed =
             (int)(NetworkManager.Instance.seed +
-            NetworkManager.Instance.currentFrame);
+                  NetworkManager.Instance.currentFrame);
         
         temp.random = new System.Random( seed );
         
-        GameStateManager.Instance.allTanks[playerID] = temp;
+   
         
         temp. currentData=ScriptableObject.CreateInstance<TankData>();
-        temp. currentData.InitializeTankData(orignalDatas[dataIndex]);
+        temp. currentData.InitializeTankData(orignalDatas[0]);
         
-        if (isPlayer)
-        {
+     
             
-            temp. playerPanelUI= Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent).GetComponent<PlayerPanelUI>();
-            temp. playerPanelUI.UpdateUI(temp);
-            temp. playerPanelUI.SetPos(PlayerManager.Instance.activePlayers.Count);  
-            temp.animType = 1;
+        temp. playerPanelUI= Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent).GetComponent<PlayerPanelUI>();
+        temp. playerPanelUI.UpdateUI(temp);
+        temp. playerPanelUI.SetPos(PlayerManager.Instance.activePlayers.Count);  
+        temp.animType = 1;
             
-        }
-        else
-        {
-            temp.animType = dataIndex;
-
-        }
+        PlayerManager.Instance.activePlayers.Add(temp);
+       
 
 
         return temp;
     }
 
 
-    public TankController InitializeSpecial(string playerID, string playerName, int x, int y, 
-        int dataIndex)
+    public TankController InitialEnemy(string tankID, string tankName, int x, int y, Color color, int dataIndex)
     {
         TankController temp=TankPool.GetObject();
 
+       
 
-        temp. PlayerID = playerID;
-        temp. TankDirection = Direction.Up;
+        temp. tankID = tankID;
+        temp. tankDirection = Direction.Up;
+        temp. IsLocalPlayer = tankID == NetworkManager.Instance.playerID;
+        temp. Pos = new Vector2Int(x, y); // 左下角坐标
+        
+        temp. isPlayer = false;
+        temp. playerName = tankName;
+        
+        // 设置坦克中心位置
+        temp.  transform.position = temp. GetCenter();
+        temp. playerColor= color;
+        temp.  GetComponent<SpriteRenderer>().material.color = color;
+        int seed =
+            (int)(NetworkManager.Instance.seed +
+                  NetworkManager.Instance.currentFrame);
+        
+        temp.random = new System.Random( seed );
+
+        
+        temp. currentData=ScriptableObject.CreateInstance<TankData>();
+        temp. currentData.InitializeTankData(orignalDatas[dataIndex]);
+        
+      
+            temp.animType = dataIndex;
+
+        
+        EnemyManager.Instance.activeEnemies.Add(temp);
+
+
+        return temp;
+    }
+    public TankController InitialSpecialEnemy(string playerID, string playerName, int x, int y, 
+        int dataIndex)
+    {
+        TankController temp=TankPool.GetObject();
+        
+
+        temp. tankID = playerID;
+        temp. tankDirection = Direction.Up;
         temp. IsLocalPlayer = playerID == NetworkManager.Instance.playerID;
         temp. Pos = new Vector2Int(x, y); // 左下角坐标
         
@@ -125,7 +159,7 @@ public class TankFactory : SingletonMono<TankFactory>
         
         temp.random = new System.Random( seed );
         
-        GameStateManager.Instance.allTanks[playerID] = temp;
+   
         
         temp. currentData=ScriptableObject.CreateInstance<TankData>();
         temp. currentData.InitializeTankData(orignalDatas[dataIndex]);
@@ -135,8 +169,19 @@ public class TankFactory : SingletonMono<TankFactory>
 
         temp.gameObject.AddComponent<Special>();
 
-
+        EnemyManager.Instance.activeEnemies.Add(temp);
         return temp;
+    }
+    
+    public void ClearAllTank()
+    {
+        // 创建副本，避免遍历时修改集合
+        var tanks = new List<TankController>(activeTanks);
+        foreach (var tank in tanks)
+        {
+           TankPool.ReturnObject(tank);
+        }
+ 
     }
     
         

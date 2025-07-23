@@ -170,21 +170,7 @@ public enum MapType
             Debug.Log("Map cleared successfully!");
         }
 
-        public TankController GetTankController(int x, int y)
-        {
-            foreach (var kv in GameStateManager.Instance.allTanks)
-            {
-                var tank = kv.Value;
-                
-
-                if (tank.Pos.x == x && tank.Pos.y == y)
-                {
-                    return kv.Value;
-                }
-            }
-            return null;
-        }
-
+    
       
         // 加载关卡
         public void LoadLevel(Level level)
@@ -259,10 +245,9 @@ public enum MapType
                         return false;
                     
                     // 检查坦克碰撞
-                    foreach (var kv in GameStateManager.Instance.allTanks)
+                    foreach (var tank in TankFactory.Instance.activeTanks)
                     {
-                        var tank = kv.Value;
-                        if(tank.PlayerID==selfID)continue;
+                        if(tank.tankID==selfID)continue;
                         if (IsRectOverlap(startX, startY, width, height, 
                                         tank.Pos.x, tank.Pos.y, 2, 2))
                         {
@@ -312,9 +297,9 @@ public enum MapType
         // 获取区域内的坦克
         public TankController GetTankInArea(int startX, int startY, int width, int height)
         {
-            foreach (var kv in GameStateManager.Instance.allTanks)
+            foreach (var tank in TankFactory.Instance.activeTanks)
             {
-                var tank = kv.Value;
+              
                 if (IsRectOverlap(startX, startY, width, height, 
                                 tank.Pos.x, tank.Pos.y, 2, 2))
                 {

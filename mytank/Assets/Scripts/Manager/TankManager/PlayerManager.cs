@@ -24,11 +24,11 @@
     
         public void ClearAllPlayers()
         {
-            foreach (var enemy in activePlayers)
+            foreach (var player in activePlayers)
             {
-                if (enemy != null)
+                if (player != null)
                 {
-                    TankFactory.Instance.TankPool.ReturnObject(enemy);
+                    TankFactory.Instance.TankPool.ReturnObject(player);
 
                 }
             }
@@ -54,9 +54,9 @@
                     playerInfo.ColorB / 255f
                 );
                 
-                var tank = TankFactory.Instance.Initialize(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
-                    spawnPoint.y, color, true, 0);
-                activePlayers.Add(tank);
+                TankFactory.Instance.InitialPlayer(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
+                    spawnPoint.y, color);
+            
             }
         }
         public void RemovePlayer(TankController tank)
@@ -79,7 +79,13 @@
             
             BulletFactory.Instance.ClearAllBullets();
             FoodFactory.Instance.ClearAllFoods();
-
+            TankFactory.Instance.ClearAllTank();
+            
+            PlayerManager.Instance.activePlayers.Clear();
+            EnemyManager.Instance.activeEnemies.Clear();
+            
+            Debug.Log(TankFactory.Instance.TankPool.GetSize());
+            Debug.Log(TankFactory.Instance.activeTanks.Count);
 
         }
     }

@@ -14,8 +14,8 @@ public class TankController : MonoBehaviour
     public TankData currentData;
 
 
-    public string PlayerID;
-    public Direction TankDirection;
+    public string tankID;
+    public Direction tankDirection;
 
     public Vector2Int Pos;
     // 坐标系统辅助方法
@@ -53,12 +53,13 @@ public class TankController : MonoBehaviour
     
     //本地动画机
     public Animator animator;
+    public SpriteRenderer spriteRenderer;
     
     public System.Random random = new System.Random();
 
     public int animType = 1;
     
-    public long InvincibleFrame=0;
+    public long invincibleFrame=0;
 
     public bool isCanShootTwice = false;
 
@@ -67,8 +68,23 @@ public class TankController : MonoBehaviour
     
     public bool isCanBreakWall = false;
 
+    private Vector3 size;
+    private void Awake()
+    {
+        size=transform.localScale;
+    }
+
     void Update()
     {
+        if (invincibleFrame > NetworkManager.Instance.currentFrame)
+        {
+            transform.localScale =size* 1.5f;
+        }
+        else
+        {
+            transform.localScale =size;
+
+        }
         
         CheckMovementState();
         if (IsLocalPlayer && !isDead)
@@ -84,7 +100,7 @@ public class TankController : MonoBehaviour
         }
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
-            BulletFactory.Instance.Initialize(secondDir, PlayerID, isPlayer);
+            BulletFactory.Instance.Initialize(secondDir, this);
             secondShootFrame = -1; // 重置
         }
     }
@@ -155,7 +171,7 @@ public class TankController : MonoBehaviour
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
 
-            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,PlayerID))
+            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
             {
                 Pos = targetPos;
             
@@ -181,7 +197,7 @@ public class TankController : MonoBehaviour
             
             targetPos = Pos + new Vector2Int(dx, dy);
             
-            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,PlayerID))
+            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
             {
                 Pos = targetPos;
             
@@ -205,7 +221,7 @@ public class TankController : MonoBehaviour
             
            
             
-            TankDirection = direction;
+            tankDirection = direction;
             Vector3 rotation = Vector3.zero;
             switch (direction)
             {
@@ -223,7 +239,7 @@ public class TankController : MonoBehaviour
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
         
             // 检查2x2区域是否可通行
-            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,PlayerID))
+            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
             {
                 Pos = targetPos;
             
@@ -246,7 +262,7 @@ public class TankController : MonoBehaviour
                 }
             }
            
-            TankDirection = direction;
+            tankDirection = direction;
             Vector3 rotation = Vector3.zero;
             switch (direction)
             {
@@ -264,13 +280,13 @@ public class TankController : MonoBehaviour
   
     public void Shoot()
     {
-        BulletFactory.Instance.Initialize(TankDirection,PlayerID,isPlayer);
+        BulletFactory.Instance.Initialize(tankDirection,this);
         if (isCanShootTwice)
         {
             float interval = 0.1f;
             secondShootFrame = NetworkManager.Instance.currentFrame +
                                Mathf.RoundToInt(interval / Constant.FrameInterval);
-                               secondDir=TankDirection;
+                               secondDir=tankDirection;
         }
     }
 
@@ -300,9 +316,9 @@ public class TankController : MonoBehaviour
         
     }
     
-    public void DamageHP(int damage,string attackerID)
+    public void DamageHP(int damage,TankController attacker)
     {
-        if(InvincibleFrame>=NetworkManager.Instance.currentFrame)return;
+        if(invincibleFrame>=NetworkManager.Instance.currentFrame)return;
         
         
         currentData.HP -= damage;
@@ -310,11 +326,11 @@ public class TankController : MonoBehaviour
         
         if (currentData.HP <= 0)
         {
-            Dead(attackerID);
+            Dead(attacker);
         }
     }
 
-    public void Dead(string attackerID)
+    public void Dead(TankController attacker)
     {
         isDead = true;
         Pos=new Vector2Int(-2,-2);
@@ -336,8 +352,11 @@ public class TankController : MonoBehaviour
             TankFactory.Instance.TankPool.ReturnObject(this);
 
         });
-        if(attackerID!=null)
-            GameStateManager.Instance.allTanks[attackerID].Kill();
+        if (attacker != null)
+        {
+            attacker.Kill();
+        }
+        
         
     }
 
@@ -360,12 +379,12 @@ public class TankController : MonoBehaviour
         
         if (frameTime - lastMoveTime > currentData.moveInterval)
         {
-            if (!MoveBy(TankDirection))
+            if (!MoveBy(tankDirection))
             {
             
                 int a = random.Next(0, 4);
                 
-                TankDirection = (Direction)a;
+                tankDirection = (Direction)a;
                 
                 // 使用帧时间更新
                 lastMoveTime = frameTime;

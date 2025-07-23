@@ -37,10 +37,16 @@ public class ObjectPool<T> where T : MonoBehaviour
 
     public void ReturnObject(T obj)
     {
-        obj.gameObject.SetActive(false);
+        
   
         
         onDespawn?.Invoke(obj);
         objectPool.Enqueue(obj);
+    }
+    
+    
+    public int GetSize()
+    {
+        return objectPool.Count;
     }
 }

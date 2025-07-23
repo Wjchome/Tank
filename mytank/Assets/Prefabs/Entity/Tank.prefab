@@ -102,8 +102,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentData: {fileID: 0}
-  PlayerID: 
-  TankDirection: 0
+  tankID: 
+  tankDirection: 0
   Pos: {x: 0, y: 0}
   killNum: 0
   IsLocalPlayer: 0
@@ -118,6 +118,13 @@ MonoBehaviour:
   playerPanelUI: {fileID: 0}
   isDead: 0
   animator: {fileID: 8205607647078584822}
+  spriteRenderer: {fileID: 688619496750072981}
+  animType: 1
+  InvincibleFrame: 0
+  isCanShootTwice: 0
+  secondShootFrame: -1
+  secondDir: 0
+  isCanBreakWall: 0
 --- !u!95 &8205607647078584822
 Animator:
   serializedVersion: 7
