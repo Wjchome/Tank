@@ -22,8 +22,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
     private int enemyIndex = 0;
     public TextMeshProUGUI enemyleafText;
     public System.Random random;
-    
- 
+
+    public int specialRange = 1;
 
     public void LoadLevel(Level levelData)
     {
@@ -108,10 +108,22 @@ public class EnemyManager : SingletonMono<EnemyManager>
         // 创建敌人坦克
         string enemyID = $"enemy_{enemyIndex++}";
    
-// 使用确定性随机选择生成点
+        // 使用确定性随机选择生成坦克类型
         int spawnType= random.Next(1, 5);
-        var  enemyTank= TankFactory.Instance.Initialize(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
-            Color.red, false, spawnType);
+        //随机坦克是否特殊
+        int a = random.Next(0, specialRange);
+        TankController enemyTank=null;
+        if (a == 0)
+        {
+            enemyTank= TankFactory.Instance.InitializeSpecial(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
+                 spawnType);
+        }
+        else
+        {
+            enemyTank= TankFactory.Instance.Initialize(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
+                Color.red, false, spawnType);
+        }
+        
         activeEnemies.Add(enemyTank);
         
         Debug.Log($"Spawned enemy {enemyID} at position {spawnPos}");

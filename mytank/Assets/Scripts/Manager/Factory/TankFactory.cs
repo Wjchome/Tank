@@ -36,6 +36,12 @@ public class TankFactory : SingletonMono<TankFactory>
     {
         tank.gameObject.SetActive(false);
         tank.playerPanelUI = null;
+        var a = tank.GetComponent<Special>();
+        if (a != null)
+        {
+            Destroy(a);
+            FoodFactory.Instance.Initialize();
+        }
         
         allTanks.Remove(tank);
     }
@@ -86,7 +92,44 @@ public class TankFactory : SingletonMono<TankFactory>
 
         return temp;
     }
+
+
+    public TankController InitializeSpecial(string playerID, string playerName, int x, int y, 
+        int dataIndex)
+    {
+        TankController temp=TankPool.GetObject();
+
+
+        temp. PlayerID = playerID;
+        temp. TankDirection = Direction.Up;
+        temp. IsLocalPlayer = playerID == NetworkManager.Instance.playerID;
+        temp. Pos = new Vector2Int(x, y); // 左下角坐标
         
+        temp. isPlayer = false;
+        temp. playerName = playerName;
         
+        // 设置坦克中心位置
+        temp.  transform.position = temp. GetCenter();
+        
+        int seed =
+            (int)(NetworkManager.Instance.seed +
+                  NetworkManager.Instance.currentFrame);
+        
+        temp.random = new System.Random( seed );
+        
+        GameStateManager.Instance.allTanks[playerID] = temp;
+        
+        temp. currentData=ScriptableObject.CreateInstance<TankData>();
+        temp. currentData.InitializeTankData(orignalDatas[dataIndex]);
+        
+
+        temp.animType = dataIndex;
+
+        temp.gameObject.AddComponent<Special>();
+
+
+        return temp;
+    }
+    
         
 }

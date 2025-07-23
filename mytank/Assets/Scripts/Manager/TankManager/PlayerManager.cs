@@ -53,6 +53,7 @@
                     playerInfo.ColorG / 255f,
                     playerInfo.ColorB / 255f
                 );
+                
                 var tank = TankFactory.Instance.Initialize(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
                     spawnPoint.y, color, true, 0);
                 activePlayers.Add(tank);

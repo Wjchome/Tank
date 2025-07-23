@@ -66,6 +66,12 @@ MonoBehaviour:
     10000000000000000000000001
 
     11111111111111111111111111'
-  enemyTankPawns: []
-  playerTankPawns: []
-  enemyNum: 0
+  enemyTankPawns:
+  - {x: 1, y: 23}
+  - {x: 23, y: 23}
+  playerTankPawns:
+  - {x: 1, y: 1}
+  - {x: 23, y: 1}
+  - {x: 10, y: 1}
+  - {x: 14, y: 1}
+  enemyNum: 12
