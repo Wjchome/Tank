@@ -37,7 +37,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         lastSpawnTime = 0f;
         enemyleafText.text= leafEnemies.ToString();
         enemyIndex = 0;
-        
+        pauseEndFrame = 0;
         // 清理现有敌人
         ClearAllEnemies();
         
@@ -176,6 +176,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
        GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
             NetworkManager.Instance.isGameing = false;
        
+            BulletFactory.Instance.ClearAllBullets();
+            FoodFactory.Instance.ClearAllFoods();
     }
 
   

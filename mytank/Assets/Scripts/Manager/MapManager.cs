@@ -1,4 +1,5 @@
 
+    using System;
     using UnityEngine;
     using System.Collections.Generic;
 
@@ -48,7 +49,9 @@ public enum MapType
         public Dictionary<MapType,GameObject> typeToPrefab;
         
         private GameObject[,] gridObjects; // 记录每个格子的实例
-        
+
+        public long ironWallEndFrames;
+        public bool isChange;
         private void Awake()
         {
             typeToPrefab = new Dictionary<MapType, GameObject>()
@@ -65,6 +68,31 @@ public enum MapType
             
         }
 
+        private void Update()
+        {
+          
+            
+            if (isChange&&NetworkManager.Instance.currentFrame >= ironWallEndFrames)
+            {
+                List<Vector2Int> pos = new List<Vector2Int>
+                {
+                    new Vector2Int(12, 1),
+                    new Vector2Int(13, 1),
+                    new Vector2Int(12, 2),
+                    new Vector2Int(13, 2),
+                };
+                for (int i = 10; i <= 15; i++)
+                {
+                    for (int j = 1; j <= 4; j++)
+                    {
+                        Vector2Int pos1 = new Vector2Int(i, j);
+                        if(!pos.Contains(pos1))
+                            SetWallType(i, j, MapType.breakableWall);
+                    }
+                }
+                isChange = false;
+            }
+        }
 
         public bool HasTankInIce(int x, int y)
         {
@@ -166,7 +194,9 @@ public enum MapType
             // 设置地图尺寸
             mapWidth = level.width;
              mapHeight = level.height;
-            
+             //复原buff
+            ironWallEndFrames=0;
+            isChange=false;
             // 清除现有地图
              ClearMap();
             

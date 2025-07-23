@@ -10,6 +10,8 @@ public class TankFactory : SingletonMono<TankFactory>
     
     
     public List<TankData> orignalDatas;
+    
+    
     private void Awake()
     {
         TankPool = new ObjectPool<TankController>(
@@ -26,6 +28,10 @@ public class TankFactory : SingletonMono<TankFactory>
         tank.lastMoveTime=0;
         tank.lastShootTime = 0;
         tank.lastAnimStartTime = 0;
+        tank.isCanBreakWall = false;
+        tank.isCanShootTwice = false;
+        tank.InvincibleFrame = 0;
+        tank.killNum = 0;
         activeTanks.Add(tank);
         tank.gameObject.SetActive(true);
         

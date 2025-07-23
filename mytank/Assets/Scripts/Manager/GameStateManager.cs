@@ -9,6 +9,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
     void Start()
     {
         NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
+        
     }
 
     void OnDestroy()

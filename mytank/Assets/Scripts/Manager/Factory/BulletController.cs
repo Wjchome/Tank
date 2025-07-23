@@ -35,6 +35,7 @@ public class BulletController : MonoBehaviour
     public bool isShouldDestroy = false;
     public float animTime = 0.3f;
    
+    public bool isCanBreakWall = false;
     
   
     public void UpdatePosition(int x, int y)
@@ -47,7 +48,7 @@ public class BulletController : MonoBehaviour
 
     private void Update()
     {
-        if (isShouldDestroy) return;
+        if (isShouldDestroy ) return;
        
         // 使用帧数进行时间判断，确保所有客户端同步
         long currentFrame = NetworkManager.Instance.currentFrame;
@@ -101,48 +102,56 @@ public class BulletController : MonoBehaviour
             {
                 if (dir == new Vector2Int(0, -1))
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y - 1) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y - 1) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x, Pos.y - 1) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x, Pos.y - 1, MapType.floor);
                     }
 
-                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y - 1) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y - 1) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x+1, Pos.y - 1) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x+1, Pos.y - 1, MapType.floor);
                     }
                 }
                 else if (dir == new Vector2Int(0, 1))
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y +2) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y +2) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x, Pos.y+2) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x, Pos.y +2, MapType.floor);
                     }
 
-                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y +2) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y +2) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x+1, Pos.y +2) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x+1, Pos.y +2, MapType.floor);
                     }
                 }
                 else if (dir == new Vector2Int(1, 0))
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y ) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y ) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x+2, Pos.y ) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x+2, Pos.y , MapType.floor);
                     }
 
-                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y +1) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y +1) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x+2, Pos.y +1) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x+2, Pos.y +1, MapType.floor);
                     }
                 }
                 else if (dir == new Vector2Int(-1, 0))
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y ) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y ) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x-1, Pos.y ) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x-1, Pos.y , MapType.floor);
                     }
 
-                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y +1) == MapType.breakableWall)
+                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y +1) == MapType.breakableWall
+                        ||(isCanBreakWall&&MapManager.Instance.GetWallType(Pos.x-1, Pos.y + 1) == MapType.wall))
                     {
                         MapManager.Instance.SetWallType(Pos.x+-1, Pos.y +1, MapType.floor);
                     }

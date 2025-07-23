@@ -58,11 +58,18 @@ public class TankController : MonoBehaviour
 
     public int animType = 1;
     
-  
+    public long InvincibleFrame=0;
+
+    public bool isCanShootTwice = false;
+
+    public long secondShootFrame = -1;
+    public Direction secondDir;
+    
+    public bool isCanBreakWall = false;
 
     void Update()
     {
-        // 检查移动状态
+        
         CheckMovementState();
         if (IsLocalPlayer && !isDead)
         {
@@ -74,6 +81,11 @@ public class TankController : MonoBehaviour
         if (!isPlayer&&!isDead&&NetworkManager.Instance.currentFrame>=EnemyManager.Instance.pauseEndFrame)
         {
             AiControls();
+        }
+        if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
+        {
+            BulletFactory.Instance.Initialize(secondDir, PlayerID, isPlayer);
+            secondShootFrame = -1; // 重置
         }
     }
 
@@ -253,7 +265,13 @@ public class TankController : MonoBehaviour
     public void Shoot()
     {
         BulletFactory.Instance.Initialize(TankDirection,PlayerID,isPlayer);
-       
+        if (isCanShootTwice)
+        {
+            float interval = 0.1f;
+            secondShootFrame = NetworkManager.Instance.currentFrame +
+                               Mathf.RoundToInt(interval / Constant.FrameInterval);
+                               secondDir=TankDirection;
+        }
     }
 
     void CheckMovementState()
@@ -284,6 +302,9 @@ public class TankController : MonoBehaviour
     
     public void DamageHP(int damage,string attackerID)
     {
+        if(InvincibleFrame>=NetworkManager.Instance.currentFrame)return;
+        
+        
         currentData.HP -= damage;
         playerPanelUI?.UpdateUI(this); // 更新血量显示
         
@@ -296,7 +317,7 @@ public class TankController : MonoBehaviour
     public void Dead(string attackerID)
     {
         isDead = true;
-        Pos=new Vector2Int(-1,-1);
+        Pos=new Vector2Int(-2,-2);
 
         GetComponent<SpriteRenderer>().material.color = Color.white;
         animator.Play("BigBoom");

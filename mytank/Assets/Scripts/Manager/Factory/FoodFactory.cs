@@ -112,4 +112,15 @@ public enum FoodType
         return null;
     }
     
+    public void ClearAllFoods()
+    {
+        // 创建副本，避免遍历时修改集合
+        var foods = new List<FoodController>(activeFood);
+        foreach (var food in foods)
+        {
+            foodPool.ReturnObject(food);
+        }
+ 
+    }
+    
     }

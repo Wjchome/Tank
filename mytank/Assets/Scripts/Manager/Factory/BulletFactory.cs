@@ -71,7 +71,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
             
             // 设置子弹中心位置
             bullet.transform.position = bullet.GetCenter();
-     
+     bullet.isCanBreakWall=ownerTank.isCanBreakWall;
     }
     
     public void ClearAllBullets()
@@ -82,7 +82,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
         {
             BulletPool.ReturnObject(bullet);
         }
-        activeBullets.Clear();
+     
     }
   
 }

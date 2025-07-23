@@ -76,6 +76,9 @@
             GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = "You Lose!";
             GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
             NetworkManager.Instance.isGameing = false;
+            
+            BulletFactory.Instance.ClearAllBullets();
+            FoodFactory.Instance.ClearAllFoods();
 
 
         }
