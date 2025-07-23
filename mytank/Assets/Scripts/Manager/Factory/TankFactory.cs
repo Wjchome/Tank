@@ -81,7 +81,9 @@ public class TankFactory : SingletonMono<TankFactory>
             
             temp. playerPanelUI= Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent).GetComponent<PlayerPanelUI>();
             temp. playerPanelUI.UpdateUI(temp);
-            temp. playerPanelUI.SetPos(PlayerManager.Instance.activePlayers.Count);   
+            temp. playerPanelUI.SetPos(PlayerManager.Instance.activePlayers.Count);  
+            temp.animType = 1;
+            
         }
         else
         {

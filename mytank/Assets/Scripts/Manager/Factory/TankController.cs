@@ -57,6 +57,8 @@ public class TankController : MonoBehaviour
     public System.Random random = new System.Random();
 
     public int animType = 1;
+    
+  
 
     void Update()
     {
@@ -69,7 +71,7 @@ public class TankController : MonoBehaviour
             HandleMovementInput();
             HandleShootInput();
         }
-        if (!isPlayer&&!isDead)
+        if (!isPlayer&&!isDead&&NetworkManager.Instance.currentFrame>=EnemyManager.Instance.pauseEndFrame)
         {
             AiControls();
         }
@@ -287,28 +289,35 @@ public class TankController : MonoBehaviour
         
         if (currentData.HP <= 0)
         {
-            isDead = true;
-            Pos=new Vector2Int(-1,-1);
-
-            GetComponent<SpriteRenderer>().material.color = Color.white;
-            animator.Play("BigBoom");
-            
-            // 如果是敌人，通知EnemyManager
-            if (!isPlayer)
-            {
-                EnemyManager.Instance.RemoveEnemy(this);
-            }
-            else
-            {
-                PlayerManager.Instance.RemovePlayer(this);
-            }
-            DOVirtual.DelayedCall(animTime, () => 
-            {
-                TankFactory.Instance.TankPool.ReturnObject(this);
-
-            });
-            GameStateManager.Instance.allTanks[attackerID].Kill();
+            Dead(attackerID);
         }
+    }
+
+    public void Dead(string attackerID)
+    {
+        isDead = true;
+        Pos=new Vector2Int(-1,-1);
+
+        GetComponent<SpriteRenderer>().material.color = Color.white;
+        animator.Play("BigBoom");
+            
+        // 如果是敌人，通知EnemyManager
+        if (!isPlayer)
+        {
+            EnemyManager.Instance.RemoveEnemy(this);
+        }
+        else
+        {
+            PlayerManager.Instance.RemovePlayer(this);
+        }
+        DOVirtual.DelayedCall(animTime, () => 
+        {
+            TankFactory.Instance.TankPool.ReturnObject(this);
+
+        });
+        if(attackerID!=null)
+            GameStateManager.Instance.allTanks[attackerID].Kill();
+        
     }
 
 
@@ -326,7 +335,7 @@ public class TankController : MonoBehaviour
     {
         // 使用帧数进行时间判断，确保所有客户端同步
         long currentFrame = NetworkManager.Instance.currentFrame;
-        float frameTime = currentFrame * 0.05f; // 每帧0.05秒
+        float frameTime = currentFrame * Constant.FrameInterval; // 每帧0.05秒
         
         if (frameTime - lastMoveTime > currentData.moveInterval)
         {

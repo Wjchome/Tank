@@ -15,7 +15,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     
     public int maxEnemies = 3; // 场上最大敌人数量
     public float enemySpawnInterval = 5f; // 敌人生成间隔
-    private List<TankController> activeEnemies = new List<TankController>();//激活的敌人坦克
+    public List<TankController> activeEnemies = new List<TankController>();//激活的敌人坦克
     public int leafEnemies = 0;
     [SerializeField]private float lastSpawnTime = 0f;
     
@@ -24,6 +24,10 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public System.Random random;
 
     public int specialRange = 1;
+
+    public long pauseEndFrame=0;
+    
+    
 
     public void LoadLevel(Level levelData)
     {
@@ -66,7 +70,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         if (activeEnemies.Count >= maxEnemies||enemyIndex>=sumEnemies|!NetworkManager.Instance.isGameing) return;
         
         long currentFrame = NetworkManager.Instance.currentFrame;
-        float currentTime = currentFrame * 0.05f; // 每帧0.05秒
+        float currentTime =  currentFrame* Constant.FrameInterval; // 每帧0.05秒
         
         if (currentTime - lastSpawnTime >= enemySpawnInterval)
         {

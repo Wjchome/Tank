@@ -51,7 +51,7 @@ public class BulletController : MonoBehaviour
        
         // 使用帧数进行时间判断，确保所有客户端同步
         long currentFrame = NetworkManager.Instance.currentFrame;
-        float frameTime = currentFrame * 0.05f; // 每帧0.05秒
+        float frameTime = currentFrame * Constant.FrameInterval; // 每帧0.05秒
         
         if (frameTime - lastMoveTime > moveInterval)
         {

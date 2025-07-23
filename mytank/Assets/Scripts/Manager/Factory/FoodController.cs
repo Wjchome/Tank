@@ -1,4 +1,5 @@
 
+    using System.Collections;
     using UnityEngine;
 
     public class FoodController:MonoBehaviour
@@ -14,7 +15,13 @@
                 case FoodType.WarCar:
                     AddHP(tank);
                     break;
-                
+                case FoodType.PocketWatch:
+                   StopAllEnemy();
+                    break;
+                case FoodType.Bomb:
+                    KillAllEnemies(tank);
+                    break;
+                    
                 
                /* case PropType.Star:
                     Upgrade();
@@ -47,4 +54,24 @@
         {
            tank.AddHP(1);
         }
+
+        void StopAllEnemy()
+        {
+            
+            int targetTime = 10;
+            long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(targetTime/Constant.FrameInterval);
+         
+            EnemyManager.Instance.pauseEndFrame=targetFrame;
+            
+        }
+
+        void KillAllEnemies(TankController tank)
+        {
+            foreach (var enemy in EnemyManager.Instance.activeEnemies)
+            {
+                enemy.Dead(tank.PlayerID);
+            }
+
+        }
+        
     }
