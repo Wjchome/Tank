@@ -117,6 +117,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             MapManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
             EnemyManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
             PlayerManager.Instance.   OnGameStart(message.GameStart.PlayerInfos.ToList());
+            CamController.Instance.Change(MapManager.Instance.mapWidth/2);
            RoomManager.Instance. OnGameStartRoom();
         }
         else if (message.ConnectSuccess != null)

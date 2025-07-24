@@ -76,12 +76,12 @@ public enum MapType
             {
                 List<Vector2Int> pos = new List<Vector2Int>
                 {
-                    new Vector2Int(12, 1),
-                    new Vector2Int(13, 1),
-                    new Vector2Int(12, 2),
-                    new Vector2Int(13, 2),
+                    new Vector2Int((mapWidth-1)/2, 1),
+                    new Vector2Int(mapWidth/2, 1),
+                    new Vector2Int((mapWidth-1)/2, 2),
+                    new Vector2Int(mapWidth/2, 2),
                 };
-                for (int i = 10; i <= 15; i++)
+                for (int i = mapWidth/2-3; i <= mapWidth/2+2; i++)
                 {
                     for (int j = 1; j <= 4; j++)
                     {
@@ -186,10 +186,11 @@ public enum MapType
             isChange=false;
             // 清除现有地图
              ClearMap();
-            homePrefab.SetActive(true);
+            
             // 解析地图数据
             LoadMapFromString(level.mapData);
-            
+            homePrefab.SetActive(true);
+            homePrefab.transform.position=new Vector2((mapWidth-1f)/2,1.5f);
         
         }
         
@@ -207,7 +208,7 @@ public enum MapType
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
-                    if ((x == 12 || x == 13) && (y == 1 || y == 2))
+                    if ((x == (mapWidth-1)/2 || x == mapWidth/2) && (y == 1 || y == 2))
                     {
                         map[x, y] =MapType.home;
                         
