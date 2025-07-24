@@ -1,30 +1,21 @@
 using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using Tankgame;
+using TMPro;
 
 public class GameStateManager : SingletonMono<GameStateManager>
 {
     
 
-    void Start()
-    {
-        NetworkManager.Instance.OnFrameInputs += OnFrameInputs;
-        
-    }
+  
 
-    void OnDestroy()
+    public void OnFrameInputs(List<PlayerInput> inputs)
     {
-        if (NetworkManager.Instance != null)
+        foreach (var input in inputs)
         {
-            NetworkManager.Instance.OnFrameInputs -= OnFrameInputs;
-        }
-    }
-
-    void OnFrameInputs(FrameInputs frameInputs)
-    {
-        foreach (var input in frameInputs.Inputs)
-        {
-            foreach (var tank in PlayerManager.Instance.activePlayers)
+            foreach (var tank in PlayerManager.Instance.activePlayers.ToList())
             {
                 if (tank.tankID == input.PlayerId)
                 {
@@ -59,6 +50,27 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
+
+    public void GameOver(bool isWin)
+    {
+        GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>().
+            DOAnchorPos(GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
+        GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = isWin?"You Win":"You Lose!";
+        GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
+        NetworkManager.Instance.isGameing = false;
+            
+        //?
+        BulletFactory.Instance.ClearAllBullets();
+        FoodFactory.Instance.ClearAllFoods();
+        TankFactory.Instance.ClearAllTank();
+            
+        PlayerManager.Instance.activePlayers.Clear();
+        EnemyManager.Instance.activeEnemies.Clear();
+        DOTween.KillAll();
+            
+        Debug.Log(TankFactory.Instance.TankPool.GetSize());
+        Debug.Log(TankFactory.Instance.activeTanks.Count);
+    }
 
     
    

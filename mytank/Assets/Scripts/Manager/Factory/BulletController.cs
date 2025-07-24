@@ -96,7 +96,7 @@ public class BulletController : MonoBehaviour
             }
             else if (MapManager.Instance.IsHintHome(newPos.x, newPos.y, 2, 2))
             {
-                PlayerManager.Instance.GameFail();
+                GameStateManager.Instance.GameOver(false);
             }
             else
             {

@@ -84,47 +84,34 @@ public class RoomManager : SingletonMono<RoomManager>
         levelDropdown.value = 0; // 默认选择第一个关卡
         
     }
-    
 
 
-    
+
+
     void SubscribeToEvents()
     {
         // 主菜单按钮 - 只负责UI切换
-        createRoomButton.onClick.AddListener(ShowCreateRoom);    //本地切换创建页面
+        createRoomButton.onClick.AddListener(ShowCreateRoom); //本地切换创建页面
         joinRoomButton.onClick.AddListener(SendRoomListRequest); //仅发送房间列表请求
-        quitButton.onClick.AddListener(QuitGame);                //本地退出
-        myColorR.onValueChanged.AddListener(ColorShow);          
+        quitButton.onClick.AddListener(QuitGame); //本地退出
+        myColorR.onValueChanged.AddListener(ColorShow);
         myColorG.onValueChanged.AddListener(ColorShow);
         myColorB.onValueChanged.AddListener(ColorShow);
-        
+
         // 创建房间按钮 - 只发送请求
         createButton.onClick.AddListener(SendCreateRoomRequest); //发出创建列表请求
-        cancelCreateButton.onClick.AddListener(ShowMainMenu);    //本地切回主菜单
-        
+        cancelCreateButton.onClick.AddListener(ShowMainMenu); //本地切回主菜单
+
         // 房间列表按钮 - 只发送请求
-        refreshRoomListButton.onClick.AddListener(SendRoomListRequest);//发出房间列表请求
+        refreshRoomListButton.onClick.AddListener(SendRoomListRequest); //发出房间列表请求
         backToMainButton.onClick.AddListener(ShowMainMenu); //本地切回主页面
-        
+
         // 房间内按钮 - 只发送请求
         leaveRoomButton.onClick.AddListener(SendLeaveRoomRequest); //发送离开请求
         startGameButton.onClick.AddListener(SendStartGameRequest); //发送游戏开始
-        
+
         // 网络事件 - 处理UI更新
-        
-        NetworkManager.Instance.OnRoomListReceived += OnRoomListReceived;
-        NetworkManager.Instance.OnRoomInfoUpdate += OnRoomInfoUpdate;
-        NetworkManager.Instance.OnGameStart += OnGameStartRoom;
-        
-    }
-    
-    void OnDestroy()
-    {
-        
-            NetworkManager.Instance.OnRoomListReceived -=  OnRoomListReceived;
-          NetworkManager.Instance.OnRoomInfoUpdate -= OnRoomInfoUpdate;
-            NetworkManager.Instance.OnGameStart -= OnGameStartRoom;
-        
+
     }
 
     void ColorShow(float colorValue)
@@ -366,7 +353,7 @@ public class RoomManager : SingletonMono<RoomManager>
     
 
     // 事件处理
-    void OnRoomListReceived(List<RoomInfo> rooms)
+    public void OnRoomListReceived(List<RoomInfo> rooms)
     {
         ShowRoomList();
         // 清空UI，等待OnRoomListReceived刷新
@@ -390,12 +377,10 @@ public class RoomManager : SingletonMono<RoomManager>
     
    
     
-    void OnRoomInfoUpdate(RoomInfo roomInfo)
+     public void OnRoomInfoUpdate(RoomInfo roomInfo)
     {
        
-        
-        // 更新当前房间信息
-        NetworkManager.Instance.currentRoom = roomInfo;
+    
         
         // 如果房间信息有错误状态，显示错误
         if (roomInfo.Status == "error")
@@ -422,7 +407,7 @@ public class RoomManager : SingletonMono<RoomManager>
         Debug.Log($"Start button active: {NetworkManager.Instance.isHost}");
     }
     
-    void OnGameStartRoom(GameStart gameStart)
+    public void OnGameStartRoom()
     {
         
         mainMenuPanel.SetActive(false);

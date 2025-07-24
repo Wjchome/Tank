@@ -14,29 +14,16 @@
         public TextMeshProUGUI levelNameText;
         
         
-        private void Start()
-        {
-            NetworkManager.Instance.OnGameStart += GameStart;
-        }
-
-        public void GameStart(GameStart gameStart)
+     
+        public void GameStart(int level)
         {
            
-                currentLevel = availableLevels [gameStart.Level];
-                levelNameText.text = currentLevel.levelName;
-                
-                MapManager.Instance.LoadLevel(currentLevel);
-                EnemyManager.Instance.LoadLevel(currentLevel);
-               PlayerManager.Instance.   OnGameStart(gameStart);
+               currentLevel =availableLevels[level];
+               levelNameText.text = currentLevel.levelName;
         }
 
         
         
 
-        private void OnDestroy()
-        {
-            NetworkManager.Instance.OnGameStart -= GameStart;
-        }
-        
         
     }

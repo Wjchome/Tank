@@ -39,7 +39,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         enemyIndex = 0;
         pauseEndFrame = 0;
         // 清理现有敌人
-        ClearAllEnemies();
+       // ClearAllEnemies();
         
         // 初始化随机种子
         random = new System.Random((int)NetworkManager.Instance.seed);
@@ -145,7 +145,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
         
         if (leafEnemies == 0)
         {
-            GameSuccess();
+            GameStateManager.Instance.GameOver(true);
+
         }
         
     }
@@ -164,24 +165,6 @@ public class EnemyManager : SingletonMono<EnemyManager>
     }
 
 
-    public void GameSuccess()
-    {
-       GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>().
-           DOAnchorPos( GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
-       GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = "You Win!";
-       GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
-            NetworkManager.Instance.isGameing = false;
-       
-            BulletFactory.Instance.ClearAllBullets();
-            FoodFactory.Instance.ClearAllFoods();
-            TankFactory.Instance.ClearAllTank();
-            PlayerManager.Instance.activePlayers.Clear();
-            EnemyManager.Instance.activeEnemies.Clear();
-            
-            
-            Debug.Log(TankFactory.Instance.TankPool.GetSize());
-            Debug.Log(TankFactory.Instance.activeTanks.Count);
-    }
 
   
     

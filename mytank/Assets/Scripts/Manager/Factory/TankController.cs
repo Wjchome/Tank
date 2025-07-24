@@ -338,18 +338,19 @@ public class TankController : MonoBehaviour
         GetComponent<SpriteRenderer>().material.color = Color.white;
         animator.Play("BigBoom");
             
-        // 如果是敌人，通知EnemyManager
-        if (!isPlayer)
-        {
-            EnemyManager.Instance.RemoveEnemy(this);
-        }
-        else
-        {
-            PlayerManager.Instance.RemovePlayer(this);
-        }
+       
         DOVirtual.DelayedCall(animTime, () => 
         {
             TankFactory.Instance.TankPool.ReturnObject(this);
+            // 如果是敌人，通知EnemyManager
+            if (!isPlayer)
+            {
+                EnemyManager.Instance.RemoveEnemy(this);
+            }
+            else
+            {
+                PlayerManager.Instance.RemovePlayer(this);
+            }
 
         });
         if (attacker != null)

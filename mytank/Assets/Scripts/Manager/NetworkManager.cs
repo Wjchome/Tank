@@ -22,13 +22,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     public bool isGameing = false;
 
     public long seed;
-    // 事件定义
-    public event Action<FrameInputs> OnFrameInputs;
-    public event Action<EmptyFrame> OnEmptyFrame;
-    public event Action<ConnectSuccess> OnConnectSuccess;
-    public event Action<List<RoomInfo>> OnRoomListReceived;
-    public event Action<RoomInfo> OnRoomInfoUpdate;
-    public event Action<GameStart> OnGameStart;
+
     
     private Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
     private object queueLock = new object();
@@ -105,29 +99,34 @@ public class NetworkManager : SingletonMono<NetworkManager>
         if (message.FrameInputs != null)
         {
             currentFrame = message.FrameInputs.FrameNumber;
-            OnFrameInputs?.Invoke(message.FrameInputs);
+            GameStateManager.Instance. OnFrameInputs(message.FrameInputs.Inputs.ToList());
         }
         else if (message.EmptyFrame != null)
         {
             currentFrame = message.EmptyFrame.FrameNumber;
-            OnEmptyFrame?.Invoke(message.EmptyFrame);
+          
         }
         else if (message.GameStart != null)
         {
             seed = message.GameStart.RandomSeed;
             isGameing = true;
             currentFrame = 0;
-            OnGameStart?.Invoke(message.GameStart);
+            //?
+          
+            LevelManager.Instance.GameStart(message.GameStart.Level);
+            MapManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
+            EnemyManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
+            PlayerManager.Instance.   OnGameStart(message.GameStart.PlayerInfos.ToList());
+           RoomManager.Instance. OnGameStartRoom();
         }
         else if (message.ConnectSuccess != null)
         {
              playerID = message.ConnectSuccess.YourPlayerId;
             
-           OnConnectSuccess?.Invoke(message.ConnectSuccess);
         }
         else if (message.RoomList != null)
         {
-            OnRoomListReceived?.Invoke(message.RoomList.Rooms.ToList());
+            RoomManager.Instance.  OnRoomListReceived(message.RoomList.Rooms.ToList());
         }
         else if (message.RoomInfo != null)
         {
@@ -135,7 +134,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
             
             currentRoom = message.RoomInfo;
          
-            OnRoomInfoUpdate?.Invoke(currentRoom);
+            RoomManager.Instance.  OnRoomInfoUpdate(message.RoomInfo);
+
             
         }
         else

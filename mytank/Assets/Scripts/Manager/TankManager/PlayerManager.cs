@@ -13,13 +13,13 @@
        
 
         
-        public void OnGameStart(GameStart gameStart)
+        public void OnGameStart(List<PlayerInfo> playerInfos)
         {
             //      清除
-            ClearAllPlayers();
+            //ClearAllPlayers();
         
             // 创建所有玩家的坦克
-            CreateAllPlayerTanks(gameStart);
+            CreateAllPlayerTanks(playerInfos);
         }
     
         public void ClearAllPlayers()
@@ -35,14 +35,14 @@
             activePlayers.Clear();
         }
     
-        void CreateAllPlayerTanks(GameStart gameStart)
+        void CreateAllPlayerTanks(List<PlayerInfo> playerInfos)
         {
 
    
             // 为每个玩家创建坦克
-            for (int i = 0; i <gameStart.PlayerInfos.Count; i++)
+            for (int i = 0; i <playerInfos.Count; i++)
             {
-                var playerInfo = gameStart.PlayerInfos[i];
+                var playerInfo = playerInfos[i];
             
                 // 获取出生点
                 Vector2Int spawnPoint = LevelManager.Instance.currentLevel.playerTankPawns[i];
@@ -64,28 +64,10 @@
             activePlayers.Remove(tank);
             if (activePlayers.Count == 0)
             {
-                GameFail();
+                GameStateManager.Instance.GameOver(false);
             }
         }
         
         
-        public void GameFail()
-        {
-            GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>().
-                DOAnchorPos(GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
-            GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text = "You Lose!";
-            GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
-            NetworkManager.Instance.isGameing = false;
-            
-            BulletFactory.Instance.ClearAllBullets();
-            FoodFactory.Instance.ClearAllFoods();
-            TankFactory.Instance.ClearAllTank();
-            
-            PlayerManager.Instance.activePlayers.Clear();
-            EnemyManager.Instance.activeEnemies.Clear();
-            
-            Debug.Log(TankFactory.Instance.TankPool.GetSize());
-            Debug.Log(TankFactory.Instance.activeTanks.Count);
-
-        }
+        
     }
