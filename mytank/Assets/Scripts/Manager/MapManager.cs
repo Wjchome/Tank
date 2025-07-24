@@ -166,6 +166,7 @@ public enum MapType
                     }
                 }
             }
+            homePrefab.SetActive(false);
             
             Debug.Log("Map cleared successfully!");
         }
@@ -185,7 +186,7 @@ public enum MapType
             isChange=false;
             // 清除现有地图
              ClearMap();
-            
+            homePrefab.SetActive(true);
             // 解析地图数据
             LoadMapFromString(level.mapData);
             

@@ -124,6 +124,8 @@ func (s *Server) handleClient(conn net.Conn) {
 			s.handleLeaveRoomRequest(client, data.LeaveRoomRequest)
 		case *myproto.ClientMessage_KickPlayerRequest:
 			s.handleKickPlayerRequest(client, data.KickPlayerRequest)
+		case *myproto.ClientMessage_GameOverRequest:
+			s.handleGameOverRequest(client, data.GameOverRequest)
 		default:
 			log.Printf("Unknown message type from client %s", client.ID)
 		}
@@ -323,6 +325,20 @@ func (s *Server) handleKickPlayerRequest(client *Client, req *myproto.KickPlayer
 	s.broadcastRoomInfo(room)
 
 	fmt.Printf("Player %s was kicked from room %s by host %s\n", req.TargetPlayerId, room.ID, client.ID)
+}
+func (s *Server) handleGameOverRequest(client *Client, req *myproto.GameOverRequest) {
+	s.Mutex.Lock()
+	room := s.Rooms[client.RoomID]
+	s.Mutex.Unlock()
+	room.Mutex.Lock()
+	// 从房间中移除客户端
+	delete(room.Clients, client.ID)
+	client.RoomID = ""
+	client.IsHost = false
+	room.Mutex.Unlock()
+	// 发送房间列表给离开的客户端，表示已成功离开房间
+	s.sendRoomList(client.Conn)
+
 }
 
 func (s *Server) handleClientDisconnect(client *Client) {

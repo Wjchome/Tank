@@ -25,7 +25,7 @@ using UnityEngine;
         void Gameover()
         {
             playerPanelParent.GetComponent<RectTransform>().DOAnchorPos(firstPos,0.5f).SetEase(Ease.OutQuad);
-            NetworkManager.Instance.LeaveRoom(NetworkManager.Instance.currentRoom.RoomId);
+            NetworkManager.Instance.GameOverRequest(NetworkManager.Instance.currentRoom.RoomId);
             gameOverButton.gameObject.SetActive(false);
             DOVirtual.DelayedCall(0.5f, () =>
             {

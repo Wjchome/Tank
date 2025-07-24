@@ -68,8 +68,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
         EnemyManager.Instance.activeEnemies.Clear();
         DOTween.KillAll();
             
-        Debug.Log(TankFactory.Instance.TankPool.GetSize());
-        Debug.Log(TankFactory.Instance.activeTanks.Count);
+        MapManager.Instance.ClearMap();
+
     }
 
     

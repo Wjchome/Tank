@@ -126,6 +126,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
         else if (message.RoomList != null)
         {
+            currentRoom = null;
             RoomManager.Instance.  OnRoomListReceived(message.RoomList.Rooms.ToList());
         }
         else if (message.RoomInfo != null)
@@ -332,6 +333,22 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             RoomId = roomId,
             Level = level
+        }};
+        SendMessage(message);
+    }
+
+
+    public void GameOverRequest(string roomId)
+    {
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot send input: not connected");
+            return;
+        }
+
+        var message = new ClientMessage { GameOverRequest = new GameOverRequest()
+        {
+            RoomId = roomId,
         }};
         SendMessage(message);
     }

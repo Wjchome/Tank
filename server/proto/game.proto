@@ -67,7 +67,10 @@ message KickPlayerRequest {
   string target_player_id = 2; // 被踢的玩家ID
 }
 
-
+// 游戏结束请求
+message GameOverRequest{
+  string room_id=1;
+}
 
 
 // 玩家输入类型
@@ -141,5 +144,6 @@ message ClientMessage {
     RoomListRequest room_list_request = 5;
     GameStartRequest game_start_request = 6;
     KickPlayerRequest kick_player_request = 7;
+    GameOverRequest game_over_request=8;
   }
 }
