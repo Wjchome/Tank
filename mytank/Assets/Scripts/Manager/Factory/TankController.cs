@@ -69,6 +69,10 @@ public class TankController : MonoBehaviour
     public bool isCanBreakWall = false;
 
     private Vector3 size;
+    
+    
+    public bool isEncourage = false;
+    public long encourageFrame = -1;
     private void Awake()
     {
         size=transform.localScale;
@@ -348,7 +352,7 @@ public class TankController : MonoBehaviour
         playerPanelUI?.UpdateUI(this); // 更新血量显示
         if (isSpecial&&IsLocalPlayer)
         {
-            FoodFactory.Instance.ShowPanels(this,random);
+            FoodManager.Instance.ShowPanels(this,random);
         }
     }
 

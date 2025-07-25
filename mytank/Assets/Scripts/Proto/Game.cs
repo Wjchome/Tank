@@ -3479,9 +3479,9 @@ namespace Tankgame {
     /// <summary>Field number for the "level" field.</summary>
     public const int LevelFieldNumber = 2;
     private int level_;
-    /// <summary>
+  /// <summary>
     /// 关卡索引
-    /// </summary>
+  /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int Level {

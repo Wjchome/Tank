@@ -69,6 +69,15 @@ public class GameStateManager : SingletonMono<GameStateManager>
     {
         FoodType foodType = (FoodType)foodRequest.FoodId;
         Debug.LogWarning(foodType.ToString());
+
+        switch (foodType)
+        {
+            case FoodType.Bomb:
+                EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(1, tank));
+                break;
+            case FoodType.Encourage:
+                
+        }
     }
     
 
