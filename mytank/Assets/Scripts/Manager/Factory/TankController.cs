@@ -64,8 +64,12 @@ public class TankController : MonoBehaviour
     
     public long invincibleFrame=0;
 
-    public bool isCanShootTwice = false;
-
+    
+    
+    
+    public bool isShootTwice = false;
+    public long shootTwiceFrame = -1;
+    
     public long secondShootFrame = -1;
     public Direction secondDir;
     
@@ -92,7 +96,8 @@ public class TankController : MonoBehaviour
             transform.localScale =size;
 
         }
-        
+
+        HandleBuff();   
         CheckMovementState();
         if (identity==Identity.Myself && !isDead)
         {
@@ -105,17 +110,63 @@ public class TankController : MonoBehaviour
         {
             AiControls();
         }
+        
+      
+    }
+
+    void HandleBuff()
+    {
+        if (isEncourage)
+        {
+            if (NetworkManager.Instance.currentFrame >= encourageFrame)
+            {
+                isEncourage = false;
+            }
+        }
+
+        if (isShootTwice)
+        {
+            if (NetworkManager.Instance.currentFrame >= shootTwiceFrame)
+            {
+                isShootTwice = false;
+            }
+        }
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
             BulletFactory.Instance.Initialize(secondDir, this);
             secondShootFrame = -1; // 重置
         }
+        
     }
-
     
+
+    int CurrentMoveIntervalFrame()
+    {
+        if (isEncourage)
+        {
+            return (int)(currentData.moveIntervalFrame * 0.7f);
+        }
+        else
+        {
+
+            return currentData.moveIntervalFrame;
+        }
+    }
+    int CurrentShootIntervalFrame()
+    {
+        if (isEncourage)
+        {
+            return (int)(currentData.shootIntervalFrame * 0.7f);
+        }
+        else
+        {
+
+            return currentData.shootIntervalFrame;
+        }
+    }
     void HandleMovementInput()
     {
-        if (NetworkManager.Instance.currentFrame - lastMoveFrame > currentData.moveIntervalFrame)
+        if (NetworkManager.Instance.currentFrame - lastMoveFrame >CurrentMoveIntervalFrame())
         {
             if (Input.GetKey(KeyCode.W))
             {
@@ -142,7 +193,7 @@ public class TankController : MonoBehaviour
 
     void HandleShootInput()
     {
-        if (NetworkManager.Instance.currentFrame- lastShootFrame > currentData.shootIntervalFrame)
+        if (NetworkManager.Instance.currentFrame- lastShootFrame > CurrentShootIntervalFrame())
         {
             if (Input.GetKey(KeyCode.Space))
             {
@@ -267,12 +318,11 @@ public class TankController : MonoBehaviour
     public void Shoot()
     {
         BulletFactory.Instance.Initialize(tankDirection,this);
-        if (isCanShootTwice)
+        if (isShootTwice)
         {
-            float interval = 0.1f;
-            secondShootFrame = NetworkManager.Instance.currentFrame +
-                               Mathf.RoundToInt(interval / Constant.FrameInterval);
-                               secondDir=tankDirection;
+            int intervalFrame = 4;
+            secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
+            secondDir=tankDirection;
         }
     }
 

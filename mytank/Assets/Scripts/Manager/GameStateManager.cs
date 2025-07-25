@@ -76,7 +76,18 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 break;
             case FoodType.Encourage:
                 tank.isEncourage = true;
-                tank.encourageFrame = NetworkManager.Instance.currentFrame + (long)(10 / Constant.FrameInterval);
+                tank.encourageFrame = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+                break;
+            case FoodType.Pistol:
+                tank.isShootTwice = true;   
+                tank.shootTwiceFrame=NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+                break;
+            case FoodType.PocketWatch:
+                long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
+                EnemyManager.Instance.pauseEndFrame=targetFrame;
+                break;
+            case FoodType.Shoe:
+                tank.currentData.moveIntervalFrame = Mathf.Max(1, tank.currentData.moveIntervalFrame - 1);
                 break;
         }
     }

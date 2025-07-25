@@ -25,6 +25,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     public int specialRange = 5;
 
+    
+    
     public long pauseEndFrame=0;
     
     

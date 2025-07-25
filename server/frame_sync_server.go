@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	FRAME_INTERVAL   = 25 * time.Millisecond // 20帧每秒
+	FRAME_INTERVAL   = 10 * time.Millisecond // 20帧每秒
 	MAX_ROOM_PLAYERS = 2
 )
 

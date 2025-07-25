@@ -29,7 +29,7 @@ public class TankFactory : SingletonMono<TankFactory>
         tank.lastShootFrame = 0;
         tank.lastAnimStartFrame = 0;
         tank.isCanBreakWall = false;
-        tank.isCanShootTwice = false;
+        tank.isShootTwice = false;
         tank.invincibleFrame = 0;
         tank.killNum = 0;
         activeTanks.Add(tank);
