@@ -7,6 +7,21 @@ using TMPro;
 
 public class GameStateManager : SingletonMono<GameStateManager>
 {
+    public void OnFoodsRequest(List<ChooseFoodRequest> foodRequests)
+    {
+        foreach (var foodRequest in foodRequests)
+        {
+            foreach (var tank in PlayerManager.Instance.activePlayers.ToList())
+            {
+                if (tank.tankID == foodRequest.PlayerId)
+                {
+                    ApplyFoodToTank(tank, foodRequest);
+                    
+                }
+                
+            }
+        }
+    }
     
 
   
@@ -50,6 +65,12 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
+    void ApplyFoodToTank(TankController tank, ChooseFoodRequest foodRequest)
+    {
+        FoodType foodType = (FoodType)foodRequest.FoodId;
+        Debug.LogWarning(foodType.ToString());
+    }
+    
 
     public void GameOver(bool isWin)
     {
@@ -61,7 +82,6 @@ public class GameStateManager : SingletonMono<GameStateManager>
             
         //?
         BulletFactory.Instance.ClearAllBullets();
-        FoodFactory.Instance.ClearAllFoods();
         TankFactory.Instance.ClearAllTank();
             
         PlayerManager.Instance.activePlayers.Clear();

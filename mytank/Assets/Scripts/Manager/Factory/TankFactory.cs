@@ -46,8 +46,7 @@ public class TankFactory : SingletonMono<TankFactory>
         if (a != null)
         {
             Destroy(a);
-            if(NetworkManager.Instance.isGameing)
-                FoodFactory.Instance.Initialize(tank.random);
+           
         }
         
         activeTanks.Remove(tank);

@@ -30,15 +30,16 @@ type Client struct {
 }
 
 type Room struct {
-	ID          string
-	Name        string
-	HostID      string
-	Clients     map[string]*Client
-	InputBuffer []*myproto.PlayerInput
-	FrameNumber int64
-	Status      string // "waiting", "playing", "ended"
-	MaxPlayers  int32
-	Mutex       sync.Mutex
+	ID               string
+	Name             string
+	HostID           string
+	Clients          map[string]*Client
+	InputBuffer      []*myproto.PlayerInput
+	ChooseFoodBuffer []*myproto.ChooseFoodRequest // 新增：奖励选择缓冲区
+	FrameNumber      int64
+	Status           string // "waiting", "playing", "ended"
+	MaxPlayers       int32
+	Mutex            sync.Mutex
 }
 
 type Server struct {
@@ -126,6 +127,8 @@ func (s *Server) handleClient(conn net.Conn) {
 			s.handleKickPlayerRequest(client, data.KickPlayerRequest)
 		case *myproto.ClientMessage_GameOverRequest:
 			s.handleGameOverRequest(client, data.GameOverRequest)
+		case *myproto.ClientMessage_ChooseFoodRequest:
+			s.handleChooseFood(client, data.ChooseFoodRequest)
 		default:
 			log.Printf("Unknown message type from client %s", client.ID)
 		}
@@ -580,15 +583,33 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 	s.sendMessage(conn, serverMsg)
 }
 
+func (s *Server) handleChooseFood(client *Client, req *myproto.ChooseFoodRequest) {
+	if client.RoomID == "" {
+		return
+	}
+	s.Mutex.Lock()
+	room, exists := s.Rooms[client.RoomID]
+	s.Mutex.Unlock()
+	if !exists {
+		return
+	}
+	room.Mutex.Lock()
+	room.ChooseFoodBuffer = append(room.ChooseFoodBuffer, req)
+	room.Mutex.Unlock()
+}
+
 func (room *Room) frameLoop() {
 	ticker := time.NewTicker(FRAME_INTERVAL)
 	defer ticker.Stop()
-	startTime := time.Now()
+	// startTime := time.Now() // 已不再使用，移除
 
 	for range ticker.C {
 		room.Mutex.Lock()
 		inputs := room.InputBuffer
+		chooseFoods := room.ChooseFoodBuffer
+		frameNum := room.FrameNumber
 		room.InputBuffer = make([]*myproto.PlayerInput, 0)
+		room.ChooseFoodBuffer = make([]*myproto.ChooseFoodRequest, 0)
 		room.FrameNumber++
 		clients := make([]*Client, 0, len(room.Clients))
 		for _, c := range room.Clients {
@@ -600,45 +621,25 @@ func (room *Room) frameLoop() {
 			continue
 		}
 
-		// 计算服务器时间
-		serverTime := time.Since(startTime).Seconds()
-
-		var serverMsg *myproto.ServerMessage
-
-		if len(inputs) > 0 {
-			// 有输入时发送FrameInputs
-			frameInputs := &myproto.FrameInputs{
-				FrameNumber: room.FrameNumber,
-				Inputs:      inputs,
-			}
-			serverMsg = &myproto.ServerMessage{
-				Data: &myproto.ServerMessage_FrameInputs{
-					FrameInputs: frameInputs,
-				},
-			}
-		} else {
-			// 没有输入时发送EmptyFrame
-			emptyFrame := &myproto.EmptyFrame{
-				FrameNumber: room.FrameNumber,
-				ServerTime:  float32(serverTime),
-			}
-			serverMsg = &myproto.ServerMessage{
-				Data: &myproto.ServerMessage_EmptyFrame{
-					EmptyFrame: emptyFrame,
-				},
-			}
+		// 每帧都发送FrameMessage
+		frameMsg := &myproto.FrameMessage{
+			FrameNumber:        frameNum,
+			Inputs:             inputs,
+			ChooseFoodRequests: chooseFoods,
 		}
-
+		serverMsg := &myproto.ServerMessage{
+			Data: &myproto.ServerMessage_FrameMessage{
+				FrameMessage: frameMsg,
+			},
+		}
+		data, err := proto.Marshal(serverMsg)
+		if err != nil {
+			log.Println("Marshal error:", err)
+			continue
+		}
+		lengthBytes := make([]byte, 4)
+		binary.BigEndian.PutUint32(lengthBytes, uint32(len(data)))
 		for _, client := range clients {
-			// 这里需要访问Server实例来调用sendMessage
-			// 为了简化，我们直接发送数据
-			data, err := proto.Marshal(serverMsg)
-			if err != nil {
-				log.Println("Marshal error:", err)
-				continue
-			}
-			lengthBytes := make([]byte, 4)
-			binary.BigEndian.PutUint32(lengthBytes, uint32(len(data)))
 			client.Conn.Write(lengthBytes)
 			client.Conn.Write(data)
 		}

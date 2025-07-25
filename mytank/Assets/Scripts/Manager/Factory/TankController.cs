@@ -185,14 +185,7 @@ public class TankController : MonoBehaviour
                 canMove = true;
             }
 
-            if (isPlayer)
-            {
-                var food = FoodFactory.Instance.HasFoodOn(targetPos.x, targetPos.y);
-                if (food != null)
-                {
-                    food.OnPropPickup(this);
-                }
-            }
+        
             
             
             targetPos = Pos + new Vector2Int(dx, dy);
@@ -210,15 +203,7 @@ public class TankController : MonoBehaviour
                 transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
                 canMove = true;
             }
-            if (isPlayer)
-            { var food = FoodFactory.Instance.HasFoodOn(targetPos.x, targetPos.y);
-                if (food != null)
-                {
-                    food.OnPropPickup(this);
-                }
-                
-            }
-            
+         
            
             
             tankDirection = direction;
@@ -253,14 +238,7 @@ public class TankController : MonoBehaviour
                 canMove = true;
             }
 
-            if (isPlayer)
-            {
-                var food = FoodFactory.Instance.HasFoodOn(targetPos.x, targetPos.y);
-                if (food != null)
-                {
-                    food.OnPropPickup(this);
-                }
-            }
+        
            
             tankDirection = direction;
             Vector3 rotation = Vector3.zero;
@@ -355,7 +333,8 @@ public class TankController : MonoBehaviour
         });
         if (attacker != null)
         {
-            attacker.Kill();
+            
+            attacker.Kill(GetComponent<Special>()!=null);
         }
         
         
@@ -363,11 +342,14 @@ public class TankController : MonoBehaviour
 
 
 
-    public void Kill()
+    public void Kill(bool isSpecial)
     {
         killNum++;
         playerPanelUI?.UpdateUI(this); // 更新血量显示
-        
+        if (isSpecial&&IsLocalPlayer)
+        {
+            FoodFactory.Instance.ShowPanels(this,random);
+        }
     }
 
 

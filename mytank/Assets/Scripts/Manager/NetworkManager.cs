@@ -93,18 +93,12 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     void ProcessServerMessage(ServerMessage message)
     {
-        if(message.EmptyFrame == null)
-            LogMessage("[Server]", message);
 
-        if (message.FrameInputs != null)
+        if (message.FrameMessage != null)
         {
-            currentFrame = message.FrameInputs.FrameNumber;
-            GameStateManager.Instance. OnFrameInputs(message.FrameInputs.Inputs.ToList());
-        }
-        else if (message.EmptyFrame != null)
-        {
-            currentFrame = message.EmptyFrame.FrameNumber;
-          
+            currentFrame = message.FrameMessage.FrameNumber;
+            GameStateManager.Instance. OnFrameInputs(message.FrameMessage.Inputs.ToList());
+            GameStateManager.Instance. OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
         }
         else if (message.GameStart != null)
         {
@@ -314,8 +308,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 PlayerId = playerID,
                 InputType = inputType,
-                FrameNumber = currentFrame,
-                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+     
             }
         };
         SendMessage(message);
@@ -353,6 +346,18 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }};
         SendMessage(message);
     }
+
+
+    public void FoodChooseRequest(FoodType foodType )
+    {
+        var message = new ClientMessage { ChooseFoodRequest = new ChooseFoodRequest()
+        {
+            PlayerId = playerID,
+            FoodId = (int)foodType
+        }};
+        SendMessage(message);
+    }
+    
     
     #endregion
 
