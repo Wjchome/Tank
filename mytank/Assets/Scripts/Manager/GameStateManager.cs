@@ -76,7 +76,9 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(1, tank));
                 break;
             case FoodType.Encourage:
+                tank.isEncourage = true;
                 
+                break;
         }
     }
     

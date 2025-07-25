@@ -62,10 +62,17 @@ public class TankFactory : SingletonMono<TankFactory>
 
         temp. tankID = tankID;
         temp. tankDirection = Direction.Up;
-        temp. IsLocalPlayer = tankID == NetworkManager.Instance.playerID;
         temp. Pos = new Vector2Int(x, y); // 左下角坐标
-        
-        temp. isPlayer = true;
+
+        if (tankID == NetworkManager.Instance.playerID)
+        {
+            temp.identity=Identity.Myself;
+        }
+        else
+        {
+            temp.identity=Identity.OtherPlayer;
+            
+        }
         temp. playerName = tankName;
         
         // 设置坦克中心位置
@@ -106,10 +113,10 @@ public class TankFactory : SingletonMono<TankFactory>
 
         temp. tankID = tankID;
         temp. tankDirection = Direction.Up;
-        temp. IsLocalPlayer = tankID == NetworkManager.Instance.playerID;
+
         temp. Pos = new Vector2Int(x, y); // 左下角坐标
-        
-        temp. isPlayer = false;
+
+        temp.identity = Identity.Enemy;
         temp. playerName = tankName;
         
         // 设置坦克中心位置
@@ -143,10 +150,10 @@ public class TankFactory : SingletonMono<TankFactory>
 
         temp. tankID = playerID;
         temp. tankDirection = Direction.Up;
-        temp. IsLocalPlayer = playerID == NetworkManager.Instance.playerID;
         temp. Pos = new Vector2Int(x, y); // 左下角坐标
         
-        temp. isPlayer = false;
+        temp.identity = Identity.Enemy;
+
         temp. playerName = playerName;
         
         // 设置坦克中心位置

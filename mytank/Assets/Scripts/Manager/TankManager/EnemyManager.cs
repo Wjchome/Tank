@@ -133,7 +133,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
     bool IsPositionOccupied(Vector2Int pos)
     {
         // 检查是否有坦克占用2x2区域
-        return MapManager.Instance.GetTankInArea(pos.x, pos.y, 2, 2) != null;
+        List<TankController> tanks = MapManager.Instance.GetTankInArea(pos.x, pos.y, 2, 2);
+        return  tanks.Count>0;
     }
     
     public void RemoveEnemy(TankController enemy)

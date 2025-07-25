@@ -22,10 +22,7 @@ public class BulletController : MonoBehaviour
     public Vector2Int Pos; // 子弹左下角坐标（2x2占地）
     
     // 坐标系统辅助方法
-    public Vector2Int GetTopLeft() => new Vector2Int(Pos.x, Pos.y + 1);
-    public Vector2Int GetTopRight() => new Vector2Int(Pos.x + 1, Pos.y + 1);
-    public Vector2Int GetBottomLeft() => Pos; // 左下角就是Pos
-    public Vector2Int GetBottomRight() => new Vector2Int(Pos.x + 1, Pos.y);
+
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
    
@@ -46,6 +43,13 @@ public class BulletController : MonoBehaviour
         transform.DOMove(GetCenter(), moveDuration).SetEase(Ease.Linear);
     }
 
+    bool ShouldCollide(Identity identity)
+    {
+        bool isPlayer=(identity == Identity.Myself||identity==Identity.OtherPlayer);
+        
+        return isPlayer==isPlayerBullet;
+    }
+    
     private void Update()
     {
         if (isShouldDestroy ) return;
@@ -62,17 +66,21 @@ public class BulletController : MonoBehaviour
             Vector2Int newPos = Pos + dir;
             
             // 检查2x2区域碰撞
-            var tank = MapManager.Instance.GetTankInArea(newPos.x, newPos.y, 2, 2);
-            
-            
-            if (tank != null && tank.isPlayer== isPlayerBullet)
+            var tanks = MapManager.Instance.GetTankInArea(newPos.x, newPos.y, 2, 2);
+
+            foreach (var tank in tanks)
             {
-                isShouldMove=true;
-            }
-            else if (tank != null && tank.isPlayer!= isPlayerBullet)
-            {
-                tank.DamageHP(1,ownerTank);
-                isShouldDestroy = true;
+
+
+                if (tank != null && ShouldCollide(tank.identity))
+                {
+                    isShouldMove = true;
+                }
+                else if (tank != null && !ShouldCollide(tank.identity))
+                {
+                    tank.DamageHP(1, ownerTank);
+                    isShouldDestroy = true;
+                }
             }
 
             foreach (var bullet in BulletFactory.Instance.activeBullets)

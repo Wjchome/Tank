@@ -6,7 +6,12 @@ using DG.Tweening;
 using UnityEngine.Serialization;
 
 
-
+public enum Identity
+{
+    Myself,
+    OtherPlayer,
+    Enemy
+}
 
 public class TankController : MonoBehaviour
 {
@@ -26,9 +31,7 @@ public class TankController : MonoBehaviour
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
     //击杀数量
     public int killNum=0;
-    
-    //是否是本机玩家
-    public bool IsLocalPlayer;
+ 
     //一些计时器
     public float lastMoveTime;
     public float lastShootTime;
@@ -38,8 +41,8 @@ public class TankController : MonoBehaviour
     public string playerName;
     //玩家自选颜色
     public Color playerColor;
-    //是否是玩家 ，false代表是敌人ai
-    public bool isPlayer;
+   
+    public Identity identity;
     
     // 控制动画
     public bool isMoving = false;
@@ -91,14 +94,14 @@ public class TankController : MonoBehaviour
         }
         
         CheckMovementState();
-        if (IsLocalPlayer && !isDead)
+        if (identity==Identity.Myself && !isDead)
         {
         
 
             HandleMovementInput();
             HandleShootInput();
         }
-        if (!isPlayer&&!isDead&&NetworkManager.Instance.currentFrame>=EnemyManager.Instance.pauseEndFrame)
+        if (identity==Identity.Enemy&&!isDead&&NetworkManager.Instance.currentFrame>=EnemyManager.Instance.pauseEndFrame)
         {
             AiControls();
         }
@@ -111,39 +114,39 @@ public class TankController : MonoBehaviour
 
     void HandleMovementInput()
     {
-        if (Time.time - lastMoveTime > currentData.moveInterval)
+        if (NetworkManager.Instance.currentFrame*Constant.FrameInterval - lastMoveTime > currentData.moveInterval)
         {
             if (Input.GetKey(KeyCode.W))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-                lastMoveTime = Time.time;
+                lastMoveTime = NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-                lastMoveTime = Time.time;
+                lastMoveTime = NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
             }
             else if (Input.GetKey(KeyCode.A))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-                lastMoveTime = Time.time;
+                lastMoveTime =NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
             }
             else if (Input.GetKey(KeyCode.D))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-                lastMoveTime = Time.time;
+                lastMoveTime = NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
             }
         }
     }
 
     void HandleShootInput()
     {
-        if (Time.time - lastShootTime > currentData.shootInterval)
+        if (NetworkManager.Instance.currentFrame*Constant.FrameInterval - lastShootTime > currentData.shootInterval)
         {
             if (Input.GetKey(KeyCode.Space))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
-                lastShootTime=Time.time;
+                lastShootTime=NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
             }
         }
     }
@@ -325,7 +328,7 @@ public class TankController : MonoBehaviour
         {
             TankFactory.Instance.TankPool.ReturnObject(this);
             // 如果是敌人，通知EnemyManager
-            if (!isPlayer)
+            if (identity==Identity.Enemy)
             {
                 EnemyManager.Instance.RemoveEnemy(this);
             }
@@ -350,7 +353,7 @@ public class TankController : MonoBehaviour
     {
         killNum++;
         playerPanelUI?.UpdateUI(this); // 更新血量显示
-        if (isSpecial&&IsLocalPlayer)
+        if (isSpecial&&identity==Identity.Myself)
         {
             FoodManager.Instance.ShowPanels(this,random);
         }

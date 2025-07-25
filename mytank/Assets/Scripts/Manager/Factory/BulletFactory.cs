@@ -42,7 +42,12 @@ public class BulletFactory : SingletonMono<BulletFactory>
         BulletController bullet = BulletPool.GetObject();
         bullet.direction = direction;
         bullet.ownerTank=tank;
-        bullet.isPlayerBullet = tank.isPlayer;
+        if (tank.identity == Identity.Myself || tank.identity == Identity.OtherPlayer)
+            bullet.isPlayerBullet = true;
+        else
+        {
+            bullet.isPlayerBullet = false;
+        }
         // 设置子弹朝向
         Vector3 rotation = Vector3.zero;
         bullet.dir = direction.ToVector2Int();  

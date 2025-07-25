@@ -297,18 +297,19 @@ public enum MapType
         }
         
         // 获取区域内的坦克
-        public TankController GetTankInArea(int startX, int startY, int width, int height)
+        public List<TankController> GetTankInArea(int startX, int startY, int width, int height)
         {
+            List<TankController> tanks = new List<TankController>();
             foreach (var tank in TankFactory.Instance.activeTanks)
             {
               
                 if (IsRectOverlap(startX, startY, width, height, 
                                 tank.Pos.x, tank.Pos.y, 2, 2))
                 {
-                    return tank;
+                    tanks.Add(tank);
                 }
             }
-            return null;
+            return tanks;
         }
      
         

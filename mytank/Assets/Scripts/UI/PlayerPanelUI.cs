@@ -19,7 +19,7 @@
         public void UpdateUI(TankController tankController)
         {
             playerNameText.text=tankController.playerName;
-            if (tankController.IsLocalPlayer)
+            if (tankController.identity==Identity.Myself)
             {
                 playerNameText.color = Color.yellow;
             }
