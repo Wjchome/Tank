@@ -71,6 +71,10 @@ public class GameStateManager : SingletonMono<GameStateManager>
 
         switch (foodType)
         {
+            case FoodType.Boat:
+                tank.isBoat = true;
+                tank.boatFrame=NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+                break;
             case FoodType.Bomb:
                 EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(1, tank));
                 break;
@@ -105,6 +109,10 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.WarCar:
                 tank.AddHP(1);
                 break;
+            case FoodType.GenerateWall:
+                MapManager.Instance.GenerateWall(3, tank.random);
+                break;
+                
         }
     }
     

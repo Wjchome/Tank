@@ -7,6 +7,7 @@ using Random = System.Random;
 
 public enum FoodType
 {
+    Boat,
     Bomb,
     Encourage,
     Pistol,
@@ -19,7 +20,7 @@ public enum FoodType
     Star,
      SteelHelmet,
    WarCar,
-    
+   GenerateWall
     
 }
     public class FoodManager:SingletonMono<FoodManager>

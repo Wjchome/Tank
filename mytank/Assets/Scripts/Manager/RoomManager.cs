@@ -404,7 +404,6 @@ public class RoomManager : SingletonMono<RoomManager>
         UpdatePlayerList();
         
         
-        Debug.Log($"Start button active: {NetworkManager.Instance.isHost}");
     }
     
     public void OnGameStartRoom()

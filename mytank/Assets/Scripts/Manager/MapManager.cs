@@ -2,8 +2,10 @@
     using System;
     using UnityEngine;
     using System.Collections.Generic;
+    using System.Linq;
+    using Random = System.Random;
 
-public enum Direction
+    public enum Direction
 {
     Up,
     Down,
@@ -231,7 +233,37 @@ public enum MapType
         }
         
         
-      
+        public bool IsAreaWalkable1(int startX, int startY, int width, int height,string selfID)
+        {
+            // 检查区域内的每个格子
+            for (int x = startX; x < startX + width; x++)
+            {
+                for (int y = startY; y < startY + height; y++)
+                {
+                    // 检查边界
+                    if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+                        return false;
+                    
+                    // 检查地形
+                    MapType wallType = GetWallType(x, y);
+                    if (wallType != MapType.floor && wallType != MapType.tree&& wallType != MapType.ice&& wallType != MapType.river)
+                        return false;
+                    
+                    // 检查坦克碰撞
+                    foreach (var tank in TankFactory.Instance.activeTanks)
+                    {
+                        if(tank.tankID==selfID)continue;
+                        if (IsRectOverlap(startX, startY, width, height, 
+                                tank.Pos.x, tank.Pos.y, 2, 2))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
 
         // 检查2x2区域是否可通行
         public bool IsAreaWalkable(int startX, int startY, int width, int height,string selfID)
@@ -282,6 +314,47 @@ public enum MapType
                 }
             }
             return true;
+        }
+
+
+        public void GenerateWall(int num,Random random)
+        {
+            // 1. 找出所有floor格子
+            List<Vector2Int> candidates = new List<Vector2Int>();
+            for (int x = 0; x < mapWidth; x++)
+            {
+                for (int y = 0; y < mapHeight; y++)
+                {
+                    if (map[x, y] == MapType.floor)
+                    {
+                       
+                            candidates.Add(new Vector2Int(x, y));
+                        
+                    }
+                }
+            }
+            
+            List<Vector2Int> a=new List<Vector2Int>();
+            
+            foreach (var tank in TankFactory.Instance.activeTanks)
+            {
+                    a.Add(tank.Pos);
+                    a.Add(tank.Pos+new Vector2Int(1,0));
+                    a.Add(tank.Pos+new Vector2Int(1,1));
+                    a.Add(tank.Pos+new Vector2Int(0,1));
+            }
+
+            candidates = candidates.Except(a).ToList();
+   
+            
+            int count = Math.Min(num, candidates.Count-1);
+            for (int i = 0; i < count; i++)
+            {
+                int idx = random.Next(candidates.Count);
+                Vector2Int pos = candidates[idx];
+                SetWallType(pos.x, pos.y, MapType.wall);
+                candidates.RemoveAt(idx); // 防止重复
+            }
         }
         public bool IsHintHome(int startX, int startY, int width, int height)
         {

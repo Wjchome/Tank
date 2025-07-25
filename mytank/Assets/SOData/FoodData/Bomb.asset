@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69da5b62024463c8b8b6fee80637b96, type: 3}
   m_Name: Bomb
   m_EditorClassIdentifier: 
-  foodType: 0
-  sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
+  foodType: 1
+  sprite: {fileID: 21300000, guid: 5993bce3879d84332bde166cdd9b74f3, type: 3}
   foodName: "\u70B8\u5F39"
   foodDescription: "\u6240\u6709\u654C\u4EBA\u6263\u4E00\u6EF4\u8840"

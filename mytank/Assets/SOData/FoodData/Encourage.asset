@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69da5b62024463c8b8b6fee80637b96, type: 3}
   m_Name: Encourage
   m_EditorClassIdentifier: 
-  foodType: 1
-  sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
+  foodType: 2
+  sprite: {fileID: 0}
   foodName: "\u9F13\u821E"
   foodDescription: "10\u79D2\u5185\u589E\u52A0\u79FB\u901F\u548C\u5C04\u51FB\u901F\u5EA6"

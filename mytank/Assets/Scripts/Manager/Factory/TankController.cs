@@ -63,6 +63,10 @@ public class TankController : MonoBehaviour
     public int animType = 1;
 
 
+    
+    public bool isBoat = false;
+    public long boatFrame = -1;
+    
     public bool isInvincible = false;
     public long invincibleFrame=0;
 
@@ -121,6 +125,13 @@ public class TankController : MonoBehaviour
 
     void HandleBuff()
     {
+        if (isBoat)
+        {
+            if (NetworkManager.Instance.currentFrame >= boatFrame)
+            {
+                isBoat = false;
+            }
+        }
         if (isEncourage)
         {
             if (NetworkManager.Instance.currentFrame >= encourageFrame)
@@ -254,7 +265,8 @@ public class TankController : MonoBehaviour
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
 
-            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
+            if((isBoat&&MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2,tankID))
+            ||MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
             {
                 Pos = targetPos;
             
@@ -272,8 +284,8 @@ public class TankController : MonoBehaviour
             
             
             targetPos = Pos + new Vector2Int(dx, dy);
-            
-            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
+            if((isBoat&&MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2,tankID))
+               ||MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
             {
                 Pos = targetPos;
             
@@ -306,8 +318,8 @@ public class TankController : MonoBehaviour
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
         
-            // 检查2x2区域是否可通行
-            if (MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
+            if((isBoat&&MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2,tankID))
+               ||MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
             {
                 Pos = targetPos;
             
