@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69fe692a07bb4f2386ed1c8c06b5cb5c, type: 3}
   m_Name: PlayerTank
   m_EditorClassIdentifier: 
-  moveInterval: 0.15
-  shootInterval: 0.3
+  moveIntervalFrame: 6
+  shootIntervalFrame: 18
   HP: 3

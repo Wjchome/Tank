@@ -86,8 +86,24 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
                 EnemyManager.Instance.pauseEndFrame=targetFrame;
                 break;
-            case FoodType.Shoe:
+            case FoodType.Shoe: 
                 tank.currentData.moveIntervalFrame = Mathf.Max(1, tank.currentData.moveIntervalFrame - 1);
+                break;
+            case FoodType.Shovel:
+                MapManager.Instance.isChange = true;
+                MapManager.Instance.ironWallEndFrames=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
+                MapManager.Instance.aaa(MapType.wall);
+                break;
+            case FoodType.Star:
+                tank.isBreakWall = true;
+                tank.breakWallFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
+                break;
+            case FoodType.SteelHelmet:
+                tank.isInvincible = true;
+                tank.invincibleFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(5/Constant.FrameInterval);
+                break;
+            case FoodType.WarCar:
+                tank.AddHP(1);
                 break;
         }
     }

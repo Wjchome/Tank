@@ -61,7 +61,9 @@ public class TankController : MonoBehaviour
     public System.Random random = new System.Random();
 
     public int animType = 1;
-    
+
+
+    public bool isInvincible = false;
     public long invincibleFrame=0;
 
     
@@ -73,13 +75,16 @@ public class TankController : MonoBehaviour
     public long secondShootFrame = -1;
     public Direction secondDir;
     
-    public bool isCanBreakWall = false;
+    public bool isBreakWall = false;
+    public long breakWallFrame = -1;
 
     private Vector3 size;
     
     
     public bool isEncourage = false;
     public long encourageFrame = -1;
+    
+    
     private void Awake()
     {
         size=transform.localScale;
@@ -136,7 +141,26 @@ public class TankController : MonoBehaviour
             BulletFactory.Instance.Initialize(secondDir, this);
             secondShootFrame = -1; // 重置
         }
+
+        if (isBreakWall)
+        {
+            if (NetworkManager.Instance.currentFrame >= breakWallFrame)
+            {
+                isBreakWall = false;
+            }
+        }
+
+        if (isInvincible)
+        {
+            if (NetworkManager.Instance.currentFrame >=invincibleFrame)
+            {
+                transform.localScale =size;
+                isInvincible = false;
+
+            }
+        }
         
+      
     }
     
 

@@ -74,26 +74,30 @@ public enum MapType
             
             if (isChange&&NetworkManager.Instance.currentFrame >= ironWallEndFrames)
             {
-                List<Vector2Int> pos = new List<Vector2Int>
-                {
-                    new Vector2Int((mapWidth-1)/2, 1),
-                    new Vector2Int(mapWidth/2, 1),
-                    new Vector2Int((mapWidth-1)/2, 2),
-                    new Vector2Int(mapWidth/2, 2),
-                };
-                for (int i = mapWidth/2-3; i <= mapWidth/2+2; i++)
-                {
-                    for (int j = 1; j <= 4; j++)
-                    {
-                        Vector2Int pos1 = new Vector2Int(i, j);
-                        if(!pos.Contains(pos1))
-                            SetWallType(i, j, MapType.breakableWall);
-                    }
-                }
+               aaa(MapType.breakableWall);
                 isChange = false;
             }
         }
 
+        public void aaa(MapType mapType)
+        {
+            List<Vector2Int> pos = new List<Vector2Int>
+            {
+                new Vector2Int((mapWidth-1)/2, 1),
+                new Vector2Int(mapWidth/2, 1),
+                new Vector2Int((mapWidth-1)/2, 2),
+                new Vector2Int(mapWidth/2, 2),
+            };
+            for (int i = mapWidth/2-3; i <= mapWidth/2+2; i++)
+            {
+                for (int j = 1; j <= 4; j++)
+                {
+                    Vector2Int pos1 = new Vector2Int(i, j);
+                    if(!pos.Contains(pos1))
+                        SetWallType(i, j, mapType);
+                }
+            }
+        }
         public bool HasTankInIce(int x, int y)
         {
             MapType type = GetWallType(x, y);
