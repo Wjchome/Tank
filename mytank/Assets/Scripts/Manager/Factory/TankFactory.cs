@@ -25,9 +25,9 @@ public class TankFactory : SingletonMono<TankFactory>
     private void CreateTank(TankController tank)
     {
         tank.isDead=false;
-        tank.lastMoveTime=0;
-        tank.lastShootTime = 0;
-        tank.lastAnimStartTime = 0;
+        tank.lastMoveFrame=0;
+        tank.lastShootFrame = 0;
+        tank.lastAnimStartFrame = 0;
         tank.isCanBreakWall = false;
         tank.isCanShootTwice = false;
         tank.invincibleFrame = 0;

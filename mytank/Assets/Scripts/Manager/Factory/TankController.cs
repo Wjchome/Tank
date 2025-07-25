@@ -33,9 +33,9 @@ public class TankController : MonoBehaviour
     public int killNum=0;
  
     //一些计时器
-    public float lastMoveTime;
-    public float lastShootTime;
-    public float lastAnimStartTime;
+    public long lastMoveFrame;
+     public long lastShootFrame;
+    public long lastAnimStartFrame;
     
     // 玩家自选名字
     public string playerName;
@@ -112,41 +112,42 @@ public class TankController : MonoBehaviour
         }
     }
 
+    
     void HandleMovementInput()
     {
-        if (NetworkManager.Instance.currentFrame*Constant.FrameInterval - lastMoveTime > currentData.moveInterval)
+        if (NetworkManager.Instance.currentFrame - lastMoveFrame > currentData.moveIntervalFrame)
         {
             if (Input.GetKey(KeyCode.W))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-                lastMoveTime = NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
+                lastMoveFrame = NetworkManager.Instance.currentFrame ;
             }
             else if (Input.GetKey(KeyCode.S))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-                lastMoveTime = NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
+                lastMoveFrame = NetworkManager.Instance.currentFrame ;
             }
             else if (Input.GetKey(KeyCode.A))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-                lastMoveTime =NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
+                lastMoveFrame =NetworkManager.Instance.currentFrame ;
             }
             else if (Input.GetKey(KeyCode.D))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-                lastMoveTime = NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
+                lastMoveFrame = NetworkManager.Instance.currentFrame ;
             }
         }
     }
 
     void HandleShootInput()
     {
-        if (NetworkManager.Instance.currentFrame*Constant.FrameInterval - lastShootTime > currentData.shootInterval)
+        if (NetworkManager.Instance.currentFrame- lastShootFrame > currentData.shootIntervalFrame)
         {
             if (Input.GetKey(KeyCode.Space))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
-                lastShootTime=NetworkManager.Instance.currentFrame*Constant.FrameInterval ;
+                lastShootFrame=NetworkManager.Instance.currentFrame ;
             }
         }
     }
@@ -187,8 +188,8 @@ public class TankController : MonoBehaviour
             
                 isMoving = true;
                 animator.Play("Tank"+ animType);
-                lastAnimStartTime = Time.time;
-                transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
+                lastAnimStartFrame =NetworkManager.Instance.currentFrame ;
+                transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
                 canMove = true;
             }
 
@@ -206,8 +207,8 @@ public class TankController : MonoBehaviour
             
                 isMoving = true;
                 animator.Play("Tank"+ animType);
-                lastAnimStartTime = Time.time;
-                transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
+                lastAnimStartFrame = NetworkManager.Instance.currentFrame ;
+                transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
                 canMove = true;
             }
          
@@ -223,7 +224,7 @@ public class TankController : MonoBehaviour
                 case Direction.Right: rotation = new Vector3(0, 0, -90); break;
             }
             // 旋转也用DOTween
-            transform.DORotate(rotation, currentData.moveInterval).SetEase(Ease.OutQuad);
+            transform.DORotate(rotation, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.OutQuad);
             return canMove;
         }
         else
@@ -240,8 +241,8 @@ public class TankController : MonoBehaviour
             
                 isMoving = true;
                 animator.Play("Tank"+ animType);
-                lastAnimStartTime = Time.time;
-                transform.DOMove(centerPos, currentData.moveInterval).SetEase(Ease.Linear);
+                lastAnimStartFrame = NetworkManager.Instance.currentFrame ;
+                transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
                 canMove = true;
             }
 
@@ -257,7 +258,7 @@ public class TankController : MonoBehaviour
                 case Direction.Right: rotation = new Vector3(0, 0, -90); break;
             }
             // 旋转也用DOTween
-            transform.DORotate(rotation, currentData.moveInterval).SetEase(Ease.OutQuad);
+            transform.DORotate(rotation, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.OutQuad);
             return canMove;
         }
         
@@ -282,7 +283,7 @@ public class TankController : MonoBehaviour
         {
             
             
-            if (Time.time - lastAnimStartTime > currentData.moveInterval)
+            if (NetworkManager.Instance.currentFrame - lastAnimStartFrame > currentData.moveIntervalFrame)
             {
                 isMoving = false;
                 animator.Play("Idle" +animType);
@@ -363,11 +364,10 @@ public class TankController : MonoBehaviour
 
     void AiControls()
     {
-        // 使用帧数进行时间判断，确保所有客户端同步
-        long currentFrame = NetworkManager.Instance.currentFrame;
-        float frameTime = currentFrame * Constant.FrameInterval; // 每帧0.05秒
+       
+    
         
-        if (frameTime - lastMoveTime > currentData.moveInterval)
+        if (NetworkManager.Instance.currentFrame - lastMoveFrame > currentData.moveIntervalFrame)
         {
             if (!MoveBy(tankDirection))
             {
@@ -377,19 +377,19 @@ public class TankController : MonoBehaviour
                 tankDirection = (Direction)a;
                 
                 // 使用帧时间更新
-                lastMoveTime = frameTime;
+                lastMoveFrame = NetworkManager.Instance.currentFrame;
             }
             else
             {
                 // 移动成功
-                lastMoveTime = frameTime;
+                lastMoveFrame = NetworkManager.Instance.currentFrame;
             }
         }
 
-        if (frameTime - lastShootTime > currentData.shootInterval)
+        if (NetworkManager.Instance.currentFrame - lastShootFrame > currentData.shootIntervalFrame)
         {
             Shoot();
-            lastShootTime = frameTime;
+            lastShootFrame = NetworkManager.Instance.currentFrame;
         }
     }
     

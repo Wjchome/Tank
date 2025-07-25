@@ -1,17 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "TankData", menuName = "Tank Game/TankData")]
 public class TankData : ScriptableObject
 {
-    public float moveInterval ;
-    public float shootInterval ;
+     public int moveIntervalFrame ;
+     public int shootIntervalFrame ;
     public int HP;
    
     public void InitializeTankData(TankData orignalData)
     {
-        moveInterval = orignalData.moveInterval;
-        shootInterval = orignalData.shootInterval;
+        moveIntervalFrame = orignalData.moveIntervalFrame;
+        shootIntervalFrame = orignalData.shootIntervalFrame;
         HP = orignalData.HP;
     }
 }

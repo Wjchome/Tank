@@ -68,7 +68,6 @@ public class GameStateManager : SingletonMono<GameStateManager>
     void ApplyFoodToTank(TankController tank, ChooseFoodRequest foodRequest)
     {
         FoodType foodType = (FoodType)foodRequest.FoodId;
-        Debug.LogWarning(foodType.ToString());
 
         switch (foodType)
         {
@@ -77,7 +76,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 break;
             case FoodType.Encourage:
                 tank.isEncourage = true;
-                
+                tank.encourageFrame = NetworkManager.Instance.currentFrame + (long)(10 / Constant.FrameInterval);
                 break;
         }
     }
