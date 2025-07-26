@@ -11,6 +11,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
     public GameObject autoTurretPrefab;
     
     public GameObject landminePrefab;
+    
+    public GameObject healingGardenPrefab;
     public void OnFoodsRequest(List<ChooseFoodRequest> foodRequests)
     {
         foreach (var foodRequest in foodRequests)
@@ -26,9 +28,6 @@ public class GameStateManager : SingletonMono<GameStateManager>
             }
         }
     }
-    
-
-  
 
     public void OnFrameInputs(List<PlayerInput> inputs)
     {
@@ -142,9 +141,27 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 Landmine landmineObj = landmine.GetComponent<Landmine>();
                 landmineObj.tank = tank;
                 landmineObj.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
-                
-                landmineObj.Pos = pos1;
                 break;
+              
+            case FoodType.HealingGarden:
+                var spawnPos2=MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
+                    .Except(MapManager.Instance.GetAllTankPos()).ToList();
+                var pos2 = spawnPos2[tank.random.Next(spawnPos2.Count)];
+               
+                HealingGarden healingGarden = Instantiate(healingGardenPrefab, 
+                    new Vector2(pos2.x , pos2.y), 
+                    Quaternion.identity).GetComponent<HealingGarden>();
+            
+                healingGarden .Pos=pos2;
+                healingGarden.color=tank.playerColor;
+                healingGarden.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
+                break;
+            case FoodType.RearFire:
+                tank.rearFire = true;
+                
+                break;
+                
+              
                 
         }
     }

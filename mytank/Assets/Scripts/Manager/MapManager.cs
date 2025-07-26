@@ -133,7 +133,22 @@ public enum MapType
             }
             return null;
         }
-        
+        public HealingGarden HasTankInGarden(int x, int y)
+        {
+            HealingGarden[] a = FindObjectsByType<HealingGarden>(FindObjectsSortMode.None);
+            foreach (HealingGarden l in a)
+            { 
+                if (l.Pos.x == x && l.Pos.y == y)
+                    return l;
+                else if(l.Pos.x == x && l.Pos.y == y+1)
+                    return l;
+                else if(l.Pos.x == x+1 && l.Pos.y == y+1)
+                    return l;
+                else if(l.Pos.x == x+1 && l.Pos.y == y)
+                    return l;
+            }
+            return null;
+        }
         // 获取指定位置的墙类型
         public MapType GetWallType(int x, int y)
         {

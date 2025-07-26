@@ -91,6 +91,8 @@ public class TankController : MonoBehaviour
     public bool isEncourage = false;
     public long encourageFrame = -1;
     
+    public bool rearFire=false;
+    
     
     private void Awake()
     {
@@ -154,6 +156,11 @@ public class TankController : MonoBehaviour
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
             BulletFactory.Instance.Initialize(secondDir, this,secondPos);
+            if ( rearFire)
+            {
+                BulletFactory.Instance.Initialize(secondDir.Opposite(), this,secondPos);
+            
+            }
             secondShootFrame = -1; // 重置
         }
 
@@ -259,6 +266,15 @@ public class TankController : MonoBehaviour
             {
                 a.Trigger();
             }
+
+            if (identity != Identity.Enemy)
+            {
+                HealingGarden b=MapManager.Instance.HasTankInGarden(Pos.x,Pos.y);
+                if (b != null)
+                {
+                    b.PickUp(this);
+                }
+            }
         
 
     }
@@ -343,6 +359,11 @@ public class TankController : MonoBehaviour
     public void Shoot()
     {
         BulletFactory.Instance.Initialize(tankDirection,this,Pos);
+        if ( rearFire)
+        {
+            BulletFactory.Instance.Initialize(tankDirection.Opposite(),this,Pos);
+            
+        }
         if (isShootTwice)
         {
             int intervalFrame = 4;

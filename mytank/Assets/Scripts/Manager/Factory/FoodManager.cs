@@ -22,7 +22,9 @@ public enum FoodType
    WarCar,
    GenerateWall,
    AutoTurret,
-   Landmine
+   Landmine,
+   HealingGarden,
+   RearFire
     
 }
     public class FoodManager:SingletonMono<FoodManager>
