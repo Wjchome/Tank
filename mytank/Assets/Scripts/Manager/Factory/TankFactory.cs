@@ -105,7 +105,7 @@ public class TankFactory : SingletonMono<TankFactory>
     }
 
 
-    public TankController InitialEnemy(string tankID, string tankName, int x, int y, Color color, int dataIndex)
+    public TankController InitialEnemy(string tankID, string tankName, int x, int y,  int dataIndex)
     {
         TankController temp=TankPool.GetObject();
 
@@ -121,8 +121,8 @@ public class TankFactory : SingletonMono<TankFactory>
         
         // 设置坦克中心位置
         temp.  transform.position = temp. GetCenter();
-        temp. playerColor= color;
-        temp.  GetComponent<SpriteRenderer>().material.color = color;
+        temp. playerColor= Color.red;
+        temp.  GetComponent<SpriteRenderer>().material.color = Color.red;
         int seed =
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);
@@ -155,6 +155,7 @@ public class TankFactory : SingletonMono<TankFactory>
         temp.identity = Identity.Enemy;
 
         temp. playerName = playerName;
+        temp. playerColor= Color.red;
         
         // 设置坦克中心位置
         temp.  transform.position = temp. GetCenter();

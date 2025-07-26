@@ -127,7 +127,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         else
         {
             TankFactory.Instance.InitialEnemy(enemyID, $"{enemyID}", spawnPos.x, spawnPos.y,
-                Color.red, spawnType);
+                spawnType);
         }
         
     }

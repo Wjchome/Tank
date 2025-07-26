@@ -20,7 +20,9 @@ public enum FoodType
     Star,
      SteelHelmet,
    WarCar,
-   GenerateWall
+   GenerateWall,
+   AutoTurret,
+   Landmine
     
 }
     public class FoodManager:SingletonMono<FoodManager>

@@ -37,7 +37,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
     }
 
         
-    public void Initialize(Direction direction, TankController tank )
+    public void Initialize(Direction direction, TankController tank,Vector2Int pos )
     {
         BulletController bullet = BulletPool.GetObject();
         bullet.direction = direction;
@@ -50,8 +50,8 @@ public class BulletFactory : SingletonMono<BulletFactory>
         }
         // 设置子弹朝向
         Vector3 rotation = Vector3.zero;
-        bullet.dir = direction.ToVector2Int();  
-        
+        bullet.dir = direction.ToVector2Int();
+        bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
         switch (direction)
         {
             case Direction.Up: 
@@ -71,7 +71,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
         
      
        
-        bullet.Pos = tank.Pos;
+        bullet.Pos = pos;
             
             // 设置子弹中心位置
             bullet.transform.position = bullet.GetCenter();

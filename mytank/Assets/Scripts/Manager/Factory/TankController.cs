@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Tankgame;
 using DG.Tweening;
+using UnityEditor.Tilemaps;
 using UnityEngine.Serialization;
 
 
@@ -78,6 +80,7 @@ public class TankController : MonoBehaviour
     
     public long secondShootFrame = -1;
     public Direction secondDir;
+    public Vector2Int secondPos;
     
     public bool isBreakWall = false;
     public long breakWallFrame = -1;
@@ -142,6 +145,7 @@ public class TankController : MonoBehaviour
 
         if (isShootTwice)
         {
+            
             if (NetworkManager.Instance.currentFrame >= shootTwiceFrame)
             {
                 isShootTwice = false;
@@ -149,7 +153,7 @@ public class TankController : MonoBehaviour
         }
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
-            BulletFactory.Instance.Initialize(secondDir, this);
+            BulletFactory.Instance.Initialize(secondDir, this,secondPos);
             secondShootFrame = -1; // 重置
         }
 
@@ -238,6 +242,33 @@ public class TankController : MonoBehaviour
         }
     }
 
+    void MoveTo( Vector2Int targetPos)
+    {
+        
+            Pos = targetPos;
+            
+            // 计算坦克中心位置
+            Vector2 centerPos = GetCenter();
+            
+            isMoving = true;
+            animator.Play("Tank"+ animType);
+            lastAnimStartFrame = NetworkManager.Instance.currentFrame ;
+            transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
+            Landmine a=MapManager.Instance.HasTankInLanemine(Pos.x,Pos.y);
+            if (a != null)
+            {
+                a.Trigger();
+            }
+        
+
+    }
+
+    bool isCanMoveTo( Vector2Int targetPos )
+    {
+        return (isBoat && MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2, tankID))
+               || MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID);
+    }
+    
     // 帧同步推进调用
     public bool MoveBy( Direction direction)
     {
@@ -264,101 +295,60 @@ public class TankController : MonoBehaviour
         if (underice)
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
-
-            if((isBoat&&MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2,tankID))
-            ||MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
+            if (isCanMoveTo(targetPos))
             {
-                Pos = targetPos;
-            
-                // 计算坦克中心位置
-                Vector2 centerPos = GetCenter();
-            
-                isMoving = true;
-                animator.Play("Tank"+ animType);
-                lastAnimStartFrame =NetworkManager.Instance.currentFrame ;
-                transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
+                MoveTo( targetPos);
                 canMove = true;
+                
             }
-
-        
-            
-            
-            targetPos = Pos + new Vector2Int(dx, dy);
-            if((isBoat&&MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2,tankID))
-               ||MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
-            {
-                Pos = targetPos;
-            
-                // 计算坦克中心位置
-                Vector2 centerPos = GetCenter();
-            
-                isMoving = true;
-                animator.Play("Tank"+ animType);
-                lastAnimStartFrame = NetworkManager.Instance.currentFrame ;
-                transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
-                canMove = true;
-            }
-         
            
-            
-            tankDirection = direction;
-            Vector3 rotation = Vector3.zero;
-            switch (direction)
+            targetPos = Pos + new Vector2Int(dx, dy);
+            if (isCanMoveTo(targetPos))
             {
-                case Direction.Up: rotation = new Vector3(0, 0, 0); break;
-                case Direction.Down: rotation = new Vector3(0, 0, 180); break;
-                case Direction.Left: rotation = new Vector3(0, 0, 90); break;
-                case Direction.Right: rotation = new Vector3(0, 0, -90); break;
+                MoveTo( targetPos);
+                canMove = true;
+                
             }
-            // 旋转也用DOTween
-            transform.DORotate(rotation, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.OutQuad);
-            return canMove;
+           
+          
         }
         else
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
         
-            if((isBoat&&MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2,tankID))
-               ||MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2,tankID))
+            if (isCanMoveTo(targetPos))
             {
-                Pos = targetPos;
-            
-                // 计算坦克中心位置
-                Vector2 centerPos = GetCenter();
-            
-                isMoving = true;
-                animator.Play("Tank"+ animType);
-                lastAnimStartFrame = NetworkManager.Instance.currentFrame ;
-                transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
+                MoveTo( targetPos);
                 canMove = true;
+                
             }
-
-        
+            
            
-            tankDirection = direction;
-            Vector3 rotation = Vector3.zero;
-            switch (direction)
-            {
-                case Direction.Up: rotation = new Vector3(0, 0, 0); break;
-                case Direction.Down: rotation = new Vector3(0, 0, 180); break;
-                case Direction.Left: rotation = new Vector3(0, 0, 90); break;
-                case Direction.Right: rotation = new Vector3(0, 0, -90); break;
-            }
-            // 旋转也用DOTween
-            transform.DORotate(rotation, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.OutQuad);
-            return canMove;
         }
+        tankDirection = direction;
+        Vector3 rotation = Vector3.zero;
+        switch (direction)
+        {
+            case Direction.Up: rotation = new Vector3(0, 0, 0); break;
+            case Direction.Down: rotation = new Vector3(0, 0, 180); break;
+            case Direction.Left: rotation = new Vector3(0, 0, 90); break;
+            case Direction.Right: rotation = new Vector3(0, 0, -90); break;
+        }
+        // 旋转也用DOTween
+        transform.DORotate(rotation, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.OutQuad);
+        return canMove;
         
     }
   
     public void Shoot()
     {
-        BulletFactory.Instance.Initialize(tankDirection,this);
+        BulletFactory.Instance.Initialize(tankDirection,this,Pos);
         if (isShootTwice)
         {
             int intervalFrame = 4;
             secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
             secondDir=tankDirection;
+            secondPos = Pos;
         }
     }
 

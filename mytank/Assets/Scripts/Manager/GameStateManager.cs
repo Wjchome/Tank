@@ -7,6 +7,10 @@ using TMPro;
 
 public class GameStateManager : SingletonMono<GameStateManager>
 {
+
+    public GameObject autoTurretPrefab;
+    
+    public GameObject landminePrefab;
     public void OnFoodsRequest(List<ChooseFoodRequest> foodRequests)
     {
         foreach (var foodRequest in foodRequests)
@@ -111,6 +115,35 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 break;
             case FoodType.GenerateWall:
                 MapManager.Instance.GenerateWall(3, tank.random);
+                break;
+            case FoodType.AutoTurret:
+                var spawnPos=MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
+                    .Except(MapManager.Instance.GetAllTankPos()).ToList();
+                var pos = spawnPos[tank.random.Next(spawnPos.Count)];
+               
+                    GameObject turretObj = Instantiate(autoTurretPrefab, 
+                        new Vector2(pos.x+0.5f , pos.y+0.5f), 
+                        Quaternion.identity);
+                    AutoTurret turret = turretObj.GetComponent<AutoTurret>();
+                    turret.tank = tank;
+                turret.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
+                
+                turret.Pos = pos;
+                
+                break;
+            case FoodType.Landmine:
+                var spawnPos1=MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
+                    .Except(MapManager.Instance.GetAllTankPos()).ToList();
+                var pos1 = spawnPos1[tank.random.Next(spawnPos1.Count)];
+               
+                GameObject landmine = Instantiate(landminePrefab, 
+                    new Vector2(pos1.x , pos1.y), 
+                    Quaternion.identity);
+                Landmine landmineObj = landmine.GetComponent<Landmine>();
+                landmineObj.tank = tank;
+                landmineObj.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
+                
+                landmineObj.Pos = pos1;
                 break;
                 
         }

@@ -75,9 +75,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: -1542622055
+  m_SortingLayer: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: -1719434990, guid: a1b5d307d46ca4d79bffdc4e5c8c2cbe, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -106,13 +106,12 @@ MonoBehaviour:
   tankDirection: 0
   Pos: {x: 0, y: 0}
   killNum: 0
-  IsLocalPlayer: 0
-  lastMoveTime: 0
-  lastShootTime: 0
-  lastAnimStartTime: 0
+  lastMoveFrame: 0
+  lastShootFrame: 0
+  lastAnimStartFrame: 0
   playerName: 
   playerColor: {r: 0, g: 0, b: 0, a: 0}
-  isPlayer: 0
+  identity: 0
   isMoving: 0
   animTime: 0.7
   playerPanelUI: {fileID: 0}
@@ -120,11 +119,18 @@ MonoBehaviour:
   animator: {fileID: 8205607647078584822}
   spriteRenderer: {fileID: 688619496750072981}
   animType: 1
-  InvincibleFrame: 0
-  isCanShootTwice: 0
+  isBoat: 0
+  boatFrame: -1
+  isInvincible: 0
+  invincibleFrame: 0
+  isShootTwice: 0
+  shootTwiceFrame: -1
   secondShootFrame: -1
   secondDir: 0
-  isCanBreakWall: 0
+  isBreakWall: 0
+  breakWallFrame: -1
+  isEncourage: 0
+  encourageFrame: -1
 --- !u!95 &8205607647078584822
 Animator:
   serializedVersion: 7

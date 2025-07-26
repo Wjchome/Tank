@@ -8,8 +8,8 @@
     public enum Direction
 {
     Up,
-    Down,
     Left,
+    Down,
     Right
 }
 
@@ -116,6 +116,24 @@ public enum MapType
                 return true;
             return false;
         }
+
+        public Landmine HasTankInLanemine(int x, int y)
+        {
+            Landmine[] a = FindObjectsByType<Landmine>(FindObjectsSortMode.None);
+            foreach (Landmine l in a)
+            { 
+                if (l.Pos.x == x && l.Pos.y == y)
+                    return l;
+                else if(l.Pos.x == x && l.Pos.y == y+1)
+                    return l;
+                else if(l.Pos.x == x+1 && l.Pos.y == y+1)
+                    return l;
+                else if(l.Pos.x == x+1 && l.Pos.y == y)
+                    return l;
+            }
+            return null;
+        }
+        
         // 获取指定位置的墙类型
         public MapType GetWallType(int x, int y)
         {
@@ -316,37 +334,46 @@ public enum MapType
             return true;
         }
 
-
-        public void GenerateWall(int num,Random random)
+        public List<Vector2Int> GetMapTypePos(List<MapType> mapTypes)
         {
-            // 1. 找出所有floor格子
+            HashSet<MapType> mapHash = new HashSet<MapType>(mapTypes);
             List<Vector2Int> candidates = new List<Vector2Int>();
             for (int x = 0; x < mapWidth; x++)
             {
                 for (int y = 0; y < mapHeight; y++)
                 {
-                    if (map[x, y] == MapType.floor)
+                    if (mapHash.Contains(map[x, y]))
                     {
                        
-                            candidates.Add(new Vector2Int(x, y));
+                        candidates.Add(new Vector2Int(x, y));
                         
                     }
                 }
             }
-            
-            List<Vector2Int> a=new List<Vector2Int>();
+            return candidates;
+        }
+
+        public List<Vector2Int> GetAllTankPos()
+        {
+            List<Vector2Int> res=new List<Vector2Int>();
             
             foreach (var tank in TankFactory.Instance.activeTanks)
             {
-                    a.Add(tank.Pos);
-                    a.Add(tank.Pos+new Vector2Int(1,0));
-                    a.Add(tank.Pos+new Vector2Int(1,1));
-                    a.Add(tank.Pos+new Vector2Int(0,1));
+                res.Add(tank.Pos);
+                res.Add(tank.Pos+new Vector2Int(1,0));
+                res.Add(tank.Pos+new Vector2Int(1,1));
+                res.Add(tank.Pos+new Vector2Int(0,1));
             }
+            return res;
+        }
+        
+        
+        
 
-            candidates = candidates.Except(a).ToList();
-   
-            
+        public void GenerateWall(int num,Random random)
+        {
+           var candidates=GetMapTypePos(new List<MapType>() { MapType.floor });
+           candidates = candidates.Except(GetAllTankPos()).ToList();
             int count = Math.Min(num, candidates.Count-1);
             for (int i = 0; i < count; i++)
             {
@@ -404,20 +431,6 @@ public enum MapType
 
 
 
-        public List<Vector2Int> GetEmptyPositions()
-        {
-            var emptyPositions = new List<Vector2Int>();
-            for (int x = 0; x < mapWidth; x++)
-            {
-                for (int y = 0; y < mapHeight; y++)
-                {
-                    if (map[x, y] == MapType.floor)
-                    {
-                        emptyPositions.Add(new Vector2Int(x, y));
-                    }
-                }
-            }
-            return emptyPositions;
-        }
+   
         
     }

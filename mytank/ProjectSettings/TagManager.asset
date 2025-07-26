@@ -48,8 +48,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Boom
+  - name: Entity
+    uniqueID: 3392410299
+    locked: 0
+  - name: Tank
     uniqueID: 2752345241
+    locked: 0
+  - name: Tree
+    uniqueID: 3517817293
     locked: 0
   m_RenderingLayers:
   - Default

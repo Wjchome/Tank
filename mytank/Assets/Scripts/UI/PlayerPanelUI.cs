@@ -11,6 +11,10 @@
         public TextMeshProUGUI playerKillText;
 
         public int interval;
+        
+        
+        
+        
         public void SetPos(int index)
         {
             GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
@@ -27,4 +31,5 @@
             playerHealthText.text="HP: "+tankController.currentData.HP.ToString();
             playerKillText.text="Kill: "+tankController.killNum.ToString();
         }
+        
     }
