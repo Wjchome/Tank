@@ -62,7 +62,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         }
     }
 
-    private void Update()
+    public void UpdateFrame()
     {
         CheckEnemySpawn();
     }

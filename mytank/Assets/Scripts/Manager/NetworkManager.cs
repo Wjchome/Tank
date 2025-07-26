@@ -99,6 +99,13 @@ public class NetworkManager : SingletonMono<NetworkManager>
             currentFrame = message.FrameMessage.FrameNumber;
             GameStateManager.Instance. OnFrameInputs(message.FrameMessage.Inputs.ToList());
             GameStateManager.Instance. OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
+            BulletFactory.Instance.activeBullets.ForEach(a=>a.UpdateFrame());
+            TankFactory.Instance.activeTanks.ForEach(a=>a.UpdateFrame());
+            MapManager.Instance.UpdateFrame();
+            EnemyManager.Instance.UpdateFrame();
+            GameStateManager.Instance.autoTurrets.ForEach(a=>a.UpdateFrame());
+            GameStateManager.Instance.healingGardens.ForEach(a=>a.UpdateFrame());
+            GameStateManager.Instance.landmines.ForEach(a=>a.UpdateFrame());
         }
         else if (message.GameStart != null)
         {

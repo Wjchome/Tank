@@ -10,9 +10,15 @@ public class GameStateManager : SingletonMono<GameStateManager>
 
     public GameObject autoTurretPrefab;
     
+    public List<AutoTurret> autoTurrets;
+    
     public GameObject landminePrefab;
+    public List<Landmine> landmines;
+    
     
     public GameObject healingGardenPrefab;
+    public List<HealingGarden> healingGardens;
+    
     public void OnFoodsRequest(List<ChooseFoodRequest> foodRequests)
     {
         foreach (var foodRequest in foodRequests)
@@ -126,8 +132,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
                     AutoTurret turret = turretObj.GetComponent<AutoTurret>();
                     turret.tank = tank;
                 turret.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
-                
                 turret.Pos = pos;
+                autoTurrets.Add(turret);
                 
                 break;
             case FoodType.Landmine:
@@ -141,13 +147,13 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 Landmine landmineObj = landmine.GetComponent<Landmine>();
                 landmineObj.tank = tank;
                 landmineObj.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
+                landmines.Add(landmineObj);
                 break;
               
             case FoodType.HealingGarden:
                 var spawnPos2=MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
                     .Except(MapManager.Instance.GetAllTankPos()).ToList();
                 var pos2 = spawnPos2[tank.random.Next(spawnPos2.Count)];
-               
                 HealingGarden healingGarden = Instantiate(healingGardenPrefab, 
                     new Vector2(pos2.x , pos2.y), 
                     Quaternion.identity).GetComponent<HealingGarden>();
@@ -155,13 +161,17 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 healingGarden .Pos=pos2;
                 healingGarden.color=tank.playerColor;
                 healingGarden.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
+                
+                healingGardens.Add(healingGarden);
                 break;
             case FoodType.RearFire:
                 tank.rearFire = true;
                 
                 break;
+            case FoodType.Protect:
+                MapManager.Instance.Protect(tank.Pos,30);
                 
-              
+                break;  
                 
         }
     }

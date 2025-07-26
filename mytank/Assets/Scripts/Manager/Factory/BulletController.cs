@@ -50,7 +50,7 @@ public class BulletController : MonoBehaviour
         return isPlayer==isPlayerBullet;
     }
     
-    private void Update()
+    public void UpdateFrame()
     {
         if (isShouldDestroy ) return;
        

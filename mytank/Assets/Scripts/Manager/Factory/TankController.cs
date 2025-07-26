@@ -99,7 +99,7 @@ public class TankController : MonoBehaviour
         size=transform.localScale;
     }
 
-    void Update()
+     public void UpdateFrame()
     {
         if (invincibleFrame > NetworkManager.Instance.currentFrame)
         {

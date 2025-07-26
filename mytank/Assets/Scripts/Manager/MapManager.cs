@@ -70,7 +70,7 @@ public enum MapType
             
         }
 
-        private void Update()
+        public void UpdateFrame()
         {
           
             
@@ -78,6 +78,11 @@ public enum MapType
             {
                aaa(MapType.breakableWall);
                 isChange = false;
+            }
+
+            foreach (var (pos,dur) in protectList.ToList())
+            {
+                //TODO 更新地图
             }
         }
 
@@ -445,7 +450,11 @@ public enum MapType
         }
 
 
-
+        private List<(Vector2Int, int)> protectList = new List<(Vector2Int, int)>();
+        public void Protect(Vector2Int pos,int durtion)
+        {
+            protectList.Add((pos, durtion));
+        }
    
         
     }

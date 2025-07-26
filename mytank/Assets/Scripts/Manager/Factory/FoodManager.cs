@@ -17,14 +17,18 @@ public enum FoodType
    
     Shoe,
     Shovel,
-    Star,
-     SteelHelmet,
-   WarCar,
-   GenerateWall,
-   AutoTurret,
-   Landmine,
-   HealingGarden,
-   RearFire
+    Star, 
+    SteelHelmet,
+    WarCar,
+    GenerateWall,
+    AutoTurret,
+    Landmine,
+    HealingGarden,
+    RearFire,
+   Protect
+    
+   
+   
     
 }
     public class FoodManager:SingletonMono<FoodManager>

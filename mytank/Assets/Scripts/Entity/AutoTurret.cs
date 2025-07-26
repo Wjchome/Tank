@@ -12,7 +12,7 @@ public class AutoTurret:MonoBehaviour
         private float lastShootFrame;
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
-        private void Update()
+        public void UpdateFrame()
         {
             if (NetworkManager.Instance.currentFrame - lastShootFrame >= shootIntervalFrame) 
             {

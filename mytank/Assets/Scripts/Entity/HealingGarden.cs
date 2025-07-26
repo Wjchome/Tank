@@ -13,7 +13,7 @@
         public bool isOk = false;
         
         public Color color;
-        public void Update()
+        public void UpdateFrame()
         {
             if (NetworkManager.Instance.currentFrame - lastGenateFrame > genateIntervalFrame)
             {
