@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SteelHelmet
   m_EditorClassIdentifier: 
   foodType: 8
-  sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
+  sprite: {fileID: 21300000, guid: ffbe03b7310ae46879927017b52cebef, type: 3}
   foodName: "\u5934\u76D4"
-  foodDescription: "5\u79D2\u65E0\u654C"
+  foodDescription:
+  - "\u65E0\u654C5\u79D2"
+  - "\u65E0\u654C15\u79D2"
+  - "\u6BCF60\u79D2\u65E0\u654C10\u79D2"

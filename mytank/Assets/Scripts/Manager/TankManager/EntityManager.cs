@@ -13,13 +13,36 @@
     
         public HealingGarden healingGardenPrefab;
         
+        public SpikeTrap spikeTrapPrefab;
+
+        public BombController bombControllerPrefab;
+        
+        public PocketWatchController pocketWatchControllerPrefab;
+        
+        public ShovelController shovelControllerPrefab;
+        
+        public SteelHelmetController steelHelmetControllerPrefab;
+        
+        public ProtectController  protectControllerPrefab;
+        
         public List<AutoTurret>  autoTurrets = new List<AutoTurret>();
         
         public List<LandmineMachine>  landmineMachines = new List<LandmineMachine>();
         public List<Landmine>  landmines = new List<Landmine>();
         
         public List<HealingGarden> healingGardens = new List<HealingGarden>();
+        
+        public List<SpikeTrap> spikeTraps = new List<SpikeTrap>();
 
+        public List<BombController> bombControllers = new List<BombController>();
+        
+        public List<PocketWatchController> pocketWatchControllers = new List<PocketWatchController>();
+      
+        public List<ShovelController> shovelControllers = new List<ShovelController>();
+        
+        public List<SteelHelmetController> steelHelmetControllers = new List<SteelHelmetController>();
+     
+        public List<ProtectController> protectControllers = new List<ProtectController>();
         public void UpdateFrame()
         {
             foreach (AutoTurret turret in autoTurrets)
@@ -36,7 +59,44 @@
             {
                 healingGarden.UpdateFrame();
             }
-            
+
+            foreach (var spikeTrap in spikeTraps.ToList())
+            {
+                if (spikeTrap != null)
+                {
+                    spikeTrap.UpdateFrame();
+                    
+                }
+                else
+                {
+                    spikeTraps.Remove(spikeTrap);
+                }
+            }
+
+            foreach (var bombController in bombControllers)
+            {
+                bombController.UpdateFrame();
+            }
+
+            foreach (var pocketWatchController in pocketWatchControllers)
+            {
+                pocketWatchController.UpdateFrame();
+            }
+
+            foreach (var shovelController in shovelControllers)
+            {
+                shovelController.UpdateFrame();
+            }
+
+            foreach (var steelHelmetController in steelHelmetControllers)
+            {
+                steelHelmetController.UpdateFrame();
+            }
+
+            foreach (var protectController in protectControllers)
+            {
+                protectController.UpdateFrame();
+            }
         }
 
 
@@ -71,7 +131,7 @@
             landmineMachines.Add(landmineMachine);
         }
 
-        public void InitLandmine(TankController tank)
+        public void InitLandmine(TankController tank )
         {
             var spawnPos=MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
                 .Except(MapManager.Instance.GetAllTankPos()).ToList();
@@ -100,6 +160,59 @@
             healingGarden.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
                 
             healingGardens.Add(healingGarden);
+        }
+
+        public void InitSpikeTrap(TankController tank, Vector2Int pos,int durationFrame)
+        {
+            SpikeTrap spikeTrap=Instantiate(spikeTrapPrefab,new Vector2(pos.x , pos.y),Quaternion.identity);
+            
+            spikeTrap.tank = tank;
+            spikeTrap.Pos = pos;
+            spikeTrap.durationFrame = 80;
+            spikeTraps.Add(spikeTrap);
+        }
+
+        public void InitBombController(TankController tank)
+        {
+            var bombC = Instantiate(bombControllerPrefab,new Vector3(-5,0,0),Quaternion.identity);
+            bombC.tank = tank;
+            bombC.lastTriggerFrame = -bombC.genateIntervalFrame;
+            bombControllers.Add(bombC);
+            
+        }
+        
+        public void InitPocketWatchController(TankController tank)
+        {
+            var pocketWatchController = Instantiate(pocketWatchControllerPrefab,new Vector3(-5,0,0),Quaternion.identity);
+            pocketWatchController.tank = tank;
+            pocketWatchController.lastTriggerFrame = -pocketWatchController.genateIntervalFrame;
+            pocketWatchControllers.Add(pocketWatchController);
+            
+        }
+        public void InitShovelController(TankController tank)
+        {
+            var shovelController = Instantiate(shovelControllerPrefab,new Vector3(-5,1,0),Quaternion.identity);
+            shovelController.tank = tank;
+            shovelController.lastTriggerFrame = -shovelController.genateIntervalFrame;
+            shovelControllers.Add(shovelController);
+            
+        }
+        public void InitSteelHelmetController(TankController tank)
+        {
+            var steelHelmet = Instantiate(steelHelmetControllerPrefab,new Vector3(-5,2,0),Quaternion.identity);
+            steelHelmet.tank = tank;
+            steelHelmet.lastTriggerFrame = -steelHelmet.genateIntervalFrame;
+            steelHelmetControllers.Add(steelHelmet);
+            
+        }
+        
+        public void InitProtectController(TankController tank)
+        {
+            var protectController = Instantiate(protectControllerPrefab,new Vector3(-5,2,0),Quaternion.identity);
+            protectController.tank = tank;
+            protectController.lastTriggerFrame = -protectController.genateIntervalFrame;
+            protectControllers.Add(protectController);
+            
         }
         
     }

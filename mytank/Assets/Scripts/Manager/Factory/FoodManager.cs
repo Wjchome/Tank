@@ -12,9 +12,6 @@ public enum FoodType
     Encourage,
     Pistol,
     PocketWatch,
-     
-    
-   
     Shoe,
     Shovel,
     Star, 
@@ -25,7 +22,8 @@ public enum FoodType
     Landmine,
     HealingGarden,
     RearFire,
-   Protect
+    SpikeTrap,
+    Protect
     
    
    
@@ -49,7 +47,7 @@ public enum FoodType
         {
             panel.chooseButton.onClick.RemoveAllListeners();
         }
-
+//TODO 随机算法
         // 2. 随机选取不重复的食物
         var availableFoods = new List<FoodData>(foodDatas);
         for (int i = 0; i < 3; i++)
@@ -78,13 +76,34 @@ public enum FoodType
 
     void SetupPanel(int index, FoodData food, TankController tank)
     {
+        int num=0  ;
+        
+        if (tank.foodDict.ContainsKey(food.foodType))
+        {
+            num = tank.foodDict[food.foodType];
+        }
+        else
+        {
+            tank.foodDict.Add(food.foodType, 0);
+        }
+        num=Mathf.Min(num,2);
         var panel = panels[index];
         panel.gameObject.SetActive(true);
         panel.chooseButton.interactable = true;
         panel.image.sprite = food.sprite;
         panel.foodName.text = food.foodName;
-        panel.foodDescription.text = food.foodDescription;
-
+        panel.foodDescription.text = food.foodDescription[num];
+        for (int i = 0; i < 3; i++)
+        {
+            if (i <= num)
+            {
+                panel.isGetImage[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                panel.isGetImage[i].gameObject.SetActive(true);
+            }
+        }
         panel.chooseButton.onClick.AddListener(() =>
         {
             // 1. 禁用所有按钮，防止多次点击

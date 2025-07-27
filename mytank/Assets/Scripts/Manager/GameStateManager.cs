@@ -69,67 +69,354 @@ public class GameStateManager : SingletonMono<GameStateManager>
     void ApplyFoodToTank(TankController tank, ChooseFoodRequest foodRequest)
     {
         FoodType foodType = (FoodType)foodRequest.FoodId;
-
+        int num= tank.foodDict[foodType]++;
         switch (foodType)
         {
             case FoodType.Boat:
-                tank.isBoat = true;
-                tank.boatFrame=NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+                if (num == 0)
+                {
+                    tank.isBoat = true;
+                    tank.boatFrame=NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+                }
+                else if (num == 1)
+                {
+                    tank.isBoat = true;
+                    tank.boatFrame=NetworkManager.Instance.currentFrame + Mathf.RoundToInt(30 / Constant.FrameInterval);
+
+                }
+                else if (num == 2)
+                {
+                    tank.isBoat = true;
+                    tank.boatFrame=long.MaxValue;
+
+                }
                 break;
             case FoodType.Bomb:
-                EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(1, tank));
+                if (num == 0)
+                {
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(1, tank));
+                    
+                }
+                else if (num == 1)
+                {
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(2, tank));
+                    
+                }
+                else if (num == 2)
+                {
+                    EntityManager.Instance.InitBombController(tank);
+                }
                 break;
             case FoodType.Encourage:
-                tank.isEncourage = true;
-                tank.encourageFrame = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
-                break;
-            case FoodType.Pistol:
-                tank.isShootTwice = true;   
-                tank.shootTwiceFrame=NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
-                break;
-            case FoodType.PocketWatch:
-                long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
-                EnemyManager.Instance.pauseEndFrame=targetFrame;
-                break;
-            case FoodType.Shoe: 
-                tank.currentData.moveIntervalFrame = Mathf.Max(1, tank.currentData.moveIntervalFrame - 1);
-                break;
-            case FoodType.Shovel:
-                MapManager.Instance.isChange = true;
-                MapManager.Instance.ironWallEndFrames=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
-                MapManager.Instance.aaa(MapType.wall);
+                if (num == 0)
+                {
+                    tank.isEncourage = true;
+                    tank.encourageFrame = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+
+    
+                }
+                else if (num == 1)
+                {
+                    tank.isEncourage = true;
+                    tank.encourageFrame = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(30 / Constant.FrameInterval);
+
+    
+                }
+                else if (num == 2)
+                {
+                    tank.isEncourage = true;
+                    tank.encourageFrame = long.MaxValue;
+                }
                 break;
             case FoodType.Star:
-                tank.isBreakWall = true;
-                tank.breakWallFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
+                if (num == 0)
+                {
+                    tank.isShootTwice = true;   
+                    tank.shootTwiceFrame=NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+
+    
+                }
+                else if (num == 1)
+                {
+                    tank.isShootTwice = true;   
+                    tank.shootTwiceFrame=long.MaxValue;
+    
+                }
+                else if (num == 2)
+                {
+                    tank.isShootThree = true;
+                }
                 break;
+            case FoodType.PocketWatch:
+                if (num == 0)
+                {
+                    long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
+                    EnemyManager.Instance.pauseEndFrame=targetFrame;
+    
+                }
+                else if (num == 1)
+                {
+                    long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(30/Constant.FrameInterval);
+                    EnemyManager.Instance.pauseEndFrame=targetFrame;
+    
+                }
+                else if (num == 2)
+                {
+                    EntityManager.Instance.InitPocketWatchController(tank);
+                }
+                break;
+            case FoodType.Shoe: 
+                if (num == 0)
+                {
+                    tank.currentData.moveIntervalFrame--;
+
+
+                }
+                else if (num == 1)
+                {
+                    tank.currentData.moveIntervalFrame--;
+
+    
+                }
+                else if (num == 2)
+                {
+                    tank.currentData.moveIntervalFrame--;
+  
+                }
+                break;
+            case FoodType.Shovel:
+                if (num == 0)
+                {
+                    MapManager.Instance.isChange = true;
+                    MapManager.Instance.ironWallEndFrames=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
+                    MapManager.Instance.HomeWall(MapType.wall);
+    
+                }
+                else if (num == 1)
+                {
+
+                    MapManager.Instance.isChange = true;
+                    MapManager.Instance.ironWallEndFrames=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(30/Constant.FrameInterval);
+                    MapManager.Instance.HomeWall(MapType.wall);
+                }
+                else if (num == 2)
+                {
+                    EntityManager.Instance.InitShovelController(tank);
+                }
+                break;
+            case FoodType.Pistol:
+                if (num == 0)
+                {
+
+                    tank.isBreakWall = true;
+                    tank.breakWallFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
+
+                }
+                else if (num == 1)
+                {
+
+                    tank.isBreakWall = true;
+                    tank.breakWallFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(30/Constant.FrameInterval);
+
+                }
+                else if (num == 2)
+                {
+                    tank.isBreakWall = true;
+                    tank.breakWallFrame=long.MaxValue;
+                }
+              break;
             case FoodType.SteelHelmet:
-                tank.isInvincible = true;
-                tank.invincibleFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(5/Constant.FrameInterval);
+                if (num == 0)
+                {
+
+                    tank.isInvincible = true;
+                    tank.invincibleFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(5/Constant.FrameInterval);
+
+                }
+                else if (num == 1)
+                {
+                    tank.isInvincible = true;
+                    tank.invincibleFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(15/Constant.FrameInterval);
+                }
+                else if (num == 2)
+                {
+                    EntityManager.Instance. InitSteelHelmetController(tank);
+                }
                 break;
             case FoodType.WarCar:
-                tank.AddHP(1);
+                if (num == 0)
+                {
+                    tank.AddHP(1);
+                }
+                else if (num == 1)
+                {
+                    tank.AddHP(2);
+                }
+                else if (num == 2)
+                {
+                    tank.AddHP(3);
+                }
                 break;
             case FoodType.GenerateWall:
-                MapManager.Instance.GenerateWall(3, tank.random);
+                if (num == 0)
+                {
+                    MapManager.Instance.GenerateWall(3, tank.random);
+
+    
+                }
+                else if (num == 1)
+                {
+                    MapManager.Instance.GenerateWall(4, tank.random);
+
+    
+                }
+                else if (num == 2)
+                {
+                    MapManager.Instance.GenerateWall(5, tank.random);
+  
+                }
+
                 break;
             case FoodType.AutoTurret:
-                EntityManager.Instance.InitAutoTurrent(tank);
+                if (num == 0)
+                {
+
+                    EntityManager.Instance.InitAutoTurrent(tank);
+    
+                }
+                else if (num == 1)
+                {
+                    EntityManager.Instance.InitAutoTurrent(tank);
+                    EntityManager.Instance.InitAutoTurrent(tank);
+
+    
+                }
+                else if (num == 2)
+                {
+                    EntityManager.Instance.InitAutoTurrent(tank);
+                    EntityManager.Instance.InitAutoTurrent(tank);
+                    EntityManager.Instance.InitAutoTurrent(tank);
+  
+                }
+
                 
                 break;
             case FoodType.Landmine:
-                EntityManager.Instance.InitLandmineMachine(tank);
+                if (num == 0)
+                {
+
+                    EntityManager.Instance.InitLandmineMachine(tank);
+    
+                }
+                else if (num == 1)
+                {
+
+                    EntityManager.Instance.InitLandmineMachine(tank);
+                    EntityManager.Instance.InitLandmineMachine(tank);
+    
+                }
+                else if (num == 2)
+                {
+                    EntityManager.Instance.InitLandmineMachine(tank);
+                    EntityManager.Instance.InitLandmineMachine(tank);
+                    EntityManager.Instance.InitLandmineMachine(tank);
+  
+                }
+
                 break;
               
             case FoodType.HealingGarden:
+                if (num == 0)
+                {
                 EntityManager.Instance.InitHealingGarden(tank);
+                    
+    
+                }
+                else if (num == 1)
+                {
+
+                EntityManager.Instance.InitHealingGarden(tank);
+                EntityManager.Instance.InitHealingGarden(tank);
+    
+                }
+                else if (num == 2)
+                {
+                EntityManager.Instance.InitHealingGarden(tank);
+                EntityManager.Instance.InitHealingGarden(tank);
+                EntityManager.Instance.InitHealingGarden(tank);
+  
+                }
                 break;
             case FoodType.RearFire:
-                tank.rearFire = true;
+                if (num == 0)
+                {
+                    tank.rearFire = true;
+                    tank.encourageFrame = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(10 / Constant.FrameInterval);
+
+                }
+                else if (num == 1)
+                {
+                    tank.rearFire = true;
+                    tank.encourageFrame = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(30 / Constant.FrameInterval);
+
+    
+                }
+                else if (num == 2)
+                {
+                    tank.rearFire = true;
+                    tank.encourageFrame = long.MaxValue;
+                }
                 
                 break;
+            case FoodType.SpikeTrap:
+                if (num == 0)
+                {
+
+                tank.isSpikeTrap = true;
+    tank.spikeTrapDurationFrame=Mathf.RoundToInt(1/Constant.FrameInterval);
+                }
+                else if (num == 1)
+                {
+                    tank.isSpikeTrap = true;
+                    tank.spikeTrapDurationFrame=Mathf.RoundToInt(2/Constant.FrameInterval);
+    
+                }
+                else if (num == 2)
+                {
+                    tank.isSpikeTrap = true;
+                    tank.spikeTrapDurationFrame=Mathf.RoundToInt(4/Constant.FrameInterval);
+                }
+                break;
+            
             case FoodType.Protect:
-                MapManager.Instance.Protect(tank.Pos,30);
+                if (num == 0)
+                {
+                    EntityManager.Instance.InitProtectController(tank);
+    
+                }
+                else if (num == 1)
+                {
+                    var targetProtect = EntityManager.Instance.protectControllers
+                        .SingleOrDefault(pro => pro.tank == tank);
+
+                    if (targetProtect != null)
+                    {
+                        targetProtect.genateIntervalFrame = (int)(3f / Constant.FrameInterval);
+                    }
+                   
+    
+                }
+                else if (num == 2)
+                {
+                    var targetProtect = EntityManager.Instance.protectControllers
+                        .SingleOrDefault(pro => pro.tank == tank);
+
+                    if (targetProtect != null)
+                    {
+                        targetProtect.genateIntervalFrame = (int)(2f / Constant.FrameInterval);
+                    }
+
+                }
                 
                 break;  
                 

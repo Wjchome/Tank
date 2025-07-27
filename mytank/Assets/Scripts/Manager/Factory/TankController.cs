@@ -17,6 +17,7 @@ public enum Identity
 
 public class TankController : MonoBehaviour
 {
+    
 
     public TankData currentData;
 
@@ -26,10 +27,9 @@ public class TankController : MonoBehaviour
 
     public Vector2Int Pos;
     // 坐标系统辅助方法
-    public Vector2Int GetTopLeft() => new Vector2Int(Pos.x, Pos.y + 1);
-    public Vector2Int GetTopRight() => new Vector2Int(Pos.x + 1, Pos.y + 1);
-    public Vector2Int GetBottomLeft() => Pos; // 左下角就是Pos
-    public Vector2Int GetBottomRight() => new Vector2Int(Pos.x + 1, Pos.y);
+    public Vector2Int PosUp => new Vector2Int(Pos.x, Pos.y + 1);
+    public Vector2Int PosUpRight => new Vector2Int(Pos.x + 1, Pos.y + 1);
+    public Vector2Int PosRight => new Vector2Int(Pos.x + 1, Pos.y);
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
     //击杀数量
     public int killNum=0;
@@ -63,6 +63,11 @@ public class TankController : MonoBehaviour
     public System.Random random = new System.Random();
 
     public int animType = 1;
+    
+    public Dictionary<FoodType,int> foodDict = new Dictionary<FoodType,int>();
+    
+    
+    
 
 
     
@@ -77,10 +82,14 @@ public class TankController : MonoBehaviour
     
     public bool isShootTwice = false;
     public long shootTwiceFrame = -1;
-    
+    public bool isShootThree = false;
     public long secondShootFrame = -1;
     public Direction secondDir;
     public Vector2Int secondPos;
+    public long threeShootFrame = -1;
+    public Direction threeDir;
+    public Vector2Int threePos;
+    
     
     public bool isBreakWall = false;
     public long breakWallFrame = -1;
@@ -92,8 +101,11 @@ public class TankController : MonoBehaviour
     public long encourageFrame = -1;
     
     public bool rearFire=false;
+    public long rearFireFrame=-1;
     
-    
+    public bool isSpikeTrap = false;
+    public int spikeTrapDurationFrame = 0;
+        
     private void Awake()
     {
         size=transform.localScale;
@@ -153,6 +165,17 @@ public class TankController : MonoBehaviour
                 isShootTwice = false;
             }
         }
+
+        if (threeShootFrame>0&&NetworkManager.Instance.currentFrame >= threeShootFrame)
+        {
+            BulletFactory.Instance.Initialize(threeDir, this,threePos);
+            if ( rearFire)
+            {
+                BulletFactory.Instance.Initialize(threeDir.Opposite(), this,threePos);
+            
+            }
+            threeShootFrame = -1; // 重置
+        }
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
             BulletFactory.Instance.Initialize(secondDir, this,secondPos);
@@ -164,6 +187,13 @@ public class TankController : MonoBehaviour
             secondShootFrame = -1; // 重置
         }
 
+        if (rearFire)
+        {
+            if (NetworkManager.Instance.currentFrame >= rearFireFrame)
+            {
+                rearFire = false;
+            }
+        }
         if (isBreakWall)
         {
             if (NetworkManager.Instance.currentFrame >= breakWallFrame)
@@ -190,7 +220,7 @@ public class TankController : MonoBehaviour
     {
         if (isEncourage)
         {
-            return (int)(currentData.moveIntervalFrame * 0.7f);
+            return (int)(currentData.moveIntervalFrame * 0.5f);
         }
         else
         {
@@ -202,7 +232,7 @@ public class TankController : MonoBehaviour
     {
         if (isEncourage)
         {
-            return (int)(currentData.shootIntervalFrame * 0.7f);
+            return (int)(currentData.shootIntervalFrame * 0.5f);
         }
         else
         {
@@ -251,7 +281,35 @@ public class TankController : MonoBehaviour
 
     void MoveTo( Vector2Int targetPos)
     {
-        
+             if (isSpikeTrap)
+        {
+            if (targetPos.x == Pos.x && targetPos.y == Pos.y + 1)
+            {
+                EntityManager.Instance.InitSpikeTrap(this, Pos,spikeTrapDurationFrame);
+                EntityManager.Instance.InitSpikeTrap(this, PosRight,spikeTrapDurationFrame);
+                
+            }
+            else if (targetPos.x == Pos.x && targetPos.y == Pos.y - 1)
+            {
+                EntityManager.Instance.InitSpikeTrap(this, PosUp,spikeTrapDurationFrame);
+                EntityManager.Instance.InitSpikeTrap(this, PosUpRight,spikeTrapDurationFrame);
+                
+            }
+            else if (targetPos.x == Pos.x +1&& targetPos.y == Pos.y )
+            {
+                EntityManager.Instance.InitSpikeTrap(this, Pos,spikeTrapDurationFrame);
+                EntityManager.Instance.InitSpikeTrap(this, PosUp,spikeTrapDurationFrame);
+                
+            }
+            else if (targetPos.x == Pos.x -1&& targetPos.y == Pos.y )
+            {
+                EntityManager.Instance.InitSpikeTrap(this, PosRight,spikeTrapDurationFrame);
+                EntityManager.Instance.InitSpikeTrap(this, PosUpRight,spikeTrapDurationFrame);
+                
+            }
+           
+        }
+          
             Pos = targetPos;
             
             // 计算坦克中心位置
@@ -275,7 +333,8 @@ public class TankController : MonoBehaviour
                     b.PickUp(this);
                 }
             }
-        
+
+            
 
     }
 
@@ -364,6 +423,14 @@ public class TankController : MonoBehaviour
             BulletFactory.Instance.Initialize(tankDirection.Opposite(),this,Pos);
             
         }
+
+        if (isShootThree)
+        {
+            int intervalFrame = 8;
+            threeShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
+            threeDir=tankDirection;
+            threePos = Pos;
+        }
         if (isShootTwice)
         {
             int intervalFrame = 4;
@@ -371,6 +438,7 @@ public class TankController : MonoBehaviour
             secondDir=tankDirection;
             secondPos = Pos;
         }
+        
     }
 
     void CheckMovementState()

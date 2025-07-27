@@ -76,17 +76,14 @@ public enum MapType
             
             if (isChange&&NetworkManager.Instance.currentFrame >= ironWallEndFrames)
             {
-               aaa(MapType.breakableWall);
+               HomeWall(MapType.breakableWall);
                 isChange = false;
             }
 
-            foreach (var (pos,dur) in protectList.ToList())
-            {
-                //TODO 更新地图
-            }
+           
         }
 
-        public void aaa(MapType mapType)
+        public void HomeWall(MapType mapType)
         {
             List<Vector2Int> pos = new List<Vector2Int>
             {
@@ -456,11 +453,12 @@ public enum MapType
         }
 
 
-        private List<(Vector2Int, int)> protectList = new List<(Vector2Int, int)>();
-        public void Protect(Vector2Int pos,int durtion)
+        public bool isVailePos(Vector2Int pos)
         {
-            protectList.Add((pos, durtion));
+            return pos.x >= 0 && pos.y >= 0&& pos.x < mapWidth && pos.y < mapHeight;
         }
+
+     
    
         
     }

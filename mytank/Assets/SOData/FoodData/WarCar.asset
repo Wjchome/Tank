@@ -15,4 +15,7 @@ MonoBehaviour:
   foodType: 9
   sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
   foodName: "\u6218\u8F66"
-  foodDescription: "\u589E\u52A0\u4E00\u70B9\u8840\u91CF"
+  foodDescription:
+  - "\u589E\u52A05\u8840\u91CF"
+  - "\u589E\u52A010\u8840\u91CF"
+  - "\u589E\u52A020\u8840\u91CF"

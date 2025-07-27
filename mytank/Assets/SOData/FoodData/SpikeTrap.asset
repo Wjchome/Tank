@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d69da5b62024463c8b8b6fee80637b96, type: 3}
-  m_Name: Shovel
+  m_Name: SpikeTrap
   m_EditorClassIdentifier: 
-  foodType: 6
-  sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
-  foodName: "\u94F2\u5B50"
+  foodType: 15
+  sprite: {fileID: 0}
+  foodName: "\u5730\u523A"
   foodDescription:
-  - "\u4FDD\u62A4\u57FA\u573010\u79D2"
-  - "\u4FDD\u62A4\u57FA\u573030\u79D2"
-  - "\u6BCF60\u79D2\u4FDD\u62A410\u79D2"
+  - "\u79FB\u52A8\u751F\u6210\u5730\u523A\uFF0C\u6301\u7EED\u4E24\u79D2"
+  - "\u79FB\u52A8\u751F\u6210\u5730\u523A\uFF0C\u6301\u7EED\u56DB\u79D2"
+  - "\u79FB\u52A8\u751F\u6210\u5730\u523A\uFF0C\u6301\u7EED8\u79D2"

@@ -15,4 +15,7 @@ MonoBehaviour:
   foodType: 10
   sprite: {fileID: 0}
   foodName: "\u751F\u58C1"
-  foodDescription: "\u751F\u6210\u5899"
+  foodDescription:
+  - "\u968F\u673A\u751F\u62103\u5757\u5899"
+  - "\u968F\u673A\u751F\u62104\u5757\u5899"
+  - "\u968F\u673A\u751F\u62105\u5757\u5899"
