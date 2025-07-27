@@ -23,7 +23,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
     {
         bullet.gameObject.SetActive(true);
         bullet.isShouldDestroy=false;
-        bullet.lastMoveTime = 0f;
+        bullet.lastMoveTimeFrame = 0;
         bullet.animator.Play("Idle",0,0);
         activeBullets.Add(bullet);
         

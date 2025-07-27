@@ -14,9 +14,9 @@ public class BulletController : MonoBehaviour
 
     public bool isPlayerBullet;
 
-    public float moveInterval = 0.3f;
+    public int moveIntervalFrame = 4;
     
-    public float lastMoveTime;
+   public long lastMoveTimeFrame;
 
     public Vector2Int dir;
     public Vector2Int Pos; // 子弹左下角坐标（2x2占地）
@@ -26,7 +26,6 @@ public class BulletController : MonoBehaviour
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
    
-    public float moveDuration = 0.3f; // DOTween动画时长
     public Animator animator;
     
     public bool isShouldDestroy = false;
@@ -40,7 +39,7 @@ public class BulletController : MonoBehaviour
         direction.ToVector2Int().Set(x,y);
         Pos = new Vector2Int(x, y);
         transform.DOKill();
-        transform.DOMove(GetCenter(), moveDuration).SetEase(Ease.Linear);
+        transform.DOMove(GetCenter(), moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
     }
 
     bool ShouldCollide(Identity identity)
@@ -54,13 +53,12 @@ public class BulletController : MonoBehaviour
     {
         if (isShouldDestroy ) return;
        
-        // 使用帧数进行时间判断，确保所有客户端同步
-        long currentFrame = NetworkManager.Instance.currentFrame;
-        float frameTime = currentFrame * Constant.FrameInterval; // 每帧0.05秒
+       
+  
         
-        if (frameTime - lastMoveTime > moveInterval)
+        if ( NetworkManager.Instance.currentFrame - lastMoveTimeFrame > moveIntervalFrame)
         {
-            lastMoveTime = frameTime;
+            lastMoveTimeFrame = NetworkManager.Instance.currentFrame;
             bool isShouldMove = false;
             
             Vector2Int newPos = Pos + dir;

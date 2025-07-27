@@ -124,9 +124,12 @@ public enum MapType
 
         public Landmine HasTankInLanemine(int x, int y)
         {
-            Landmine[] a = FindObjectsByType<Landmine>(FindObjectsSortMode.None);
-            foreach (Landmine l in a)
-            { 
+            foreach (Landmine l in EntityManager.Instance.landmines)
+            {
+                if (l == null)
+                {
+                    continue;
+                }
                 if (l.Pos.x == x && l.Pos.y == y)
                     return l;
                 else if(l.Pos.x == x && l.Pos.y == y+1)
@@ -140,9 +143,12 @@ public enum MapType
         }
         public HealingGarden HasTankInGarden(int x, int y)
         {
-            HealingGarden[] a = FindObjectsByType<HealingGarden>(FindObjectsSortMode.None);
-            foreach (HealingGarden l in a)
+            foreach (HealingGarden l in EntityManager.Instance.healingGardens)
             { 
+                if (l == null)
+                {
+                    continue;
+                }
                 if (l.Pos.x == x && l.Pos.y == y)
                     return l;
                 else if(l.Pos.x == x && l.Pos.y == y+1)
