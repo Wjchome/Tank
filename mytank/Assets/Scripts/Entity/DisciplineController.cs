@@ -1,6 +1,7 @@
 
     using System.Linq;
     using UnityEngine;
+    using UnityEngine.UI;
 
     public class DisciplineController:MonoBehaviour
     {
@@ -10,6 +11,8 @@
         public int genateIntervalFrame=(int)(60f/Constant.FrameInterval);
 
         public int targetNum = 1;
+        public Image image;
+        
         
         public void UpdateFrame()
         {
@@ -29,6 +32,10 @@
                 
                 
                 lastTriggerFrame = NetworkManager.Instance.currentFrame;
+            }
+            else
+            {
+                image.fillAmount = (float )(NetworkManager.Instance.currentFrame - lastTriggerFrame)/ genateIntervalFrame;
             }
         }
     }

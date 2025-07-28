@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69da5b62024463c8b8b6fee80637b96, type: 3}
   m_Name: Discipline
   m_EditorClassIdentifier: 
-  foodType: 11
+  foodType: 17
   sprite: {fileID: 0}
-  foodName: "\u81EA\u52A8\u70AE\u53F0"
+  foodName: "\u60E9\u6212"
   foodDescription:
-  - "\u751F\u62101\u4E2A\u70AE\u53F0"
-  - "\u751F\u62102\u4E2A\u70AE\u53F0"
-  - "\u751F\u62103\u4E2A\u70AE\u53F0"
+  - "\u6CA1\u8FC710\u79D2\u5BF9\u4E00\u4E2A\u654C\u4EBA\u9020\u62102\u70B9\u4F24\u5BB3"
+  - "\u6CA1\u8FC710\u79D2\u5BF9\u4E24\u4E2A\u654C\u4EBA\u9020\u62102\u70B9\u4F24\u5BB3"
+  - "\u6CA1\u8FC710\u79D2\u5BF9\u4E09\u4E2A\u654C\u4EBA\u9020\u62102\u70B9\u4F24\u5BB3"

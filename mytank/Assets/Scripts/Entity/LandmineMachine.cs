@@ -1,18 +1,25 @@
 
     using UnityEngine;
+    using UnityEngine.Serialization;
+    using UnityEngine.UI;
 
     public class LandmineMachine:MonoBehaviour
     {
-        public Vector2Int Pos;
         public TankController tank;
-        public int genateorIntervalFrame;
-        public long lastGenateFrame = 0;
+        public int genateIntervalFrame;
+         public long lastTriggerFrame = 0;
+        public Image image;
+        
         public void UpdateFrame()
         {
-            if (NetworkManager.Instance.currentFrame - lastGenateFrame > genateorIntervalFrame)
+            if (NetworkManager.Instance.currentFrame - lastTriggerFrame > genateIntervalFrame)
             {
                 EntityManager.Instance. InitLandmine(tank);
-                lastGenateFrame = NetworkManager.Instance.currentFrame;
+                lastTriggerFrame = NetworkManager.Instance.currentFrame;
+            }
+            else
+            {
+                image.fillAmount = (float )(NetworkManager.Instance.currentFrame - lastTriggerFrame)/ genateIntervalFrame;
             }
         }
       

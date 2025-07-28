@@ -5,6 +5,10 @@
 
     public class EntityManager:SingletonMono<EntityManager>
     {
+
+        public Transform content;
+        
+        
         public AutoTurret autoTurretPrefab;
     
     
@@ -127,16 +131,11 @@
 
         public void InitLandmineMachine(TankController tank)
         {
-            var spawnPos=MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
-                .Except(MapManager.Instance.GetAllTankPos()).ToList();
-            var pos = spawnPos[tank.random.Next(spawnPos.Count)];
+          
                
-            LandmineMachine landmineMachine = Instantiate(landmineMachinePrefab, 
-                new Vector2(pos.x , pos.y), 
-                Quaternion.identity);
+            LandmineMachine landmineMachine = Instantiate(landmineMachinePrefab, content);
             landmineMachine.tank = tank;
-            landmineMachine.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
-            landmineMachine.Pos = pos;
+            landmineMachine.lastTriggerFrame = -landmineMachine.genateIntervalFrame;
             landmineMachines.Add(landmineMachine);
         }
 
@@ -183,7 +182,7 @@
 
         public void InitBombController(TankController tank)
         {
-            var bombC = Instantiate(bombControllerPrefab,new Vector3(-5,0,0),Quaternion.identity);
+            var bombC = Instantiate(bombControllerPrefab,content);
             bombC.tank = tank;
             bombC.lastTriggerFrame = -bombC.genateIntervalFrame;
             bombControllers.Add(bombC);
@@ -192,7 +191,7 @@
         
         public void InitPocketWatchController(TankController tank)
         {
-            var pocketWatchController = Instantiate(pocketWatchControllerPrefab,new Vector3(-5,0,0),Quaternion.identity);
+            var pocketWatchController = Instantiate(pocketWatchControllerPrefab,content);
             pocketWatchController.tank = tank;
             pocketWatchController.lastTriggerFrame = -pocketWatchController.genateIntervalFrame;
             pocketWatchControllers.Add(pocketWatchController);
@@ -200,7 +199,7 @@
         }
         public void InitShovelController(TankController tank)
         {
-            var shovelController = Instantiate(shovelControllerPrefab,new Vector3(-5,1,0),Quaternion.identity);
+            var shovelController = Instantiate(shovelControllerPrefab,content);
             shovelController.tank = tank;
             shovelController.lastTriggerFrame = -shovelController.genateIntervalFrame;
             shovelControllers.Add(shovelController);
@@ -208,7 +207,7 @@
         }
         public void InitSteelHelmetController(TankController tank)
         {
-            var steelHelmet = Instantiate(steelHelmetControllerPrefab,new Vector3(-5,2,0),Quaternion.identity);
+            var steelHelmet = Instantiate(steelHelmetControllerPrefab,content);
             steelHelmet.tank = tank;
             steelHelmet.lastTriggerFrame = -steelHelmet.genateIntervalFrame;
             steelHelmetControllers.Add(steelHelmet);
@@ -217,7 +216,7 @@
         
         public void InitProtectController(TankController tank)
         {
-            var protectController = Instantiate(protectControllerPrefab,new Vector3(-5,2,0),Quaternion.identity);
+            var protectController = Instantiate(protectControllerPrefab,content);
             protectController.tank = tank;
             protectController.lastTriggerFrame = -protectController.genateIntervalFrame;
             protectControllers.Add(protectController);
@@ -226,7 +225,7 @@
 
         public void InitDisciplineController(TankController tank)
         {
-            var disciplineController = Instantiate(disciplineControllerPrefab,new Vector3(-5,3,0),Quaternion.identity);
+            var disciplineController = Instantiate(disciplineControllerPrefab,content);
             disciplineController.tank = tank;
             disciplineController.lastTriggerFrame = -disciplineController.genateIntervalFrame;
             disciplines.Add(disciplineController);

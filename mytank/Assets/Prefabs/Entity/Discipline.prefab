@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8033022810824749699
+--- !u!1 &8809464172985871523
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,67 +8,68 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3624992449836688136}
-  - component: {fileID: 3364237908212559664}
-  - component: {fileID: 2359495406214594293}
-  - component: {fileID: 1437174261498087334}
+  - component: {fileID: 1567764102931408063}
+  - component: {fileID: 3782525686423470398}
+  - component: {fileID: 509260567889211808}
+  - component: {fileID: 441346099765697783}
   m_Layer: 0
-  m_Name: LandmineMachine
+  m_Name: Discipline
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &3624992449836688136
+--- !u!224 &1567764102931408063
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8033022810824749699}
+  m_GameObject: {fileID: 8809464172985871523}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 8.32161, y: 12.71979}
-  m_SizeDelta: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 738.3208, y: 362.2223}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &3364237908212559664
+--- !u!114 &3782525686423470398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8033022810824749699}
+  m_GameObject: {fileID: 8809464172985871523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aae4e267fea34f22a55451bd50516324, type: 3}
+  m_Script: {fileID: 11500000, guid: da755b24ec0b4d1d80e563938785150b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
-  genateIntervalFrame: 1200
   lastTriggerFrame: 0
-  image: {fileID: 1437174261498087334}
---- !u!222 &2359495406214594293
+  genateIntervalFrame: 2400
+  targetNum: 1
+  image: {fileID: 441346099765697783}
+--- !u!222 &509260567889211808
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8033022810824749699}
+  m_GameObject: {fileID: 8809464172985871523}
   m_CullTransparentMesh: 1
---- !u!114 &1437174261498087334
+--- !u!114 &441346099765697783
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8033022810824749699}
+  m_GameObject: {fileID: 8809464172985871523}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}

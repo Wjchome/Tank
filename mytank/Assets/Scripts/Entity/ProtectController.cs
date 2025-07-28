@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
+    using UnityEngine.UI;
 
     public class ProtectController:MonoBehaviour
     {
@@ -13,12 +14,8 @@
         public long lastTriggerFrame;
         
         public int genateIntervalFrame=(int)(5f/Constant.FrameInterval);
-
-        public void Update()
-        {
-            transform.position=tank.transform.position;
-            
-        }
+        public Image image;
+    
 
         public void UpdateFrame()
         {
@@ -39,6 +36,10 @@
                 }
                 
                 lastTriggerFrame = NetworkManager.Instance.currentFrame;
+            }
+            else
+            {
+                image.fillAmount = (float )(NetworkManager.Instance.currentFrame - lastTriggerFrame)/ genateIntervalFrame;
             }
         }
         
