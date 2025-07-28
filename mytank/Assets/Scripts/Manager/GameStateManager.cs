@@ -417,6 +417,36 @@ public class GameStateManager : SingletonMono<GameStateManager>
                     }
 
                 }
+
+                break;
+                case FoodType.Discipline:
+                if (num == 0)
+                {
+                    EntityManager.Instance.InitDisciplineController(tank);
+    
+                }
+                else if (num == 1)
+                {
+                    var targetProtect = EntityManager.Instance.disciplines
+                        .SingleOrDefault(pro => pro.tank == tank);
+
+                    if (targetProtect != null)
+                    {
+                        targetProtect.targetNum = 2;
+                    }
+
+    
+                }
+                else if (num == 2)
+                {
+                    var targetProtect = EntityManager.Instance.disciplines
+                        .SingleOrDefault(pro => pro.tank == tank);
+
+                    if (targetProtect != null)
+                    {
+                        targetProtect.targetNum = 3;
+                    }
+                }
                 
                 break;  
                 

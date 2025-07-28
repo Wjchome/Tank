@@ -25,6 +25,8 @@
         
         public ProtectController  protectControllerPrefab;
         
+        public DisciplineController disciplineControllerPrefab;
+        
         public List<AutoTurret>  autoTurrets = new List<AutoTurret>();
         
         public List<LandmineMachine>  landmineMachines = new List<LandmineMachine>();
@@ -43,6 +45,8 @@
         public List<SteelHelmetController> steelHelmetControllers = new List<SteelHelmetController>();
      
         public List<ProtectController> protectControllers = new List<ProtectController>();
+        
+        public List<DisciplineController> disciplines = new List<DisciplineController>();
         public void UpdateFrame()
         {
             foreach (AutoTurret turret in autoTurrets)
@@ -96,6 +100,11 @@
             foreach (var protectController in protectControllers)
             {
                 protectController.UpdateFrame();
+            }
+
+            foreach (var discipline in disciplines)
+            {
+                discipline.UpdateFrame();
             }
         }
 
@@ -213,6 +222,15 @@
             protectController.lastTriggerFrame = -protectController.genateIntervalFrame;
             protectControllers.Add(protectController);
             
+        }
+
+        public void InitDisciplineController(TankController tank)
+        {
+            var disciplineController = Instantiate(disciplineControllerPrefab,new Vector3(-5,3,0),Quaternion.identity);
+            disciplineController.tank = tank;
+            disciplineController.lastTriggerFrame = -disciplineController.genateIntervalFrame;
+            disciplines.Add(disciplineController);
+
         }
         
     }

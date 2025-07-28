@@ -23,7 +23,8 @@ public enum FoodType
     HealingGarden,
     RearFire,
     SpikeTrap,
-    Protect
+    Protect,
+    Discipline//惩戒
     
    
    
