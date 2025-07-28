@@ -5,7 +5,6 @@
 
     public class BombController:MonoBehaviour
     {
-        public Vector2Int Pos;
         public TankController tank;
         public long lastTriggerFrame;
         

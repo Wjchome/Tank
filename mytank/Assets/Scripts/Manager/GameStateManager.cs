@@ -328,22 +328,22 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.HealingGarden:
                 if (num == 0)
                 {
-                EntityManager.Instance.InitHealingGarden(tank);
+                    EntityManager.Instance.InitHealingGarden(tank);
                     
     
                 }
                 else if (num == 1)
                 {
 
-                EntityManager.Instance.InitHealingGarden(tank);
-                EntityManager.Instance.InitHealingGarden(tank);
+                  EntityManager.Instance.InitHealingGarden(tank);
+                  EntityManager.Instance.InitHealingGarden(tank);
     
                 }
                 else if (num == 2)
                 {
-                EntityManager.Instance.InitHealingGarden(tank);
-                EntityManager.Instance.InitHealingGarden(tank);
-                EntityManager.Instance.InitHealingGarden(tank);
+                    EntityManager.Instance.InitHealingGarden(tank);
+                     EntityManager.Instance.InitHealingGarden(tank);
+                   EntityManager.Instance.InitHealingGarden(tank);
   
                 }
                 break;
@@ -372,8 +372,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 if (num == 0)
                 {
 
-                tank.isSpikeTrap = true;
-    tank.spikeTrapDurationFrame=Mathf.RoundToInt(1/Constant.FrameInterval);
+                    tank.isSpikeTrap = true;
+                  tank.spikeTrapDurationFrame=Mathf.RoundToInt(1/Constant.FrameInterval);
                 }
                 else if (num == 1)
                 {

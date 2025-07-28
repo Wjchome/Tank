@@ -131,12 +131,8 @@ public class TankFactory : SingletonMono<TankFactory>
 
         
         temp. currentData=ScriptableObject.CreateInstance<TankData>();
-        temp. currentData.InitializeTankData(orignalDatas[dataIndex]);
-        
-      
-            temp.animType = dataIndex;
-
-        
+        temp.currentData.InitializeTankData(orignalDatas[dataIndex]);
+        temp.animType = dataIndex;
         EnemyManager.Instance.activeEnemies.Add(temp);
 
 

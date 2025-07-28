@@ -236,7 +236,6 @@ public class TankController : MonoBehaviour
         }
         else
         {
-
             return currentData.shootIntervalFrame;
         }
     }

@@ -48,9 +48,19 @@ public enum FoodType
         {
             panel.chooseButton.onClick.RemoveAllListeners();
         }
-//TODO 随机算法
-        // 2. 随机选取不重复的食物
-        var availableFoods = new List<FoodData>(foodDatas);
+
+        // 2. 过滤掉已经满级的道具
+        var availableFoods = new List<FoodData>();
+        foreach (var foodData in foodDatas)
+        {
+            // 检查坦克是否已经有这个道具，以及是否已经满级
+            if (!tank.foodDict.ContainsKey(foodData.foodType) || tank.foodDict[foodData.foodType] < 3)
+            {
+                availableFoods.Add(foodData);
+            }
+        }
+
+        // 3. 随机选取不重复的食物
         for (int i = 0; i < 3; i++)
         {
             if (availableFoods.Count == 0) break;
@@ -60,10 +70,6 @@ public enum FoodType
 
             SetupPanel(i, randomFood, tank);
         }
-
-
-
-
     }
 
     public void ClosePanels()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Shovel
   m_EditorClassIdentifier: 
   foodType: 6
-  sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
+  sprite: {fileID: 21300000, guid: 494ca0831ae5e4b598babb47f1a2105c, type: 3}
   foodName: "\u94F2\u5B50"
   foodDescription:
   - "\u4FDD\u62A4\u57FA\u573010\u79D2"

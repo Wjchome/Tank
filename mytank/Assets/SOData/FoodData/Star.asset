@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Star
   m_EditorClassIdentifier: 
   foodType: 7
-  sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
+  sprite: {fileID: 21300000, guid: ba232368aeedf4f4284cdb62c98e76a3, type: 3}
   foodName: "\u661F\u661F"
   foodDescription:
   - "\u53EF\u4EE5\u8FDE\u53D1\uFF0C\u6301\u7EED20\u79D2"

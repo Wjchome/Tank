@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Boat
   m_EditorClassIdentifier: 
   foodType: 0
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 82059e10ae3e84b9fb23022c738a5ba6, type: 3}
   foodName: "\u8239"
   foodDescription:
   - "\u53EF\u901A\u884C\u6C34\u976210\u79D2"
