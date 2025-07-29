@@ -69,7 +69,17 @@ public class GameStateManager : SingletonMono<GameStateManager>
     void ApplyFoodToTank(TankController tank, ChooseFoodRequest foodRequest)
     {
         FoodType foodType = (FoodType)foodRequest.FoodId;
-        int num= tank.foodDict[foodType]++;
+        int num = 0;
+        if (tank.foodDict.ContainsKey(foodType))// 0 
+        {
+            num=tank.foodDict[foodType]++;
+        }
+        else
+        {
+            tank.foodDict.Add(foodType,1);
+        }
+         
+        tank.playerPanelUI.UpdateFoodUI(foodType, tank.foodDict[foodType]);
         switch (foodType)
         {
             case FoodType.Boat:

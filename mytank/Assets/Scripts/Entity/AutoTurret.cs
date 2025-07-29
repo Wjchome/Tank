@@ -7,7 +7,7 @@ public class AutoTurret:MonoBehaviour
     {
         public TankController tank;
         public Vector2Int Pos;
-        private float shootIntervalFrame = 40;
+        public float shootIntervalFrame = 40;
         private Direction currentDirection=Direction.Up;
         private float lastShootFrame;
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);

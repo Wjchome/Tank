@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Tankgame;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine.Serialization;
 
@@ -10,19 +11,26 @@ public class RoomManager : SingletonMono<RoomManager>
 {
     [Header("UI References")]
     public GameObject mainMenuPanel;
+    public GameObject mySettingsPanel;
     public GameObject roomListPanel;
     public GameObject createRoomPanel;
     public GameObject roomPanel;
     
     [Header("Main Menu")]
+    public Button mySettingsButton;
+    public Button createRoomButton;
+    public Button joinRoomButton;
+    public Button quitButton;
+    
+    [Header("MySetting")]
+    
+    public Image colorShow;
     public TMP_InputField myNameInput;
     public Slider myColorR; 
     public Slider myColorG; 
     public Slider myColorB;
-    public Image colorShow;
-    public Button createRoomButton;
-    public Button joinRoomButton;
-    public Button quitButton;
+    public Button backButton;
+
     
     
     [Header("Create Room")]
@@ -52,18 +60,29 @@ public class RoomManager : SingletonMono<RoomManager>
     private List<PlayerUIItem> playerUIItems = new List<PlayerUIItem>();
 
    
+    private List<GameObject> panels = new List<GameObject>();
+    private int currentPanelIndex = 0;
+    public float durationTime;
     
     void Start()
     {
         InitializeUI();
         SubscribeToEvents();
-        ShowMainMenu();
-        
-       
+        ShowPanel(0);
+
+
     }
     
     void InitializeUI()
     {
+        panels = new List<GameObject>
+        {
+            mainMenuPanel,
+            mySettingsPanel,
+            createRoomPanel,
+            roomListPanel,
+            roomPanel,
+        };
         // 设置最大玩家数下拉菜单
         maxPlayersDropdown.ClearOptions();
         maxPlayersDropdown.AddOptions(new List<string> { "1","2", "3", "4" });
@@ -91,26 +110,29 @@ public class RoomManager : SingletonMono<RoomManager>
     void SubscribeToEvents()
     {
         // 主菜单按钮 - 只负责UI切换
-        createRoomButton.onClick.AddListener(ShowCreateRoom); //本地切换创建页面
+        mySettingsButton.onClick.AddListener(()=>ShowPanel(1));
+        createRoomButton.onClick.AddListener(()=>ShowPanel(2)); //本地切换创建页面
         joinRoomButton.onClick.AddListener(SendRoomListRequest); //仅发送房间列表请求
         quitButton.onClick.AddListener(QuitGame); //本地退出
+        // 设置
         myColorR.onValueChanged.AddListener(ColorShow);
         myColorG.onValueChanged.AddListener(ColorShow);
         myColorB.onValueChanged.AddListener(ColorShow);
-
+        backButton.onClick.AddListener(()=>ShowPanel(0));
+      
         // 创建房间按钮 - 只发送请求
         createButton.onClick.AddListener(SendCreateRoomRequest); //发出创建列表请求
-        cancelCreateButton.onClick.AddListener(ShowMainMenu); //本地切回主菜单
+        cancelCreateButton.onClick.AddListener(()=>ShowPanel(0)); //本地切回主菜单
 
         // 房间列表按钮 - 只发送请求
         refreshRoomListButton.onClick.AddListener(SendRoomListRequest); //发出房间列表请求
-        backToMainButton.onClick.AddListener(ShowMainMenu); //本地切回主页面
+        backToMainButton.onClick.AddListener(()=>ShowPanel(0)); //本地切回主页面
 
         // 房间内按钮 - 只发送请求
         leaveRoomButton.onClick.AddListener(SendLeaveRoomRequest); //发送离开请求
         startGameButton.onClick.AddListener(SendStartGameRequest); //发送游戏开始
 
-        // 网络事件 - 处理UI更新
+        
 
     }
 
@@ -119,61 +141,56 @@ public class RoomManager : SingletonMono<RoomManager>
         colorShow.color=new Color(myColorR.value,myColorG.value,myColorB.value);
     }
 
-    #region UI显示控制
 
-    
-
-    void ShowMainMenu()
+    void ShowPanel(int index)
     {
-        mainMenuPanel.SetActive(true);
-        roomListPanel.SetActive(false);
-        createRoomPanel.SetActive(false);
-        roomPanel.SetActive(false);
-      
-    }
-
-    void ShowCreateRoom()
-    {
-        mainMenuPanel.SetActive(false);
-        roomListPanel.SetActive(false);
-        createRoomPanel.SetActive(true);
-        roomPanel.SetActive(false);
-    }
-    
-    void ShowRoomList()
-    {
-        mainMenuPanel.SetActive(false);
-        roomListPanel.SetActive(true);
-        createRoomPanel.SetActive(false);
-        roomPanel.SetActive(false);
-        
-        
-    }
-    
-    void ShowRoom()
-    {
-        
-        mainMenuPanel.SetActive(false);
-        roomListPanel.SetActive(false);
-        createRoomPanel.SetActive(false);
-        roomPanel.SetActive(true);
-        
-        if (NetworkManager.Instance.isHost)
+        for (int i = 0; i < panels.Count; i++)
         {
-            startGameButton.gameObject.SetActive( true);
-            // 房主可以看到关卡选择
-            levelDropdown.gameObject.SetActive(true);
-        }
-        else
-        {
-            startGameButton.gameObject.SetActive(false);
+        panels[i].SetActive(i==index);
 
-            // 非房主看不到关卡选择
-            levelDropdown.gameObject.SetActive(false);
+            /*   int num = i;
+
+           if (i == index)
+           {
+               panels[i].SetActive(true);
+               panels[i].GetComponent<CanvasGroup>()
+                   .DOFade(1f, durationTime)
+                   .SetEase(Ease.OutQuad)
+                   .OnComplete(()=>panels[num].GetComponent<CanvasGroup>().interactable=true);
+           }
+           else
+           {
+               panels[i].GetComponent<CanvasGroup>().interactable = false;
+
+              panels[i].GetComponent<CanvasGroup>()
+                   .DOFade(0f, durationTime )
+                   .SetEase(Ease.OutQuad)
+                   .OnComplete(() => { panels[num].SetActive(false); });
+           }
+          */
         }
+        currentPanelIndex = index;
     }
+    public void OnGameStartRoom()
+    {
+        for (int i = 0; i < panels.Count; i++)
+        {
+                int num = i;
+                panels[num].SetActive(false);
+            
+           /* panels[i].GetComponent<CanvasGroup>().interactable = false;
+                
+            panels[i].GetComponent<CanvasGroup>()
+                .DOFade(0f, durationTime )
+                .SetEase(Ease.OutQuad)
+                .OnComplete(() => { panels[num].SetActive(false); });*/
+        }
+        currentPanelIndex = -1;
+    }
+ 
     
-    #endregion
+
+
 
     #region 发送消息
 
@@ -355,7 +372,8 @@ public class RoomManager : SingletonMono<RoomManager>
     // 事件处理
     public void OnRoomListReceived(List<RoomInfo> rooms)
     {
-        ShowRoomList();
+        ShowPanel(3);
+
         // 清空UI，等待OnRoomListReceived刷新
         foreach (var item in roomItems)
         {
@@ -390,9 +408,20 @@ public class RoomManager : SingletonMono<RoomManager>
             return;
         }
         
-        // 成功响应：显示房间界面并更新信息
-        ShowRoom();
-        
+       ShowPanel(4);
+        if (NetworkManager.Instance.isHost)
+        {
+            startGameButton.gameObject.SetActive( true);
+            // 房主可以看到关卡选择
+            levelDropdown.gameObject.SetActive(true);
+        }
+        else
+        {
+            startGameButton.gameObject.SetActive(false);
+
+            // 非房主看不到关卡选择
+            levelDropdown.gameObject.SetActive(false);
+        }
         // 更新房间信息显示
         roomNameText.text = roomInfo.RoomName;
         playerCountText.text = $"{roomInfo.PlayerIds.Count}/{roomInfo.MaxPlayers}";
@@ -406,14 +435,7 @@ public class RoomManager : SingletonMono<RoomManager>
         
     }
     
-    public void OnGameStartRoom()
-    {
-        
-        mainMenuPanel.SetActive(false);
-        roomListPanel.SetActive(false);
-        createRoomPanel.SetActive(false);
-        roomPanel.SetActive(false);
-    }
+
     
  
     #endregion

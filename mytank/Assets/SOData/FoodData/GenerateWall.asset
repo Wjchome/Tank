@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GenerateWall
   m_EditorClassIdentifier: 
   foodType: 10
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 1a1bf4108d1bc40da909f3d8e6325d39, type: 3}
   foodName: "\u751F\u58C1"
   foodDescription:
   - "\u968F\u673A\u751F\u62103\u5757\u5899"

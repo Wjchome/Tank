@@ -462,7 +462,7 @@ public class TankController : MonoBehaviour
     public void AddHP(int num)
     {
         currentData.HP += num;
-        playerPanelUI?.UpdateUI(this); // 更新血量显示
+        playerPanelUI?.UpdateUI(); // 更新血量显示
         
     }
     
@@ -472,7 +472,7 @@ public class TankController : MonoBehaviour
         
         
         currentData.HP -= damage;
-        playerPanelUI?.UpdateUI(this); // 更新血量显示
+        playerPanelUI?.UpdateUI(); // 更新血量显示
         
         if (currentData.HP <= 0)
         {
@@ -517,7 +517,7 @@ public class TankController : MonoBehaviour
     public void Kill(bool isSpecial)
     {
         killNum++;
-        playerPanelUI?.UpdateUI(this); // 更新血量显示
+        playerPanelUI?.UpdateUI(); // 更新血量显示
         if (isSpecial&&identity==Identity.Myself)
         {
             FoodManager.Instance.ShowPanels(this,random);

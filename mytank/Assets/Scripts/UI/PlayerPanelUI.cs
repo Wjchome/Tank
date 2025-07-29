@@ -1,35 +1,102 @@
 
+    using System.Collections.Generic;
+    using DG.Tweening;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
 
     public class PlayerPanelUI:MonoBehaviour
     {
+        public Transform playerInfo;
         public TextMeshProUGUI playerNameText;
         public Image playerImage;
         public TextMeshProUGUI playerHealthText;
         public TextMeshProUGUI playerKillText;
 
         public int interval;
+
+        public Transform scollView;
+        public Transform content;
         
+        public PlayerFoodUI playerFoodUIPrefab;
+
+        public Button button;
+        public bool isOpenFood=false;
+
+        public Vector2 leftPos = Vector2.zero; 
+        public Vector2 rightPos = Vector2.zero; 
         
+        public TankController tank;
         
-        
-        public void SetPos(int index)
+        private Dictionary<FoodType, PlayerFoodUI> foodUIDict = new Dictionary<FoodType, PlayerFoodUI>();
+        public void Init(TankController tankController, int index)
         {
+            tank=tankController;
             GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
+            leftPos=playerInfo.GetComponent<RectTransform>().anchoredPosition;
+            rightPos=scollView.GetComponent<RectTransform>().anchoredPosition;
+            button.onClick.AddListener(Change);
         }
-        
-        public void UpdateUI(TankController tankController)
+
+        public void UpdateUI()
         {
-            playerNameText.text=tankController.playerName;
-            if (tankController.identity==Identity.Myself)
+            playerNameText.text=tank.playerName;
+            if (tank.identity==Identity.Myself)
             {
                 playerNameText.color = Color.yellow;
             }
-            playerImage.color = tankController.playerColor;
-            playerHealthText.text="HP: "+tankController.currentData.HP.ToString();
-            playerKillText.text="Kill: "+tankController.killNum.ToString();
+            playerImage.color = tank.playerColor;
+            playerHealthText.text="HP: "+tank.currentData.HP.ToString();
+            playerKillText.text="Kill: "+tank.killNum.ToString();
+        }
+
+        public void Change()
+        {
+            if (isOpenFood)
+            {
+                playerInfo.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
+                scollView.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
+                isOpenFood=false;
+            }
+            else
+            {
+                playerInfo.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
+                scollView.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
+                // 清除所有子物体
+               /* for (int i = content.childCount - 1; i >= 0; i--)
+                {
+                    DestroyImmediate(content.GetChild(i).gameObject);
+                }
+
+                foreach (var kv in tank.foodDict)
+                {
+                    var foodUI = Instantiate(playerFoodUIPrefab, content);
+                    foodUI.image.sprite=FoodManager.Instance.foodDict[kv.Key].sprite;
+                    foodUI.text.text = kv.Value.ToString();
+                }*/
+                
+                
+                isOpenFood=true;
+            }
+        }
+        
+        public void UpdateFoodUI(FoodType foodType, int level)
+        {
+            if (foodUIDict.ContainsKey(foodType))
+            {
+                // 更新现有UI
+                foodUIDict[foodType].text.text = level.ToString();
+            }
+            else
+            {
+                // 创建新的UI
+                var foodUI = Instantiate(playerFoodUIPrefab, content);
+                foodUI.image.sprite = FoodManager.Instance.foodDict[foodType].sprite;
+                foodUI.text.text = level.ToString();
+            
+                // 添加到字典
+                foodUIDict[foodType] = foodUI;
+            }
         }
         
     }

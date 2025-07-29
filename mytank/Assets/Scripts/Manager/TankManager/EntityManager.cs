@@ -125,6 +125,7 @@
             
             turret.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
             turret.Pos = pos;
+            turret.tank = tank;
             autoTurrets.Add(turret);
             
         }

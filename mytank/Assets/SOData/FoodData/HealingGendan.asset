@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HealingGendan
   m_EditorClassIdentifier: 
   foodType: 13
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: c25b5ee10cc7945d98ceaa68f39ef07c, type: 3}
   foodName: "\u6CBB\u7597\u82B1\u56ED"
   foodDescription:
   - "\u751F\u6210\u4E00\u4E2A\u82B1\u56ED"

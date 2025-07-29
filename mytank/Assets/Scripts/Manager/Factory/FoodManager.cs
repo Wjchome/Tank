@@ -37,7 +37,15 @@ public enum FoodType
 
     public RectTransform panelParent;
     public List<FoodUIPanel> panels;
-    
+    public Dictionary<FoodType, FoodData> foodDict=new Dictionary<FoodType, FoodData>();
+
+    private void Start()
+    {
+        foreach (var foodData in foodDatas)
+        {
+            foodDict.Add(foodData.foodType, foodData);
+        }
+    }
 
     public void ShowPanels(TankController tank, Random random)
     {
@@ -102,13 +110,13 @@ public enum FoodType
         panel.foodDescription.text = food.foodDescription[num];
         for (int i = 0; i < 3; i++)
         {
-            if (i <= num)
+            if (i < num)
             {
                 panel.isGetImage[i].gameObject.SetActive(true);
             }
             else
             {
-                panel.isGetImage[i].gameObject.SetActive(true);
+                panel.isGetImage[i].gameObject.SetActive(false);
             }
         }
         panel.chooseButton.onClick.AddListener(() =>

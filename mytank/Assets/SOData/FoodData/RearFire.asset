@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RearFire
   m_EditorClassIdentifier: 
   foodType: 14
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 9fc20e3c22df74b1dbe7ae47d6466029, type: 3}
   foodName: "\u5411\u540E\u5C04\u51FB"
   foodDescription:
   - "\u53EF\u4EE5\u5411\u540E\u5C04\u51FB20\u79D2"
