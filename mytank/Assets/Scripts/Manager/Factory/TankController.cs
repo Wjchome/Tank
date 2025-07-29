@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using Tankgame;
 using DG.Tweening;
-using UnityEditor.Tilemaps;
 using UnityEngine.Serialization;
 
 
@@ -73,9 +72,11 @@ public class TankController : MonoBehaviour
     
     public bool isBoat = false;
     public long boatFrame = -1;
+    public GameObject boatShow;
     
     public bool isInvincible = false;
     public long invincibleFrame=0;
+    public Vector3 size;
 
     
     
@@ -89,22 +90,27 @@ public class TankController : MonoBehaviour
     public long threeShootFrame = -1;
     public Direction threeDir;
     public Vector2Int threePos;
-    
+    public GameObject shootTwiceShow;
     
     public bool isBreakWall = false;
     public long breakWallFrame = -1;
-
-    private Vector3 size;
+    public GameObject breakWallShow;
     
     
     public bool isEncourage = false;
     public long encourageFrame = -1;
+    public GameObject encourageShow;
     
     public bool rearFire=false;
     public long rearFireFrame=-1;
+    public GameObject rearFireShow;
     
     public bool isSpikeTrap = false;
     public int spikeTrapDurationFrame = 0;
+
+    public GameObject shoeShow;
+    
+    public Animator bombAnimator;
         
     private void Awake()
     {
@@ -113,15 +119,7 @@ public class TankController : MonoBehaviour
 
      public void UpdateFrame()
     {
-        if (invincibleFrame > NetworkManager.Instance.currentFrame)
-        {
-            transform.localScale =size* 1.5f;
-        }
-        else
-        {
-            transform.localScale =size;
-
-        }
+      
 
         HandleBuff();   
         CheckMovementState();
@@ -147,6 +145,7 @@ public class TankController : MonoBehaviour
             if (NetworkManager.Instance.currentFrame >= boatFrame)
             {
                 isBoat = false;
+                boatShow.SetActive(false);
             }
         }
         if (isEncourage)
@@ -154,15 +153,16 @@ public class TankController : MonoBehaviour
             if (NetworkManager.Instance.currentFrame >= encourageFrame)
             {
                 isEncourage = false;
+                encourageShow.SetActive(false);
             }
         }
 
         if (isShootTwice)
         {
-            
             if (NetworkManager.Instance.currentFrame >= shootTwiceFrame)
             {
                 isShootTwice = false;
+                shootTwiceShow.SetActive(false);
             }
         }
 
@@ -192,6 +192,7 @@ public class TankController : MonoBehaviour
             if (NetworkManager.Instance.currentFrame >= rearFireFrame)
             {
                 rearFire = false;
+                rearFireShow.SetActive(false);
             }
         }
         if (isBreakWall)
@@ -199,6 +200,7 @@ public class TankController : MonoBehaviour
             if (NetworkManager.Instance.currentFrame >= breakWallFrame)
             {
                 isBreakWall = false;
+                breakWallShow.SetActive(false);
             }
         }
 
@@ -461,6 +463,7 @@ public class TankController : MonoBehaviour
 
     public void AddHP(int num)
     {
+        bombAnimator.Play("Heal",0,0);
         currentData.HP += num;
         playerPanelUI?.UpdateUI(); // 更新血量显示
         

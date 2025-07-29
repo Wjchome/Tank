@@ -36,6 +36,8 @@
                 }
                 
                 lastTriggerFrame = NetworkManager.Instance.currentFrame;
+                
+                tank.bombAnimator.Play("Protect",0,0);
             }
             else
             {

@@ -17,6 +17,7 @@
             if (NetworkManager.Instance.currentFrame - lastTriggerFrame > genateIntervalFrame)
             {
                 EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(2, tank));
+                    tank.bombAnimator.Play("BombShow",0,0);
              
                 lastTriggerFrame = NetworkManager.Instance.currentFrame;
             }

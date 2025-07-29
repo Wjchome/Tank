@@ -6,6 +6,8 @@ using UnityEngine;
 
     public class GameUIManager:SingletonMono<GameUIManager>
     {
+
+        public GameObject gamePanel;
         
         public Transform playerPanelParent;
         public GameObject playerPanelPrefab;

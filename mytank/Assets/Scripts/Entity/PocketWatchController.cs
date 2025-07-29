@@ -17,6 +17,7 @@ public class PocketWatchController:MonoBehaviour
                 long targetFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
                 EnemyManager.Instance.pauseEndFrame=targetFrame;
                 
+                tank.bombAnimator.Play("PocketWatch",0,0);
                 
                 lastTriggerFrame=NetworkManager.Instance.currentFrame;
             }

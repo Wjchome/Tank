@@ -240,7 +240,17 @@ public enum MapType
             homePrefab.transform.position=new Vector2((mapWidth-1f)/2,1.5f);
         
         }
-        
+
+        public List<Vector2Int> HomePos()
+        {
+            return new List<Vector2Int>()
+            {
+                new Vector2Int((int)(mapWidth - 1f) / 2, 1),
+                new Vector2Int((int)(mapWidth - 1f) / 2, 1),
+                new Vector2Int((int)(mapWidth) / 2, 2),
+                new Vector2Int((int)(mapWidth) / 2, 2),
+            };
+        }
         // 从字符串加载地图
         public void LoadMapFromString(string mapData)
         {
@@ -366,6 +376,25 @@ public enum MapType
                 for (int y = 0; y < mapHeight; y++)
                 {
                     if (mapHash.Contains(map[x, y]))
+                    {
+                       
+                        candidates.Add(new Vector2Int(x, y));
+                        
+                    }
+                }
+            }
+            return candidates;
+        }
+        public List<Vector2Int> GetTwoMapTypePos(List<MapType> mapTypes)
+        {
+            HashSet<MapType> mapHash = new HashSet<MapType>(mapTypes);
+            List<Vector2Int> candidates = new List<Vector2Int>();
+            for (int x = 0; x < mapWidth-1; x++)
+            {
+                for (int y = 0; y < mapHeight-1; y++)
+                {
+                    if (mapHash.Contains(map[x, y])&&mapHash.Contains(map[x+1, y])&&
+                        mapHash.Contains(map[x, y+1])&&mapHash.Contains(map[x+1, y+1]))
                     {
                        
                         candidates.Add(new Vector2Int(x, y));

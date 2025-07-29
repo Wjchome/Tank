@@ -17,7 +17,7 @@
      
         public void GameStart(int level)
         {
-           
+            GameUIManager.Instance.gamePanel.SetActive(true);
                currentLevel =availableLevels[level];
                levelNameText.text = currentLevel.levelName;
         }

@@ -16,6 +16,7 @@ public class ShovelController:MonoBehaviour
                 MapManager.Instance.isChange = true;
                 MapManager.Instance.ironWallEndFrames=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
                 MapManager.Instance.HomeWall(MapType.wall);
+                    tank.bombAnimator.Play("Shovel",0,0);
                 
                 lastTriggerFrame = NetworkManager.Instance.currentFrame;
             }

@@ -16,7 +16,8 @@ public class SteelHelmetController:MonoBehaviour
             {
                 tank.isInvincible = true;
                 tank.invincibleFrame=NetworkManager.Instance.currentFrame+Mathf.RoundToInt(10/Constant.FrameInterval);
-
+                tank.transform.localScale =tank.size* 1.5f;
+                
                 
                 lastTriggerFrame = NetworkManager.Instance.currentFrame;
             }

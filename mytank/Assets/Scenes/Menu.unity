@@ -981,9 +981,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1480527955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 635, y: 327}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -164, y: 295}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &229438873 stripped
@@ -2014,7 +2014,7 @@ RectTransform:
   m_Father: {fileID: 968603433}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8039,7 +8039,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00003528595}
+  m_AnchoredPosition: {x: 0, y: -0.000009536743}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1046354342
@@ -9785,23 +9785,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodDatas:
-  - {fileID: 11400000, guid: 543caeb1337484578869d18b43bb3602, type: 2}
-  - {fileID: 11400000, guid: 0c3f1a6badc0b47e5a83d6fdcce8a9c3, type: 2}
-  - {fileID: 11400000, guid: 5de8281c6b6604f1c8398dcf713c41a5, type: 2}
-  - {fileID: 11400000, guid: ed267d32158f44e5180d3c4b68b2773f, type: 2}
-  - {fileID: 11400000, guid: 13abcfc6c314f4a82a4c8d328194dcd2, type: 2}
-  - {fileID: 11400000, guid: d18ca0ee953444df1a0550461bf47648, type: 2}
-  - {fileID: 11400000, guid: 0e6f5bf1c2d9d49258ed4a4a6125112f, type: 2}
-  - {fileID: 11400000, guid: 1bd6473d56710473691c9770b1d627d6, type: 2}
-  - {fileID: 11400000, guid: e8926549c198d4e1ba68d2f4737c2aed, type: 2}
-  - {fileID: 11400000, guid: 0cf209985a8cf4437a46a3656a240def, type: 2}
   - {fileID: 11400000, guid: f852203a403bb4626afffb7010e0049e, type: 2}
-  - {fileID: 11400000, guid: 1d7ceed3120c74e57906e8a2a24629af, type: 2}
-  - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
-  - {fileID: 11400000, guid: 6676d2430654149178c78814c408ad98, type: 2}
-  - {fileID: 11400000, guid: 37f875ec6e2914f408789d6a1145213b, type: 2}
-  - {fileID: 11400000, guid: bce80924cecdc4093a393d0e8f22c6a8, type: 2}
-  - {fileID: 11400000, guid: a408ce0e4d256407e939776e9cc772b9, type: 2}
+  - {fileID: 11400000, guid: 0e6f5bf1c2d9d49258ed4a4a6125112f, type: 2}
   - {fileID: 11400000, guid: 10dfb54718d4342c3a50a7e007c16ff6, type: 2}
   panelParent: {fileID: 408527372}
   panels:
@@ -9852,6 +9837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74b788c51738456a96509b7cd6798c34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gamePanel: {fileID: 1814831117}
   playerPanelParent: {fileID: 223813548}
   playerPanelPrefab: {fileID: 268154198779758875, guid: b6f4146acb25d44f68a769af2a22c794, type: 3}
   firstPos: {x: 700, y: 400}
@@ -10416,10 +10402,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1600, y: 900}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -10437,9 +10423,9 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -12191,7 +12177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1814831118
 RectTransform:
   m_ObjectHideFlags: 0
