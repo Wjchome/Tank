@@ -47,7 +47,7 @@ public enum FoodType
         }
     }
 
-    public void ShowPanels(TankController tank, Random random)
+    public void ShowPanels(TankController tank)
     {
         panelParent.DOAnchorPos(new Vector2(0, 0), 0.5f);
 
@@ -72,7 +72,7 @@ public enum FoodType
         for (int i = 0; i < 3; i++)
         {
             if (availableFoods.Count == 0) break;
-            int foodIndex = random.Next(0, availableFoods.Count);
+            int foodIndex = UnityEngine.Random.Range(0, availableFoods.Count);
             FoodData randomFood = availableFoods[foodIndex];
             availableFoods.RemoveAt(foodIndex);
 

@@ -5057,7 +5057,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &754405182
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5909,7 +5909,7 @@ MonoBehaviour:
   currentFrame: 0
   isGameing: 0
   seed: 0
-  serverIP: 127.0.0.1
+  serverIP: 10.30.29.192
   serverPort: 8080
 --- !u!1 &843415143
 GameObject:
@@ -9785,8 +9785,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodDatas:
-  - {fileID: 11400000, guid: f852203a403bb4626afffb7010e0049e, type: 2}
+  - {fileID: 11400000, guid: 543caeb1337484578869d18b43bb3602, type: 2}
+  - {fileID: 11400000, guid: 0c3f1a6badc0b47e5a83d6fdcce8a9c3, type: 2}
+  - {fileID: 11400000, guid: 5de8281c6b6604f1c8398dcf713c41a5, type: 2}
+  - {fileID: 11400000, guid: ed267d32158f44e5180d3c4b68b2773f, type: 2}
+  - {fileID: 11400000, guid: 13abcfc6c314f4a82a4c8d328194dcd2, type: 2}
+  - {fileID: 11400000, guid: d18ca0ee953444df1a0550461bf47648, type: 2}
   - {fileID: 11400000, guid: 0e6f5bf1c2d9d49258ed4a4a6125112f, type: 2}
+  - {fileID: 11400000, guid: 1bd6473d56710473691c9770b1d627d6, type: 2}
+  - {fileID: 11400000, guid: e8926549c198d4e1ba68d2f4737c2aed, type: 2}
+  - {fileID: 11400000, guid: 0cf209985a8cf4437a46a3656a240def, type: 2}
+  - {fileID: 11400000, guid: f852203a403bb4626afffb7010e0049e, type: 2}
+  - {fileID: 11400000, guid: 1d7ceed3120c74e57906e8a2a24629af, type: 2}
+  - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
+  - {fileID: 11400000, guid: 6676d2430654149178c78814c408ad98, type: 2}
+  - {fileID: 11400000, guid: 37f875ec6e2914f408789d6a1145213b, type: 2}
+  - {fileID: 11400000, guid: bce80924cecdc4093a393d0e8f22c6a8, type: 2}
+  - {fileID: 11400000, guid: a408ce0e4d256407e939776e9cc772b9, type: 2}
   - {fileID: 11400000, guid: 10dfb54718d4342c3a50a7e007c16ff6, type: 2}
   panelParent: {fileID: 408527372}
   panels:
@@ -11764,8 +11779,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sumEnemies: 0
-  maxEnemies: 3
-  enemySpawnInterval: 5
+  maxEnemies: 5
+  enemySpawnInterval: 4
   activeEnemies: []
   leafEnemies: 0
   lastSpawnTime: 0

@@ -249,14 +249,14 @@ public class GameStateManager : SingletonMono<GameStateManager>
                     tank.isInvincible = true;
                     tank.invincibleFrame = NetworkManager.Instance.currentFrame +
                                            Mathf.RoundToInt(5 / Constant.FrameInterval);
-                    tank.transform.localScale = tank.size * 1.5f;
+                    tank.transform.localScale = tank.scaleSize * 1.5f;
                 }
                 else if (num == 1)
                 {
                     tank.isInvincible = true;
                     tank.invincibleFrame = NetworkManager.Instance.currentFrame +
                                            Mathf.RoundToInt(15 / Constant.FrameInterval);
-                    tank.transform.localScale = tank.size * 1.5f;
+                    tank.transform.localScale = tank.scaleSize * 1.5f;
                 }
                 else if (num == 2)
                 {

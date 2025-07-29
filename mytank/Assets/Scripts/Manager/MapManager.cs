@@ -467,9 +467,35 @@ public enum MapType
             }
             return tanks;
         }
-     
+        public List<TankController> GetPlayerTankInArea(int startX, int startY, int width, int height)
+        {
+            List<TankController> tanks = new List<TankController>();
+            foreach (var tank in PlayerManager.Instance.activePlayers)
+            {
+              
+                if (IsRectOverlap(startX, startY, width, height, 
+                        tank.Pos.x, tank.Pos.y, 2, 2))
+                {
+                    tanks.Add(tank);
+                }
+            }
+            return tanks;
+        }
         
-        
+        public List<TankController> GetEnemyTankInArea(int startX, int startY, int width, int height)
+        {
+            List<TankController> tanks = new List<TankController>();
+            foreach (var tank in EnemyManager.Instance.activeEnemies)
+            {
+              
+                if (IsRectOverlap(startX, startY, width, height, 
+                        tank.Pos.x, tank.Pos.y, 2, 2))
+                {
+                    tanks.Add(tank);
+                }
+            }
+            return tanks;
+        }
         
        
         

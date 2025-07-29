@@ -443,7 +443,7 @@ public class MapEditorTool : EditorWindow
                 char tileChar = rows[y][x];
                 if (int.TryParse(tileChar.ToString(), out int tileType))
                 {
-                    if (tileType >= 0 && tileType <= 4)
+                    if (tileType >= 0 && tileType <= 5)
                     {
                         PlaceWall(x, y, tileType);
                     }

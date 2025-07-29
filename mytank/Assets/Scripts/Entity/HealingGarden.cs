@@ -1,38 +1,50 @@
+using System;
+using UnityEngine;
 
-    using System;
-    using UnityEngine;
+public class HealingGarden : MonoBehaviour
+{
+    public Vector2Int Pos;
 
-    public class HealingGarden:MonoBehaviour
+    public long lastGenateFrame;
+
+    public int genateIntervalFrame = 10;
+
+    public bool isOk = false;
+
+    public Color color;
+
+    public void UpdateFrame()
     {
-        public Vector2Int Pos;
-
-        public long lastGenateFrame;
-
-        public int genateIntervalFrame=10;
-
-        public bool isOk = false;
-        
-        public Color color;
-        public void UpdateFrame()
+        if (NetworkManager.Instance.currentFrame - lastGenateFrame > genateIntervalFrame)
         {
-            if (NetworkManager.Instance.currentFrame - lastGenateFrame > genateIntervalFrame)
+            if (!isOk)
             {
-                if (!isOk)
+                isOk = true;
+                GetComponent<SpriteRenderer>().color = Color.green;
+            }
+        }
+
+        if (isOk)
+        {
+            var tanks = MapManager.Instance.GetPlayerTankInArea(Pos.x, Pos.y, 1, 1);
+            if (tanks != null)
+            {
+                foreach (var tank in tanks)
                 {
-                    isOk = true;
-                    GetComponent<SpriteRenderer>().color = Color.green;
+                    PickUp(tank);
                 }
             }
         }
+    }
 
-        public void PickUp(TankController tank)
+    public void PickUp(TankController tank)
+    {
+        if (isOk)
         {
-            if (isOk)
-            {
-                tank.AddHP(1);
-                isOk = false;
-                lastGenateFrame = NetworkManager.Instance.currentFrame;
-                GetComponent<SpriteRenderer>().color =color;
-            }
+            tank.AddHP(1);
+            isOk = false;
+            lastGenateFrame = NetworkManager.Instance.currentFrame;
+            GetComponent<SpriteRenderer>().color = color;
         }
     }
+}

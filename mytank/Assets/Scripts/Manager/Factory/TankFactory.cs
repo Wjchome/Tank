@@ -32,6 +32,31 @@ public class TankFactory : SingletonMono<TankFactory>
         tank.isShootTwice = false;
         tank.invincibleFrame = 0;
         tank.killNum = 0;
+        tank.isBoat = false;
+        tank.boatFrame = -1;
+        tank.boatShow.SetActive(false);
+        tank.isInvincible = false;
+        tank.invincibleFrame = -1;
+        tank.scaleSize = tank.transform.localScale;
+        tank.isShootTwice = false;
+        tank.shootTwiceFrame = -1;
+        tank.isShootThree = false;
+        tank.secondShootFrame = -1;
+        tank.threeShootFrame = -1;
+        tank.shootTwiceShow.SetActive(false);
+        tank.isBreakWall = false;
+        tank.breakWallFrame = -1;
+        tank.breakWallShow.SetActive(false);
+        tank.isEncourage = false;
+        tank.encourageFrame = -1;
+        tank.encourageShow.SetActive(false);
+        tank.rearFire=false;
+        tank.rearFireFrame=-1;
+        tank.rearFireShow.SetActive(false);
+        tank.isSpikeTrap = false;
+        tank.spikeTrapDurationFrame = 0;
+        tank.shoeShow.SetActive(false);
+        
         activeTanks.Add(tank);
         tank.gameObject.SetActive(true);
         

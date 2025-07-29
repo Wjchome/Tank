@@ -75,8 +75,8 @@ public class TankController : MonoBehaviour
     public GameObject boatShow;
     
     public bool isInvincible = false;
-    public long invincibleFrame=0;
-    public Vector3 size;
+    public long invincibleFrame=-1;
+    public Vector3 scaleSize;
 
     
     
@@ -112,10 +112,7 @@ public class TankController : MonoBehaviour
     
     public Animator bombAnimator;
         
-    private void Awake()
-    {
-        size=transform.localScale;
-    }
+ 
 
      public void UpdateFrame()
     {
@@ -208,7 +205,7 @@ public class TankController : MonoBehaviour
         {
             if (NetworkManager.Instance.currentFrame >=invincibleFrame)
             {
-                transform.localScale =size;
+                transform.localScale =scaleSize;
                 isInvincible = false;
 
             }
@@ -245,6 +242,7 @@ public class TankController : MonoBehaviour
     {
         if (NetworkManager.Instance.currentFrame - lastMoveFrame >CurrentMoveIntervalFrame())
         {
+            
             if (Input.GetKey(KeyCode.W))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
@@ -320,20 +318,7 @@ public class TankController : MonoBehaviour
             animator.Play("Tank"+ animType);
             lastAnimStartFrame = NetworkManager.Instance.currentFrame ;
             transform.DOMove(centerPos, currentData.moveIntervalFrame*Constant.FrameInterval).SetEase(Ease.Linear);
-            Landmine a=MapManager.Instance.HasTankInLanemine(Pos.x,Pos.y);
-            if (a != null)
-            {
-                a.Trigger();
-            }
-
-            if (identity != Identity.Enemy)
-            {
-                HealingGarden b=MapManager.Instance.HasTankInGarden(Pos.x,Pos.y);
-                if (b != null)
-                {
-                    b.PickUp(this);
-                }
-            }
+         
 
             
 
@@ -523,7 +508,7 @@ public class TankController : MonoBehaviour
         playerPanelUI?.UpdateUI(); // 更新血量显示
         if (isSpecial&&identity==Identity.Myself)
         {
-            FoodManager.Instance.ShowPanels(this,random);
+            FoodManager.Instance.ShowPanels(this);
         }
     }
 
@@ -531,9 +516,7 @@ public class TankController : MonoBehaviour
 
     void AiControls()
     {
-       
-    
-        
+
         if (NetworkManager.Instance.currentFrame - lastMoveFrame > currentData.moveIntervalFrame)
         {
             if (!MoveBy(tankDirection))

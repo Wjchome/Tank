@@ -62,6 +62,10 @@ public class EntityManager : SingletonMono<EntityManager>
             landmineMachine.UpdateFrame();
         }
 
+        foreach (var landmine in landmines)
+        {
+            landmine.UpdateFrame();
+        }
         foreach (var healingGarden in healingGardens)
         {
             healingGarden.UpdateFrame();

@@ -29,7 +29,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private Thread receiveThread;
     private bool shouldStopThread = false;
 
-    public string serverIP = "192.168.1.100";
+    public string serverIP = "10.30.29.192";
     public int serverPort = 8080;
     private void Start()
     {
