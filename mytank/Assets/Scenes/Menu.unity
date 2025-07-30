@@ -2730,6 +2730,7 @@ MonoBehaviour:
   landminePrefab: {fileID: -6251440126117694802, guid: 3fa59046de21445c88855347f2465099, type: 3}
   healingGardenPrefab: {fileID: 5576086412088546095, guid: 50dfb48aae14146d7b6022308765d515, type: 3}
   spikeTrapPrefab: {fileID: 5265131791465059852, guid: c208852355021443eb8c93590ed62cfe, type: 3}
+  ghostGuardPrefab: {fileID: 6581307129808243645, guid: f79c1918aef274b9784109a10675aa5e, type: 3}
   landmineMachinePrefab: {fileID: 3364237908212559664, guid: f3c66f2a6cf264d60b270b1d40e642c1, type: 3}
   bombControllerPrefab: {fileID: 3859500663799134593, guid: 7cdf9cdbf56ed44f68dd7a72754497f8, type: 3}
   pocketWatchControllerPrefab: {fileID: 3681391883020070046, guid: 93931f4b5ccdb460ca1c6a48473dfbdd, type: 3}
@@ -2737,6 +2738,7 @@ MonoBehaviour:
   steelHelmetControllerPrefab: {fileID: 8090109195196709821, guid: b7fbe77d5784040458541759edc150b7, type: 3}
   protectControllerPrefab: {fileID: 2162136879226511600, guid: e1615a220052a4c8da14c647b216694f, type: 3}
   disciplineControllerPrefab: {fileID: 3782525686423470398, guid: 6ad67b6e392c747b480c97ac1f459e0d, type: 3}
+  ghostGuardMachinePrefab: {fileID: -2865518096813212923, guid: 660e26c93ed7c46fd85ca1426955c85c, type: 3}
 --- !u!1 &484754226
 GameObject:
   m_ObjectHideFlags: 0
@@ -7121,7 +7123,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 381906566}
   m_HandleRect: {fileID: 381906565}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9912,22 +9914,7 @@ MonoBehaviour:
   foodDatas:
   - {fileID: 11400000, guid: 543caeb1337484578869d18b43bb3602, type: 2}
   - {fileID: 11400000, guid: 0c3f1a6badc0b47e5a83d6fdcce8a9c3, type: 2}
-  - {fileID: 11400000, guid: 5de8281c6b6604f1c8398dcf713c41a5, type: 2}
-  - {fileID: 11400000, guid: ed267d32158f44e5180d3c4b68b2773f, type: 2}
-  - {fileID: 11400000, guid: 13abcfc6c314f4a82a4c8d328194dcd2, type: 2}
-  - {fileID: 11400000, guid: d18ca0ee953444df1a0550461bf47648, type: 2}
-  - {fileID: 11400000, guid: 0e6f5bf1c2d9d49258ed4a4a6125112f, type: 2}
-  - {fileID: 11400000, guid: 1bd6473d56710473691c9770b1d627d6, type: 2}
-  - {fileID: 11400000, guid: e8926549c198d4e1ba68d2f4737c2aed, type: 2}
-  - {fileID: 11400000, guid: 0cf209985a8cf4437a46a3656a240def, type: 2}
-  - {fileID: 11400000, guid: f852203a403bb4626afffb7010e0049e, type: 2}
-  - {fileID: 11400000, guid: 1d7ceed3120c74e57906e8a2a24629af, type: 2}
-  - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
-  - {fileID: 11400000, guid: 6676d2430654149178c78814c408ad98, type: 2}
-  - {fileID: 11400000, guid: 37f875ec6e2914f408789d6a1145213b, type: 2}
-  - {fileID: 11400000, guid: bce80924cecdc4093a393d0e8f22c6a8, type: 2}
-  - {fileID: 11400000, guid: a408ce0e4d256407e939776e9cc772b9, type: 2}
-  - {fileID: 11400000, guid: 10dfb54718d4342c3a50a7e007c16ff6, type: 2}
+  - {fileID: 11400000, guid: abef0f49fcbe64a0e8cd422ee51604de, type: 2}
   panelParent: {fileID: 408527372}
   panels:
   - {fileID: 229438876}

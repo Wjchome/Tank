@@ -24,7 +24,8 @@ public enum FoodType
     RearFire,
     SpikeTrap,
     Protect,
-    Discipline//惩戒
+    Discipline,
+    GhostGuard
     
    
    

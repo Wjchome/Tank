@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6057427113148433846}
   - component: {fileID: 5576086412088546095}
   m_Layer: 0
-  m_Name: HealingGengan
+  m_Name: HealingGendan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

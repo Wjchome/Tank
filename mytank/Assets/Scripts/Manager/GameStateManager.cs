@@ -445,6 +445,24 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
 
                 break;
+            case FoodType.GhostGuard:
+                if (num == 0)
+                {
+
+                    EntityManager.Instance.InitGhostGuard(tank);
+                }
+                else if (num == 1)
+                {
+                    EntityManager.Instance.InitGhostGuardMachine(tank);
+    
+                }
+                else if (num == 2)
+                {
+                    var target = EntityManager.Instance.FindUIEntity<GhostGuardMachine>(tank);
+                    target.genateIntervalFrame = 600;
+                }
+
+                break;
         }
     }
 

@@ -11,17 +11,18 @@ public class EntityManager : SingletonMono<EntityManager>
     public Landmine landminePrefab;
     public HealingGarden healingGardenPrefab;
     public SpikeTrap spikeTrapPrefab;
+    public GhostGuard ghostGuardPrefab;
 
-    [Header("Spawner Entity Prefabs")]
+
+    [Header("UI Timer Entity Prefabs")]
     public LandmineMachine landmineMachinePrefab;
-
-    [Header("Effect Entity Prefabs")]
     public BombController bombControllerPrefab;
     public PocketWatchController pocketWatchControllerPrefab;
     public ShovelController shovelControllerPrefab;
     public SteelHelmetController steelHelmetControllerPrefab;
     public ProtectController protectControllerPrefab;
     public DisciplineController disciplineControllerPrefab;
+    public GhostGuardMachine ghostGuardMachinePrefab;
 
     // 分类管理
     private List<MapEntity> mapEntities = new List<MapEntity>();
@@ -152,12 +153,7 @@ public class EntityManager : SingletonMono<EntityManager>
 
         SpawnMapEntity(autoTurretPrefab, tank,new Vector2(pos.x+0.5f, pos.y+0.5f),pos);
     }
-
-    public void InitLandmineMachine(TankController tank)
-    {
-        SpawnUIEntity(landmineMachinePrefab, tank);
-    }
-
+    
     public void InitLandmine(TankController tank)
     {
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
@@ -179,6 +175,46 @@ public class EntityManager : SingletonMono<EntityManager>
     {
         var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, new Vector2(pos.x, pos.y), pos);
         spikeTrap.durationFrame = durationFrame;
+    }
+    
+    public void InitGhostGuard(TankController tank)
+    {
+        List<Vector2Int> poss = new List<Vector2Int>()
+        {
+            new Vector2Int((MapManager.Instance.mapWidth - 1) / 2 - 1, 1),
+            new Vector2Int((MapManager.Instance.mapWidth) / 2, 1),
+            new Vector2Int((MapManager.Instance.mapWidth - 1) / 2 - 1, 3),
+            new Vector2Int((MapManager.Instance.mapWidth) / 2, 3),
+
+        };
+        
+    
+        Color tankColor = tank.playerColor;
+        Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
+
+        var ghostGuardLeft = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[0].x + 0.5f, poss[0].y + 0.5f), poss[0]);
+        ghostGuardLeft.moveDirection = Direction.Left;
+        ghostGuardLeft.GetComponent<SpriteRenderer>().color = transparentColor;
+        ghostGuardLeft.transform.rotation = Quaternion.Euler(0, 0, 90);
+
+        var ghostGuardRight = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[1].x + 0.5f, poss[1].y + 0.5f), poss[1]);
+        ghostGuardRight.moveDirection = Direction.Right;
+        ghostGuardRight.GetComponent<SpriteRenderer>().color = transparentColor;
+        ghostGuardRight.transform.rotation = Quaternion.Euler(0, 0, -90);
+
+        var ghostGuardUp1 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[2].x + 0.5f, poss[2].y + 0.5f), poss[2]);
+        ghostGuardUp1.moveDirection = Direction.Up;
+        ghostGuardUp1.GetComponent<SpriteRenderer>().color = transparentColor;
+
+        var ghostGuardUp2 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[3].x + 0.5f, poss[3].y + 0.5f), poss[3]);
+        ghostGuardUp2.moveDirection = Direction.Up;
+        ghostGuardUp2.GetComponent<SpriteRenderer>().color = transparentColor;
+        
+    }
+    
+    public void InitLandmineMachine(TankController tank)
+    {
+        SpawnUIEntity(landmineMachinePrefab, tank);
     }
 
     public void InitBombController(TankController tank)
@@ -209,5 +245,10 @@ public class EntityManager : SingletonMono<EntityManager>
     public void InitDisciplineController(TankController tank)
     {
         SpawnUIEntity(disciplineControllerPrefab, tank);
+    }
+    
+    public void InitGhostGuardMachine(TankController tank)
+    {
+        SpawnUIEntity(ghostGuardMachinePrefab, tank);
     }
 }
