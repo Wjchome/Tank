@@ -1,50 +1,50 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class HealingGarden : MonoBehaviour
+public class HealingGarden : MapEntity
 {
-    public Vector2Int Pos;
-
     public long lastGenateFrame;
 
     public int genateIntervalFrame = 10;
 
-    public bool isOk = false;
+     public bool isCanHealing = false;
+    
 
-    public Color color;
-
-    public void UpdateFrame()
+    public override void UpdateFrame()
     {
         if (NetworkManager.Instance.currentFrame - lastGenateFrame > genateIntervalFrame)
         {
-            if (!isOk)
+            if (!isCanHealing)
             {
-                isOk = true;
+                isCanHealing = true;
                 GetComponent<SpriteRenderer>().color = Color.green;
+                lastGenateFrame = NetworkManager.Instance.currentFrame;
             }
         }
 
-        if (isOk)
+        if (isCanHealing)
         {
             var tanks = MapManager.Instance.GetPlayerTankInArea(Pos.x, Pos.y, 1, 1);
             if (tanks != null)
             {
-                foreach (var tank in tanks)
+                foreach (var _tank in tanks)
                 {
-                    PickUp(tank);
+                    PickUp(_tank);
                 }
             }
         }
     }
 
+
     public void PickUp(TankController tank)
     {
-        if (isOk)
+        if (isCanHealing)
         {
             tank.AddHP(1);
-            isOk = false;
+            isCanHealing = false;
             lastGenateFrame = NetworkManager.Instance.currentFrame;
-            GetComponent<SpriteRenderer>().color = color;
+            GetComponent<SpriteRenderer>().color = tank.playerColor;
         }
     }
 }

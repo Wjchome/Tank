@@ -80,11 +80,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554cd19c003440d7be95e5a236629ab8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pos: {x: 0, y: 0}
   tank: {fileID: 0}
-  lastTriggerFrame: 0
+  timerImage: {fileID: 2623925226714571180}
   genateIntervalFrame: 1200
-  image: {fileID: 2623925226714571180}
+  lastTriggerFrame: 0
 --- !u!222 &3262350270203837890
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -6,115 +6,129 @@ public class EntityManager : SingletonMono<EntityManager>
 {
     public Transform content;
 
-
+    [Header("Map Entity Prefabs")]
     public AutoTurret autoTurretPrefab;
-
-
-    public LandmineMachine landmineMachinePrefab;
     public Landmine landminePrefab;
-
     public HealingGarden healingGardenPrefab;
-
     public SpikeTrap spikeTrapPrefab;
 
+    [Header("Spawner Entity Prefabs")]
+    public LandmineMachine landmineMachinePrefab;
+
+    [Header("Effect Entity Prefabs")]
     public BombController bombControllerPrefab;
-
     public PocketWatchController pocketWatchControllerPrefab;
-
     public ShovelController shovelControllerPrefab;
-
     public SteelHelmetController steelHelmetControllerPrefab;
-
     public ProtectController protectControllerPrefab;
-
     public DisciplineController disciplineControllerPrefab;
 
-    public List<AutoTurret> autoTurrets = new List<AutoTurret>();
-
-    public List<LandmineMachine> landmineMachines = new List<LandmineMachine>();
-    public List<Landmine> landmines = new List<Landmine>();
-
-    public List<HealingGarden> healingGardens = new List<HealingGarden>();
-
-    public List<SpikeTrap> spikeTraps = new List<SpikeTrap>();
-
-    public List<BombController> bombControllers = new List<BombController>();
-
-    public List<PocketWatchController> pocketWatchControllers = new List<PocketWatchController>();
-
-    public List<ShovelController> shovelControllers = new List<ShovelController>();
-
-    public List<SteelHelmetController> steelHelmetControllers = new List<SteelHelmetController>();
-
-    public List<ProtectController> protectControllers = new List<ProtectController>();
-
-    public List<DisciplineController> disciplines = new List<DisciplineController>();
+    // 分类管理
+    private List<MapEntity> mapEntities = new List<MapEntity>();
+    private List<UITimerEntity> uiEntities = new List<UITimerEntity>();
 
     public void UpdateFrame()
     {
-        foreach (AutoTurret turret in autoTurrets)
+        // 更新地图实体
+        foreach (var entity in mapEntities.ToList())
         {
-            turret.UpdateFrame();
-        }
-
-        foreach (var landmineMachine in landmineMachines)
-        {
-            landmineMachine.UpdateFrame();
-        }
-
-        foreach (var landmine in landmines)
-        {
-            landmine.UpdateFrame();
-        }
-        foreach (var healingGarden in healingGardens)
-        {
-            healingGarden.UpdateFrame();
-        }
-
-        foreach (var spikeTrap in spikeTraps.ToList())
-        {
-            if (spikeTrap != null)
+            if (entity != null)
             {
-                spikeTrap.UpdateFrame();
+                entity.UpdateFrame();
             }
             else
             {
-                spikeTraps.Remove(spikeTrap);
+                mapEntities.Remove(entity);
             }
         }
-
-        foreach (var bombController in bombControllers)
+        
+        // 更新UI实体
+        foreach (var entity in uiEntities.ToList())
         {
-            bombController.UpdateFrame();
-        }
-
-        foreach (var pocketWatchController in pocketWatchControllers)
-        {
-            pocketWatchController.UpdateFrame();
-        }
-
-        foreach (var shovelController in shovelControllers)
-        {
-            shovelController.UpdateFrame();
-        }
-
-        foreach (var steelHelmetController in steelHelmetControllers)
-        {
-            steelHelmetController.UpdateFrame();
-        }
-
-        foreach (var protectController in protectControllers)
-        {
-            protectController.UpdateFrame();
-        }
-
-        foreach (var discipline in disciplines)
-        {
-            discipline.UpdateFrame();
+            if (entity != null)
+            {
+                entity.UpdateFrame();
+            }
+            else
+            {
+                uiEntities.Remove(entity);
+            }
         }
     }
 
+    public void AddMapEntity(MapEntity entity)
+    {
+        mapEntities.Add(entity);
+    }
 
+    public void AddUIEntity(UITimerEntity entity)
+    {
+        uiEntities.Add(entity);
+    }
+
+    public void RemoveEntity(IEntity entity)
+    {
+        if (entity is MapEntity mapEntity)
+        {
+            mapEntities.Remove(mapEntity);
+        }
+        else if (entity is UITimerEntity uiEntity)
+        {
+            uiEntities.Remove(uiEntity);
+        }
+    }
+    
+    // 查找特定类型的UI实体
+    public T FindUIEntity<T>(TankController tank) where T : UITimerEntity
+    {
+        foreach (var entity in uiEntities)
+        {
+            if (entity is T targetEntity && targetEntity.tank == tank)
+            {
+                return targetEntity;
+            }
+        }
+        return null;
+    }
+    
+    // 查找特定类型的地图实体
+    public T FindMapEntity<T>(TankController tank) where T : MapEntity
+    {
+        foreach (var entity in mapEntities)
+        {
+            if (entity is T targetEntity && targetEntity.tank == tank)
+            {
+                return targetEntity;
+            }
+        }
+        return null;
+    }
+
+
+
+
+    // 生成方法
+    public T SpawnMapEntity<T>(T prefab, TankController tank, Vector2 position,Vector2Int pos) where T : MapEntity
+    {
+ 
+        T entity = Instantiate(prefab, new Vector2(position.x, position.y), Quaternion.identity);
+        entity.Init(tank,pos);
+        AddMapEntity(entity);
+        return entity;
+    }
+    
+    public T SpawnUIEntity<T>(T prefab, TankController tank) where T : UITimerEntity
+    {
+        T entity = Instantiate(prefab, content);
+        entity.Init(tank);
+        
+        AddUIEntity(entity);
+        return entity;
+    }
+    
+
+
+    // 兼容性方法 - 保持原有接口
     public void InitAutoTurrent(TankController tank)
     {
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
@@ -136,110 +150,64 @@ public class EntityManager : SingletonMono<EntityManager>
 
         var pos = spawnPos[tank.random.Next(spawnPos.Count)];
 
-        AutoTurret turret = Instantiate(autoTurretPrefab,
-            new Vector2(pos.x + 0.5f, pos.y + 0.5f),
-            Quaternion.identity);
-
-        turret.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
-        turret.Pos = pos;
-        turret.tank = tank;
-        autoTurrets.Add(turret);
+        SpawnMapEntity(autoTurretPrefab, tank,new Vector2(pos.x+0.5f, pos.y+0.5f),pos);
     }
 
     public void InitLandmineMachine(TankController tank)
     {
-        LandmineMachine landmineMachine = Instantiate(landmineMachinePrefab, content);
-        landmineMachine.tank = tank;
-        landmineMachine.lastTriggerFrame = -landmineMachine.genateIntervalFrame;
-        landmineMachines.Add(landmineMachine);
+        SpawnUIEntity(landmineMachinePrefab, tank);
     }
 
     public void InitLandmine(TankController tank)
     {
-        var spawnPos = MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
+        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
         var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-
-        Landmine landmine = Instantiate(landminePrefab,
-            new Vector2(pos.x, pos.y),
-            Quaternion.identity);
-        landmine.tank = tank;
-        landmine.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
-        landmine.Pos = pos;
-        landmines.Add(landmine);
+        
+        SpawnMapEntity(landminePrefab, tank, new Vector2(pos.x, pos.y), pos);
     }
 
     public void InitHealingGarden(TankController tank)
     {
-        var spawnPos = MapManager.Instance.GetMapTypePos(new List<MapType>() { MapType.floor })
+        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
         var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-        HealingGarden healingGarden = Instantiate(healingGardenPrefab,
-            new Vector2(pos.x, pos.y),
-            Quaternion.identity).GetComponent<HealingGarden>();
-
-        healingGarden.Pos = pos;
-        healingGarden.color = tank.playerColor;
-        healingGarden.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
-
-        healingGardens.Add(healingGarden);
+        SpawnMapEntity(healingGardenPrefab, tank,new Vector2(pos.x, pos.y), pos);
     }
 
     public void InitSpikeTrap(TankController tank, Vector2Int pos, int durationFrame)
     {
-        SpikeTrap spikeTrap = Instantiate(spikeTrapPrefab, new Vector2(pos.x, pos.y), Quaternion.identity);
-
-        spikeTrap.tank = tank;
-        spikeTrap.Pos = pos;
-        spikeTrap.durationFrame = 80;
-        spikeTraps.Add(spikeTrap);
+        var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, new Vector2(pos.x, pos.y), pos);
+        spikeTrap.durationFrame = durationFrame;
     }
 
     public void InitBombController(TankController tank)
     {
-        var bombC = Instantiate(bombControllerPrefab, content);
-        bombC.tank = tank;
-        bombC.lastTriggerFrame = -bombC.genateIntervalFrame;
-        bombControllers.Add(bombC);
+        SpawnUIEntity(bombControllerPrefab, tank);
     }
 
     public void InitPocketWatchController(TankController tank)
     {
-        var pocketWatchController = Instantiate(pocketWatchControllerPrefab, content);
-        pocketWatchController.tank = tank;
-        pocketWatchController.lastTriggerFrame = -pocketWatchController.genateIntervalFrame;
-        pocketWatchControllers.Add(pocketWatchController);
+        SpawnUIEntity(pocketWatchControllerPrefab, tank);
     }
 
     public void InitShovelController(TankController tank)
     {
-        var shovelController = Instantiate(shovelControllerPrefab, content);
-        shovelController.tank = tank;
-        shovelController.lastTriggerFrame = -shovelController.genateIntervalFrame;
-        shovelControllers.Add(shovelController);
+        SpawnUIEntity(shovelControllerPrefab, tank);
     }
 
     public void InitSteelHelmetController(TankController tank)
     {
-        var steelHelmet = Instantiate(steelHelmetControllerPrefab, content);
-        steelHelmet.tank = tank;
-        steelHelmet.lastTriggerFrame = -steelHelmet.genateIntervalFrame;
-        steelHelmetControllers.Add(steelHelmet);
+        SpawnUIEntity(steelHelmetControllerPrefab, tank);
     }
 
     public void InitProtectController(TankController tank)
     {
-        var protectController = Instantiate(protectControllerPrefab, content);
-        protectController.tank = tank;
-        protectController.lastTriggerFrame = -protectController.genateIntervalFrame;
-        protectControllers.Add(protectController);
+        SpawnUIEntity(protectControllerPrefab, tank);
     }
 
     public void InitDisciplineController(TankController tank)
     {
-        var disciplineController = Instantiate(disciplineControllerPrefab, content);
-        disciplineController.tank = tank;
-        disciplineController.lastTriggerFrame = -disciplineController.genateIntervalFrame;
-        disciplines.Add(disciplineController);
+        SpawnUIEntity(disciplineControllerPrefab, tank);
     }
 }

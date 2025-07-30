@@ -283,17 +283,17 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 if (num == 0)
                 {
                     MapManager.Instance.GenerateWall(3, tank.random);
-                    tank.bombAnimator.Play("GenerateWall", 0, 0);
+                    tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
                 else if (num == 1)
                 {
                     MapManager.Instance.GenerateWall(4, tank.random);
-                    tank.bombAnimator.Play("GenerateWall", 0, 0);
+                    tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
                 else if (num == 2)
                 {
                     MapManager.Instance.GenerateWall(5, tank.random);
-                    tank.bombAnimator.Play("GenerateWall", 0, 0);
+                    tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
 
                 break;
@@ -402,8 +402,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    var targetProtect = EntityManager.Instance.protectControllers
-                        .SingleOrDefault(pro => pro.tank == tank);
+                    var targetProtect = EntityManager.Instance.FindUIEntity<ProtectController>(tank);
 
                     if (targetProtect != null)
                     {
@@ -412,8 +411,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 2)
                 {
-                    var targetProtect = EntityManager.Instance.protectControllers
-                        .SingleOrDefault(pro => pro.tank == tank);
+                    var targetProtect = EntityManager.Instance.FindUIEntity<ProtectController>(tank);
 
                     if (targetProtect != null)
                     {
@@ -429,22 +427,20 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    var targetProtect = EntityManager.Instance.disciplines
-                        .SingleOrDefault(pro => pro.tank == tank);
+                    var targetDiscipline = EntityManager.Instance.FindUIEntity<DisciplineController>(tank);
 
-                    if (targetProtect != null)
+                    if (targetDiscipline != null)
                     {
-                        targetProtect.targetNum = 2;
+                        targetDiscipline.targetNum = 2;
                     }
                 }
                 else if (num == 2)
                 {
-                    var targetProtect = EntityManager.Instance.disciplines
-                        .SingleOrDefault(pro => pro.tank == tank);
+                    var targetDiscipline = EntityManager.Instance.FindUIEntity<DisciplineController>(tank);
 
-                    if (targetProtect != null)
+                    if (targetDiscipline != null)
                     {
-                        targetProtect.targetNum = 3;
+                        targetDiscipline.targetNum = 3;
                     }
                 }
 

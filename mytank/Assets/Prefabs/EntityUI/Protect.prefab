@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5093163570155445234}
-  - component: {fileID: 2162136879226511600}
   - component: {fileID: 5848280442165748878}
   - component: {fileID: 4450360590991944268}
+  - component: {fileID: 2162136879226511600}
   m_Layer: 0
   m_Name: Protect
   m_TagString: Untagged
@@ -38,23 +38,6 @@ RectTransform:
   m_AnchoredPosition: {x: -14.82923, y: 17.47544}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2162136879226511600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6233460948728440074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee2e452d101548e69b69d0f9479d54b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Pos: {x: 0, y: 0}
-  tank: {fileID: 0}
-  lastTriggerFrame: 0
-  genateIntervalFrame: 200
-  image: {fileID: 4450360590991944268}
 --- !u!222 &5848280442165748878
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -93,3 +76,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2162136879226511600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6233460948728440074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2e452d101548e69b69d0f9479d54b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tank: {fileID: 0}
+  timerImage: {fileID: 4450360590991944268}
+  genateIntervalFrame: 200
+  lastTriggerFrame: 0
+  Pos: {x: 0, y: 0}

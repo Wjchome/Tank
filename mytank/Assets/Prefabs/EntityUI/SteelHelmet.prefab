@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1781137552841965686}
-  - component: {fileID: 8090109195196709821}
   - component: {fileID: 3072628809274021739}
   - component: {fileID: 4671227424099440796}
+  - component: {fileID: 8090109195196709821}
   m_Layer: 0
   m_Name: SteelHelmet
   m_TagString: Untagged
@@ -38,22 +38,6 @@ RectTransform:
   m_AnchoredPosition: {x: -14.82923, y: 17.47544}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.28866667}
---- !u!114 &8090109195196709821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 328626554454685703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 305c83c98aa047dda8d22ad6ace94a5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tank: {fileID: 0}
-  lastTriggerFrame: 0
-  genateIntervalFrame: 2400
-  image: {fileID: 4671227424099440796}
 --- !u!222 &3072628809274021739
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -92,3 +76,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8090109195196709821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328626554454685703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 305c83c98aa047dda8d22ad6ace94a5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tank: {fileID: 0}
+  timerImage: {fileID: 4671227424099440796}
+  genateIntervalFrame: 2400
+  lastTriggerFrame: 0

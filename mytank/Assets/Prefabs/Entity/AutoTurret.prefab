@@ -102,3 +102,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
   Pos: {x: 0, y: 0}
+  shootIntervalFrame: 80
