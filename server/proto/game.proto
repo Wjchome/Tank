@@ -17,6 +17,7 @@ message PlayerInfo {
   int32 color_r = 3;
   int32 color_g = 4;
   int32 color_b = 5;
+  int32 player_role = 6;
 }
 
 // 房间信息
@@ -44,6 +45,7 @@ message CreateRoomRequest {
   int32 color_r = 4;       // 颜色R分量
   int32 color_g = 5;       // 颜色G分量
   int32 color_b = 6;       // 颜色B分量
+  int32 player_role=7;     // 角色选择
 }
 
 
@@ -54,6 +56,7 @@ message JoinRoomRequest {
   int32 color_r = 3;       // 颜色R分量
   int32 color_g = 4;       // 颜色G分量
   int32 color_b = 5;       // 颜色B分量
+  int32 player_role=6;     // 角色选择
 }
 
 // 离开房间请求

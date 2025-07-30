@@ -583,7 +583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNameText: {fileID: 6046230864761466298}
   playerStatusText: {fileID: 2893045208756457139}
-  playerColor: {fileID: 5787719661411290408}
+  playerImage: {fileID: 5787719661411290408}
   kickButton: {fileID: 3271579358695376890}
 --- !u!1 &9099736265072901301
 GameObject:

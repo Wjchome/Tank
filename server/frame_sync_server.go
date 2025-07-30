@@ -19,14 +19,15 @@ const (
 )
 
 type Client struct {
-	ID     string
-	Conn   net.Conn
-	RoomID string
-	IsHost bool   // 是否是房主
-	Name   string // 玩家名字
-	ColorR int32  // 颜色R分量
-	ColorG int32  // 颜色G分量
-	ColorB int32  // 颜色B分量
+	ID         string
+	Conn       net.Conn
+	RoomID     string
+	IsHost     bool   // 是否是房主
+	Name       string // 玩家名字
+	ColorR     int32  // 颜色R分量
+	ColorG     int32  // 颜色G分量
+	ColorB     int32  // 颜色B分量
+	PlayerRole int32  // 角色选择
 }
 
 type Room struct {
@@ -173,6 +174,7 @@ func (s *Server) handleCreateRoom(client *Client, req *myproto.CreateRoomRequest
 	client.ColorR = req.ColorR
 	client.ColorG = req.ColorG
 	client.ColorB = req.ColorB
+	client.PlayerRole = req.PlayerRole
 
 	room := &Room{
 		ID:         roomID,
@@ -229,6 +231,7 @@ func (s *Server) handleJoinRoom(client *Client, req *myproto.JoinRoomRequest) {
 	client.ColorR = req.ColorR
 	client.ColorG = req.ColorG
 	client.ColorB = req.ColorB
+	client.PlayerRole = req.PlayerRole
 
 	// 加入房间
 	client.RoomID = room.ID
@@ -547,6 +550,7 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 				ColorR:     c.ColorR,
 				ColorG:     c.ColorG,
 				ColorB:     c.ColorB,
+				PlayerRole: c.PlayerRole,
 			})
 			// 获取房主名字
 			if c.ID == room.HostID {

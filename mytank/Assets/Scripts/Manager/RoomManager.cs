@@ -30,7 +30,9 @@ public class RoomManager : SingletonMono<RoomManager>
     public Slider myColorG; 
     public Slider myColorB;
     public Button backButton;
-
+    public ToggleGroup toggleGroup;
+    public PlayerRole playerRole;
+    public Sprite[] sprites;
     
     
     [Header("Create Room")]
@@ -64,6 +66,7 @@ public class RoomManager : SingletonMono<RoomManager>
     private int currentPanelIndex = 0;
     public float durationTime;
     
+    public Dictionary<string, PlayerRole> playerRoleDict = new Dictionary<string, PlayerRole>();
     void Start()
     {
         InitializeUI();
@@ -72,9 +75,26 @@ public class RoomManager : SingletonMono<RoomManager>
 
 
     }
-    
+    public void GetSelectedToggle()
+    {
+        Toggle selectedToggle = toggleGroup.GetFirstActiveToggle();
+        if (selectedToggle != null)
+        {
+            playerRole=playerRoleDict[selectedToggle.name];
+            colorShow.sprite = sprites[(int)playerRole];
+
+        }
+    }
     void InitializeUI()
     {
+        playerRoleDict = new Dictionary<string, PlayerRole>
+        {
+            { "Original", PlayerRole.Original },
+            { "Tanker", PlayerRole.Tanker },
+            { "Priest", PlayerRole.Priest },
+        };
+        
+        
         panels = new List<GameObject>
         {
             mainMenuPanel,
@@ -208,7 +228,7 @@ public class RoomManager : SingletonMono<RoomManager>
         int maxPlayers = maxPlayersDropdown.value + 1;
         var (playerName, colorR, colorG, colorB) = GetPlayerInfo();
         
-        NetworkManager.Instance.CreateRoom(roomName, maxPlayers, playerName, colorR, colorG, colorB);
+        NetworkManager.Instance.CreateRoom(roomName, maxPlayers, playerName, colorR, colorG, colorB,playerRole);
     }
     
     // 发送房间列表请求
@@ -236,12 +256,12 @@ public class RoomManager : SingletonMono<RoomManager>
     void SendJoinRoom(string roomId)
     {
         var (playerName, colorR, colorG, colorB) = GetPlayerInfo();
-        NetworkManager.Instance.JoinRoom(roomId, playerName, colorR, colorG, colorB);
+        NetworkManager.Instance.JoinRoom(roomId, playerName, colorR, colorG, colorB,playerRole);
     }
     #endregion
     
     // 获取玩家信息的辅助方法
-    (string playerName, int colorR, int colorG, int colorB) GetPlayerInfo()
+    (string playerName, int colorR, int colorG, int colorB ) GetPlayerInfo()
     {
         string playerName = myNameInput.text;
         if (string.IsNullOrEmpty(playerName))
@@ -320,7 +340,8 @@ public class RoomManager : SingletonMono<RoomManager>
                 playerInfo.ColorG / 255f,
                 playerInfo.ColorB / 255f
             );
-            playerUIItem.playerColor.color = playerColor;
+            playerUIItem.playerImage.sprite= sprites[playerInfo.PlayerRole];
+            playerUIItem.playerImage.color = playerColor;
         }
         
        
@@ -408,7 +429,7 @@ public class RoomManager : SingletonMono<RoomManager>
             return;
         }
         
-       ShowPanel(4);
+        ShowPanel(4);
         if (NetworkManager.Instance.isHost)
         {
             startGameButton.gameObject.SetActive( true);

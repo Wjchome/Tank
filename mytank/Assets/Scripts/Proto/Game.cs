@@ -25,63 +25,64 @@ namespace Tankgame {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChBwcm90by9nYW1lLnByb3RvEgh0YW5rZ2FtZSIoCg5Db25uZWN0U3VjY2Vz",
-            "cxIWCg55b3VyX3BsYXllcl9pZBgBIAEoCSJnCgpQbGF5ZXJJbmZvEhEKCXBs",
+            "cxIWCg55b3VyX3BsYXllcl9pZBgBIAEoCSJ8CgpQbGF5ZXJJbmZvEhEKCXBs",
             "YXllcl9pZBgBIAEoCRITCgtwbGF5ZXJfbmFtZRgCIAEoCRIPCgdjb2xvcl9y",
-            "GAMgASgFEg8KB2NvbG9yX2cYBCABKAUSDwoHY29sb3JfYhgFIAEoBSK3AQoI",
-            "Um9vbUluZm8SDwoHcm9vbV9pZBgBIAEoCRISCgpwbGF5ZXJfaWRzGAIgAygJ",
-            "Eg4KBnN0YXR1cxgDIAEoCRIPCgdob3N0X2lkGAQgASgJEhMKC21heF9wbGF5",
-            "ZXJzGAUgASgFEhEKCXJvb21fbmFtZRgGIAEoCRIqCgxwbGF5ZXJfaW5mb3MY",
-            "ByADKAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvEhEKCWhvc3RfbmFtZRgIIAEo",
-            "CSItCghSb29tTGlzdBIhCgVyb29tcxgBIAMoCzISLnRhbmtnYW1lLlJvb21J",
-            "bmZvIoMBChFDcmVhdGVSb29tUmVxdWVzdBIRCglyb29tX25hbWUYASABKAkS",
-            "EwoLbWF4X3BsYXllcnMYAiABKAUSEwoLcGxheWVyX25hbWUYAyABKAkSDwoH",
-            "Y29sb3JfchgEIAEoBRIPCgdjb2xvcl9nGAUgASgFEg8KB2NvbG9yX2IYBiAB",
-            "KAUiagoPSm9pblJvb21SZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSEwoLcGxh",
-            "eWVyX25hbWUYAiABKAkSDwoHY29sb3JfchgDIAEoBRIPCgdjb2xvcl9nGAQg",
-            "ASgFEg8KB2NvbG9yX2IYBSABKAUiIwoQTGVhdmVSb29tUmVxdWVzdBIPCgdy",
-            "b29tX2lkGAEgASgJIj4KEUtpY2tQbGF5ZXJSZXF1ZXN0Eg8KB3Jvb21faWQY",
-            "ASABKAkSGAoQdGFyZ2V0X3BsYXllcl9pZBgCIAEoCSIiCg9HYW1lT3ZlclJl",
-            "cXVlc3QSDwoHcm9vbV9pZBgBIAEoCSJJCgtQbGF5ZXJJbnB1dBIRCglwbGF5",
-            "ZXJfaWQYASABKAkSJwoKaW5wdXRfdHlwZRgCIAEoDjITLnRhbmtnYW1lLklu",
-            "cHV0VHlwZSJsCglHYW1lU3RhcnQSDwoHcm9vbV9pZBgBIAEoCRIqCgxwbGF5",
-            "ZXJfaW5mb3MYAiADKAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvEhMKC3JhbmRv",
-            "bV9zZWVkGAMgASgDEg0KBWxldmVsGAQgASgFIhEKD1Jvb21MaXN0UmVxdWVz",
-            "dCIyChBHYW1lU3RhcnRSZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSDQoFbGV2",
-            "ZWwYAiABKAUiNwoRQ2hvb3NlRm9vZFJlcXVlc3QSEQoJcGxheWVyX2lkGAEg",
-            "ASgJEg8KB2Zvb2RfaWQYAiABKAUihgEKDEZyYW1lTWVzc2FnZRIUCgxmcmFt",
-            "ZV9udW1iZXIYASABKAMSJQoGaW5wdXRzGAIgAygLMhUudGFua2dhbWUuUGxh",
-            "eWVySW5wdXQSOQoUY2hvb3NlX2Zvb2RfcmVxdWVzdHMYAyADKAsyGy50YW5r",
-            "Z2FtZS5DaG9vc2VGb29kUmVxdWVzdCL6AQoNU2VydmVyTWVzc2FnZRIvCg1m",
-            "cmFtZV9tZXNzYWdlGAEgASgLMhYudGFua2dhbWUuRnJhbWVNZXNzYWdlSAAS",
-            "JwoJcm9vbV9pbmZvGAIgASgLMhIudGFua2dhbWUuUm9vbUluZm9IABIpCgpn",
-            "YW1lX3N0YXJ0GAMgASgLMhMudGFua2dhbWUuR2FtZVN0YXJ0SAASMwoPY29u",
-            "bmVjdF9zdWNjZXNzGAQgASgLMhgudGFua2dhbWUuQ29ubmVjdFN1Y2Nlc3NI",
-            "ABInCglyb29tX2xpc3QYBSABKAsyEi50YW5rZ2FtZS5Sb29tTGlzdEgAQgYK",
-            "BGRhdGEilgQKDUNsaWVudE1lc3NhZ2USLQoMcGxheWVyX2lucHV0GAEgASgL",
-            "MhUudGFua2dhbWUuUGxheWVySW5wdXRIABI6ChNjcmVhdGVfcm9vbV9yZXF1",
-            "ZXN0GAIgASgLMhsudGFua2dhbWUuQ3JlYXRlUm9vbVJlcXVlc3RIABI2ChFq",
-            "b2luX3Jvb21fcmVxdWVzdBgDIAEoCzIZLnRhbmtnYW1lLkpvaW5Sb29tUmVx",
-            "dWVzdEgAEjgKEmxlYXZlX3Jvb21fcmVxdWVzdBgEIAEoCzIaLnRhbmtnYW1l",
-            "LkxlYXZlUm9vbVJlcXVlc3RIABI2ChFyb29tX2xpc3RfcmVxdWVzdBgFIAEo",
-            "CzIZLnRhbmtnYW1lLlJvb21MaXN0UmVxdWVzdEgAEjgKEmdhbWVfc3RhcnRf",
-            "cmVxdWVzdBgGIAEoCzIaLnRhbmtnYW1lLkdhbWVTdGFydFJlcXVlc3RIABI6",
-            "ChNraWNrX3BsYXllcl9yZXF1ZXN0GAcgASgLMhsudGFua2dhbWUuS2lja1Bs",
-            "YXllclJlcXVlc3RIABI2ChFnYW1lX292ZXJfcmVxdWVzdBgIIAEoCzIZLnRh",
-            "bmtnYW1lLkdhbWVPdmVyUmVxdWVzdEgAEjoKE2Nob29zZV9mb29kX3JlcXVl",
-            "c3QYCSABKAsyGy50YW5rZ2FtZS5DaG9vc2VGb29kUmVxdWVzdEgAQgYKBGRh",
-            "dGEqfwoJSW5wdXRUeXBlEg4KCklOUFVUX05PTkUQABIRCg1JTlBVVF9NT1ZF",
-            "X1VQEAESEwoPSU5QVVRfTU9WRV9ET1dOEAISEwoPSU5QVVRfTU9WRV9MRUZU",
-            "EAMSFAoQSU5QVVRfTU9WRV9SSUdIVBAEEg8KC0lOUFVUX1NIT09UEAVCDloM",
-            "c2VydmVyL3Byb3RvYgZwcm90bzM="));
+            "GAMgASgFEg8KB2NvbG9yX2cYBCABKAUSDwoHY29sb3JfYhgFIAEoBRITCgtw",
+            "bGF5ZXJfcm9sZRgGIAEoBSK3AQoIUm9vbUluZm8SDwoHcm9vbV9pZBgBIAEo",
+            "CRISCgpwbGF5ZXJfaWRzGAIgAygJEg4KBnN0YXR1cxgDIAEoCRIPCgdob3N0",
+            "X2lkGAQgASgJEhMKC21heF9wbGF5ZXJzGAUgASgFEhEKCXJvb21fbmFtZRgG",
+            "IAEoCRIqCgxwbGF5ZXJfaW5mb3MYByADKAsyFC50YW5rZ2FtZS5QbGF5ZXJJ",
+            "bmZvEhEKCWhvc3RfbmFtZRgIIAEoCSItCghSb29tTGlzdBIhCgVyb29tcxgB",
+            "IAMoCzISLnRhbmtnYW1lLlJvb21JbmZvIpgBChFDcmVhdGVSb29tUmVxdWVz",
+            "dBIRCglyb29tX25hbWUYASABKAkSEwoLbWF4X3BsYXllcnMYAiABKAUSEwoL",
+            "cGxheWVyX25hbWUYAyABKAkSDwoHY29sb3JfchgEIAEoBRIPCgdjb2xvcl9n",
+            "GAUgASgFEg8KB2NvbG9yX2IYBiABKAUSEwoLcGxheWVyX3JvbGUYByABKAUi",
+            "fwoPSm9pblJvb21SZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSEwoLcGxheWVy",
+            "X25hbWUYAiABKAkSDwoHY29sb3JfchgDIAEoBRIPCgdjb2xvcl9nGAQgASgF",
+            "Eg8KB2NvbG9yX2IYBSABKAUSEwoLcGxheWVyX3JvbGUYBiABKAUiIwoQTGVh",
+            "dmVSb29tUmVxdWVzdBIPCgdyb29tX2lkGAEgASgJIj4KEUtpY2tQbGF5ZXJS",
+            "ZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSGAoQdGFyZ2V0X3BsYXllcl9pZBgC",
+            "IAEoCSIiCg9HYW1lT3ZlclJlcXVlc3QSDwoHcm9vbV9pZBgBIAEoCSJJCgtQ",
+            "bGF5ZXJJbnB1dBIRCglwbGF5ZXJfaWQYASABKAkSJwoKaW5wdXRfdHlwZRgC",
+            "IAEoDjITLnRhbmtnYW1lLklucHV0VHlwZSJsCglHYW1lU3RhcnQSDwoHcm9v",
+            "bV9pZBgBIAEoCRIqCgxwbGF5ZXJfaW5mb3MYAiADKAsyFC50YW5rZ2FtZS5Q",
+            "bGF5ZXJJbmZvEhMKC3JhbmRvbV9zZWVkGAMgASgDEg0KBWxldmVsGAQgASgF",
+            "IhEKD1Jvb21MaXN0UmVxdWVzdCIyChBHYW1lU3RhcnRSZXF1ZXN0Eg8KB3Jv",
+            "b21faWQYASABKAkSDQoFbGV2ZWwYAiABKAUiNwoRQ2hvb3NlRm9vZFJlcXVl",
+            "c3QSEQoJcGxheWVyX2lkGAEgASgJEg8KB2Zvb2RfaWQYAiABKAUihgEKDEZy",
+            "YW1lTWVzc2FnZRIUCgxmcmFtZV9udW1iZXIYASABKAMSJQoGaW5wdXRzGAIg",
+            "AygLMhUudGFua2dhbWUuUGxheWVySW5wdXQSOQoUY2hvb3NlX2Zvb2RfcmVx",
+            "dWVzdHMYAyADKAsyGy50YW5rZ2FtZS5DaG9vc2VGb29kUmVxdWVzdCL6AQoN",
+            "U2VydmVyTWVzc2FnZRIvCg1mcmFtZV9tZXNzYWdlGAEgASgLMhYudGFua2dh",
+            "bWUuRnJhbWVNZXNzYWdlSAASJwoJcm9vbV9pbmZvGAIgASgLMhIudGFua2dh",
+            "bWUuUm9vbUluZm9IABIpCgpnYW1lX3N0YXJ0GAMgASgLMhMudGFua2dhbWUu",
+            "R2FtZVN0YXJ0SAASMwoPY29ubmVjdF9zdWNjZXNzGAQgASgLMhgudGFua2dh",
+            "bWUuQ29ubmVjdFN1Y2Nlc3NIABInCglyb29tX2xpc3QYBSABKAsyEi50YW5r",
+            "Z2FtZS5Sb29tTGlzdEgAQgYKBGRhdGEilgQKDUNsaWVudE1lc3NhZ2USLQoM",
+            "cGxheWVyX2lucHV0GAEgASgLMhUudGFua2dhbWUuUGxheWVySW5wdXRIABI6",
+            "ChNjcmVhdGVfcm9vbV9yZXF1ZXN0GAIgASgLMhsudGFua2dhbWUuQ3JlYXRl",
+            "Um9vbVJlcXVlc3RIABI2ChFqb2luX3Jvb21fcmVxdWVzdBgDIAEoCzIZLnRh",
+            "bmtnYW1lLkpvaW5Sb29tUmVxdWVzdEgAEjgKEmxlYXZlX3Jvb21fcmVxdWVz",
+            "dBgEIAEoCzIaLnRhbmtnYW1lLkxlYXZlUm9vbVJlcXVlc3RIABI2ChFyb29t",
+            "X2xpc3RfcmVxdWVzdBgFIAEoCzIZLnRhbmtnYW1lLlJvb21MaXN0UmVxdWVz",
+            "dEgAEjgKEmdhbWVfc3RhcnRfcmVxdWVzdBgGIAEoCzIaLnRhbmtnYW1lLkdh",
+            "bWVTdGFydFJlcXVlc3RIABI6ChNraWNrX3BsYXllcl9yZXF1ZXN0GAcgASgL",
+            "MhsudGFua2dhbWUuS2lja1BsYXllclJlcXVlc3RIABI2ChFnYW1lX292ZXJf",
+            "cmVxdWVzdBgIIAEoCzIZLnRhbmtnYW1lLkdhbWVPdmVyUmVxdWVzdEgAEjoK",
+            "E2Nob29zZV9mb29kX3JlcXVlc3QYCSABKAsyGy50YW5rZ2FtZS5DaG9vc2VG",
+            "b29kUmVxdWVzdEgAQgYKBGRhdGEqfwoJSW5wdXRUeXBlEg4KCklOUFVUX05P",
+            "TkUQABIRCg1JTlBVVF9NT1ZFX1VQEAESEwoPSU5QVVRfTU9WRV9ET1dOEAIS",
+            "EwoPSU5QVVRfTU9WRV9MRUZUEAMSFAoQSU5QVVRfTU9WRV9SSUdIVBAEEg8K",
+            "C0lOUFVUX1NIT09UEAVCDloMc2VydmVyL3Byb3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tankgame.InputType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ConnectSuccess), global::Tankgame.ConnectSuccess.Parser, new[]{ "YourPlayerId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.PlayerInfo), global::Tankgame.PlayerInfo.Parser, new[]{ "PlayerId", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.PlayerInfo), global::Tankgame.PlayerInfo.Parser, new[]{ "PlayerId", "PlayerName", "ColorR", "ColorG", "ColorB", "PlayerRole" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomInfo), global::Tankgame.RoomInfo.Parser, new[]{ "RoomId", "PlayerIds", "Status", "HostId", "MaxPlayers", "RoomName", "PlayerInfos", "HostName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomList), global::Tankgame.RoomList.Parser, new[]{ "Rooms" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.CreateRoomRequest), global::Tankgame.CreateRoomRequest.Parser, new[]{ "RoomName", "MaxPlayers", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.JoinRoomRequest), global::Tankgame.JoinRoomRequest.Parser, new[]{ "RoomId", "PlayerName", "ColorR", "ColorG", "ColorB" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.CreateRoomRequest), global::Tankgame.CreateRoomRequest.Parser, new[]{ "RoomName", "MaxPlayers", "PlayerName", "ColorR", "ColorG", "ColorB", "PlayerRole" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.JoinRoomRequest), global::Tankgame.JoinRoomRequest.Parser, new[]{ "RoomId", "PlayerName", "ColorR", "ColorG", "ColorB", "PlayerRole" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.LeaveRoomRequest), global::Tankgame.LeaveRoomRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.KickPlayerRequest), global::Tankgame.KickPlayerRequest.Parser, new[]{ "RoomId", "TargetPlayerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameOverRequest), global::Tankgame.GameOverRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
@@ -358,6 +359,7 @@ namespace Tankgame {
       colorR_ = other.colorR_;
       colorG_ = other.colorG_;
       colorB_ = other.colorB_;
+      playerRole_ = other.playerRole_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -427,6 +429,18 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "player_role" field.</summary>
+    public const int PlayerRoleFieldNumber = 6;
+    private int playerRole_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int PlayerRole {
+      get { return playerRole_; }
+      set {
+        playerRole_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -447,6 +461,7 @@ namespace Tankgame {
       if (ColorR != other.ColorR) return false;
       if (ColorG != other.ColorG) return false;
       if (ColorB != other.ColorB) return false;
+      if (PlayerRole != other.PlayerRole) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -459,6 +474,7 @@ namespace Tankgame {
       if (ColorR != 0) hash ^= ColorR.GetHashCode();
       if (ColorG != 0) hash ^= ColorG.GetHashCode();
       if (ColorB != 0) hash ^= ColorB.GetHashCode();
+      if (PlayerRole != 0) hash ^= PlayerRole.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -497,6 +513,10 @@ namespace Tankgame {
         output.WriteRawTag(40);
         output.WriteInt32(ColorB);
       }
+      if (PlayerRole != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(PlayerRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -527,6 +547,10 @@ namespace Tankgame {
         output.WriteRawTag(40);
         output.WriteInt32(ColorB);
       }
+      if (PlayerRole != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(PlayerRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -551,6 +575,9 @@ namespace Tankgame {
       }
       if (ColorB != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorB);
+      }
+      if (PlayerRole != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerRole);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -578,6 +605,9 @@ namespace Tankgame {
       }
       if (other.ColorB != 0) {
         ColorB = other.ColorB;
+      }
+      if (other.PlayerRole != 0) {
+        PlayerRole = other.PlayerRole;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -618,6 +648,10 @@ namespace Tankgame {
             ColorB = input.ReadInt32();
             break;
           }
+          case 48: {
+            PlayerRole = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -655,6 +689,10 @@ namespace Tankgame {
           }
           case 40: {
             ColorB = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            PlayerRole = input.ReadInt32();
             break;
           }
         }
@@ -1354,6 +1392,7 @@ namespace Tankgame {
       colorR_ = other.colorR_;
       colorG_ = other.colorG_;
       colorB_ = other.colorB_;
+      playerRole_ = other.playerRole_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1447,6 +1486,21 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "player_role" field.</summary>
+    public const int PlayerRoleFieldNumber = 7;
+    private int playerRole_;
+    /// <summary>
+    /// 角色选择
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int PlayerRole {
+      get { return playerRole_; }
+      set {
+        playerRole_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1468,6 +1522,7 @@ namespace Tankgame {
       if (ColorR != other.ColorR) return false;
       if (ColorG != other.ColorG) return false;
       if (ColorB != other.ColorB) return false;
+      if (PlayerRole != other.PlayerRole) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1481,6 +1536,7 @@ namespace Tankgame {
       if (ColorR != 0) hash ^= ColorR.GetHashCode();
       if (ColorG != 0) hash ^= ColorG.GetHashCode();
       if (ColorB != 0) hash ^= ColorB.GetHashCode();
+      if (PlayerRole != 0) hash ^= PlayerRole.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1523,6 +1579,10 @@ namespace Tankgame {
         output.WriteRawTag(48);
         output.WriteInt32(ColorB);
       }
+      if (PlayerRole != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(PlayerRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1557,6 +1617,10 @@ namespace Tankgame {
         output.WriteRawTag(48);
         output.WriteInt32(ColorB);
       }
+      if (PlayerRole != 0) {
+        output.WriteRawTag(56);
+        output.WriteInt32(PlayerRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1584,6 +1648,9 @@ namespace Tankgame {
       }
       if (ColorB != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorB);
+      }
+      if (PlayerRole != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerRole);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1614,6 +1681,9 @@ namespace Tankgame {
       }
       if (other.ColorB != 0) {
         ColorB = other.ColorB;
+      }
+      if (other.PlayerRole != 0) {
+        PlayerRole = other.PlayerRole;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1658,6 +1728,10 @@ namespace Tankgame {
             ColorB = input.ReadInt32();
             break;
           }
+          case 56: {
+            PlayerRole = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -1699,6 +1773,10 @@ namespace Tankgame {
           }
           case 48: {
             ColorB = input.ReadInt32();
+            break;
+          }
+          case 56: {
+            PlayerRole = input.ReadInt32();
             break;
           }
         }
@@ -1751,6 +1829,7 @@ namespace Tankgame {
       colorR_ = other.colorR_;
       colorG_ = other.colorG_;
       colorB_ = other.colorB_;
+      playerRole_ = other.playerRole_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1832,6 +1911,21 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "player_role" field.</summary>
+    public const int PlayerRoleFieldNumber = 6;
+    private int playerRole_;
+    /// <summary>
+    /// 角色选择
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int PlayerRole {
+      get { return playerRole_; }
+      set {
+        playerRole_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1852,6 +1946,7 @@ namespace Tankgame {
       if (ColorR != other.ColorR) return false;
       if (ColorG != other.ColorG) return false;
       if (ColorB != other.ColorB) return false;
+      if (PlayerRole != other.PlayerRole) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1864,6 +1959,7 @@ namespace Tankgame {
       if (ColorR != 0) hash ^= ColorR.GetHashCode();
       if (ColorG != 0) hash ^= ColorG.GetHashCode();
       if (ColorB != 0) hash ^= ColorB.GetHashCode();
+      if (PlayerRole != 0) hash ^= PlayerRole.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1902,6 +1998,10 @@ namespace Tankgame {
         output.WriteRawTag(40);
         output.WriteInt32(ColorB);
       }
+      if (PlayerRole != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(PlayerRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1932,6 +2032,10 @@ namespace Tankgame {
         output.WriteRawTag(40);
         output.WriteInt32(ColorB);
       }
+      if (PlayerRole != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(PlayerRole);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1956,6 +2060,9 @@ namespace Tankgame {
       }
       if (ColorB != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ColorB);
+      }
+      if (PlayerRole != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerRole);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1983,6 +2090,9 @@ namespace Tankgame {
       }
       if (other.ColorB != 0) {
         ColorB = other.ColorB;
+      }
+      if (other.PlayerRole != 0) {
+        PlayerRole = other.PlayerRole;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2023,6 +2133,10 @@ namespace Tankgame {
             ColorB = input.ReadInt32();
             break;
           }
+          case 48: {
+            PlayerRole = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -2060,6 +2174,10 @@ namespace Tankgame {
           }
           case 40: {
             ColorB = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            PlayerRole = input.ReadInt32();
             break;
           }
         }
@@ -3479,9 +3597,9 @@ namespace Tankgame {
     /// <summary>Field number for the "level" field.</summary>
     public const int LevelFieldNumber = 2;
     private int level_;
-  /// <summary>
+    /// <summary>
     /// 关卡索引
-  /// </summary>
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int Level {

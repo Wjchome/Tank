@@ -213,7 +213,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         SendMessage(msg);
     }
     // 请求创建房间
-    public void CreateRoom(string roomName, int maxPlayers, string playerName, int colorR, int colorG, int colorB)
+    public void CreateRoom(string roomName, int maxPlayers, string playerName, int colorR, int colorG, int colorB,PlayerRole playerRole)
     {
         if (!isConnected)
         {
@@ -231,13 +231,14 @@ public class NetworkManager : SingletonMono<NetworkManager>
                 ColorR = colorR,
                 ColorG = colorG,
                 ColorB = colorB,
+                PlayerRole =  (int)playerRole
             }
         };
         SendMessage(message);
     }
     
     // 请求加入房间
-    public void JoinRoom(string roomId, string playerName, int colorR, int colorG, int colorB)
+    public void JoinRoom(string roomId, string playerName, int colorR, int colorG, int colorB,PlayerRole playerRole)
     {
         if (!isConnected)
         {
@@ -254,6 +255,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
                 ColorR = colorR,
                 ColorG = colorG,
                 ColorB = colorB,
+                PlayerRole = (int)playerRole
             }
         };
         SendMessage(message);

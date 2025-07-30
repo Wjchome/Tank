@@ -133,6 +133,7 @@ type PlayerInfo struct {
 	ColorR        int32                  `protobuf:"varint,3,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`
 	ColorG        int32                  `protobuf:"varint,4,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`
 	ColorB        int32                  `protobuf:"varint,5,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`
+	PlayerRole    int32                  `protobuf:"varint,6,opt,name=player_role,json=playerRole,proto3" json:"player_role,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -198,6 +199,13 @@ func (x *PlayerInfo) GetColorG() int32 {
 func (x *PlayerInfo) GetColorB() int32 {
 	if x != nil {
 		return x.ColorB
+	}
+	return 0
+}
+
+func (x *PlayerInfo) GetPlayerRole() int32 {
+	if x != nil {
+		return x.PlayerRole
 	}
 	return 0
 }
@@ -353,10 +361,11 @@ type CreateRoomRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomName      string                 `protobuf:"bytes,1,opt,name=room_name,json=roomName,proto3" json:"room_name,omitempty"`
 	MaxPlayers    int32                  `protobuf:"varint,2,opt,name=max_players,json=maxPlayers,proto3" json:"max_players,omitempty"`
-	PlayerName    string                 `protobuf:"bytes,3,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"` // 玩家名字
-	ColorR        int32                  `protobuf:"varint,4,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`            // 颜色R分量
-	ColorG        int32                  `protobuf:"varint,5,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`            // 颜色G分量
-	ColorB        int32                  `protobuf:"varint,6,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`            // 颜色B分量
+	PlayerName    string                 `protobuf:"bytes,3,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"`  // 玩家名字
+	ColorR        int32                  `protobuf:"varint,4,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`             // 颜色R分量
+	ColorG        int32                  `protobuf:"varint,5,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`             // 颜色G分量
+	ColorB        int32                  `protobuf:"varint,6,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`             // 颜色B分量
+	PlayerRole    int32                  `protobuf:"varint,7,opt,name=player_role,json=playerRole,proto3" json:"player_role,omitempty"` // 角色选择
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -433,14 +442,22 @@ func (x *CreateRoomRequest) GetColorB() int32 {
 	return 0
 }
 
+func (x *CreateRoomRequest) GetPlayerRole() int32 {
+	if x != nil {
+		return x.PlayerRole
+	}
+	return 0
+}
+
 // 加入房间请求
 type JoinRoomRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomId        string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
-	PlayerName    string                 `protobuf:"bytes,2,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"` // 玩家名字
-	ColorR        int32                  `protobuf:"varint,3,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`            // 颜色R分量
-	ColorG        int32                  `protobuf:"varint,4,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`            // 颜色G分量
-	ColorB        int32                  `protobuf:"varint,5,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`            // 颜色B分量
+	PlayerName    string                 `protobuf:"bytes,2,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"`  // 玩家名字
+	ColorR        int32                  `protobuf:"varint,3,opt,name=color_r,json=colorR,proto3" json:"color_r,omitempty"`             // 颜色R分量
+	ColorG        int32                  `protobuf:"varint,4,opt,name=color_g,json=colorG,proto3" json:"color_g,omitempty"`             // 颜色G分量
+	ColorB        int32                  `protobuf:"varint,5,opt,name=color_b,json=colorB,proto3" json:"color_b,omitempty"`             // 颜色B分量
+	PlayerRole    int32                  `protobuf:"varint,6,opt,name=player_role,json=playerRole,proto3" json:"player_role,omitempty"` // 角色选择
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -506,6 +523,13 @@ func (x *JoinRoomRequest) GetColorG() int32 {
 func (x *JoinRoomRequest) GetColorB() int32 {
 	if x != nil {
 		return x.ColorB
+	}
+	return 0
+}
+
+func (x *JoinRoomRequest) GetPlayerRole() int32 {
+	if x != nil {
+		return x.PlayerRole
 	}
 	return 0
 }
@@ -1307,7 +1331,7 @@ const file_proto_game_proto_rawDesc = "" +
 	"\n" +
 	"\x10proto/game.proto\x12\btankgame\"6\n" +
 	"\x0eConnectSuccess\x12$\n" +
-	"\x0eyour_player_id\x18\x01 \x01(\tR\fyourPlayerId\"\x95\x01\n" +
+	"\x0eyour_player_id\x18\x01 \x01(\tR\fyourPlayerId\"\xb6\x01\n" +
 	"\n" +
 	"PlayerInfo\x12\x1b\n" +
 	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\x12\x1f\n" +
@@ -1315,7 +1339,9 @@ const file_proto_game_proto_rawDesc = "" +
 	"playerName\x12\x17\n" +
 	"\acolor_r\x18\x03 \x01(\x05R\x06colorR\x12\x17\n" +
 	"\acolor_g\x18\x04 \x01(\x05R\x06colorG\x12\x17\n" +
-	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\"\x87\x02\n" +
+	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\x12\x1f\n" +
+	"\vplayer_role\x18\x06 \x01(\x05R\n" +
+	"playerRole\"\x87\x02\n" +
 	"\bRoomInfo\x12\x17\n" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1d\n" +
 	"\n" +
@@ -1328,7 +1354,7 @@ const file_proto_game_proto_rawDesc = "" +
 	"\fplayer_infos\x18\a \x03(\v2\x14.tankgame.PlayerInfoR\vplayerInfos\x12\x1b\n" +
 	"\thost_name\x18\b \x01(\tR\bhostName\"4\n" +
 	"\bRoomList\x12(\n" +
-	"\x05rooms\x18\x01 \x03(\v2\x12.tankgame.RoomInfoR\x05rooms\"\xbd\x01\n" +
+	"\x05rooms\x18\x01 \x03(\v2\x12.tankgame.RoomInfoR\x05rooms\"\xde\x01\n" +
 	"\x11CreateRoomRequest\x12\x1b\n" +
 	"\troom_name\x18\x01 \x01(\tR\broomName\x12\x1f\n" +
 	"\vmax_players\x18\x02 \x01(\x05R\n" +
@@ -1337,14 +1363,18 @@ const file_proto_game_proto_rawDesc = "" +
 	"playerName\x12\x17\n" +
 	"\acolor_r\x18\x04 \x01(\x05R\x06colorR\x12\x17\n" +
 	"\acolor_g\x18\x05 \x01(\x05R\x06colorG\x12\x17\n" +
-	"\acolor_b\x18\x06 \x01(\x05R\x06colorB\"\x96\x01\n" +
+	"\acolor_b\x18\x06 \x01(\x05R\x06colorB\x12\x1f\n" +
+	"\vplayer_role\x18\a \x01(\x05R\n" +
+	"playerRole\"\xb7\x01\n" +
 	"\x0fJoinRoomRequest\x12\x17\n" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1f\n" +
 	"\vplayer_name\x18\x02 \x01(\tR\n" +
 	"playerName\x12\x17\n" +
 	"\acolor_r\x18\x03 \x01(\x05R\x06colorR\x12\x17\n" +
 	"\acolor_g\x18\x04 \x01(\x05R\x06colorG\x12\x17\n" +
-	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\"+\n" +
+	"\acolor_b\x18\x05 \x01(\x05R\x06colorB\x12\x1f\n" +
+	"\vplayer_role\x18\x06 \x01(\x05R\n" +
+	"playerRole\"+\n" +
 	"\x10LeaveRoomRequest\x12\x17\n" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\"V\n" +
 	"\x11KickPlayerRequest\x12\x17\n" +
