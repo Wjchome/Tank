@@ -12,6 +12,7 @@
         public Image playerImage;
         public TextMeshProUGUI playerHealthText;
         public TextMeshProUGUI playerKillText;
+        public Image HPbar;
 
         public int interval;
 
@@ -32,6 +33,9 @@
         public void Init(TankController tankController, int index)
         {
             tank=tankController;
+            tank.HPRate = 1;
+            HPbar.color = tank.playerColor;
+            
             GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
             leftPos=playerInfo.GetComponent<RectTransform>().anchoredPosition;
             rightPos=scollView.GetComponent<RectTransform>().anchoredPosition;
@@ -46,8 +50,9 @@
                 playerNameText.color = Color.yellow;
             }
             playerImage.color = tank.playerColor;
-            playerHealthText.text="HP: "+tank.currentData.HP.ToString();
-            playerKillText.text="Kill: "+tank.killNum.ToString();
+            playerHealthText.text=tank.currentData.HP+" / "+tank.currentData.orignalHP;
+            playerKillText.text="击杀:"+tank.killNum.ToString();
+            HPbar.fillAmount = tank.HPRate;
         }
 
         public void Change()

@@ -15,3 +15,4 @@ MonoBehaviour:
   moveIntervalFrame: 6
   shootIntervalFrame: 18
   HP: 30
+  orignalHP: 30

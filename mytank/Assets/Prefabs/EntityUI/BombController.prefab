@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2623925226714571180}
   - component: {fileID: 3859500663799134593}
   - component: {fileID: 3262350270203837890}
+  - component: {fileID: -2617099068761851106}
   m_Layer: 0
   m_Name: BombController
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 1
+  m_FillAmount: 0.657
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -84,6 +85,10 @@ MonoBehaviour:
   timerImage: {fileID: 2623925226714571180}
   genateIntervalFrame: 1200
   lastTriggerFrame: 0
+  eventTrigger: {fileID: -2617099068761851106}
+  title: "\u70B8\u5F39\u63A7\u5236"
+  description: "\u6BCF30\u79D2\u5BF9\u6240\u6709\u654C\u4EBA\u9020\u62101\u70B9\u4F24\u5BB3"
+  damageNum: 1
 --- !u!222 &3262350270203837890
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -92,3 +97,16 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900368424308827066}
   m_CullTransparentMesh: 1
+--- !u!114 &-2617099068761851106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900368424308827066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []

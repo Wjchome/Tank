@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3072628809274021739}
   - component: {fileID: 4671227424099440796}
   - component: {fileID: 8090109195196709821}
+  - component: {fileID: 2183134660804735332}
   m_Layer: 0
   m_Name: SteelHelmet
   m_TagString: Untagged
@@ -92,3 +93,19 @@ MonoBehaviour:
   timerImage: {fileID: 4671227424099440796}
   genateIntervalFrame: 2400
   lastTriggerFrame: 0
+  eventTrigger: {fileID: 2183134660804735332}
+  title: 
+  description: 
+--- !u!114 &2183134660804735332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328626554454685703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []

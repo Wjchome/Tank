@@ -64,8 +64,8 @@ public class TankController : MonoBehaviour
     public int animType = 1;
     
     public Dictionary<FoodType,int> foodDict = new Dictionary<FoodType,int>();
-    
-    
+
+    public float HPRate;
     
 
 
@@ -117,7 +117,7 @@ public class TankController : MonoBehaviour
      public void UpdateFrame()
     {
       
-
+        HPRate=((float)currentData.HP/currentData.orignalHP);
         HandleBuff();   
         CheckMovementState();
         if (identity==Identity.Myself && !isDead)
@@ -446,10 +446,16 @@ public class TankController : MonoBehaviour
         }
     }
 
+    public void AddOrignalHP(int num)
+    {
+        bombAnimator.Play("Heal",0,0);
+        currentData.orignalHP += num;
+        playerPanelUI?.UpdateUI(); // 更新血量显示
+    }
     public void AddHP(int num)
     {
         bombAnimator.Play("Heal",0,0);
-        currentData.HP += num;
+        currentData.HP = Math.Min(currentData.HP+num,currentData.orignalHP);
         playerPanelUI?.UpdateUI(); // 更新血量显示
         
     }

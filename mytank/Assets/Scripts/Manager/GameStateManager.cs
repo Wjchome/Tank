@@ -267,15 +267,15 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.WarCar:
                 if (num == 0)
                 {
-                    tank.AddHP(1);
+                    tank. AddOrignalHP(1);
                 }
                 else if (num == 1)
                 {
-                    tank.AddHP(2);
+                    tank. AddOrignalHP(2);
                 }
                 else if (num == 2)
                 {
-                    tank.AddHP(3);
+                    tank. AddOrignalHP(3);
                 }
 
                 break;

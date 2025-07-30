@@ -5,12 +5,12 @@
     using UnityEngine;
     using UnityEngine.UI;
 
-    public class ProtectController : EffectEntity
+    public class ProtectController : UITimerEntity
     {
         public Vector2Int Pos;
-    
-        
-        
+
+
+        public int damageNum = 1;
         protected override void ApplyEffect()
         {
             Pos = tank.Pos;
@@ -24,7 +24,7 @@
             HashSet<TankController> tanksSet=new HashSet<TankController>(tanks);
             foreach (TankController a in tanksSet.ToList())
             {
-                a.DamageHP(1, tank);
+                a.DamageHP(damageNum, tank);
             }
             
             tank.bombAnimator.Play("Protect",0,0);
@@ -63,4 +63,16 @@
             return list;
         }
         
+        protected override void ShowTooltip()
+        {
+            
+            TooltipUI.Instance.titleText.text=$"<b><color={Constant.TITLE_COLOR}>保护</color></b>";
+            TooltipUI.Instance.isFollow = true;
+            TooltipUI.Instance.descriptionText.text
+                = $"每隔<color={Constant.TIME_COLOR}>{genateIntervalFrame * Constant.FrameInterval}</color>秒" +
+                  $"对<color={Constant.VALUE_COLOR}>自身一圈敌人</color>造成" +
+                  $"<color={Constant.VALUE_COLOR}>{damageNum}</color>伤害" +
+                  $"\n时间:<color={Constant.TIME_COLOR}>{((NetworkManager.Instance.currentFrame - lastTriggerFrame) * Constant.FrameInterval).ToString("F2")}</color>";
+
+        }
     }
