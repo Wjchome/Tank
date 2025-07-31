@@ -561,12 +561,14 @@ MonoBehaviour:
   animator: {fileID: 8205607647078584822}
   spriteRenderer: {fileID: 688619496750072981}
   animType: 1
+  HPRate: 0
+  bulletDamageNum: 10
   isBoat: 0
   boatFrame: -1
   boatShow: {fileID: 3852454461792351941}
   isInvincible: 0
   invincibleFrame: 0
-  size: {x: 0, y: 0, z: 0}
+  scaleSize: {x: 0, y: 0, z: 0}
   isShootTwice: 0
   shootTwiceFrame: -1
   isShootThree: 0

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6443543618723824197}
   - component: {fileID: 8705780682468749850}
+  - component: {fileID: 4763428437553532836}
   m_Layer: 5
   m_Name: PlayerFoodUI
   m_TagString: Untagged
@@ -50,8 +51,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f281534de5794929bb28eb970f3facb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foodType: 0
+  foodData: {fileID: 0}
   image: {fileID: 545942855733605563}
-  text: {fileID: 5511733148191045283}
+  level: 0
+  levelText: {fileID: 5511733148191045283}
+  eventTrigger: {fileID: 4763428437553532836}
+  isMouseOn: 0
+--- !u!114 &4763428437553532836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5209160896677664445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
 --- !u!1 &6668878657914965782
 GameObject:
   m_ObjectHideFlags: 0

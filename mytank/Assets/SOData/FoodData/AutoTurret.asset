@@ -16,6 +16,6 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 25a1b77a26ce8466ba551c593f34e497, type: 3}
   foodName: "\u81EA\u52A8\u70AE\u53F0"
   foodDescription:
-  - "\u751F\u62101\u4E2A\u70AE\u53F0"
-  - "\u751F\u62102\u4E2A\u70AE\u53F0"
-  - "\u751F\u62103\u4E2A\u70AE\u53F0"
+  - "\u751F\u62101\u4E2A\u70AE\u53F0,\u70AE\u53F0\u4F24\u5BB35"
+  - "\u751F\u62102\u4E2A\u70AE\u53F0,\u70AE\u53F0\u4F24\u5BB35"
+  - "\u751F\u62103\u4E2A\u70AE\u53F0,\u70AE\u53F0\u4F24\u5BB35"

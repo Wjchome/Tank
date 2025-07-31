@@ -11,8 +11,8 @@ using UnityEngine;
         
         public Transform playerPanelParent;
         public GameObject playerPanelPrefab;
-        public Vector2 firstPos=new Vector2(700, 400); 
-        public Vector2 secondPos=new Vector2(0, 400);
+        public Vector2 firstPos; 
+        public Vector2 secondPos;
         
         
         public Button gameOverButton;
@@ -26,7 +26,7 @@ using UnityEngine;
         
         private void Awake()
         {
-            gameOverButton.onClick.AddListener(()=>Gameover());
+            gameOverButton.onClick.AddListener(Gameover);
             gameOverButton.gameObject.SetActive(false);
             backButton.onClick.AddListener(GoLeft);
         }
@@ -53,6 +53,7 @@ using UnityEngine;
             playerPanelParent.GetComponent<RectTransform>().DOAnchorPos(firstPos,0.5f).SetEase(Ease.OutQuad);
             NetworkManager.Instance.GameOverRequest(NetworkManager.Instance.currentRoom.RoomId);
             gameOverButton.gameObject.SetActive(false);
+            
             DOVirtual.DelayedCall(0.5f, () =>
             {
                 ResetGame();
@@ -70,6 +71,7 @@ using UnityEngine;
             }
 
             LevelManager.Instance.levelNameText.text = "";
+            gamePanel.SetActive(false);
             
         }
     }

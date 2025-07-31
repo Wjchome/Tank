@@ -21,63 +21,63 @@ public class BulletFactory : SingletonMono<BulletFactory>
 
     private void CreateBullet(BulletController bullet)
     {
+        bullet.isDead = false;
         bullet.gameObject.SetActive(true);
-        bullet.isShouldDestroy=false;
+        bullet.isShouldDestroy = false;
         bullet.lastMoveTimeFrame = 0;
-        bullet.animator.Play("Idle",0,0);
+        bullet.animator.Play("Idle", 0, 0);
         activeBullets.Add(bullet);
-        
     }
 
     private void KillBullet(BulletController bullet)
     {
         bullet.gameObject.SetActive(false);
         activeBullets.Remove(bullet);
-        
     }
 
-        
-    public void Initialize(Direction direction, TankController tank,Vector2Int pos )
+
+    public void Initialize(Direction direction, TankController tank, Vector2Int pos, int damageNum)
     {
         BulletController bullet = BulletPool.GetObject();
         bullet.direction = direction;
-        bullet.ownerTank=tank;
+        bullet.ownerTank = tank;
         if (tank.identity == Identity.Myself || tank.identity == Identity.OtherPlayer)
             bullet.isPlayerBullet = true;
         else
         {
             bullet.isPlayerBullet = false;
         }
+
         // 设置子弹朝向
         Vector3 rotation = Vector3.zero;
         bullet.dir = direction.ToVector2Int();
         bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
         switch (direction)
         {
-            case Direction.Up: 
+            case Direction.Up:
                 rotation = new Vector3(0, 0, 0);
                 break;
-            case Direction.Down: 
-                rotation = new Vector3(0, 0, 180);  
+            case Direction.Down:
+                rotation = new Vector3(0, 0, 180);
                 break;
-            case Direction.Left: 
-                rotation = new Vector3(0, 0, 90);  
+            case Direction.Left:
+                rotation = new Vector3(0, 0, 90);
                 break;
-            case Direction.Right: 
-                rotation = new Vector3(0, 0, -90);  
+            case Direction.Right:
+                rotation = new Vector3(0, 0, -90);
                 break;
         }
+
         bullet.transform.rotation = Quaternion.Euler(rotation);
-        
-     
-       
+
+
         bullet.Pos = pos;
-            
-            // 设置子弹中心位置
-            bullet.transform.position = bullet.GetCenter();
-     bullet.isCanBreakWall=tank.isBreakWall;
+
+        // 设置子弹中心位置
+        bullet.transform.position = bullet.GetCenter();
+        bullet.damageNum = damageNum;
     }
-    
+
     public void ClearAllBullets()
     {
         // 创建副本，避免遍历时修改集合
@@ -86,7 +86,5 @@ public class BulletFactory : SingletonMono<BulletFactory>
         {
             BulletPool.ReturnObject(bullet);
         }
-     
     }
-  
 }

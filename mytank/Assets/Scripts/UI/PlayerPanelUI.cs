@@ -19,7 +19,7 @@
         public Transform scollView;
         public Transform content;
         
-        public PlayerFoodUI playerFoodUIPrefab;
+        
 
         public Button button;
         public bool isOpenFood=false;
@@ -90,14 +90,14 @@
             if (foodUIDict.ContainsKey(foodType))
             {
                 // 更新现有UI
-                foodUIDict[foodType].text.text = level.ToString();
+                foodUIDict[foodType].levelText.text = level.ToString();
             }
             else
             {
                 // 创建新的UI
-                var foodUI = Instantiate(playerFoodUIPrefab, content);
-                foodUI.image.sprite = FoodManager.Instance.foodDict[foodType].sprite;
-                foodUI.text.text = level.ToString();
+                var foodUI = Instantiate( FoodManager.Instance.playerFoodUIPrefab, content);
+                foodUI .Init(foodType, level);
+             
             
                 // 添加到字典
                 foodUIDict[foodType] = foodUI;

@@ -14,8 +14,7 @@ import (
 )
 
 const (
-	FRAME_INTERVAL   = 25 * time.Millisecond // 20帧每秒
-	MAX_ROOM_PLAYERS = 2
+	FRAME_INTERVAL = 25 * time.Millisecond // 20帧每秒
 )
 
 type Client struct {
@@ -165,9 +164,6 @@ func (s *Server) handleCreateRoom(client *Client, req *myproto.CreateRoomRequest
 		roomName = fmt.Sprintf("Room %s", roomID[:8])
 	}
 	maxPlayers := req.MaxPlayers
-	if maxPlayers <= 0 {
-		maxPlayers = MAX_ROOM_PLAYERS
-	}
 
 	// 保存玩家信息
 	client.Name = req.PlayerName
@@ -404,6 +400,7 @@ func (s *Server) startGame(room *Room, level int32) {
 			ColorR:     c.ColorR,
 			ColorG:     c.ColorG,
 			ColorB:     c.ColorB,
+			PlayerRole: c.PlayerRole,
 		})
 	}
 

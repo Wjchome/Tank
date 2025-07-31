@@ -6,7 +6,13 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.Serialization;
-
+public enum PlayerRole
+{
+    Original=1,
+    Tanker=2,
+    Priest=3,
+    Soldier=4
+}
 public class RoomManager : SingletonMono<RoomManager>
 {
     [Header("UI References")]
@@ -67,6 +73,7 @@ public class RoomManager : SingletonMono<RoomManager>
     public float durationTime;
     
     public Dictionary<string, PlayerRole> playerRoleDict = new Dictionary<string, PlayerRole>();
+    public Dictionary<PlayerRole,Sprite> playerRoleSpriteDict = new Dictionary<PlayerRole,Sprite>();
     void Start()
     {
         InitializeUI();
@@ -81,7 +88,7 @@ public class RoomManager : SingletonMono<RoomManager>
         if (selectedToggle != null)
         {
             playerRole=playerRoleDict[selectedToggle.name];
-            colorShow.sprite = sprites[(int)playerRole];
+            colorShow.sprite = playerRoleSpriteDict[playerRole];
 
         }
     }
@@ -92,8 +99,16 @@ public class RoomManager : SingletonMono<RoomManager>
             { "Original", PlayerRole.Original },
             { "Tanker", PlayerRole.Tanker },
             { "Priest", PlayerRole.Priest },
+            { "Soldier", PlayerRole.Soldier },
+            
         };
-        
+        playerRoleSpriteDict = new Dictionary<PlayerRole, Sprite>
+        {
+            { PlayerRole.Original, sprites[0] },
+            { PlayerRole.Tanker, sprites[1] },
+            { PlayerRole.Priest, sprites[2] },
+            { PlayerRole.Soldier, sprites[3] },
+        };
         
         panels = new List<GameObject>
         {
@@ -340,7 +355,7 @@ public class RoomManager : SingletonMono<RoomManager>
                 playerInfo.ColorG / 255f,
                 playerInfo.ColorB / 255f
             );
-            playerUIItem.playerImage.sprite= sprites[playerInfo.PlayerRole];
+            playerUIItem.playerImage.sprite= playerRoleSpriteDict[(PlayerRole)playerInfo.PlayerRole];
             playerUIItem.playerImage.color = playerColor;
         }
         

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6233460948728440074
+--- !u!1 &328626554454685703
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,25 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5093163570155445234}
-  - component: {fileID: 5848280442165748878}
-  - component: {fileID: 4450360590991944268}
-  - component: {fileID: 2162136879226511600}
-  - component: {fileID: 8528835672214947297}
+  - component: {fileID: 1781137552841965686}
+  - component: {fileID: 3072628809274021739}
+  - component: {fileID: 4671227424099440796}
+  - component: {fileID: 2183134660804735332}
+  - component: {fileID: -3034586624797461125}
   m_Layer: 0
-  m_Name: Protect
+  m_Name: WarCarController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &5093163570155445234
+--- !u!224 &1781137552841965686
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6233460948728440074}
+  m_GameObject: {fileID: 328626554454685703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -38,22 +38,22 @@ RectTransform:
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -14.82923, y: 17.47544}
   m_SizeDelta: {x: 1, y: 1}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5848280442165748878
+  m_Pivot: {x: 0.5, y: 0.28866667}
+--- !u!222 &3072628809274021739
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6233460948728440074}
+  m_GameObject: {fileID: 328626554454685703}
   m_CullTransparentMesh: 1
---- !u!114 &4450360590991944268
+--- !u!114 &4671227424099440796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6233460948728440074}
+  m_GameObject: {fileID: 328626554454685703}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3a134830821e1454c822cddb1fdc9634, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d4b1b2533c9ef4d7fb2688cc9aa5ec2b, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -77,35 +77,34 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2162136879226511600
+--- !u!114 &2183134660804735332
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6233460948728440074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee2e452d101548e69b69d0f9479d54b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tank: {fileID: 0}
-  timerImage: {fileID: 4450360590991944268}
-  genateIntervalFrame: 200
-  lastTriggerFrame: 0
-  eventTrigger: {fileID: 8528835672214947297}
-  Pos: {x: 0, y: 0}
-  damageNum: 3
---- !u!114 &8528835672214947297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6233460948728440074}
+  m_GameObject: {fileID: 328626554454685703}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+--- !u!114 &-3034586624797461125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328626554454685703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 448f48d172334ecbb0cd2f4382f9c47c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tank: {fileID: 0}
+  timerImage: {fileID: 4671227424099440796}
+  genateIntervalFrame: 1200
+  lastTriggerFrame: 0
+  eventTrigger: {fileID: 2183134660804735332}
+  addNum: 1

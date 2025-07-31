@@ -16,7 +16,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
             {
                 if (tank.tankID == foodRequest.PlayerId)
                 {
-                    ApplyFoodToTank(tank, foodRequest);
+                    ApplyFoodToTank(tank, foodRequest.FoodId);
                 }
             }
         }
@@ -59,9 +59,9 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
-    void ApplyFoodToTank(TankController tank, ChooseFoodRequest foodRequest)
+   public void ApplyFoodToTank(TankController tank, int foodId)
     {
-        FoodType foodType = (FoodType)foodRequest.FoodId;
+        FoodType foodType = (FoodType)foodId;
         int num = 0;
         if (tank.foodDict.ContainsKey(foodType)) // 0 
         {
@@ -271,11 +271,11 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    tank. AddOrignalHP(2);
+                    tank. AddOrignalHP(3);
                 }
                 else if (num == 2)
                 {
-                    tank. AddOrignalHP(3);
+                   EntityManager.Instance.InitWarCarController(tank);
                 }
 
                 break;
@@ -476,13 +476,17 @@ public class GameStateManager : SingletonMono<GameStateManager>
         GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
         NetworkManager.Instance.isGameing = false;
 
-        //?
+        /*
         BulletFactory.Instance.ClearAllBullets();
         TankFactory.Instance.ClearAllTank();
 
         PlayerManager.Instance.activePlayers.Clear();
         EnemyManager.Instance.activeEnemies.Clear();
-        DOTween.KillAll();
+       */
+        
+        BulletFactory.Instance.activeBullets.ForEach(a=>a.DestroyBullet());
+        TankFactory.Instance.activeTanks.ForEach(a=>a.Dead(null));
+        EntityManager.Instance.GameOver();
 
         MapManager.Instance.ClearMap();
     }

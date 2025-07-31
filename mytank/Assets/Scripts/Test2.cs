@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum PlayerRole
-{
-    
-    Original,
-    Tanker,
-    Priest
-}
+
 /*
 public class Test2 : SingletonMono<Test2>
 {

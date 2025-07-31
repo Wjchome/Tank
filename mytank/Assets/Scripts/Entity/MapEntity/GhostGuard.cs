@@ -14,6 +14,8 @@
         private long lastShootFrame;
         public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
         
+        public int damageNum;
+        
         public override void UpdateFrame()
         {
             if (NetworkManager.Instance.currentFrame - lastMoveFrame >= moveIntervalFrame)
@@ -34,7 +36,7 @@
         }
         private void Shoot()
         {
-            BulletFactory.Instance.Initialize(moveDirection, tank, Pos);
+            BulletFactory.Instance.Initialize(moveDirection, tank, Pos,damageNum);
         }
 
         private void Move()

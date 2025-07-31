@@ -9,7 +9,8 @@ public class HealingGarden : MapEntity
     public int genateIntervalFrame = 10;
 
      public bool isCanHealing = false;
-    
+
+     public int healingNum;
 
     public override void UpdateFrame()
     {
@@ -41,7 +42,7 @@ public class HealingGarden : MapEntity
     {
         if (isCanHealing)
         {
-            tank.AddHP(1);
+            tank.AddHP(healingNum);
             isCanHealing = false;
             lastGenateFrame = NetworkManager.Instance.currentFrame;
             GetComponent<SpriteRenderer>().color = tank.playerColor;

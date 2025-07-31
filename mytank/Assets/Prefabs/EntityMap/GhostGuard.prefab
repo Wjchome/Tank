@@ -546,6 +546,8 @@ MonoBehaviour:
   Pos: {x: 0, y: 0}
   moveDirection: 0
   moveIntervalFrame: 20
+  shootIntervalFrame: 60
+  damageNum: 5
 --- !u!1 &5447267967790324639
 GameObject:
   m_ObjectHideFlags: 0

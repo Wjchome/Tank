@@ -86,9 +86,7 @@ MonoBehaviour:
   genateIntervalFrame: 1200
   lastTriggerFrame: 0
   eventTrigger: {fileID: -2617099068761851106}
-  title: "\u70B8\u5F39\u63A7\u5236"
-  description: "\u6BCF30\u79D2\u5BF9\u6240\u6709\u654C\u4EBA\u9020\u62101\u70B9\u4F24\u5BB3"
-  damageNum: 1
+  damageNum: 10
 --- !u!222 &3262350270203837890
 CanvasRenderer:
   m_ObjectHideFlags: 0

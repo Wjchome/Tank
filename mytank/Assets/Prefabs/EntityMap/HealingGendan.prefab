@@ -100,8 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa34b99df4c418a852b4ec0a1e1bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tank: {fileID: 0}
   Pos: {x: 0, y: 0}
   lastGenateFrame: 0
-  genateIntervalFrame: 400
-  isOk: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
+  genateIntervalFrame: 2400
+  isCanHealing: 0
+  healingNum: 5

@@ -178,7 +178,6 @@ public enum MapType
             }
             homePrefab.SetActive(false);
             
-            Debug.Log("Map cleared successfully!");
         }
 
     

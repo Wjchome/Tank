@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1842f5a628e4585ae187c54ec314c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pos: {x: 0, y: 0}
   tank: {fileID: 0}
+  Pos: {x: 0, y: 0}
   durationFrame: 0
+  damageNum: 2

@@ -11,6 +11,8 @@ public class AutoTurret : MapEntity
     private Direction currentDirection = Direction.Up;
 
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
+    
+    public int damageNum = 1;
 
     public override void UpdateFrame()
     {
@@ -44,6 +46,6 @@ public class AutoTurret : MapEntity
 
     private void Shoot()
     {
-        BulletFactory.Instance.Initialize(currentDirection, tank, Pos);
+        BulletFactory.Instance.Initialize(currentDirection, tank, Pos,damageNum);
     }
 }

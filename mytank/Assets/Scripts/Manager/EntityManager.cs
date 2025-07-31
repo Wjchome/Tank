@@ -23,6 +23,7 @@ public class EntityManager : SingletonMono<EntityManager>
     public ProtectController protectControllerPrefab;
     public DisciplineController disciplineControllerPrefab;
     public GhostGuardMachine ghostGuardMachinePrefab;
+    public WarCarController warCarControllerPrefab;
 
     // 分类管理
     private List<MapEntity> mapEntities = new List<MapEntity>();
@@ -62,6 +63,24 @@ public class EntityManager : SingletonMono<EntityManager>
         mapEntities.Add(entity);
     }
 
+    public void GameOver()
+    {
+        foreach (var entity in mapEntities.ToList())
+        {
+            
+            entity.Destroy();
+            
+           
+        }
+        
+        // 更新UI实体
+        foreach (var entity in uiEntities.ToList())
+        {
+            
+            entity.Destroy();
+            
+        }
+    }
     public void AddUIEntity(UITimerEntity entity)
     {
         uiEntities.Add(entity);
@@ -250,5 +269,10 @@ public class EntityManager : SingletonMono<EntityManager>
     public void InitGhostGuardMachine(TankController tank)
     {
         SpawnUIEntity(ghostGuardMachinePrefab, tank);
+    }
+    
+    public void InitWarCarController(TankController tank)
+    {
+        SpawnUIEntity(warCarControllerPrefab, tank);
     }
 }

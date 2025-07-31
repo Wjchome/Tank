@@ -34,7 +34,7 @@ public enum FoodType
     public class FoodManager:SingletonMono<FoodManager>
     {
         public List<FoodData> foodDatas;
-      
+        public PlayerFoodUI playerFoodUIPrefab;
 
     public RectTransform panelParent;
     public List<FoodUIPanel> panels;

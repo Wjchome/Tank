@@ -6,6 +6,7 @@ public class Landmine : MapEntity
 {
     public Animator animator;
 
+    public int damageNum;
     public override void UpdateFrame()
     {
         var tanks = MapManager.Instance.GetTankInArea(Pos.x, Pos.y, 1, 1);
@@ -21,7 +22,7 @@ public class Landmine : MapEntity
         var tanks = MapManager.Instance.GetTankInArea(Pos.x - 1, Pos.y - 1, 3, 3);
         foreach (var a in tanks)
         {
-            a.DamageHP(1, tank);
+            a.DamageHP(damageNum, tank);
         }
 
         animator.Play("Trigger", 0, 0);

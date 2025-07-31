@@ -94,9 +94,8 @@ MonoBehaviour:
   genateIntervalFrame: 2400
   lastTriggerFrame: 0
   eventTrigger: {fileID: -2652098564656370233}
-  title: "\u60E9\u6212"
-  description: 
   targetNum: 1
+  damageNum: 5
 --- !u!114 &-2652098564656370233
 MonoBehaviour:
   m_ObjectHideFlags: 0

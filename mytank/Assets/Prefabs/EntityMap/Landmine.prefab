@@ -101,9 +101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db1b109c75344062ab41b84f2a89fa2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Pos: {x: 0, y: 0}
   tank: {fileID: 0}
+  Pos: {x: 0, y: 0}
   animator: {fileID: -2190902832759852224}
+  damageNum: 5
 --- !u!95 &-2190902832759852224
 Animator:
   serializedVersion: 7

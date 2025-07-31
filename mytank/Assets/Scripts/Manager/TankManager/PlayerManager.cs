@@ -53,9 +53,8 @@
                     playerInfo.ColorG / 255f,
                     playerInfo.ColorB / 255f
                 );
-                
                 TankFactory.Instance.InitialPlayer(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
-                    spawnPoint.y, color);
+                    spawnPoint.y, color,playerInfo.PlayerRole);
             
             }
         }

@@ -67,10 +67,12 @@ public class TankController : MonoBehaviour
 
     public int animType = 1;
 
-    public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
-
+    
     public float HPRate;
-
+    public int bulletDamageNum;
+    
+    
+    public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
 
     public bool isBoat = false;
     public long boatFrame = -1;
@@ -162,10 +164,10 @@ public class TankController : MonoBehaviour
 
         if (threeShootFrame > 0 && NetworkManager.Instance.currentFrame >= threeShootFrame)
         {
-            BulletFactory.Instance.Initialize(threeDir, this, threePos);
+            BulletFactory.Instance.Initialize(threeDir, this, threePos,bulletDamageNum);
             if (rearFire)
             {
-                BulletFactory.Instance.Initialize(threeDir.Opposite(), this, threePos);
+                BulletFactory.Instance.Initialize(threeDir.Opposite(), this, threePos,bulletDamageNum);
             }
 
             threeShootFrame = -1; // 重置
@@ -173,10 +175,10 @@ public class TankController : MonoBehaviour
 
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
-            BulletFactory.Instance.Initialize(secondDir, this, secondPos);
+            BulletFactory.Instance.Initialize(secondDir, this, secondPos,bulletDamageNum);
             if (rearFire)
             {
-                BulletFactory.Instance.Initialize(secondDir.Opposite(), this, secondPos);
+                BulletFactory.Instance.Initialize(secondDir.Opposite(), this, secondPos,bulletDamageNum);
             }
 
             secondShootFrame = -1; // 重置
@@ -389,10 +391,10 @@ public class TankController : MonoBehaviour
 
     public void Shoot()
     {
-        BulletFactory.Instance.Initialize(tankDirection, this, Pos);
+        BulletFactory.Instance.Initialize(tankDirection, this, Pos,bulletDamageNum);
         if (rearFire)
         {
-            BulletFactory.Instance.Initialize(tankDirection.Opposite(), this, Pos);
+            BulletFactory.Instance.Initialize(tankDirection.Opposite(), this, Pos,bulletDamageNum);
         }
 
         if (isShootThree)
@@ -459,6 +461,7 @@ public class TankController : MonoBehaviour
 
     public void Dead(TankController attacker)
     {
+        if(isDead) return;
         isDead = true;
         Pos = new Vector2Int(-2, -2);
 

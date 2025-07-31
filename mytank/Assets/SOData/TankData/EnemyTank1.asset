@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveIntervalFrame: 12
   shootIntervalFrame: 72
-  HP: 1
-  orignalHP: 1
+  HP: 10
+  orignalHP: 10
