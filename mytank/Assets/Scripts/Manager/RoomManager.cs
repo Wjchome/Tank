@@ -355,6 +355,7 @@ public class RoomManager : SingletonMono<RoomManager>
                 playerInfo.ColorG / 255f,
                 playerInfo.ColorB / 255f
             );
+            
             playerUIItem.playerImage.sprite= playerRoleSpriteDict[(PlayerRole)playerInfo.PlayerRole];
             playerUIItem.playerImage.color = playerColor;
         }

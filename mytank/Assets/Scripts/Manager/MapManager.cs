@@ -193,8 +193,7 @@ public enum MapType
              //复原buff
             ironWallEndFrames=0;
             isChange=false;
-            // 清除现有地图
-             ClearMap();
+           
             
             // 解析地图数据
             LoadMapFromString(level.mapData);

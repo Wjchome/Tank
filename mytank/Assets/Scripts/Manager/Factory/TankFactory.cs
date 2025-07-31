@@ -84,6 +84,7 @@ public class TankFactory : SingletonMono<TankFactory>
 
         temp.tankID = tankID;
         temp.tankDirection = Direction.Up;
+        temp.transform.rotation=Quaternion.identity;
         temp.Pos = new Vector2Int(x, y); // 左下角坐标
 
         if (tankID == NetworkManager.Instance.playerID)
@@ -143,7 +144,26 @@ public class TankFactory : SingletonMono<TankFactory>
         return temp;
     }
 
+      public TankController RevivalPlayer(TankController tank,  int x, int y)
+      {
 
+          tank.isDead = false;
+        tank.tankDirection = Direction.Up;
+        tank.transform.rotation=Quaternion.identity;
+        tank.Pos = new Vector2Int(x, y); // 左下角坐标
+
+
+        // 设置坦克中心位置
+        tank.transform.position = tank.GetCenter();
+
+        tank.currentData.HP = tank.currentData.orignalHP;
+
+          tank.playerPanelUI?.UpdateUI();
+
+        return tank;
+    }
+
+    
     public TankController InitialEnemy(string tankID, string tankName, int x, int y, int dataIndex)
     {
         TankController temp = TankPool.GetObject();

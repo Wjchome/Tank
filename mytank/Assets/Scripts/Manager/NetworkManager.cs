@@ -101,9 +101,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
             GameStateManager.Instance. OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
             BulletFactory.Instance.activeBullets.ToList().ForEach(a=>a.UpdateFrame());
             TankFactory.Instance.activeTanks.ForEach(a=>a.UpdateFrame());
-            MapManager.Instance.UpdateFrame();
-            EnemyManager.Instance.UpdateFrame();
-            EntityManager.Instance.UpdateFrame();
+            MapManager.Instance.UpdateFrame();//有关道具
+            EnemyManager.Instance.UpdateFrame();//生成敌人
+            PlayerManager.Instance.UpdateFrame();//复活队友
+            EntityManager.Instance.UpdateFrame();//实体推进
         }
         else if (message.GameStart != null)
         {
@@ -115,7 +116,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             LevelManager.Instance.GameStart(message.GameStart.Level);
             MapManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
             EnemyManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
-            PlayerManager.Instance.   OnGameStart(message.GameStart.PlayerInfos.ToList());
+            PlayerManager.Instance.  OnGameStart(message.GameStart.PlayerInfos.ToList());
             CamController.Instance.Change(MapManager.Instance.mapWidth/2);
            RoomManager.Instance. OnGameStartRoom();
         }

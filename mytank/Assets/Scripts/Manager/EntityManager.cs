@@ -67,18 +67,13 @@ public class EntityManager : SingletonMono<EntityManager>
     {
         foreach (var entity in mapEntities.ToList())
         {
-            
             entity.Destroy();
-            
-           
         }
         
         // 更新UI实体
         foreach (var entity in uiEntities.ToList())
         {
-            
             entity.Destroy();
-            
         }
     }
     public void AddUIEntity(UITimerEntity entity)

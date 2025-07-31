@@ -67,11 +67,9 @@ public class TankController : MonoBehaviour
 
     public int animType = 1;
 
-    
-    public float HPRate;
     public int bulletDamageNum;
-    
-    
+
+
     public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
 
     public bool isBoat = false;
@@ -117,7 +115,6 @@ public class TankController : MonoBehaviour
 
     public void UpdateFrame()
     {
-        HPRate = ((float)currentData.HP / currentData.orignalHP);
         HandleBuff();
         CheckMovementState();
         if (identity == Identity.Myself && !isDead)
@@ -164,10 +161,10 @@ public class TankController : MonoBehaviour
 
         if (threeShootFrame > 0 && NetworkManager.Instance.currentFrame >= threeShootFrame)
         {
-            BulletFactory.Instance.Initialize(threeDir, this, threePos,bulletDamageNum);
+            BulletFactory.Instance.Initialize(threeDir, this, threePos, bulletDamageNum);
             if (rearFire)
             {
-                BulletFactory.Instance.Initialize(threeDir.Opposite(), this, threePos,bulletDamageNum);
+                BulletFactory.Instance.Initialize(threeDir.Opposite(), this, threePos, bulletDamageNum);
             }
 
             threeShootFrame = -1; // 重置
@@ -175,10 +172,10 @@ public class TankController : MonoBehaviour
 
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
-            BulletFactory.Instance.Initialize(secondDir, this, secondPos,bulletDamageNum);
+            BulletFactory.Instance.Initialize(secondDir, this, secondPos, bulletDamageNum);
             if (rearFire)
             {
-                BulletFactory.Instance.Initialize(secondDir.Opposite(), this, secondPos,bulletDamageNum);
+                BulletFactory.Instance.Initialize(secondDir.Opposite(), this, secondPos, bulletDamageNum);
             }
 
             secondShootFrame = -1; // 重置
@@ -391,10 +388,10 @@ public class TankController : MonoBehaviour
 
     public void Shoot()
     {
-        BulletFactory.Instance.Initialize(tankDirection, this, Pos,bulletDamageNum);
+        BulletFactory.Instance.Initialize(tankDirection, this, Pos, bulletDamageNum);
         if (rearFire)
         {
-            BulletFactory.Instance.Initialize(tankDirection.Opposite(), this, Pos,bulletDamageNum);
+            BulletFactory.Instance.Initialize(tankDirection.Opposite(), this, Pos, bulletDamageNum);
         }
 
         if (isShootThree)
@@ -459,27 +456,31 @@ public class TankController : MonoBehaviour
         }
     }
 
-    public void Dead(TankController attacker)
+    public void Dead(TankController attacker, bool isGameOver = false)
     {
-        if(isDead) return;
+        if (isDead) return;
         isDead = true;
         Pos = new Vector2Int(-2, -2);
 
-        GetComponent<SpriteRenderer>().material.color = Color.white;
         animator.Play("BigBoom");
 
 
         DOVirtual.DelayedCall(animTime, () =>
         {
-            TankFactory.Instance.TankPool.ReturnObject(this);
             // 如果是敌人，通知EnemyManager
             if (identity == Identity.Enemy)
             {
                 EnemyManager.Instance.RemoveEnemy(this);
+                TankFactory.Instance.TankPool.ReturnObject(this);
             }
             else
             {
                 PlayerManager.Instance.RemovePlayer(this);
+                transform.position = new Vector2(-100, 0);
+                if (isGameOver)
+                {
+                    TankFactory.Instance.TankPool.ReturnObject(this);
+                }
             }
         });
         if (attacker != null)

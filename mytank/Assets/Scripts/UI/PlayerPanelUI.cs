@@ -28,12 +28,13 @@
         public Vector2 rightPos = Vector2.zero; 
         
         public TankController tank;
+        public string tankID;
         
         private Dictionary<FoodType, PlayerFoodUI> foodUIDict = new Dictionary<FoodType, PlayerFoodUI>();
         public void Init(TankController tankController, int index)
         {
             tank=tankController;
-            tank.HPRate = 1;
+            tankID=tank.tankID;
             HPbar.color = tank.playerColor;
             
             GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
@@ -42,6 +43,11 @@
             button.onClick.AddListener(Change);
         }
 
+        public void Revival(TankController tankController)
+        {
+            tank=tankController;
+            UpdateUI();
+        }
         public void UpdateUI()
         {
             playerNameText.text=tank.playerName;
@@ -52,7 +58,7 @@
             playerImage.color = tank.playerColor;
             playerHealthText.text=tank.currentData.HP+" / "+tank.currentData.orignalHP;
             playerKillText.text="击杀:"+tank.killNum.ToString();
-            HPbar.fillAmount = tank.HPRate;
+            HPbar.fillAmount = ((float)tank.currentData.HP / tank.currentData.orignalHP);
         }
 
         public void Change()

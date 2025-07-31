@@ -101,12 +101,12 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.Bomb:
                 if (num == 0)
                 {
-                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(1, tank));
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(10, tank));
                     tank.bombAnimator.Play("BombShow", 0, 0);
                 }
                 else if (num == 1)
                 {
-                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(2, tank));
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(20, tank));
                     tank.bombAnimator.Play("BombShow", 0, 0);
                 }
                 else if (num == 2)
@@ -485,7 +485,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
        */
         
         BulletFactory.Instance.activeBullets.ForEach(a=>a.DestroyBullet());
-        TankFactory.Instance.activeTanks.ForEach(a=>a.Dead(null));
+        TankFactory.Instance.activeTanks.ForEach(a=>a.Dead(null,true));
         EntityManager.Instance.GameOver();
 
         MapManager.Instance.ClearMap();

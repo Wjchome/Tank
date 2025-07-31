@@ -20,7 +20,7 @@ public class TooltipUI : SingletonMono<TooltipUI>
         canvasRect = canvas.GetComponent<RectTransform>();
         
         // Calculate the tooltip size once (assuming it doesn't change)
-        tooltipSize = rectTransform.sizeDelta * canvas.scaleFactor;
+        tooltipSize = rectTransform.sizeDelta/* * canvas.scaleFactor*/;
     }
 
     private void Update()
@@ -44,36 +44,30 @@ public class TooltipUI : SingletonMono<TooltipUI>
 
     private Vector2 ClampToScreen(Vector2 desiredPosition)
     {
-        // Get screen size
         Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-        
-        // Calculate min and max positions
-        float minX = tooltipSize.x / 2;
-        float maxX = screenSize.x - tooltipSize.x / 2;
-        float minY = tooltipSize.y / 2;
-        float maxY = screenSize.y - tooltipSize.y / 2;
-        
-        // Clamp the position
-        float clampedX = Mathf.Clamp(desiredPosition.x, minX, maxX);
-        float clampedY = Mathf.Clamp(desiredPosition.y, minY, maxY);
-        
-        // If we're clamping on X axis, flip the offset to other side of mouse
-        if (Mathf.Abs( clampedX - desiredPosition.x)>0.01f)
-        {
-            clampedX = mousePos.x - offset.x - tooltipSize.x;
-            clampedX = Mathf.Clamp(clampedX, minX, maxX);
-        }
-        
-        // If we're clamping on Y axis, flip the offset to other side of mouse
-        if (Mathf.Abs( clampedY - desiredPosition.y)>0.01f)
-        {
-            clampedY = mousePos.y - offset.y - tooltipSize.y;
-            clampedY = Mathf.Clamp(clampedY, minY, maxY);
-        }
-        
-        return new Vector2(clampedX, clampedY);
-    }
+    
+        // 计算tooltip的边界
+        float halfWidth = tooltipSize.x / 2;
+        float halfHeight = tooltipSize.y / 2;
 
+        if (desiredPosition.x + halfWidth > screenSize.x)
+        {
+            desiredPosition.x  -= halfWidth;
+        }
+
+        if (desiredPosition.y + halfHeight > screenSize.y)
+        {
+            desiredPosition.y -= halfHeight;
+        }
+        
+        // 限制X轴：确保tooltip的左右边界都在屏幕内
+       // float clampedX = Mathf.Clamp(desiredPosition.x, halfWidth, screenSize.x - halfWidth);
+    
+        // 限制Y轴：确保tooltip的上下边界都在屏幕内
+      //  float clampedY = Mathf.Clamp(desiredPosition.y, halfHeight, screenSize.y - halfHeight);
+    
+        return desiredPosition;
+    }
     public void Hide()
     {
         rectTransform.anchoredPosition = new Vector2(-2000, 0);

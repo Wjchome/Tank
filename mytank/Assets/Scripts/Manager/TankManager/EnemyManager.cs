@@ -14,10 +14,10 @@ public class EnemyManager : SingletonMono<EnemyManager>
     private List<Vector2Int> tankPawnsPos;
     
     public int maxEnemies = 3; // 场上最大敌人数量
-    public float enemySpawnInterval = 5f; // 敌人生成间隔
+    public int enemySpawnInterval = 200; // 敌人生成间隔
     public List<TankController> activeEnemies = new List<TankController>();//激活的敌人坦克
     public int leafEnemies = 0;
-    [SerializeField]private float lastSpawnTime = 0f;
+    private long lastSpawnFrame = 0;
     
     private int enemyIndex = 0;
     public TextMeshProUGUI enemyleafText;
@@ -36,7 +36,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         sumEnemies = levelData.enemyNum;
         tankPawnsPos=levelData.enemyTankPawns.ToList();
         leafEnemies=sumEnemies;
-        lastSpawnTime = 0f;
+        lastSpawnFrame = 0;
         enemyleafText.text= leafEnemies.ToString();
         enemyIndex = 0;
         pauseEndFrame = 0;
@@ -71,13 +71,11 @@ public class EnemyManager : SingletonMono<EnemyManager>
     {
         if (activeEnemies.Count >= maxEnemies||enemyIndex>=sumEnemies|!NetworkManager.Instance.isGameing) return;
         
-        long currentFrame = NetworkManager.Instance.currentFrame;
-        float currentTime =  currentFrame* Constant.FrameInterval; // 每帧0.05秒
-        
-        if (currentTime - lastSpawnTime >= enemySpawnInterval)
+     
+        if ( NetworkManager.Instance.currentFrame- lastSpawnFrame >= enemySpawnInterval)
         {
             SpawnEnemy();
-            lastSpawnTime = currentTime;
+            lastSpawnFrame = NetworkManager.Instance.currentFrame;
         }
     }
     
