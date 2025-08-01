@@ -27,7 +27,7 @@ public enum FoodType
     Discipline,
     GhostGuard
     
-   
+    //19个道具
    
     
 }

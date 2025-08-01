@@ -117,9 +117,10 @@ MonoBehaviour:
   enemyTankPawns:
   - {x: 1, y: 23}
   - {x: 23, y: 23}
+  - {x: 47, y: 23}
   playerTankPawns:
   - {x: 1, y: 1}
   - {x: 47, y: 1}
   - {x: 10, y: 1}
   - {x: 14, y: 1}
-  enemyNum: 10
+  enemyNum: 100

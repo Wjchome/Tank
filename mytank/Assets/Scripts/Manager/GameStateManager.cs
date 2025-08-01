@@ -469,6 +469,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
 
     public void GameOver(bool isWin)
     {
+        if (!NetworkManager.Instance.isGameing) return;
         GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>()
             .DOAnchorPos(GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
         GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text =
@@ -485,7 +486,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
        */
         
         BulletFactory.Instance.activeBullets.ForEach(a=>a.DestroyBullet());
-        TankFactory.Instance.activeTanks.ForEach(a=>a.Dead(null,true));
+        TankFactory.Instance.activeTanks.ForEach(a=>a.Dead(null));
         EntityManager.Instance.GameOver();
 
         MapManager.Instance.ClearMap();

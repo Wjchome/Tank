@@ -34,7 +34,7 @@ public class BulletController : MonoBehaviour
     public int damageNum;
     
     public bool isDead = false;
-  
+    public long deathDelayFrames;
     public void UpdatePosition(int x, int y)
     {
         direction.ToVector2Int().Set(x,y);
@@ -52,12 +52,10 @@ public class BulletController : MonoBehaviour
     
     public void UpdateFrame()
     {
-        if (isShouldDestroy ) return;
-       
-       
-  
         
-        if ( NetworkManager.Instance.currentFrame - lastMoveTimeFrame > moveIntervalFrame)
+        
+        
+        if (!isShouldDestroy&& NetworkManager.Instance.currentFrame - lastMoveTimeFrame > moveIntervalFrame)
         {
             lastMoveTimeFrame = NetworkManager.Instance.currentFrame;
             bool isShouldMove = false;
@@ -177,7 +175,15 @@ public class BulletController : MonoBehaviour
             }
         }
 
-        
+        if (isDead )
+        {
+           
+            if (NetworkManager.Instance.currentFrame  >= deathDelayFrames)
+            {
+                // 执行死亡后的逻辑
+                ExecuteDeathLogic();
+            }
+        }
         
     }
 
@@ -189,10 +195,15 @@ public class BulletController : MonoBehaviour
         Vector2 randomPos=new Vector2(Random.Range(0f,dir.x), Random.Range(0f,dir.y ));
         transform.position += (Vector3)randomPos;
         animator.Play("SmallBoom");
-        DOVirtual.DelayedCall(animTime, () => 
-        {
+        deathDelayFrames=NetworkManager.Instance.currentFrame+(int)(animTime/Constant.FrameInterval);
+  
+    }
+    
+    // 执行死亡后的逻辑
+    void ExecuteDeathLogic()
+    {
             BulletFactory.Instance.BulletPool.ReturnObject(this);
-        });
+        
     }
     
     

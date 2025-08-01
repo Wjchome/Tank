@@ -63,11 +63,5 @@ public class PlayerFoodUI:MonoBehaviour
         
         }
 
-        private void Update()
-        {
-            if (isMouseOn)
-            {
-                
-            }
-        }
+  
     }

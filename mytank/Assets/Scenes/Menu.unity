@@ -13203,10 +13203,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sumEnemies: 0
   maxEnemies: 5
-  enemySpawnInterval: 4
+  enemySpawnInterval: 200
   activeEnemies: []
   leafEnemies: 0
-  lastSpawnTime: 0
   enemyleafText: {fileID: 272430327}
   specialRange: 1
   pauseEndFrame: 0

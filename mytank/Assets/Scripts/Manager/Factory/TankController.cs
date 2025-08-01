@@ -112,7 +112,7 @@ public class TankController : MonoBehaviour
 
     public Animator bombAnimator;
 
-
+    public long deathDelayFrames;
     public void UpdateFrame()
     {
         HandleBuff();
@@ -127,6 +127,15 @@ public class TankController : MonoBehaviour
             NetworkManager.Instance.currentFrame >= EnemyManager.Instance.pauseEndFrame)
         {
             AiControls();
+        }
+        if (isDead )
+        {
+           
+            if (NetworkManager.Instance.currentFrame  >= deathDelayFrames)
+            {
+                // 执行死亡后的逻辑
+                ExecuteDeathLogic();
+            }
         }
     }
 
@@ -456,7 +465,7 @@ public class TankController : MonoBehaviour
         }
     }
 
-    public void Dead(TankController attacker, bool isGameOver = false)
+    public void Dead(TankController attacker)
     {
         if (isDead) return;
         isDead = true;
@@ -464,32 +473,35 @@ public class TankController : MonoBehaviour
 
         animator.Play("BigBoom");
 
-
-        DOVirtual.DelayedCall(animTime, () =>
-        {
-            // 如果是敌人，通知EnemyManager
-            if (identity == Identity.Enemy)
-            {
-                EnemyManager.Instance.RemoveEnemy(this);
-                TankFactory.Instance.TankPool.ReturnObject(this);
-            }
-            else
-            {
-                PlayerManager.Instance.RemovePlayer(this);
-                transform.position = new Vector2(-100, 0);
-                if (isGameOver)
-                {
-                    TankFactory.Instance.TankPool.ReturnObject(this);
-                }
-            }
-        });
+        deathDelayFrames=NetworkManager.Instance.currentFrame+(int)(animTime/Constant.FrameInterval);
+      
         if (attacker != null)
         {
             attacker.Kill(GetComponent<Special>() != null);
         }
     }
 
-
+    private void ExecuteDeathLogic()
+    {
+        // 如果是敌人，通知EnemyManager
+        if (identity == Identity.Enemy)
+        {
+            EnemyManager.Instance.RemoveEnemy(this);
+            TankFactory.Instance.TankPool.ReturnObject(this);
+        }
+        else
+        {
+            PlayerManager.Instance.RemovePlayer(this);
+            transform.position = new Vector2(-100, 0);
+            if (NetworkManager.Instance.isGameing==false)
+            {
+                TankFactory.Instance.TankPool.ReturnObject(this);
+            }
+        }
+    
+  
+        deathDelayFrames = 0;
+    }
     public void Kill(bool isSpecial)
     {
         killNum++;
