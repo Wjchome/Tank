@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -14,7 +13,7 @@ public enum FoodType
     PocketWatch,
     Shoe,
     Shovel,
-    Star, 
+    Star,
     SteelHelmet,
     WarCar,
     GenerateWall,
@@ -25,26 +24,56 @@ public enum FoodType
     SpikeTrap,
     Protect,
     Discipline,
-    GhostGuard
-    
+    GhostGuard,
+
     //19个道具
-   
-    
+
+    // 新增合成道具
+    AlmightyTurret, // 全能炮台
+    SpeedKiller, // 疾速杀手
+    LifeEnhancement, // 生命强化
+    TimeController, // 时间控制器
+    PenetratingBullet, // 穿透子弹
+    SuperDefense // 超级守卫
 }
-    public class FoodManager:SingletonMono<FoodManager>
-    {
-        public List<FoodData> foodDatas;
-        public PlayerFoodUI playerFoodUIPrefab;
+
+public class FoodManager : SingletonMono<FoodManager>
+{
+    public List<FoodData> foodDatas;
+    public PlayerFoodUI playerFoodUIPrefab;
 
     public RectTransform panelParent;
     public List<FoodUIPanel> panels;
-    public Dictionary<FoodType, FoodData> foodDict=new Dictionary<FoodType, FoodData>();
+    public Dictionary<FoodType, FoodData> foodDict = new Dictionary<FoodType, FoodData>();
+
+
+    public List<FoodData> superFoodDatas = new List<FoodData>();
+
+    public List<FoodCombination> foodCombinations = new List<FoodCombination>();
+
+    // 合成条件配置
+    private Dictionary<FoodType, List<FoodType>> combinationRequirements = new Dictionary<FoodType, List<FoodType>>();
 
     private void Start()
     {
         foreach (var foodData in foodDatas)
         {
             foodDict.Add(foodData.foodType, foodData);
+        }
+
+        foreach (var foodData in superFoodDatas)
+        {
+            foodDict.Add(foodData.foodType, foodData);
+        }
+
+        foreach (var foodCombination in foodCombinations)
+        {
+            combinationRequirements[foodCombination.foodTarget] = new List<FoodType>
+            {
+                foodCombination.food1,
+                foodCombination.food2,
+                foodCombination.food3,
+            };
         }
     }
 
@@ -69,6 +98,21 @@ public enum FoodType
             }
         }
 
+        // 检查合成道具是否解锁
+        foreach (var foodData in superFoodDatas)
+        {
+            if (IsSuperFoodUnlocked(tank, foodData.foodType))
+            {
+                availableFoods.Add(foodData);
+            }
+        }
+
+        if (availableFoods.Count == 0)
+        {
+            ClosePanels();
+            
+        }
+
         // 3. 随机选取不重复的食物
         for (int i = 0; i < 3; i++)
         {
@@ -79,6 +123,23 @@ public enum FoodType
 
             SetupPanel(i, randomFood, tank);
         }
+    }
+
+    private bool IsSuperFoodUnlocked(TankController tank, FoodType superFoodType)
+    {
+        if (!combinationRequirements.ContainsKey(superFoodType))
+            return false;
+
+        var requirement = combinationRequirements[superFoodType];
+
+        // 检查是否已经拥有这个合成道具
+        if (tank.foodDict.ContainsKey(superFoodType))
+            return false;
+
+        // 检查是否满足合成条件（三个道具都满级）
+        return tank.foodDict.ContainsKey(requirement[0]) && tank.foodDict[requirement[0]] >= 3 &&
+               tank.foodDict.ContainsKey(requirement[1]) && tank.foodDict[requirement[1]] >= 3 &&
+               tank.foodDict.ContainsKey(requirement[2]) && tank.foodDict[requirement[2]] >= 3;
     }
 
     public void ClosePanels()
@@ -92,8 +153,8 @@ public enum FoodType
 
     void SetupPanel(int index, FoodData food, TankController tank)
     {
-        int num=0  ;
-        
+        int num = 0;
+
         if (tank.foodDict.ContainsKey(food.foodType))
         {
             num = tank.foodDict[food.foodType];
@@ -102,7 +163,8 @@ public enum FoodType
         {
             tank.foodDict.Add(food.foodType, 0);
         }
-        num=Mathf.Min(num,2);
+
+        num = Mathf.Min(num, 2);
         var panel = panels[index];
         panel.gameObject.SetActive(true);
         panel.chooseButton.interactable = true;
@@ -120,6 +182,7 @@ public enum FoodType
                 panel.isGetImage[i].gameObject.SetActive(false);
             }
         }
+
         panel.chooseButton.onClick.AddListener(() =>
         {
             // 1. 禁用所有按钮，防止多次点击
@@ -133,7 +196,4 @@ public enum FoodType
             ClosePanels();
         });
     }
-    
-    }
-
-    
+}

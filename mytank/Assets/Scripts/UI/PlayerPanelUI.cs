@@ -96,7 +96,7 @@
             if (foodUIDict.ContainsKey(foodType))
             {
                 // 更新现有UI
-                foodUIDict[foodType].levelText.text = level.ToString();
+                foodUIDict[foodType].levelText.text = (level+1).ToString();
             }
             else
             {

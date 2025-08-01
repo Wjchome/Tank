@@ -166,7 +166,7 @@ public class BulletController :MapEntity
         MapType wallType = MapManager.Instance.GetWallType(wallPos.x, wallPos.y);
     
         // 检查是否可以破坏墙壁
-        if (wallType == MapType.breakableWall||(tank.isBreakWall&&wallType == MapType.wall))
+        if (wallType == MapType.breakableWall)
         {
             MapManager.Instance.SetWallType(wallPos.x, wallPos.y, MapType.floor);
         }
@@ -185,7 +185,7 @@ public class BulletController :MapEntity
     }
     
     // 执行死亡后的逻辑
-    protected virtual void ExecuteDeathLogic()
+    void ExecuteDeathLogic()
     {
         EntityManager.Instance.BulletPool.ReturnObject(this);
         

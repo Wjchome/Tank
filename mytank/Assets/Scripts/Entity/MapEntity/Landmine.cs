@@ -7,13 +7,28 @@ public class Landmine : MapEntity
     public Animator animator;
 
     public int damageNum;
+
+    public bool isDead = false;
+    public long deadDelayTime;
     public override void UpdateFrame()
     {
-        var tanks = MapManager.Instance.GetTankInArea(Pos.x, Pos.y, 1, 1);
-        if (tanks != null&&tanks.Count>0)
+        if (isDead)
         {
-            Trigger();
+            if (NetworkManager.Instance.currentFrame >= deadDelayTime)
+            {
+                Destroy();
+            }
         }
+        else
+        {
+            var tanks = MapManager.Instance.GetTankInArea(Pos.x, Pos.y, 1, 1);
+            if (tanks != null&&tanks.Count>0)
+            {
+                Trigger();
+            }
+        }
+
+       
     }
 
 
@@ -26,6 +41,7 @@ public class Landmine : MapEntity
         }
 
         animator.Play("Trigger", 0, 0);
-        DOVirtual.DelayedCall(0.33f, Destroy);
+        isDead = true;
+        deadDelayTime = NetworkManager.Instance.currentFrame + (int)(0.33f / Constant.FrameInterval);
     }
 }

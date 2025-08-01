@@ -59,7 +59,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
-   public void ApplyFoodToTank(TankController tank, int foodId)
+    public void ApplyFoodToTank(TankController tank, int foodId)
     {
         FoodType foodType = (FoodType)foodId;
         int num = 0;
@@ -72,7 +72,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
             tank.foodDict.Add(foodType, 1);
         }
 
-        tank.playerPanelUI.UpdateFoodUI(foodType, tank.foodDict[foodType]);
+        tank.playerPanelUI.UpdateFoodUI(foodType, num);
         switch (foodType)
         {
             case FoodType.Boat:
@@ -267,15 +267,15 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.WarCar:
                 if (num == 0)
                 {
-                    tank. AddOrignalHP(1);
+                    tank.AddOrignalHP(1);
                 }
                 else if (num == 1)
                 {
-                    tank. AddOrignalHP(3);
+                    tank.AddOrignalHP(3);
                 }
                 else if (num == 2)
                 {
-                   EntityManager.Instance.InitWarCarController(tank);
+                    EntityManager.Instance.InitWarCarController(tank);
                 }
 
                 break;
@@ -402,7 +402,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    var targetProtect = EntityManager.Instance.FindUIEntity<ProtectController>(tank);
+                    var targetProtect = EntityManager.Instance.FindFirstOrDefaultUIEntity<ProtectController>(tank);
 
                     if (targetProtect != null)
                     {
@@ -411,7 +411,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 2)
                 {
-                    var targetProtect = EntityManager.Instance.FindUIEntity<ProtectController>(tank);
+                    var targetProtect = EntityManager.Instance.FindFirstOrDefaultUIEntity<ProtectController>(tank);
 
                     if (targetProtect != null)
                     {
@@ -427,7 +427,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    var targetDiscipline = EntityManager.Instance.FindUIEntity<DisciplineController>(tank);
+                    var targetDiscipline =
+                        EntityManager.Instance.FindFirstOrDefaultUIEntity<DisciplineController>(tank);
 
                     if (targetDiscipline != null)
                     {
@@ -436,7 +437,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 2)
                 {
-                    var targetDiscipline = EntityManager.Instance.FindUIEntity<DisciplineController>(tank);
+                    var targetDiscipline =
+                        EntityManager.Instance.FindFirstOrDefaultUIEntity<DisciplineController>(tank);
 
                     if (targetDiscipline != null)
                     {
@@ -448,18 +450,57 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.GhostGuard:
                 if (num == 0)
                 {
-
                     EntityManager.Instance.InitGhostGuard(tank);
                 }
                 else if (num == 1)
                 {
                     EntityManager.Instance.InitGhostGuardMachine(tank);
-    
                 }
                 else if (num == 2)
                 {
-                    var target = EntityManager.Instance.FindUIEntity<GhostGuardMachine>(tank);
+                    var target = EntityManager.Instance.FindFirstOrDefaultUIEntity<GhostGuardMachine>(tank);
                     target.genateIntervalFrame = 600;
+                }
+
+                break;
+            case FoodType.AlmightyTurret:
+                //  => 所有地雷制造机变成自动发射机 所有现存自动炮台，地雷，治疗花园
+                // => 变成自动设计台（能发射子弹，子弹可以打敌人，打玩家可以恢复血量，敌人触碰爆炸） 
+
+                var landmineMachines = EntityManager.Instance.FindUIEntities<LandmineMachine>(tank);
+
+                foreach (var machine in landmineMachines)
+                {
+                    machine.Destroy();
+                    EntityManager.Instance.InitAlmightyTurretMachine(tank);
+                }
+
+                // 转换所有地图实体
+                var landmines = EntityManager.Instance.FindMapEntities<Landmine>(tank);
+                var autoTurrets = EntityManager.Instance.FindMapEntities<AutoTurret>(tank);
+                var healingGardens = EntityManager.Instance.FindMapEntities<HealingGarden>(tank);
+                // 转换地雷
+                foreach (var landmine in landmines)
+                {
+                    Vector2Int pos = landmine.Pos;
+                    EntityManager.Instance.InitAlmightyTurret(tank, pos);
+                    landmine.Destroy();
+                }
+
+                // 转换自动炮台
+                foreach (var turret in autoTurrets)
+                {
+                    Vector2Int pos = turret.Pos;
+                    EntityManager.Instance.InitAlmightyTurret(tank, pos);
+                    turret.Destroy();
+                }
+
+                // 转换治疗花园
+                foreach (var garden in healingGardens)
+                {
+                    Vector2Int pos = garden.Pos;
+                    EntityManager.Instance.InitAlmightyTurret(tank, pos);
+                    garden.Destroy();
                 }
 
                 break;
@@ -484,9 +525,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
         PlayerManager.Instance.activePlayers.Clear();
         EnemyManager.Instance.activeEnemies.Clear();
        */
-        
-       // BulletFactory.Instance.activeBullets.ForEach(a=>a.DestroyBullet());
-        TankFactory.Instance.activeTanks.ForEach(a=>a.Dead(null));
+
+        TankFactory.Instance.activeTanks.ForEach(a => a.Dead(null));
         EntityManager.Instance.GameOver();
 
         MapManager.Instance.ClearMap();

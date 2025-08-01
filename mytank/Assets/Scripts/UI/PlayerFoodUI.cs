@@ -25,7 +25,7 @@ public class PlayerFoodUI:MonoBehaviour
             foodData = FoodManager.Instance.foodDict[foodType];
             this.level = level;
             image.sprite =  foodData.sprite;
-            levelText.text = level.ToString();
+            levelText.text = (level+1).ToString();
        
             SetupUIEvents();
         }

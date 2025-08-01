@@ -10,11 +10,13 @@ public class EntityManager : SingletonMono<EntityManager>
     [Header("Bullet Prefabs")] 
     public BulletController bulletPrefab;
 
-    [Header("Map Entity Prefabs")] public AutoTurret autoTurretPrefab;
+    [Header("Map Entity Prefabs")] 
+    public AutoTurret autoTurretPrefab;
     public Landmine landminePrefab;
     public HealingGarden healingGardenPrefab;
     public SpikeTrap spikeTrapPrefab;
     public GhostGuard ghostGuardPrefab;
+    public AlmightyTurret  almightyTurretPrefab;
 
 
     [Header("UI Timer Entity Prefabs")] public LandmineMachine landmineMachinePrefab;
@@ -26,7 +28,7 @@ public class EntityManager : SingletonMono<EntityManager>
     public DisciplineController disciplineControllerPrefab;
     public GhostGuardMachine ghostGuardMachinePrefab;
     public WarCarController warCarControllerPrefab;
-
+    public AlmightyTurretMachine almightyTurretMachinePrefab;
     // 分类管理
     private List<MapEntity> mapEntities = new List<MapEntity>();
     private List<UITimerEntity> uiEntities = new List<UITimerEntity>();
@@ -156,7 +158,7 @@ public class EntityManager : SingletonMono<EntityManager>
     }
 
     // 查找特定类型的UI实体
-    public T FindUIEntity<T>(TankController tank) where T : UITimerEntity
+    public T FindFirstOrDefaultUIEntity<T>(TankController tank) where T : UITimerEntity
     {
         foreach (var entity in uiEntities)
         {
@@ -168,9 +170,23 @@ public class EntityManager : SingletonMono<EntityManager>
 
         return null;
     }
+    public List<T>  FindUIEntities<T>(TankController tank) where T : UITimerEntity
+    {
+        List<T> list = new List<T>();
+        foreach (var entity in uiEntities)
+        {
+            if (entity is T targetEntity && targetEntity.tank == tank)
+            {
+                list.Add( targetEntity);
+            }
+        }
+
+        return list;
+    }
+    
 
     // 查找特定类型的地图实体
-    public T FindMapEntity<T>(TankController tank) where T : MapEntity
+    public T FindFirstOrDefaultMapEntity<T>(TankController tank) where T : MapEntity
     {
         foreach (var entity in mapEntities)
         {
@@ -182,7 +198,19 @@ public class EntityManager : SingletonMono<EntityManager>
 
         return null;
     }
+    public List<T> FindMapEntities<T>(TankController tank) where T : MapEntity
+    {
+        List<T> list = new List<T>();
+        foreach (var entity in mapEntities)
+        {
+            if (entity is T targetEntity && targetEntity.tank == tank)
+            {
+                list.Add(targetEntity);
+            }
+        }
 
+        return list;
+    }
 
     // 生成方法
     private T SpawnMapEntity<T>(T prefab, TankController tank, Vector2 position, Vector2Int pos) where T : MapEntity
@@ -334,6 +362,53 @@ public class EntityManager : SingletonMono<EntityManager>
         ghostGuardUp2.GetComponent<SpriteRenderer>().color = transparentColor;
     }
 
+    public void InitAlmightyTurret(TankController tank)
+    {
+        
+        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
+            .Except(MapManager.Instance.GetAllTankPos()).ToList();
+        var homePos = new List<int>()
+        {
+            (MapManager.Instance.mapWidth - 1) / 2 - 1,
+            (MapManager.Instance.mapWidth - 1) / 2,
+            MapManager.Instance.mapWidth / 2,
+        };
+        foreach (var spawnPo in spawnPos.ToList())
+        {
+            if (spawnPo.y == 0 || spawnPo.y == 1 || spawnPo.y == 2 ||
+                homePos.Contains(spawnPo.x))
+            {
+                spawnPos.Remove(spawnPo);
+            }
+        }
+
+        var pos = spawnPos[tank.random.Next(spawnPos.Count)];
+
+        SpawnMapEntity(almightyTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
+
+    }
+    public void InitAlmightyTurret(TankController tank,Vector2Int pos)
+    { 
+        var homePos = new List<int>()
+        {
+            (MapManager.Instance.mapWidth - 1) / 2 - 1,
+            (MapManager.Instance.mapWidth - 1) / 2,
+            MapManager.Instance.mapWidth / 2,
+        };
+        if (pos.y == 0 || pos.y == 1 || pos.y == 2 ||
+            homePos.Contains(pos.x))
+        {
+            return;
+        }
+
+        SpawnMapEntity(almightyTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
+
+    }
+    
+    public void InitAlmightyTurretMachine(TankController tank)
+    {
+        SpawnUIEntity(almightyTurretMachinePrefab, tank);
+    }
     public void InitLandmineMachine(TankController tank)
     {
         SpawnUIEntity(landmineMachinePrefab, tank);
@@ -379,5 +454,6 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnUIEntity(warCarControllerPrefab, tank);
     }
 
+    
     #endregion
 }

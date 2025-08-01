@@ -6,7 +6,7 @@ public class HealingGarden : MapEntity
 {
     public long lastGenateFrame;
 
-    public int genateIntervalFrame = 10;
+    public int genateIntervalFrame;
 
      public bool isCanHealing = false;
 
@@ -38,7 +38,7 @@ public class HealingGarden : MapEntity
     }
 
 
-    public void PickUp(TankController tank)
+    void PickUp(TankController tank)
     {
         if (isCanHealing)
         {

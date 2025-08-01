@@ -127,6 +127,19 @@ public class TankFactory : SingletonMono<TankFactory>
         {
             case 1:
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Shoe);
+                
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.AutoTurret);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.AutoTurret);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.AutoTurret);
+
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.HealingGarden);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.HealingGarden);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.HealingGarden);
+
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Landmine);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Landmine);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Landmine);
+                
                 break;
             case 2:
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.WarCar);
