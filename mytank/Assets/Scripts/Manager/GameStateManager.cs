@@ -485,7 +485,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         EnemyManager.Instance.activeEnemies.Clear();
        */
         
-        BulletFactory.Instance.activeBullets.ForEach(a=>a.DestroyBullet());
+       // BulletFactory.Instance.activeBullets.ForEach(a=>a.DestroyBullet());
         TankFactory.Instance.activeTanks.ForEach(a=>a.Dead(null));
         EntityManager.Instance.GameOver();
 

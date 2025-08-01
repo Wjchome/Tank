@@ -2884,6 +2884,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   content: {fileID: 1046354341}
+  bulletPrefab: {fileID: -5286829672375745056, guid: da13715faeeea46bf996f1ca451e933c, type: 3}
+  breakWallBulletPrefab: {fileID: -2140736576408765539, guid: 0803c3fda0b13449ca60836d80b28521, type: 3}
   autoTurretPrefab: {fileID: -8456564479829692878, guid: 23fefdffd76af4fbf866dbbe28a9a059, type: 3}
   landminePrefab: {fileID: -6251440126117694802, guid: 3fa59046de21445c88855347f2465099, type: 3}
   healingGardenPrefab: {fileID: 5576086412088546095, guid: 50dfb48aae14146d7b6022308765d515, type: 3}
@@ -2898,6 +2900,8 @@ MonoBehaviour:
   disciplineControllerPrefab: {fileID: 3782525686423470398, guid: 6ad67b6e392c747b480c97ac1f459e0d, type: 3}
   ghostGuardMachinePrefab: {fileID: -2865518096813212923, guid: 660e26c93ed7c46fd85ca1426955c85c, type: 3}
   warCarControllerPrefab: {fileID: -3034586624797461125, guid: ec13b59982bf843fcb7d15f637fcf229, type: 3}
+  activeBullets: []
+  activeBreakWallBullets: []
 --- !u!1 &477763092
 GameObject:
   m_ObjectHideFlags: 0
@@ -6308,7 +6312,7 @@ MonoBehaviour:
   currentFrame: 0
   isGameing: 0
   seed: 0
-  serverIP: 10.30.20.68
+  serverIP: 127.0.0.1
   serverPort: 8080
 --- !u!1 &843415143
 GameObject:
@@ -13130,7 +13134,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1738175250}
   - component: {fileID: 1738175252}
-  - component: {fileID: 1738175251}
   - component: {fileID: 1738175254}
   - component: {fileID: 1738175253}
   m_Layer: 0
@@ -13155,20 +13158,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 219629758}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1738175251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1738175249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55ee2cb7cef34951abb8662008462f96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: -5286829672375745056, guid: da13715faeeea46bf996f1ca451e933c, type: 3}
-  activeBullets: []
 --- !u!114 &1738175252
 MonoBehaviour:
   m_ObjectHideFlags: 0

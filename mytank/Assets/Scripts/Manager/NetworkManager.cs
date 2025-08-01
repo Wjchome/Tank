@@ -99,7 +99,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             currentFrame = message.FrameMessage.FrameNumber;
             GameStateManager.Instance. OnFrameInputs(message.FrameMessage.Inputs.ToList());
             GameStateManager.Instance. OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
-            BulletFactory.Instance.activeBullets.ToList().ForEach(a=>a.UpdateFrame());
+            //BulletFactory.Instance.activeBullets.ToList().ForEach(a=>a.UpdateFrame());
             TankFactory.Instance.activeTanks.ToList().ForEach(a=>a.UpdateFrame());
             MapManager.Instance.UpdateFrame();//有关道具
             EnemyManager.Instance.UpdateFrame();//生成敌人

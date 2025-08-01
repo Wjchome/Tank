@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,16 +7,17 @@ public class EntityManager : SingletonMono<EntityManager>
 {
     public Transform content;
 
-    [Header("Map Entity Prefabs")]
-    public AutoTurret autoTurretPrefab;
+    [Header("Bullet Prefabs")] 
+    public BulletController bulletPrefab;
+
+    [Header("Map Entity Prefabs")] public AutoTurret autoTurretPrefab;
     public Landmine landminePrefab;
     public HealingGarden healingGardenPrefab;
     public SpikeTrap spikeTrapPrefab;
     public GhostGuard ghostGuardPrefab;
 
 
-    [Header("UI Timer Entity Prefabs")]
-    public LandmineMachine landmineMachinePrefab;
+    [Header("UI Timer Entity Prefabs")] public LandmineMachine landmineMachinePrefab;
     public BombController bombControllerPrefab;
     public PocketWatchController pocketWatchControllerPrefab;
     public ShovelController shovelControllerPrefab;
@@ -28,6 +30,42 @@ public class EntityManager : SingletonMono<EntityManager>
     // 分类管理
     private List<MapEntity> mapEntities = new List<MapEntity>();
     private List<UITimerEntity> uiEntities = new List<UITimerEntity>();
+
+    // 子弹对象池
+    public ObjectPool<BulletController> BulletPool { get; private set; }
+    public List<BulletController> activeBullets = new List<BulletController>();
+    private void Awake()
+    {
+        InitializeBulletPool();
+    }
+
+    private void InitializeBulletPool()
+    {
+        BulletPool = new ObjectPool<BulletController>(
+            prefab: bulletPrefab,
+            onSpawn: CreateBullet,
+            onDespawn: KillBullet
+        );
+        
+
+        activeBullets = new List<BulletController>();
+    }
+
+    private void CreateBullet(BulletController bullet)
+    {
+        bullet.isDead = false;
+        bullet.gameObject.SetActive(true);
+        bullet.isShouldDestroy = false;
+        bullet.lastMoveTimeFrame = 0;
+        bullet.animator.Play("Idle", 0, 0);
+        activeBullets.Add(bullet);
+    }
+
+    private void KillBullet(BulletController bullet)
+    {
+        bullet.gameObject.SetActive(false);
+        activeBullets.Remove(bullet);
+    }
 
     public void UpdateFrame()
     {
@@ -43,7 +81,7 @@ public class EntityManager : SingletonMono<EntityManager>
                 mapEntities.Remove(entity);
             }
         }
-        
+
         // 更新UI实体
         foreach (var entity in uiEntities.ToList())
         {
@@ -56,6 +94,17 @@ public class EntityManager : SingletonMono<EntityManager>
                 uiEntities.Remove(entity);
             }
         }
+
+        // 更新子弹
+        foreach (var bullet in activeBullets.ToList())
+        {
+            if (bullet != null )
+            {
+                bullet.UpdateFrame();
+            }
+         
+        }
+ 
     }
 
     public void AddMapEntity(MapEntity entity)
@@ -69,13 +118,26 @@ public class EntityManager : SingletonMono<EntityManager>
         {
             entity.Destroy();
         }
-        
+
         // 更新UI实体
         foreach (var entity in uiEntities.ToList())
         {
             entity.Destroy();
         }
+
+        // 清理所有子弹
+        foreach (var bullet in activeBullets.ToList())
+        {
+            if (bullet != null)
+            {
+              
+                    BulletPool.ReturnObject(bullet);
+                
+            }
+        }
+   
     }
+
     public void AddUIEntity(UITimerEntity entity)
     {
         uiEntities.Add(entity);
@@ -92,7 +154,7 @@ public class EntityManager : SingletonMono<EntityManager>
             uiEntities.Remove(uiEntity);
         }
     }
-    
+
     // 查找特定类型的UI实体
     public T FindUIEntity<T>(TankController tank) where T : UITimerEntity
     {
@@ -103,9 +165,10 @@ public class EntityManager : SingletonMono<EntityManager>
                 return targetEntity;
             }
         }
+
         return null;
     }
-    
+
     // 查找特定类型的地图实体
     public T FindMapEntity<T>(TankController tank) where T : MapEntity
     {
@@ -116,33 +179,76 @@ public class EntityManager : SingletonMono<EntityManager>
                 return targetEntity;
             }
         }
+
         return null;
     }
 
 
-
-
     // 生成方法
-    public T SpawnMapEntity<T>(T prefab, TankController tank, Vector2 position,Vector2Int pos) where T : MapEntity
+    private T SpawnMapEntity<T>(T prefab, TankController tank, Vector2 position, Vector2Int pos) where T : MapEntity
     {
- 
         T entity = Instantiate(prefab, new Vector2(position.x, position.y), Quaternion.identity);
-        entity.Init(tank,pos);
+        entity.Init(tank, pos);
         AddMapEntity(entity);
         return entity;
     }
-    
-    public T SpawnUIEntity<T>(T prefab, TankController tank) where T : UITimerEntity
+
+    private T SpawnUIEntity<T>(T prefab, TankController tank) where T : UITimerEntity
     {
         T entity = Instantiate(prefab, content);
         entity.Init(tank);
-        
+
         AddUIEntity(entity);
         return entity;
     }
-    
 
+    #region 生成方法
 
+    // 子弹生成方法
+    public void InitializeBullet(Direction direction, TankController tank, Vector2Int pos, int damageNum)
+    {
+        BulletController bullet = BulletPool.GetObject();
+        bullet.direction = direction;
+        bullet.tank = tank;
+
+        if (tank.identity == Identity.Myself || tank.identity == Identity.OtherPlayer)
+            bullet.isPlayerBullet = true;
+        else
+        {
+            bullet.isPlayerBullet = false;
+        }
+
+        // 设置子弹朝向
+        Vector3 rotation = Vector3.zero;
+        bullet.dir = direction.ToVector2Int();
+        bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
+
+        switch (direction)
+        {
+            case Direction.Up:
+                rotation = new Vector3(0, 0, 0);
+                break;
+            case Direction.Down:
+                rotation = new Vector3(0, 0, 180);
+                break;
+            case Direction.Left:
+                rotation = new Vector3(0, 0, 90);
+                break;
+            case Direction.Right:
+                rotation = new Vector3(0, 0, -90);
+                break;
+        }
+
+        bullet.transform.rotation = Quaternion.Euler(rotation);
+        bullet.Pos = pos;
+        bullet.transform.position = bullet.GetCenter();
+        bullet.damageNum = damageNum;
+        
+        // 调用基类的Init方法
+        bullet.Init(tank, pos);
+    }
+
+   
     // 兼容性方法 - 保持原有接口
     public void InitAutoTurrent(TankController tank)
     {
@@ -165,15 +271,15 @@ public class EntityManager : SingletonMono<EntityManager>
 
         var pos = spawnPos[tank.random.Next(spawnPos.Count)];
 
-        SpawnMapEntity(autoTurretPrefab, tank,new Vector2(pos.x+0.5f, pos.y+0.5f),pos);
+        SpawnMapEntity(autoTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
     }
-    
+
     public void InitLandmine(TankController tank)
     {
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
         var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-        
+
         SpawnMapEntity(landminePrefab, tank, new Vector2(pos.x, pos.y), pos);
     }
 
@@ -182,7 +288,7 @@ public class EntityManager : SingletonMono<EntityManager>
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
         var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-        SpawnMapEntity(healingGardenPrefab, tank,new Vector2(pos.x, pos.y), pos);
+        SpawnMapEntity(healingGardenPrefab, tank, new Vector2(pos.x, pos.y), pos);
     }
 
     public void InitSpikeTrap(TankController tank, Vector2Int pos, int durationFrame)
@@ -190,7 +296,7 @@ public class EntityManager : SingletonMono<EntityManager>
         var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, new Vector2(pos.x, pos.y), pos);
         spikeTrap.durationFrame = durationFrame;
     }
-    
+
     public void InitGhostGuard(TankController tank)
     {
         List<Vector2Int> poss = new List<Vector2Int>()
@@ -199,33 +305,35 @@ public class EntityManager : SingletonMono<EntityManager>
             new Vector2Int((MapManager.Instance.mapWidth) / 2, 1),
             new Vector2Int((MapManager.Instance.mapWidth - 1) / 2 - 1, 3),
             new Vector2Int((MapManager.Instance.mapWidth) / 2, 3),
-
         };
-        
-    
+
+
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
-        var ghostGuardLeft = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[0].x + 0.5f, poss[0].y + 0.5f), poss[0]);
+        var ghostGuardLeft = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[0].x + 0.5f, poss[0].y + 0.5f),
+            poss[0]);
         ghostGuardLeft.moveDirection = Direction.Left;
         ghostGuardLeft.GetComponent<SpriteRenderer>().color = transparentColor;
         ghostGuardLeft.transform.rotation = Quaternion.Euler(0, 0, 90);
 
-        var ghostGuardRight = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[1].x + 0.5f, poss[1].y + 0.5f), poss[1]);
+        var ghostGuardRight = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[1].x + 0.5f, poss[1].y + 0.5f),
+            poss[1]);
         ghostGuardRight.moveDirection = Direction.Right;
         ghostGuardRight.GetComponent<SpriteRenderer>().color = transparentColor;
         ghostGuardRight.transform.rotation = Quaternion.Euler(0, 0, -90);
 
-        var ghostGuardUp1 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[2].x + 0.5f, poss[2].y + 0.5f), poss[2]);
+        var ghostGuardUp1 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[2].x + 0.5f, poss[2].y + 0.5f),
+            poss[2]);
         ghostGuardUp1.moveDirection = Direction.Up;
         ghostGuardUp1.GetComponent<SpriteRenderer>().color = transparentColor;
 
-        var ghostGuardUp2 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[3].x + 0.5f, poss[3].y + 0.5f), poss[3]);
+        var ghostGuardUp2 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[3].x + 0.5f, poss[3].y + 0.5f),
+            poss[3]);
         ghostGuardUp2.moveDirection = Direction.Up;
         ghostGuardUp2.GetComponent<SpriteRenderer>().color = transparentColor;
-        
     }
-    
+
     public void InitLandmineMachine(TankController tank)
     {
         SpawnUIEntity(landmineMachinePrefab, tank);
@@ -260,14 +368,16 @@ public class EntityManager : SingletonMono<EntityManager>
     {
         SpawnUIEntity(disciplineControllerPrefab, tank);
     }
-    
+
     public void InitGhostGuardMachine(TankController tank)
     {
         SpawnUIEntity(ghostGuardMachinePrefab, tank);
     }
-    
+
     public void InitWarCarController(TankController tank)
     {
         SpawnUIEntity(warCarControllerPrefab, tank);
     }
+
+    #endregion
 }

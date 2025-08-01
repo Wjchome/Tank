@@ -170,22 +170,28 @@ public class TankController : MonoBehaviour
 
         if (threeShootFrame > 0 && NetworkManager.Instance.currentFrame >= threeShootFrame)
         {
-            BulletFactory.Instance.Initialize(threeDir, this, threePos, bulletDamageNum);
-            if (rearFire)
-            {
-                BulletFactory.Instance.Initialize(threeDir.Opposite(), this, threePos, bulletDamageNum);
-            }
+           
+                EntityManager.Instance.InitializeBullet(threeDir, this, threePos, bulletDamageNum);
+                if (rearFire)
+                {
+                    EntityManager.Instance.InitializeBullet(threeDir.Opposite(), this, threePos, bulletDamageNum);
+                }
+            
+            
 
             threeShootFrame = -1; // 重置
         }
 
         if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
         {
-            BulletFactory.Instance.Initialize(secondDir, this, secondPos, bulletDamageNum);
-            if (rearFire)
-            {
-                BulletFactory.Instance.Initialize(secondDir.Opposite(), this, secondPos, bulletDamageNum);
-            }
+           
+                EntityManager.Instance.InitializeBullet(secondDir, this, secondPos, bulletDamageNum);
+                if (rearFire)
+                {
+                    EntityManager.Instance.InitializeBullet(secondDir.Opposite(), this, secondPos, bulletDamageNum);
+                }
+            
+           
 
             secondShootFrame = -1; // 重置
         }
@@ -397,11 +403,14 @@ public class TankController : MonoBehaviour
 
     public void Shoot()
     {
-        BulletFactory.Instance.Initialize(tankDirection, this, Pos, bulletDamageNum);
-        if (rearFire)
-        {
-            BulletFactory.Instance.Initialize(tankDirection.Opposite(), this, Pos, bulletDamageNum);
-        }
+        
+            EntityManager.Instance.InitializeBullet(tankDirection, this, Pos, bulletDamageNum);
+            if (rearFire)
+            {
+                EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this, Pos, bulletDamageNum);
+            }
+        
+        
 
         if (isShootThree)
         {
@@ -419,6 +428,7 @@ public class TankController : MonoBehaviour
             secondPos = Pos;
         }
     }
+
 
     void CheckMovementState()
     {

@@ -6,11 +6,10 @@ using DG.Tweening;
 using UnityEngine.Serialization;
 using Random =UnityEngine.Random;
 
-public class BulletController : MonoBehaviour
+public class BulletController :MapEntity
 {
 
     public Direction direction;
-     public TankController ownerTank;
 
     public bool isPlayerBullet;
 
@@ -19,7 +18,7 @@ public class BulletController : MonoBehaviour
    public long lastMoveTimeFrame;
 
     public Vector2Int dir;
-    public Vector2Int Pos; // 子弹左下角坐标（2x2占地）
+
     
     // 坐标系统辅助方法
 
@@ -50,7 +49,7 @@ public class BulletController : MonoBehaviour
         return isPlayer==isPlayerBullet;
     }
     
-    public void UpdateFrame()
+    public override void UpdateFrame()
     {
         
         
@@ -75,12 +74,12 @@ public class BulletController : MonoBehaviour
                 }
                 else if (tank != null && !ShouldCollide(tank.identity))
                 {
-                    tank.DamageHP(damageNum, ownerTank);
+                    tank.DamageHP(damageNum, this.tank);
                     isShouldDestroy = true;
                 }
             }
 
-            foreach (var bullet in BulletFactory.Instance.activeBullets)
+            foreach (var bullet in EntityManager.Instance.activeBullets)
             {
                 if(bullet==this)continue;
                 if (bullet.Pos == Pos && bullet.isPlayerBullet != isPlayerBullet)
@@ -105,62 +104,37 @@ public class BulletController : MonoBehaviour
             }
             else
             {
-                if (dir == new Vector2Int(0, -1))
+                Vector2Int wallPos1, wallPos2;
+    
+                if (dir == new Vector2Int(0, -1)) // 向下
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y - 1) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x, Pos.y - 1) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x, Pos.y - 1, MapType.floor);
-                    }
-
-                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y - 1) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x+1, Pos.y - 1) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x+1, Pos.y - 1, MapType.floor);
-                    }
+                    wallPos1 = new Vector2Int(Pos.x, Pos.y - 1);
+                    wallPos2 = new Vector2Int(Pos.x + 1, Pos.y - 1);
                 }
-                else if (dir == new Vector2Int(0, 1))
+                else if (dir == new Vector2Int(0, 1)) // 向上
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x, Pos.y +2) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x, Pos.y+2) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x, Pos.y +2, MapType.floor);
-                    }
-
-                    if (MapManager.Instance.GetWallType(Pos.x+1, Pos.y +2) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x+1, Pos.y +2) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x+1, Pos.y +2, MapType.floor);
-                    }
+                    wallPos1 = new Vector2Int(Pos.x, Pos.y + 2);
+                    wallPos2 = new Vector2Int(Pos.x + 1, Pos.y + 2);
                 }
-                else if (dir == new Vector2Int(1, 0))
+                else if (dir == new Vector2Int(1, 0)) // 向右
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y ) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x+2, Pos.y ) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x+2, Pos.y , MapType.floor);
-                    }
-
-                    if (MapManager.Instance.GetWallType(Pos.x+2, Pos.y +1) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x+2, Pos.y +1) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x+2, Pos.y +1, MapType.floor);
-                    }
+                    wallPos1 = new Vector2Int(Pos.x + 2, Pos.y);
+                    wallPos2 = new Vector2Int(Pos.x + 2, Pos.y + 1);
                 }
-                else if (dir == new Vector2Int(-1, 0))
+                else if (dir == new Vector2Int(-1, 0)) // 向左
                 {
-                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y ) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x-1, Pos.y ) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x-1, Pos.y , MapType.floor);
-                    }
-
-                    if (MapManager.Instance.GetWallType(Pos.x-1, Pos.y +1) == MapType.breakableWall
-                        ||(ownerTank.isBreakWall&&MapManager.Instance.GetWallType(Pos.x-1, Pos.y + 1) == MapType.wall))
-                    {
-                        MapManager.Instance.SetWallType(Pos.x+-1, Pos.y +1, MapType.floor);
-                    }
+                    wallPos1 = new Vector2Int(Pos.x - 1, Pos.y);
+                    wallPos2 = new Vector2Int(Pos.x - 1, Pos.y + 1);
                 }
+                else
+                {
+                    return; // 无效方向
+                }
+    
+                // 破坏两个墙壁位置
+                BreakWallIfPossible(wallPos1);
+                BreakWallIfPossible(wallPos2);
+    
                 isShouldDestroy = true;
             }
             if (isShouldMove)
@@ -186,6 +160,17 @@ public class BulletController : MonoBehaviour
         }
         
     }
+    
+    protected virtual void BreakWallIfPossible(Vector2Int wallPos)
+    {
+        MapType wallType = MapManager.Instance.GetWallType(wallPos.x, wallPos.y);
+    
+        // 检查是否可以破坏墙壁
+        if (wallType == MapType.breakableWall||(tank.isBreakWall&&wallType == MapType.wall))
+        {
+            MapManager.Instance.SetWallType(wallPos.x, wallPos.y, MapType.floor);
+        }
+    }
 
     public void DestroyBullet()
     {
@@ -200,9 +185,9 @@ public class BulletController : MonoBehaviour
     }
     
     // 执行死亡后的逻辑
-    void ExecuteDeathLogic()
+    protected virtual void ExecuteDeathLogic()
     {
-            BulletFactory.Instance.BulletPool.ReturnObject(this);
+        EntityManager.Instance.BulletPool.ReturnObject(this);
         
     }
     

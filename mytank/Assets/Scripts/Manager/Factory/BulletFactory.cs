@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -40,7 +40,7 @@ public class BulletFactory : SingletonMono<BulletFactory>
     {
         BulletController bullet = BulletPool.GetObject();
         bullet.direction = direction;
-        bullet.ownerTank = tank;
+        bullet.tank = tank;
         if (tank.identity == Identity.Myself || tank.identity == Identity.OtherPlayer)
             bullet.isPlayerBullet = true;
         else
@@ -78,13 +78,5 @@ public class BulletFactory : SingletonMono<BulletFactory>
         bullet.damageNum = damageNum;
     }
 
-    public void ClearAllBullets()
-    {
-        // 创建副本，避免遍历时修改集合
-        var bullets = new List<BulletController>(activeBullets);
-        foreach (var bullet in bullets)
-        {
-            BulletPool.ReturnObject(bullet);
-        }
-    }
-}
+
+}*/
