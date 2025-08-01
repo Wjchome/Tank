@@ -90,6 +90,7 @@ public class TankFactory : SingletonMono<TankFactory>
         if (tankID == NetworkManager.Instance.playerID)
         {
             temp.identity = Identity.Myself;
+            NetworkManager.Instance.myTank = temp;
         }
         else
         {

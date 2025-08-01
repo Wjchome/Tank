@@ -516,7 +516,7 @@ public class TankController : MonoBehaviour
         playerPanelUI?.UpdateUI(); // 更新血量显示
         if (isSpecial && identity == Identity.Myself)
         {
-            FoodManager.Instance.ShowPanels(this);
+            FoodManager.Instance.chooseNum++;
         }
     }
 

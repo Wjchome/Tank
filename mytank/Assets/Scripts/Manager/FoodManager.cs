@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = System.Random;
 
 public enum FoodType
@@ -43,6 +45,7 @@ public class FoodManager : SingletonMono<FoodManager>
     public PlayerFoodUI playerFoodUIPrefab;
 
     public RectTransform panelParent;
+    public Button openOrCloseButton;
     public List<FoodUIPanel> panels;
     public Dictionary<FoodType, FoodData> foodDict = new Dictionary<FoodType, FoodData>();
 
@@ -53,6 +56,11 @@ public class FoodManager : SingletonMono<FoodManager>
 
     // 合成条件配置
     private Dictionary<FoodType, List<FoodType>> combinationRequirements = new Dictionary<FoodType, List<FoodType>>();
+
+
+    public int chooseNum = 0;
+
+    public bool isChooseOpen = false;
 
     private void Start()
     {
@@ -75,12 +83,43 @@ public class FoodManager : SingletonMono<FoodManager>
                 foodCombination.food3,
             };
         }
+
+
+        openOrCloseButton.onClick.AddListener(() =>
+        {
+            if (isOpenPanel)
+            {
+                ClosePanels();
+            }
+            else
+            {
+                ShowPanels();
+            }
+        });
     }
 
-    public void ShowPanels(TankController tank)
+    public void GameStart()
     {
-        panelParent.DOAnchorPos(new Vector2(0, 0), 0.5f);
+        chooseNum = 0;
+    }
 
+    public void UpdateFrame()
+    {
+        if (chooseNum > 0 && !isChooseOpen)
+        {
+            isChooseOpen = true;
+            ShowPanelAndFoods(NetworkManager.Instance.myTank);
+        }
+
+
+        openOrCloseButton.gameObject.SetActive(isChooseOpen);
+    }
+
+    private bool isOpenPanel = false;
+
+    private void ShowPanelAndFoods(TankController tank)
+    {
+        ShowPanels();
         // 1. 先移除所有监听器，防止重复绑定
         foreach (var panel in panels)
         {
@@ -110,7 +149,6 @@ public class FoodManager : SingletonMono<FoodManager>
         if (availableFoods.Count == 0)
         {
             ClosePanels();
-            
         }
 
         // 3. 随机选取不重复的食物
@@ -132,8 +170,8 @@ public class FoodManager : SingletonMono<FoodManager>
 
         var requirement = combinationRequirements[superFoodType];
 
-        // 检查是否已经拥有这个合成道具
-        if (tank.foodDict.ContainsKey(superFoodType))
+        // 检查是否已经拥有这个合成道具（且等级>0）
+        if (tank.foodDict.ContainsKey(superFoodType) && tank.foodDict[superFoodType] > 0)
             return false;
 
         // 检查是否满足合成条件（三个道具都满级）
@@ -142,13 +180,18 @@ public class FoodManager : SingletonMono<FoodManager>
                tank.foodDict.ContainsKey(requirement[2]) && tank.foodDict[requirement[2]] >= 3;
     }
 
-    public void ClosePanels()
+
+    void ShowPanels()
+    {
+        panelParent.DOAnchorPos(new Vector2(0, 0), 0.5f);
+        isOpenPanel = true;
+    }
+
+    void ClosePanels()
     {
         panelParent.DOAnchorPos(new Vector2(0, -800), 0.5f);
-        foreach (var panel in panels)
-        {
-            panel.chooseButton.onClick.RemoveAllListeners();
-        }
+        isOpenPanel = false;
+        
     }
 
     void SetupPanel(int index, FoodData food, TankController tank)
@@ -188,12 +231,16 @@ public class FoodManager : SingletonMono<FoodManager>
             // 1. 禁用所有按钮，防止多次点击
             foreach (var p in panels)
                 p.chooseButton.interactable = false;
+            chooseNum--;
+            isChooseOpen = false;
 
             // 2. 发送网络请求
             NetworkManager.Instance.FoodChooseRequest(food.foodType);
 
             // 3. 关闭面板
             ClosePanels();
+            
+          
         });
     }
 }

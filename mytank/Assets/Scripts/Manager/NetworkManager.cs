@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using Tankgame;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
@@ -31,6 +32,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     public string serverIP = "10.30.29.192";
     public int serverPort = 8080;
+
+    public TankController myTank;
     private void Start()
     {
         ConnectToServer();
@@ -103,6 +106,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             TankFactory.Instance.activeTanks.ToList().ForEach(a=>a.UpdateFrame());
             MapManager.Instance.UpdateFrame();//有关道具
             EnemyManager.Instance.UpdateFrame();//生成敌人
+            FoodManager.Instance.UpdateFrame();//选择道具
             PlayerManager.Instance.UpdateFrame();//复活队友
             EntityManager.Instance.UpdateFrame();//实体推进
         }
@@ -119,6 +123,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
             PlayerManager.Instance.  OnGameStart(message.GameStart.PlayerInfos.ToList());
             CamController.Instance.Change(MapManager.Instance.mapWidth/2);
            RoomManager.Instance. OnGameStartRoom();
+           FoodManager.Instance.GameStart();
+
         }
         else if (message.ConnectSuccess != null)
         {
