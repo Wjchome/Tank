@@ -27,11 +27,11 @@
         public Vector2 leftPos = Vector2.zero; 
         public Vector2 rightPos = Vector2.zero; 
         
-        public TankController tank;
+        public PlayerTankController tank;
         public string tankID;
         
         private Dictionary<FoodType, PlayerFoodUI> foodUIDict = new Dictionary<FoodType, PlayerFoodUI>();
-        public void Init(TankController tankController, int index)
+        public void Init(PlayerTankController tankController, int index)
         {
             tank=tankController;
             tankID=tank.tankID;
@@ -43,7 +43,7 @@
             button.onClick.AddListener(Change);
         }
 
-        public void Revival(TankController tankController)
+        public void Revival(PlayerTankController tankController)
         {
             tank=tankController;
             UpdateUI();

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class MapEntity : MonoBehaviour, IEntity
 {
-    public TankController tank;
+    public PlayerTankController tank;
     public Vector2Int Pos;
 
     public abstract void UpdateFrame();
 
-    public virtual void Init(TankController _tank, Vector2Int pos)
+    public virtual void Init(PlayerTankController _tank, Vector2Int pos)
     {
         tank = _tank;
         Pos = pos;

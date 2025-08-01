@@ -36,7 +36,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
-    void ApplyInputToTank(TankController tank, PlayerInput input)
+    void ApplyInputToTank(PlayerTankController tank, PlayerInput input)
     {
         if (tank == null) return;
         switch (input.InputType)
@@ -59,7 +59,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
         }
     }
 
-    public void ApplyFoodToTank(TankController tank, int foodId)
+    public void ApplyFoodToTank(PlayerTankController tank, int foodId)
     {
         FoodType foodType = (FoodType)foodId;
         int num = 0;
@@ -565,7 +565,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
         EnemyManager.Instance.activeEnemies.Clear();
        */
 
-        TankFactory.Instance.activeTanks.ForEach(a => a.Dead(null));
+        PlayerManager.Instance.activePlayers.ForEach(a => a.Dead());
+         EnemyManager.Instance.activeEnemies.ForEach(a => a.Dead(null));
         EntityManager.Instance.GameOver();
 
         MapManager.Instance.ClearMap();

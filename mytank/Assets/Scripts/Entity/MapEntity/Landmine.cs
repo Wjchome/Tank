@@ -34,7 +34,7 @@ public class Landmine : MapEntity
 
     public void Trigger()
     {
-        var tanks = MapManager.Instance.GetTankInArea(Pos.x - 1, Pos.y - 1, 3, 3);
+        var tanks = MapManager.Instance.GetEnemyTankInArea(Pos.x - 1, Pos.y - 1, 3, 3);
         foreach (var a in tanks)
         {
             a.DamageHP(damageNum, tank);

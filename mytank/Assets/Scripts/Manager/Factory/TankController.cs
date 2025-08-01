@@ -14,7 +14,7 @@ public enum Identity
     Enemy
 }
 
-public class TankController : MonoBehaviour
+public abstract class TankController : MonoBehaviour
 {
     public TankData currentData;
 
@@ -31,8 +31,7 @@ public class TankController : MonoBehaviour
 
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
-    //击杀数量
-    public int killNum = 0;
+   
 
     //一些计时器
     public long lastMoveFrame;
@@ -53,8 +52,7 @@ public class TankController : MonoBehaviour
     //死亡动画时间
     public float animTime = 0.5f;
 
-    //只有玩家有UI
-    public PlayerPanelUI playerPanelUI;
+    
 
     //是否死亡
     public bool isDead;
@@ -69,72 +67,18 @@ public class TankController : MonoBehaviour
 
     public int bulletDamageNum;
 
-
-    public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
-
-    public bool isBoat = false;
-    public long boatFrame = -1;
-    public GameObject boatShow;
-
-    public bool isInvincible = false;
-    public long invincibleFrame = -1;
-    public Vector3 scaleSize;
-
-
-    public bool isShootTwice = false;
-    public long shootTwiceFrame = -1;
-    public bool isShootThree = false;
-    public long secondShootFrame = -1;
-    public Direction secondDir;
-    public Vector2Int secondPos;
-    public long threeShootFrame = -1;
-    public Direction threeDir;
-    public Vector2Int threePos;
-    public GameObject shootTwiceShow;
-
-    public bool isBreakWall = false;
-    public long breakWallFrame = -1;
-    public GameObject breakWallShow;
-
-
-    public bool isEncourage = false;
-    public long encourageFrame = -1;
-    public GameObject encourageShow;
-
-    public bool rearFire = false;
-    public long rearFireFrame = -1;
-    public GameObject rearFireShow;
-
-    public bool isSpikeTrap = false;
-    public int spikeTrapDurationFrame = 0;
-
-    public GameObject shoeShow;
-
-    public Animator bombAnimator;
-
     public long deathDelayFrames;
 
-    public bool isSpeedKiller;
-
-    public bool isPenetrate;
     
 
 
-    public void UpdateFrame()
+    public virtual void UpdateFrame()
     {
-        HandleBuff();
+       
         CheckMovementState();
-        if (identity == Identity.Myself && !isDead)
-        {
-            HandleMovementInput();
-            HandleShootInput();
-        }
+      
 
-        if (identity == Identity.Enemy && !isDead &&
-            NetworkManager.Instance.currentFrame >= EnemyManager.Instance.pauseEndFrame)
-        {
-            AiControls();
-        }
+        
 
         if (isDead)
         {
@@ -146,199 +90,14 @@ public class TankController : MonoBehaviour
         }
     }
 
-    void HandleBuff()
-    {
-        if (isBoat)
-        {
-            if (NetworkManager.Instance.currentFrame >= boatFrame)
-            {
-                isBoat = false;
-                boatShow.SetActive(false);
-            }
-        }
-
-        if (isEncourage)
-        {
-            if (NetworkManager.Instance.currentFrame >= encourageFrame)
-            {
-                isEncourage = false;
-                encourageShow.SetActive(false);
-            }
-        }
-
-        if (isShootTwice)
-        {
-            if (NetworkManager.Instance.currentFrame >= shootTwiceFrame)
-            {
-                isShootTwice = false;
-                shootTwiceShow.SetActive(false);
-            }
-        }
-
-        if (threeShootFrame > 0 && NetworkManager.Instance.currentFrame >= threeShootFrame)
-        {
-            EntityManager.Instance.InitializeBullet(threeDir, this, threePos, bulletDamageNum);
-            if (rearFire)
-            {
-                EntityManager.Instance.InitializeBullet(threeDir.Opposite(), this, threePos, bulletDamageNum);
-            }
-
-            threeShootFrame = -1; // 重置
-        }
-
-        if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
-        {
-            EntityManager.Instance.InitializeBullet(secondDir, this, secondPos, bulletDamageNum);
-            if (rearFire)
-            {
-                EntityManager.Instance.InitializeBullet(secondDir.Opposite(), this, secondPos, bulletDamageNum);
-            }
-
-            secondShootFrame = -1; // 重置
-        }
-
-        if (rearFire)
-        {
-            if (NetworkManager.Instance.currentFrame >= rearFireFrame)
-            {
-                rearFire = false;
-                rearFireShow.SetActive(false);
-            }
-        }
-
-        if (isBreakWall)
-        {
-            if (NetworkManager.Instance.currentFrame >= breakWallFrame)
-            {
-                isBreakWall = false;
-                breakWallShow.SetActive(false);
-            }
-        }
-
-        if (isInvincible)
-        {
-            if (NetworkManager.Instance.currentFrame >= invincibleFrame)
-            {
-                transform.localScale = scaleSize;
-                isInvincible = false;
-            }
-        }
-    }
 
 
-    int CurrentMoveIntervalFrame()
-    {
-        if (isSpeedKiller)
-        {
-            return (int)(currentData.moveIntervalFrame * 0.25f);
-        }
 
-        if (isEncourage)
-        {
-            return (int)(currentData.moveIntervalFrame * 0.5f);
-        }
 
-        return currentData.moveIntervalFrame;
-    }
 
-    int CurrentShootIntervalFrame()
-    {
-        if (isSpeedKiller)
-        {
-            return (int)(currentData.shootIntervalFrame * 0.25f);
-        }
+    protected abstract void MoveTo(Vector2Int targetPos);
 
-        if (isEncourage)
-        {
-            return (int)(currentData.shootIntervalFrame * 0.5f);
-        }
-        else
-        {
-            return currentData.shootIntervalFrame;
-        }
-    }
-
-    void HandleMovementInput()
-    {
-        if (NetworkManager.Instance.currentFrame - lastMoveFrame > CurrentMoveIntervalFrame())
-        {
-            if (Input.GetKey(KeyCode.W))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-        }
-    }
-
-    void HandleShootInput()
-    {
-        if (NetworkManager.Instance.currentFrame - lastShootFrame > CurrentShootIntervalFrame())
-        {
-            if (Input.GetKey(KeyCode.Space))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
-                lastShootFrame = NetworkManager.Instance.currentFrame;
-            }
-        }
-    }
-
-    void MoveTo(Vector2Int targetPos)
-    {
-        if (isSpikeTrap)
-        {
-            if (targetPos.x == Pos.x && targetPos.y == Pos.y + 1)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
-            }
-            else if (targetPos.x == Pos.x && targetPos.y == Pos.y - 1)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
-            }
-            else if (targetPos.x == Pos.x + 1 && targetPos.y == Pos.y)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
-            }
-            else if (targetPos.x == Pos.x - 1 && targetPos.y == Pos.y)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
-            }
-        }
-
-        Pos = targetPos;
-
-        // 计算坦克中心位置
-        Vector2 centerPos = GetCenter();
-
-        isMoving = true;
-        animator.Play("Tank" + animType);
-        lastAnimStartFrame = NetworkManager.Instance.currentFrame;
-        transform.DOMove(centerPos, currentData.moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
-    }
-
-    bool isCanMoveTo(Vector2Int targetPos)
-    {
-        return (isBoat && MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2, tankID))
-               || MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID);
-    }
+    protected abstract bool IsCanMoveTo(Vector2Int targetPos);
 
     // 帧同步推进调用
     public bool MoveBy(Direction direction)
@@ -371,14 +130,14 @@ public class TankController : MonoBehaviour
         if (underice)
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
-            if (isCanMoveTo(targetPos))
+            if (IsCanMoveTo(targetPos))
             {
                 MoveTo(targetPos);
                 canMove = true;
             }
 
             targetPos = Pos + new Vector2Int(dx, dy);
-            if (isCanMoveTo(targetPos))
+            if (IsCanMoveTo(targetPos))
             {
                 MoveTo(targetPos);
                 canMove = true;
@@ -388,7 +147,7 @@ public class TankController : MonoBehaviour
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
 
-            if (isCanMoveTo(targetPos))
+            if (IsCanMoveTo(targetPos))
             {
                 MoveTo(targetPos);
                 canMove = true;
@@ -410,30 +169,8 @@ public class TankController : MonoBehaviour
         return canMove;
     }
 
-    public void Shoot()
-    {
-        EntityManager.Instance.InitializeBullet(tankDirection, this, Pos, bulletDamageNum);
-        if (rearFire)
-        {
-            EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this, Pos, bulletDamageNum);
-        }
-
-        if (isShootThree)
-        {
-            int intervalFrame = 8;
-            threeShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
-            threeDir = tankDirection;
-            threePos = Pos;
-        }
-
-        if (isShootTwice)
-        {
-            int intervalFrame = 4;
-            secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
-            secondDir = tankDirection;
-            secondPos = Pos;
-        }
-    }
+    public abstract void Shoot();
+    
 
 
     void CheckMovementState()
@@ -453,118 +190,15 @@ public class TankController : MonoBehaviour
         }
     }
 
-    public void AddOrignalHP(int num)
-    {
-        bombAnimator.Play("Heal", 0, 0);
-        currentData.orignalHP += num;
-        playerPanelUI?.UpdateUI(); // 更新血量显示
-    }
+    public abstract void AddOrignalHP(int num);
 
-    public void AddHP(int num)
-    {
-        bombAnimator.Play("Heal", 0, 0);
-        currentData.HP = Math.Min(currentData.HP + num, currentData.orignalHP);
-        playerPanelUI?.UpdateUI(); // 更新血量显示
-    }
-
-    public void DamageHP(int damage, TankController attacker)
-    {
-        if (invincibleFrame >= NetworkManager.Instance.currentFrame) return;
+    public abstract void AddHP(int num);
 
 
-        currentData.HP -= damage;
-        playerPanelUI?.UpdateUI(); // 更新血量显示
 
-        if (currentData.HP <= 0)
-        {
-            Dead(attacker);
-        }
-    }
-
-    public void Dead(TankController attacker)
-    {
-        if (isDead) return;
-        isDead = true;
-
-        animator.Play("BigBoom");
-
-        deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
+    protected abstract void ExecuteDeathLogic();
 
 
-        if (attacker != null)
-        {
-            if (attacker.isSpeedKiller)
-            {
-                EntityManager.Instance.InitSpikeTrap(attacker, Pos, int.MaxValue);
-                EntityManager.Instance.InitSpikeTrap(attacker, PosRight, int.MaxValue);
-                EntityManager.Instance.InitSpikeTrap(attacker, PosUp, int.MaxValue);
-                EntityManager.Instance.InitSpikeTrap(attacker, PosUpRight, int.MaxValue);
-                Debug.LogWarning(Pos);
-            }
-
-            attacker.Kill(GetComponent<Special>() != null);
-        }
-        Pos = new Vector2Int(-2, -2);
-        
-    }
-
-    private void ExecuteDeathLogic()
-    {
-        // 如果是敌人，通知EnemyManager
-        if (identity == Identity.Enemy)
-        {
-            EnemyManager.Instance.RemoveEnemy(this);
-            TankFactory.Instance.TankPool.ReturnObject(this);
-        }
-        else
-        {
-            PlayerManager.Instance.RemovePlayer(this);
-            transform.position = new Vector2(-100, 0);
-            if (NetworkManager.Instance.isGameing == false)
-            {
-                TankFactory.Instance.TankPool.ReturnObject(this);
-            }
-        }
 
 
-        deathDelayFrames = 0;
-    }
-
-    public void Kill(bool isSpecial)
-    {
-        killNum++;
-        playerPanelUI?.UpdateUI(); // 更新血量显示
-        if (isSpecial && identity == Identity.Myself)
-        {
-            FoodManager.Instance.chooseNum++;
-        }
-    }
-
-
-    void AiControls()
-    {
-        if (NetworkManager.Instance.currentFrame - lastMoveFrame > currentData.moveIntervalFrame)
-        {
-            if (!MoveBy(tankDirection))
-            {
-                int a = random.Next(0, 4);
-
-                tankDirection = (Direction)a;
-
-                // 使用帧时间更新
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else
-            {
-                // 移动成功
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-        }
-
-        if (NetworkManager.Instance.currentFrame - lastShootFrame > currentData.shootIntervalFrame)
-        {
-            Shoot();
-            lastShootFrame = NetworkManager.Instance.currentFrame;
-        }
-    }
 }

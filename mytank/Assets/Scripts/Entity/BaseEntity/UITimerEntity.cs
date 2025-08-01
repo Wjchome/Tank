@@ -7,7 +7,7 @@ using UnityEngine.UI;
 // UI倒计时实体基类
 public abstract class UITimerEntity : MonoBehaviour, IEntity
 {
-    public TankController tank;
+    public PlayerTankController tank;
     public Image timerImage;
     public int genateIntervalFrame;
     public long lastTriggerFrame;
@@ -46,7 +46,7 @@ public abstract class UITimerEntity : MonoBehaviour, IEntity
         }
     }
 
-    public virtual void Init(TankController _tank)
+    public virtual void Init(PlayerTankController _tank)
     {
         tank = _tank;
         lastTriggerFrame = -genateIntervalFrame;

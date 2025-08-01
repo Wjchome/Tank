@@ -8,6 +8,7 @@ using Random =UnityEngine.Random;
 
 public class BulletController :MapEntity
 {
+    public new TankController tank;
 
     public Direction direction;
 
@@ -76,7 +77,15 @@ public class BulletController :MapEntity
                 }
                 else if (tank != null && !ShouldCollide(tank.identity))
                 {
-                    tank.DamageHP(damageNum, this.tank);
+                    if (tank is EnemyTankController enemy)
+                    {
+                        enemy.DamageHP(damageNum, this.tank as PlayerTankController);
+                        
+                    }
+                    else if(tank is PlayerTankController player)
+                    {
+                        player.DamageHP(damageNum);
+                    }
                     
                     // 穿透逻辑：减少穿透次数而不是直接销毁
                     penetrationCount--;

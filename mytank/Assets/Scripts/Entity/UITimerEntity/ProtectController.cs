@@ -16,13 +16,13 @@
             Pos = tank.Pos;
             List<Vector2Int> vets = FindAll();
 
-            List<TankController> tanks 
+            List<EnemyTankController> tanks 
                 = EnemyManager.Instance.activeEnemies.FindAll(
                     a => vets.Contains(a.Pos)||vets.Contains(a.PosUp)||
                          vets.Contains(a.PosUpRight)||vets.Contains(a.PosRight));
             
             HashSet<TankController> tanksSet=new HashSet<TankController>(tanks);
-            foreach (TankController a in tanksSet.ToList())
+            foreach (EnemyTankController a in tanksSet.ToList())
             {
                 a.DamageHP(damageNum, tank);
             }

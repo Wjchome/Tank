@@ -33,7 +33,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     public string serverIP = "10.30.29.192";
     public int serverPort = 8080;
 
-    public TankController myTank;
+    public PlayerTankController myTank;
     private void Start()
     {
         ConnectToServer();
@@ -102,8 +102,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
             currentFrame = message.FrameMessage.FrameNumber;
             GameStateManager.Instance. OnFrameInputs(message.FrameMessage.Inputs.ToList());
             GameStateManager.Instance. OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
-            //BulletFactory.Instance.activeBullets.ToList().ForEach(a=>a.UpdateFrame());
-            TankFactory.Instance.activeTanks.ToList().ForEach(a=>a.UpdateFrame());
             MapManager.Instance.UpdateFrame();//有关道具
             EnemyManager.Instance.UpdateFrame();//生成敌人
             FoodManager.Instance.UpdateFrame();//选择道具

@@ -117,7 +117,7 @@ public class FoodManager : SingletonMono<FoodManager>
 
     private bool isOpenPanel = false;
 
-    private void ShowPanelAndFoods(TankController tank)
+    private void ShowPanelAndFoods(PlayerTankController tank)
     {
         ShowPanels();
         // 1. 先移除所有监听器，防止重复绑定
@@ -163,7 +163,7 @@ public class FoodManager : SingletonMono<FoodManager>
         }
     }
 
-    private bool IsSuperFoodUnlocked(TankController tank, FoodType superFoodType)
+    private bool IsSuperFoodUnlocked(PlayerTankController tank, FoodType superFoodType)
     {
         if (!combinationRequirements.ContainsKey(superFoodType))
             return false;
@@ -194,7 +194,7 @@ public class FoodManager : SingletonMono<FoodManager>
         
     }
 
-    void SetupPanel(int index, FoodData food, TankController tank)
+    void SetupPanel(int index, FoodData food, PlayerTankController tank)
     {
         int num = 0;
 

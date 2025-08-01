@@ -262,7 +262,16 @@ public enum MapType
                         return false;
                     
                     // 检查坦克碰撞
-                    foreach (var tank in TankFactory.Instance.activeTanks)
+                    foreach (var tank in PlayerManager.Instance.activePlayers)
+                    {
+                        if(tank.tankID==selfID)continue;
+                        if (IsRectOverlap(startX, startY, width, height, 
+                                tank.Pos.x, tank.Pos.y, 2, 2))
+                        {
+                            return false;
+                        }
+                    }
+                    foreach (var tank in EnemyManager.Instance.activeEnemies)
                     {
                         if(tank.tankID==selfID)continue;
                         if (IsRectOverlap(startX, startY, width, height, 
@@ -295,11 +304,21 @@ public enum MapType
                         return false;
                     
                     // 检查坦克碰撞
-                    foreach (var tank in TankFactory.Instance.activeTanks)
+                    foreach (var tank in PlayerManager.Instance.activePlayers)
                     {
                         if(tank.tankID==selfID)continue;
                         if (IsRectOverlap(startX, startY, width, height, 
                                         tank.Pos.x, tank.Pos.y, 2, 2))
+                        {
+                            return false;
+                        }
+                    }
+                    // 检查坦克碰撞
+                    foreach (var tank in EnemyManager.Instance.activeEnemies)
+                    {
+                        if(tank.tankID==selfID)continue;
+                        if (IsRectOverlap(startX, startY, width, height, 
+                                tank.Pos.x, tank.Pos.y, 2, 2))
                         {
                             return false;
                         }
@@ -370,7 +389,14 @@ public enum MapType
         {
             List<Vector2Int> res=new List<Vector2Int>();
             
-            foreach (var tank in TankFactory.Instance.activeTanks)
+            foreach (var tank in EnemyManager.Instance.activeEnemies)
+            {
+                res.Add(tank.Pos);
+                res.Add(tank.Pos+new Vector2Int(1,0));
+                res.Add(tank.Pos+new Vector2Int(1,1));
+                res.Add(tank.Pos+new Vector2Int(0,1));
+            }
+            foreach (var tank in PlayerManager.Instance.activePlayers)
             {
                 res.Add(tank.Pos);
                 res.Add(tank.Pos+new Vector2Int(1,0));
@@ -417,11 +443,20 @@ public enum MapType
         public List<TankController> GetTankInArea(int startX, int startY, int width, int height)
         {
             List<TankController> tanks = new List<TankController>();
-            foreach (var tank in TankFactory.Instance.activeTanks)
+            foreach (var tank in PlayerManager.Instance.activePlayers)
             {
               
                 if (IsRectOverlap(startX, startY, width, height, 
                                 tank.Pos.x, tank.Pos.y, 2, 2))
+                {
+                    tanks.Add(tank);
+                }
+            }
+            foreach (var tank in EnemyManager.Instance.activeEnemies)
+            {
+              
+                if (IsRectOverlap(startX, startY, width, height, 
+                        tank.Pos.x, tank.Pos.y, 2, 2))
                 {
                     tanks.Add(tank);
                 }
@@ -443,9 +478,9 @@ public enum MapType
             return tanks;
         }
         
-        public List<TankController> GetEnemyTankInArea(int startX, int startY, int width, int height)
+        public List<EnemyTankController> GetEnemyTankInArea(int startX, int startY, int width, int height)
         {
-            List<TankController> tanks = new List<TankController>();
+            List<EnemyTankController> tanks = new List<EnemyTankController>();
             foreach (var tank in EnemyManager.Instance.activeEnemies)
             {
               

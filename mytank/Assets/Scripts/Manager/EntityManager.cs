@@ -7,16 +7,14 @@ public class EntityManager : SingletonMono<EntityManager>
 {
     public Transform content;
 
-    [Header("Bullet Prefabs")] 
-    public BulletController bulletPrefab;
+    [Header("Bullet Prefabs")] public BulletController bulletPrefab;
 
-    [Header("Map Entity Prefabs")] 
-    public AutoTurret autoTurretPrefab;
+    [Header("Map Entity Prefabs")] public AutoTurret autoTurretPrefab;
     public Landmine landminePrefab;
     public HealingGarden healingGardenPrefab;
     public SpikeTrap spikeTrapPrefab;
     public GhostGuard ghostGuardPrefab;
-    public AlmightyTurret  almightyTurretPrefab;
+    public AlmightyTurret almightyTurretPrefab;
 
 
     [Header("UI Timer Entity Prefabs")] public LandmineMachine landmineMachinePrefab;
@@ -29,7 +27,9 @@ public class EntityManager : SingletonMono<EntityManager>
     public GhostGuardMachine ghostGuardMachinePrefab;
     public WarCarController warCarControllerPrefab;
     public AlmightyTurretMachine almightyTurretMachinePrefab;
+
     public TimeStormController timeStormControllerPrefab;
+
     // 分类管理
     private List<MapEntity> mapEntities = new List<MapEntity>();
     private List<UITimerEntity> uiEntities = new List<UITimerEntity>();
@@ -37,6 +37,7 @@ public class EntityManager : SingletonMono<EntityManager>
     // 子弹对象池
     public ObjectPool<BulletController> BulletPool { get; private set; }
     public List<BulletController> activeBullets = new List<BulletController>();
+
     private void Awake()
     {
         InitializeBulletPool();
@@ -49,7 +50,7 @@ public class EntityManager : SingletonMono<EntityManager>
             onSpawn: CreateBullet,
             onDespawn: KillBullet
         );
-        
+
 
         activeBullets = new List<BulletController>();
     }
@@ -101,13 +102,11 @@ public class EntityManager : SingletonMono<EntityManager>
         // 更新子弹
         foreach (var bullet in activeBullets.ToList())
         {
-            if (bullet != null )
+            if (bullet != null)
             {
                 bullet.UpdateFrame();
             }
-         
         }
- 
     }
 
     public void AddMapEntity(MapEntity entity)
@@ -133,12 +132,9 @@ public class EntityManager : SingletonMono<EntityManager>
         {
             if (bullet != null)
             {
-              
-                    BulletPool.ReturnObject(bullet);
-                
+                BulletPool.ReturnObject(bullet);
             }
         }
-   
     }
 
     public void AddUIEntity(UITimerEntity entity)
@@ -171,20 +167,21 @@ public class EntityManager : SingletonMono<EntityManager>
 
         return null;
     }
-    public List<T>  FindUIEntities<T>(TankController tank) where T : UITimerEntity
+
+    public List<T> FindUIEntities<T>(TankController tank) where T : UITimerEntity
     {
         List<T> list = new List<T>();
         foreach (var entity in uiEntities)
         {
             if (entity is T targetEntity && targetEntity.tank == tank)
             {
-                list.Add( targetEntity);
+                list.Add(targetEntity);
             }
         }
 
         return list;
     }
-    
+
 
     // 查找特定类型的地图实体
     public T FindFirstOrDefaultMapEntity<T>(TankController tank) where T : MapEntity
@@ -199,6 +196,7 @@ public class EntityManager : SingletonMono<EntityManager>
 
         return null;
     }
+
     public List<T> FindMapEntities<T>(TankController tank) where T : MapEntity
     {
         List<T> list = new List<T>();
@@ -214,7 +212,7 @@ public class EntityManager : SingletonMono<EntityManager>
     }
 
     // 生成方法
-    private T SpawnMapEntity<T>(T prefab, TankController tank, Vector2 position, Vector2Int pos) where T : MapEntity
+    private T SpawnMapEntity<T>(T prefab, PlayerTankController tank, Vector2 position, Vector2Int pos) where T : MapEntity
     {
         T entity = Instantiate(prefab, new Vector2(position.x, position.y), Quaternion.identity);
         entity.Init(tank, pos);
@@ -222,7 +220,7 @@ public class EntityManager : SingletonMono<EntityManager>
         return entity;
     }
 
-    private T SpawnUIEntity<T>(T prefab, TankController tank) where T : UITimerEntity
+    private T SpawnUIEntity<T>(T prefab, PlayerTankController tank) where T : UITimerEntity
     {
         T entity = Instantiate(prefab, content);
         entity.Init(tank);
@@ -272,23 +270,26 @@ public class EntityManager : SingletonMono<EntityManager>
         bullet.Pos = pos;
         bullet.transform.position = bullet.GetCenter();
         bullet.damageNum = damageNum;
-       
-        if (tank.isPenetrate)
+
+        if (tank is PlayerTankController playerTank)
         {
-            bullet.penetrationCount = 3;
+            if (playerTank.isPenetrate)
+            {
+                bullet.penetrationCount = 3;
+            }
         }
         else
         {
             bullet.penetrationCount = 1;
         }
-        
+
         // 调用基类的Init方法
-        bullet.Init(tank, pos);
+       // bullet.Init(tank, pos);
     }
 
-   
+
     // 兼容性方法 - 保持原有接口
-    public void InitAutoTurrent(TankController tank)
+    public void InitAutoTurrent(PlayerTankController tank)
     {
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
@@ -312,7 +313,7 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnMapEntity(autoTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
     }
 
-    public void InitLandmine(TankController tank)
+    public void InitLandmine(PlayerTankController tank)
     {
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
@@ -321,7 +322,7 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnMapEntity(landminePrefab, tank, new Vector2(pos.x, pos.y), pos);
     }
 
-    public void InitHealingGarden(TankController tank)
+    public void InitHealingGarden(PlayerTankController tank)
     {
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
@@ -329,13 +330,13 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnMapEntity(healingGardenPrefab, tank, new Vector2(pos.x, pos.y), pos);
     }
 
-    public void InitSpikeTrap(TankController tank, Vector2Int pos, int durationFrame)
+    public void InitSpikeTrap(PlayerTankController tank, Vector2Int pos, int durationFrame)
     {
         var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, new Vector2(pos.x, pos.y), pos);
         spikeTrap.durationFrame = durationFrame;
     }
 
-    public void InitGhostGuard(TankController tank)
+    public void InitGhostGuard(PlayerTankController tank)
     {
         List<Vector2Int> poss = new List<Vector2Int>()
         {
@@ -372,9 +373,8 @@ public class EntityManager : SingletonMono<EntityManager>
         ghostGuardUp2.GetComponent<SpriteRenderer>().color = transparentColor;
     }
 
-    public void InitAlmightyTurret(TankController tank)
+    public void InitAlmightyTurret(PlayerTankController tank)
     {
-        
         var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
             .Except(MapManager.Instance.GetAllTankPos()).ToList();
         var homePos = new List<int>()
@@ -395,10 +395,10 @@ public class EntityManager : SingletonMono<EntityManager>
         var pos = spawnPos[tank.random.Next(spawnPos.Count)];
 
         SpawnMapEntity(almightyTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
-
     }
-    public void InitAlmightyTurret(TankController tank,Vector2Int pos)
-    { 
+
+    public void InitAlmightyTurret(PlayerTankController tank, Vector2Int pos)
+    {
         var homePos = new List<int>()
         {
             (MapManager.Instance.mapWidth - 1) / 2 - 1,
@@ -412,61 +412,62 @@ public class EntityManager : SingletonMono<EntityManager>
         }
 
         SpawnMapEntity(almightyTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
-
     }
-    
-    public void InitAlmightyTurretMachine(TankController tank)
+
+    public void InitAlmightyTurretMachine(PlayerTankController tank)
     {
         SpawnUIEntity(almightyTurretMachinePrefab, tank);
     }
-    public void InitLandmineMachine(TankController tank)
+
+    public void InitLandmineMachine(PlayerTankController tank)
     {
         SpawnUIEntity(landmineMachinePrefab, tank);
     }
 
-    public void InitBombController(TankController tank)
+    public void InitBombController(PlayerTankController tank)
     {
         SpawnUIEntity(bombControllerPrefab, tank);
     }
 
-    public void InitPocketWatchController(TankController tank)
+    public void InitPocketWatchController(PlayerTankController tank)
     {
         SpawnUIEntity(pocketWatchControllerPrefab, tank);
     }
 
-    public void InitShovelController(TankController tank)
+    public void InitShovelController(PlayerTankController tank)
     {
         SpawnUIEntity(shovelControllerPrefab, tank);
     }
 
-    public void InitSteelHelmetController(TankController tank)
+    public void InitSteelHelmetController(PlayerTankController tank)
     {
         SpawnUIEntity(steelHelmetControllerPrefab, tank);
     }
 
-    public void InitProtectController(TankController tank)
+    public void InitProtectController(PlayerTankController tank)
     {
         SpawnUIEntity(protectControllerPrefab, tank);
     }
 
-    public void InitDisciplineController(TankController tank)
+    public void InitDisciplineController(PlayerTankController tank)
     {
         SpawnUIEntity(disciplineControllerPrefab, tank);
     }
 
-    public void InitGhostGuardMachine(TankController tank)
+    public void InitGhostGuardMachine(PlayerTankController tank)
     {
         SpawnUIEntity(ghostGuardMachinePrefab, tank);
     }
 
-    public void InitWarCarController(TankController tank)
+    public void InitWarCarController(PlayerTankController tank)
     {
         SpawnUIEntity(warCarControllerPrefab, tank);
     }
 
-    public void InitTimeStormController(TankController tank)
+    public void InitTimeStormController(PlayerTankController tank)
     {
         SpawnUIEntity(timeStormControllerPrefab, tank);
     }
+
     #endregion
 }
