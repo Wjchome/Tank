@@ -97,7 +97,7 @@ AutoTurrent Landmine HealingGarden
 
 Encouage Shoe SpikeTrap
 => 原效果不变
-=> 移速和射击速度更快，击杀敌人可以在敌人死亡的3*3生成地刺
+=> 移速和射击速度更快，击杀敌人可以在敌人死亡的2*2生成永久地刺
 
 SteelHelmet WarCar Protect
 => 原效果不变

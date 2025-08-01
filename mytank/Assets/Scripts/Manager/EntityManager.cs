@@ -29,6 +29,7 @@ public class EntityManager : SingletonMono<EntityManager>
     public GhostGuardMachine ghostGuardMachinePrefab;
     public WarCarController warCarControllerPrefab;
     public AlmightyTurretMachine almightyTurretMachinePrefab;
+    public TimeStormController timeStormControllerPrefab;
     // 分类管理
     private List<MapEntity> mapEntities = new List<MapEntity>();
     private List<UITimerEntity> uiEntities = new List<UITimerEntity>();
@@ -271,6 +272,15 @@ public class EntityManager : SingletonMono<EntityManager>
         bullet.Pos = pos;
         bullet.transform.position = bullet.GetCenter();
         bullet.damageNum = damageNum;
+       
+        if (tank.isPenetrate)
+        {
+            bullet.penetrationCount = 3;
+        }
+        else
+        {
+            bullet.penetrationCount = 1;
+        }
         
         // 调用基类的Init方法
         bullet.Init(tank, pos);
@@ -454,6 +464,9 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnUIEntity(warCarControllerPrefab, tank);
     }
 
-    
+    public void InitTimeStormController(TankController tank)
+    {
+        SpawnUIEntity(timeStormControllerPrefab, tank);
+    }
     #endregion
 }

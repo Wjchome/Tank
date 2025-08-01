@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 706775638412418028}
   - component: {fileID: 2623925226714571180}
-  - component: {fileID: 3859500663799134593}
   - component: {fileID: 3262350270203837890}
   - component: {fileID: -2617099068761851106}
+  - component: {fileID: 4687413944728002130}
   m_Layer: 0
-  m_Name: BombController
+  m_Name: TimeStormController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,34 +59,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5993bce3879d84332bde166cdd9b74f3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: aaed792cdbe901b43bdd4ea9b4ddf883, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 0.657
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3859500663799134593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 900368424308827066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 554cd19c003440d7be95e5a236629ab8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tank: {fileID: 0}
-  timerImage: {fileID: 2623925226714571180}
-  genateIntervalFrame: 2400
-  lastTriggerFrame: 0
-  eventTrigger: {fileID: -2617099068761851106}
-  damageNum: 10
 --- !u!222 &3262350270203837890
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -108,3 +90,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+--- !u!114 &4687413944728002130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900368424308827066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98f7ecfcb224ddc9c32a84127ee2fa7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tank: {fileID: 0}
+  timerImage: {fileID: 2623925226714571180}
+  genateIntervalFrame: 1200
+  lastTriggerFrame: 0
+  eventTrigger: {fileID: -2617099068761851106}
+  stopTimerNum: 6
+  damageNum: 12

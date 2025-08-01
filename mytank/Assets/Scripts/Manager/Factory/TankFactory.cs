@@ -129,17 +129,19 @@ public class TankFactory : SingletonMono<TankFactory>
             case 1:
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Shoe);
                 
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.AutoTurret);
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.AutoTurret);
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.AutoTurret);
 
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.HealingGarden);
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.HealingGarden);
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.HealingGarden);
+                
 
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Landmine);
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Landmine);
-                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Landmine);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Discipline);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Discipline);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Discipline);
+
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.PocketWatch);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.PocketWatch);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.PocketWatch);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Bomb);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Bomb);
+                GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Bomb);
                 
                 break;
             case 2:

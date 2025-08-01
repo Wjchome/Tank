@@ -504,6 +504,45 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
 
                 break;
+            case FoodType.SpeedKiller:
+                tank.isSpeedKiller = true;
+                break;
+            case FoodType.LifeEnhancement:
+                WarCarController a=EntityManager.Instance.FindFirstOrDefaultUIEntity<WarCarController>(tank);
+                a.islimited = false;
+                break;
+            case FoodType.TimeStorm:
+                // 移除所有相关控制器
+                var bombControllers = EntityManager.Instance.FindUIEntities<BombController>(tank);
+                var disciplineControllers = EntityManager.Instance.FindUIEntities<DisciplineController>(tank);
+                var pocketWatchControllers = EntityManager.Instance.FindUIEntities<PocketWatchController>(tank);
+    
+                // 销毁所有控制器
+                foreach (var controller in bombControllers)
+                {
+                    controller.Destroy();
+                }
+    
+                foreach (var controller in disciplineControllers)
+                {
+                    controller.Destroy();
+                }
+    
+                foreach (var controller in pocketWatchControllers)
+                {
+                    controller.Destroy();
+                }
+    
+                // 生成新的TimeController
+                EntityManager.Instance.InitTimeStormController(tank);
+                break;
+                
+            case FoodType.PenetratingBullet:
+                
+                    tank.isPenetrate = true;
+                
+                break;
+    
         }
     }
 

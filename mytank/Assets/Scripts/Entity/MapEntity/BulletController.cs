@@ -31,6 +31,8 @@ public class BulletController :MapEntity
     public float animTime = 0.3f;
 
     public int damageNum;
+
+    public int penetrationCount;
     
     public bool isDead = false;
     public long deathDelayFrames;
@@ -75,7 +77,13 @@ public class BulletController :MapEntity
                 else if (tank != null && !ShouldCollide(tank.identity))
                 {
                     tank.DamageHP(damageNum, this.tank);
-                    isShouldDestroy = true;
+                    
+                    // 穿透逻辑：减少穿透次数而不是直接销毁
+                    penetrationCount--;
+                    if (penetrationCount <= 0)
+                    {
+                        isShouldDestroy = true;
+                    }
                 }
             }
 
@@ -84,8 +92,20 @@ public class BulletController :MapEntity
                 if(bullet==this)continue;
                 if (bullet.Pos == Pos && bullet.isPlayerBullet != isPlayerBullet)
                 {
-                    isShouldDestroy=true;
-                    bullet.isShouldDestroy = true;
+                    // 穿透逻辑：减少穿透次数而不是直接销毁
+                    penetrationCount--;
+                    if (penetrationCount <= 0)
+                    {
+                        isShouldDestroy = true;
+                    }
+                    
+                    // 对方子弹也减少穿透次数
+                    bullet.penetrationCount--;
+                    if (bullet.penetrationCount <= 0)
+                    {
+                        bullet.isShouldDestroy = true;
+                    }
+                    
                     bullet.DestroyBullet();
                     break;
                 }

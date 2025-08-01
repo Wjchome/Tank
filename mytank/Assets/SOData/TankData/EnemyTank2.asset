@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: EnemyTank2
   m_EditorClassIdentifier: 
   moveIntervalFrame: 16
-  shootIntervalFrame: 86
+  shootIntervalFrame: 129
   HP: 20
   orignalHP: 20

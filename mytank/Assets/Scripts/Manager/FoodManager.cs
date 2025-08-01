@@ -34,7 +34,7 @@ public enum FoodType
     AlmightyTurret, // 全能炮台
     SpeedKiller, // 疾速杀手
     LifeEnhancement, // 生命强化
-    TimeController, // 时间控制器
+    TimeStorm, // 时间风暴
     PenetratingBullet, // 穿透子弹
     SuperDefense // 超级守卫
 }

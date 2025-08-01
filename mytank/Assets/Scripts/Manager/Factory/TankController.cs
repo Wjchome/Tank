@@ -113,6 +113,13 @@ public class TankController : MonoBehaviour
     public Animator bombAnimator;
 
     public long deathDelayFrames;
+
+    public bool isSpeedKiller;
+
+    public bool isPenetrate;
+    
+
+
     public void UpdateFrame()
     {
         HandleBuff();
@@ -128,10 +135,10 @@ public class TankController : MonoBehaviour
         {
             AiControls();
         }
-        if (isDead )
+
+        if (isDead)
         {
-           
-            if (NetworkManager.Instance.currentFrame  >= deathDelayFrames)
+            if (NetworkManager.Instance.currentFrame >= deathDelayFrames)
             {
                 // 执行死亡后的逻辑
                 ExecuteDeathLogic();
@@ -221,18 +228,26 @@ public class TankController : MonoBehaviour
 
     int CurrentMoveIntervalFrame()
     {
+        if (isSpeedKiller)
+        {
+            return (int)(currentData.moveIntervalFrame * 0.25f);
+        }
+
         if (isEncourage)
         {
             return (int)(currentData.moveIntervalFrame * 0.5f);
         }
-        else
-        {
-            return currentData.moveIntervalFrame;
-        }
+
+        return currentData.moveIntervalFrame;
     }
 
     int CurrentShootIntervalFrame()
     {
+        if (isSpeedKiller)
+        {
+            return (int)(currentData.shootIntervalFrame * 0.25f);
+        }
+
         if (isEncourage)
         {
             return (int)(currentData.shootIntervalFrame * 0.5f);
@@ -420,13 +435,6 @@ public class TankController : MonoBehaviour
         }
     }
 
-    void ShootBulletType()
-    {
-        if (isBreakWall)
-        {
-            
-        }
-    }
 
     void CheckMovementState()
     {
@@ -477,16 +485,27 @@ public class TankController : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-        Pos = new Vector2Int(-2, -2);
 
         animator.Play("BigBoom");
 
-        deathDelayFrames=NetworkManager.Instance.currentFrame+(int)(animTime/Constant.FrameInterval);
-      
+        deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
+
+
         if (attacker != null)
         {
+            if (attacker.isSpeedKiller)
+            {
+                EntityManager.Instance.InitSpikeTrap(attacker, Pos, int.MaxValue);
+                EntityManager.Instance.InitSpikeTrap(attacker, PosRight, int.MaxValue);
+                EntityManager.Instance.InitSpikeTrap(attacker, PosUp, int.MaxValue);
+                EntityManager.Instance.InitSpikeTrap(attacker, PosUpRight, int.MaxValue);
+                Debug.LogWarning(Pos);
+            }
+
             attacker.Kill(GetComponent<Special>() != null);
         }
+        Pos = new Vector2Int(-2, -2);
+        
     }
 
     private void ExecuteDeathLogic()
@@ -501,15 +520,16 @@ public class TankController : MonoBehaviour
         {
             PlayerManager.Instance.RemovePlayer(this);
             transform.position = new Vector2(-100, 0);
-            if (NetworkManager.Instance.isGameing==false)
+            if (NetworkManager.Instance.isGameing == false)
             {
                 TankFactory.Instance.TankPool.ReturnObject(this);
             }
         }
-    
-  
+
+
         deathDelayFrames = 0;
     }
+
     public void Kill(bool isSpecial)
     {
         killNum++;
