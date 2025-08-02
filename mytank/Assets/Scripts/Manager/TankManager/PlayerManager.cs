@@ -50,9 +50,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     private int playerNum;
 
-    public void RemovePlayer(PlayerTankController tank)
+    public void DeadPlayer(PlayerTankController tank)
     {
-        //activePlayers.Remove(tank);
         playerNum--;
         if (playerNum == 0)
         {
@@ -68,6 +67,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     public void UpdateFrame()
     {
+        
+        activePlayers.ToList().ForEach(a=>a.UpdateFrame());
         if (deadPlayerDic.Count > 0)
         {
             // 反向遍历，避免修改集合的问题
@@ -127,9 +128,11 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
         temp.random = new System.Random(seed);
 
-
-        temp.currentData = ScriptableObject.CreateInstance<TankData>();
-        temp.currentData.InitializeTankData(playerTankData);
+        TankData data = playerTankData;
+        temp.moveIntervalFrame=data.moveIntervalFrame;
+        temp.shootIntervalFrame = data.shootIntervalFrame;
+        temp.orignalHP=data.orignalHP;
+        temp.HP=data.HP;
 
 
         temp.playerPanelUI =
@@ -140,14 +143,14 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.playerPanelUI.UpdateUI();
         temp.animType = dataIndex;
 
-        PlayerManager.Instance.activePlayers.Add(temp);
-
+        activePlayers.Add(temp);
+        EntityManager.Instance. allTanks.Add(temp);
         switch (dataIndex)
         {
             case 1:
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Shoe);
 
-
+/*
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Discipline);
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Discipline);
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Discipline);
@@ -158,7 +161,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Bomb);
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Bomb);
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.Bomb);
-
+*/
                 break;
             case 2:
                 GameStateManager.Instance.ApplyFoodToTank(temp, (int)FoodType.WarCar);
@@ -186,7 +189,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         // 设置坦克中心位置
         tank.transform.position = tank.GetCenter();
 
-        tank.currentData.HP = tank.currentData.orignalHP;
+        tank.HP = tank.orignalHP;
 
         tank.playerPanelUI?.UpdateUI();
 

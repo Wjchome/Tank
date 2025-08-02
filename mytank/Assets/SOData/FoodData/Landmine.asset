@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Landmine
   m_EditorClassIdentifier: 
   foodType: 12
-  sprite: {fileID: 21300000, guid: b7ce054ac16c947e697c183bbab26a72, type: 3}
+  sprite: {fileID: 21300000, guid: 4844a5453d2384c7d87c56bee6d0228d, type: 3}
   foodName: "\u5730\u96F7"
   foodDescription:
   - "\u751F\u6210\u4E00\u4E2A\u5730\u96F7\u751F\u6210\u673A\u5668"

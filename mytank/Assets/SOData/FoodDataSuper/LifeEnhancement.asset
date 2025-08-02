@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LifeEnhancement
   m_EditorClassIdentifier: 
   foodType: 21
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 52cf191caeb344b62a2b2804041c8db1, type: 3}
   foodName: "\u751F\u547D\u5F3A\u5316"
   foodDescription:
   - "\u751F\u547D\u5F3A\u5316"

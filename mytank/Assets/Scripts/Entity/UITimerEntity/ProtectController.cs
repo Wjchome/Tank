@@ -54,7 +54,7 @@
             };
             foreach (var item in list.ToList())
             {
-                if (!MapManager.Instance.isVailePos(item))
+                if (!MapManager.Instance.IsVailePos(item))
                 {
                     list.Remove(item);
                 }

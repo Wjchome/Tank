@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Discipline
   m_EditorClassIdentifier: 
   foodType: 17
-  sprite: {fileID: 21300000, guid: 5008645ddf45747bc88da579edd0db2f, type: 3}
+  sprite: {fileID: 21300000, guid: d3b3ee106240f47499170cd5f49688be, type: 3}
   foodName: "\u60E9\u6212"
   foodDescription:
   - "\u6BCF\u8FC710\u79D2\u5BF91\u4E2A\u654C\u4EBA\u9020\u62105\u70B9\u4F24\u5BB3"

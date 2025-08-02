@@ -10,7 +10,7 @@ public class WarCarController : UITimerEntity
     {
         if (islimited)
         {
-            if (tank.currentData.orignalHP == tank.currentData.HP)
+            if (tank.orignalHP == tank.HP)
             {
                 tank.AddOrignalHP(addNum);
             }

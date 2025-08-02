@@ -1,4 +1,5 @@
 
+    using System;
     using System.Collections.Generic;
     using DG.Tweening;
     using TMPro;
@@ -56,9 +57,14 @@
                 playerNameText.color = Color.yellow;
             }
             playerImage.color = tank.playerColor;
-            playerHealthText.text=tank.currentData.HP+" / "+tank.currentData.orignalHP;
+            playerHealthText.text=tank.HP+" / "+tank.orignalHP;
             playerKillText.text="击杀:"+tank.killNum.ToString();
-            HPbar.fillAmount = ((float)tank.currentData.HP / tank.currentData.orignalHP);
+        }
+
+        private void Update()
+        {
+            HPbar.fillAmount = Mathf.Lerp(HPbar.fillAmount, ((float)tank.HP / tank.orignalHP),Time.deltaTime);
+
         }
 
         public void Change()

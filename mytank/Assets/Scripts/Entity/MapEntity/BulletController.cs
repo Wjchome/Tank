@@ -8,7 +8,6 @@ using Random =UnityEngine.Random;
 
 public class BulletController :MapEntity
 {
-    public new TankController tank;
 
     public Direction direction;
 

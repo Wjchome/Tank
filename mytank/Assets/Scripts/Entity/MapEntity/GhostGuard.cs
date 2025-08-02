@@ -62,7 +62,7 @@
                     break;
             }
             Vector2Int targetPos=new Vector2Int(Pos.x + dx, Pos.y + dy);
-            if (!MapManager.Instance.isVailePos(targetPos))
+            if (!MapManager.Instance.IsVailePos(targetPos))
             {
                 Destroy();
                 return;

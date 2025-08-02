@@ -17,4 +17,6 @@ public class TankData : ScriptableObject
         HP = orignalData.HP;
         orignalHP = orignalData.orignalHP;
     }
+
+  
 }

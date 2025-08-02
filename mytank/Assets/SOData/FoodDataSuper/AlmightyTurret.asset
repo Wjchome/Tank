@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AlmightyTurret
   m_EditorClassIdentifier: 
   foodType: 19
-  sprite: {fileID: 0}
-  foodName: "\u81EA\u52A8\u8BBE\u8BA1\u53F0"
+  sprite: {fileID: 21300000, guid: 4102c11780d5b488fa4a09489aa35ffa, type: 3}
+  foodName: "\u5168\u80FD\u70AE\u53F0"
   foodDescription:
-  - "\u81EA\u52A8\u8BBE\u8BA1\u53F0"
+  - "\u5168\u80FD\u70AE\u53F0"

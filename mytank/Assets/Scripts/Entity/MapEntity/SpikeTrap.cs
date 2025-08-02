@@ -18,7 +18,7 @@ using UnityEngine;
             var enemyTankInArea = MapManager.Instance.GetEnemyTankInArea(Pos.x, Pos.y, 1, 1);
             if (enemyTankInArea != null&&enemyTankInArea.Count > 0)
             {
-                enemyTankInArea.ForEach(enemy=>enemy.DamageHP(damageNum,tank));
+                enemyTankInArea.ForEach(enemy=>enemy.DamageHP(damageNum,tank as PlayerTankController));
                 Destroy(gameObject);
             }
         }

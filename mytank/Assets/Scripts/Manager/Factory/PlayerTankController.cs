@@ -1,77 +1,75 @@
+using System.Collections.Generic;
+using DG.Tweening;
+using Tankgame;
+using UnityEngine;
 
-    using System.Collections.Generic;
-    using DG.Tweening;
-    using Tankgame;
-    using UnityEngine;
+public class PlayerTankController : TankController
+{
+    //击杀数量
+    public int killNum = 0;
 
-    public class PlayerTankController:TankController
+    //只有玩家有UI
+    public PlayerPanelUI playerPanelUI;
+
+    public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
+    public bool isBoat = false;
+    public long boatFrame = -1;
+    public GameObject boatShow;
+
+    public bool isInvincible = false;
+    public long invincibleFrame = -1;
+    public Vector3 scaleSize;
+
+
+    public bool isShootTwice = false;
+    public long shootTwiceFrame = -1;
+    public bool isShootThree = false;
+    public long secondShootFrame = -1;
+    public Direction secondDir;
+    public Vector2Int secondPos;
+    public long threeShootFrame = -1;
+    public Direction threeDir;
+    public Vector2Int threePos;
+    public GameObject shootTwiceShow;
+
+    public bool isBreakWall = false;
+    public long breakWallFrame = -1;
+    public GameObject breakWallShow;
+
+
+    public bool isEncourage = false;
+    public long encourageFrame = -1;
+    public GameObject encourageShow;
+
+    public bool rearFire = false;
+    public long rearFireFrame = -1;
+    public GameObject rearFireShow;
+
+    public bool isSpikeTrap = false;
+    public int spikeTrapDurationFrame = 0;
+
+    public GameObject shoeShow;
+
+    public Animator bombAnimator;
+
+
+    public bool isSpeedKiller;
+
+    public bool isPenetrate;
+
+
+    public override void UpdateFrame()
     {
-        //击杀数量
-        public int killNum = 0;
-        //只有玩家有UI
-        public PlayerPanelUI playerPanelUI;
-        
-        public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
-
-        public bool isBoat = false;
-        public long boatFrame = -1;
-        public GameObject boatShow;
-
-        public bool isInvincible = false;
-        public long invincibleFrame = -1;
-        public Vector3 scaleSize;
-
-
-        public bool isShootTwice = false;
-        public long shootTwiceFrame = -1;
-        public bool isShootThree = false;
-        public long secondShootFrame = -1;
-        public Direction secondDir;
-        public Vector2Int secondPos;
-        public long threeShootFrame = -1;
-        public Direction threeDir;
-        public Vector2Int threePos;
-        public GameObject shootTwiceShow;
-
-        public bool isBreakWall = false;
-        public long breakWallFrame = -1;
-        public GameObject breakWallShow;
-
-
-        public bool isEncourage = false;
-        public long encourageFrame = -1;
-        public GameObject encourageShow;
-
-        public bool rearFire = false;
-        public long rearFireFrame = -1;
-        public GameObject rearFireShow;
-
-        public bool isSpikeTrap = false;
-        public int spikeTrapDurationFrame = 0;
-
-        public GameObject shoeShow;
-
-        public Animator bombAnimator;
-
-        
-
-        public bool isSpeedKiller;
-
-        public bool isPenetrate;
-
-
-        public override void UpdateFrame()
+        base.UpdateFrame();
+        HandleBuff();
+        if (identity == Identity.Myself && !isDead)
         {
-            base.UpdateFrame();
-            HandleBuff();
-            if (identity == Identity.Myself && !isDead)
-            {
-                HandleMovementInput();
-                HandleShootInput();
-            }
+            HandleMovementInput();
+            HandleShootInput();
         }
-        
-           void HandleBuff()
+    }
+
+    void HandleBuff()
     {
         if (isBoat)
         {
@@ -149,36 +147,36 @@
             }
         }
     }
-           
-               int CurrentMoveIntervalFrame()
+
+    int CurrentMoveIntervalFrame()
     {
         if (isSpeedKiller)
         {
-            return (int)(currentData.moveIntervalFrame * 0.25f);
+            return (int)(moveIntervalFrame * 0.25f);
         }
 
         if (isEncourage)
         {
-            return (int)(currentData.moveIntervalFrame * 0.5f);
+            return (int)(moveIntervalFrame * 0.5f);
         }
 
-        return currentData.moveIntervalFrame;
+        return moveIntervalFrame;
     }
 
     int CurrentShootIntervalFrame()
     {
         if (isSpeedKiller)
         {
-            return (int)(currentData.shootIntervalFrame * 0.25f);
+            return (int)(shootIntervalFrame * 0.25f);
         }
 
         if (isEncourage)
         {
-            return (int)(currentData.shootIntervalFrame * 0.5f);
+            return (int)(shootIntervalFrame * 0.5f);
         }
         else
         {
-            return currentData.shootIntervalFrame;
+            return shootIntervalFrame;
         }
     }
 
@@ -220,12 +218,14 @@
             }
         }
     }
-    
-    
+
+
     protected override bool IsCanMoveTo(Vector2Int targetPos)
     {
-        return (isBoat && MapManager.Instance.IsAreaWalkable1(targetPos.x, targetPos.y, 2, 2, tankID))
-               || MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID);
+        List<MapType> allowTypes = new List<MapType> { MapType.floor, MapType.ice, MapType.tree };
+        List<MapType> allowTypes1 = new List<MapType> { MapType.floor, MapType.ice, MapType.tree, MapType.river };
+        return (isBoat && MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID, allowTypes1))
+               || MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID, allowTypes);
     }
 
     protected override void MoveTo(Vector2Int targetPos)
@@ -254,26 +254,20 @@
             }
         }
         Pos = targetPos;
-
-        // 计算坦克中心位置
         Vector2 centerPos = GetCenter();
-
         isMoving = true;
         animator.Play("Tank" + animType);
         lastAnimStartFrame = NetworkManager.Instance.currentFrame;
-        transform.DOMove(centerPos, currentData.moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
-
+        transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
     }
 
     public override void Shoot()
     {
         EntityManager.Instance.InitializeBullet(tankDirection, this, Pos, bulletDamageNum);
-        
         if (rearFire)
         {
             EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this, Pos, bulletDamageNum);
         }
-
         if (isShootThree)
         {
             int intervalFrame = 8;
@@ -281,7 +275,6 @@
             threeDir = tankDirection;
             threePos = Pos;
         }
-
         if (isShootTwice)
         {
             int intervalFrame = 4;
@@ -290,53 +283,48 @@
             secondPos = Pos;
         }
     }
-    
+
     public override void AddOrignalHP(int num)
     {
         bombAnimator.Play("Heal", 0, 0);
-        currentData.orignalHP += num;
-        playerPanelUI?.UpdateUI(); // 更新血量显示
+        orignalHP += num;
+        playerPanelUI.UpdateUI(); // 更新血量显示
     }
+
     public override void AddHP(int num)
     {
         bombAnimator.Play("Heal", 0, 0);
-        currentData.HP = Mathf.Min(currentData.HP + num, currentData.orignalHP);
+        HP = Mathf.Min(HP + num, orignalHP);
         playerPanelUI?.UpdateUI(); // 更新血量显示
     }
-    
+
     public void DamageHP(int damage)
     {
-        if (invincibleFrame >= NetworkManager.Instance.currentFrame) return;
+        if (isInvincible) return;
 
 
-        currentData.HP -= damage;
+        HP -= damage;
         playerPanelUI.UpdateUI(); // 更新血量显示
 
-        if (currentData.HP <= 0)
+        if (HP <= 0)
         {
             Dead();
         }
     }
-    
+
     public void Dead()
     {
         if (isDead) return;
         isDead = true;
-
         animator.Play("BigBoom");
-
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
-
-
-    
         Pos = new Vector2Int(-2, -2);
-        
     }
-    
+
     public void Kill(bool isSpecial)
     {
         killNum++;
-        playerPanelUI?.UpdateUI(); // 更新血量显示
+        playerPanelUI.UpdateUI(); // 更新血量显示
         if (isSpecial && identity == Identity.Myself)
         {
             FoodManager.Instance.chooseNum++;
@@ -345,9 +333,7 @@
 
     protected override void ExecuteDeathLogic()
     {
-        PlayerManager.Instance.RemovePlayer(this);
+        PlayerManager.Instance.DeadPlayer(this);
         transform.position = new Vector2(-100, 0);
-        deathDelayFrames = 0;
-        
     }
-    }
+}

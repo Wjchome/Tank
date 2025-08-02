@@ -38,6 +38,9 @@ public class EntityManager : SingletonMono<EntityManager>
     public ObjectPool<BulletController> BulletPool { get; private set; }
     public List<BulletController> activeBullets = new List<BulletController>();
 
+    
+    public List<TankController> allTanks = new List<TankController>();
+    
     private void Awake()
     {
         InitializeBulletPool();
@@ -212,7 +215,8 @@ public class EntityManager : SingletonMono<EntityManager>
     }
 
     // 生成方法
-    private T SpawnMapEntity<T>(T prefab, PlayerTankController tank, Vector2 position, Vector2Int pos) where T : MapEntity
+    private T SpawnMapEntity<T>(T prefab, PlayerTankController tank, Vector2 position, Vector2Int pos)
+        where T : MapEntity
     {
         T entity = Instantiate(prefab, new Vector2(position.x, position.y), Quaternion.identity);
         entity.Init(tank, pos);
@@ -277,14 +281,19 @@ public class EntityManager : SingletonMono<EntityManager>
             {
                 bullet.penetrationCount = 3;
             }
+            else
+            {
+                bullet.penetrationCount = 1;
+            }
         }
         else
         {
             bullet.penetrationCount = 1;
         }
 
+
         // 调用基类的Init方法
-       // bullet.Init(tank, pos);
+        // bullet.Init(tank, pos);
     }
 
 

@@ -16,8 +16,10 @@ public enum Identity
 
 public abstract class TankController : MonoBehaviour
 {
-    public TankData currentData;
-
+    public int moveIntervalFrame ;
+    public int shootIntervalFrame ;
+    public int HP;
+    public int orignalHP;
 
     public string tankID;
     public Direction tankDirection;
@@ -52,8 +54,6 @@ public abstract class TankController : MonoBehaviour
     //死亡动画时间
     public float animTime = 0.5f;
 
-    
-
     //是否死亡
     public bool isDead;
 
@@ -76,10 +76,28 @@ public abstract class TankController : MonoBehaviour
     {
        
         CheckMovementState();
-      
 
-        
+        CheckDeadState();
 
+    }
+    void CheckMovementState()
+    {
+        if (isDead) return;
+        if (isMoving)
+        {
+            if (NetworkManager.Instance.currentFrame - lastAnimStartFrame > moveIntervalFrame)
+            {
+                isMoving = false;
+                animator.Play("Idle" + animType);
+            }
+        }
+        else
+        {
+            animator.Play("Idle" + animType);
+        }
+    }
+    void CheckDeadState()
+    {
         if (isDead)
         {
             if (NetworkManager.Instance.currentFrame >= deathDelayFrames)
@@ -98,8 +116,7 @@ public abstract class TankController : MonoBehaviour
     protected abstract void MoveTo(Vector2Int targetPos);
 
     protected abstract bool IsCanMoveTo(Vector2Int targetPos);
-
-    // 帧同步推进调用
+    // 帧同步调用
     public bool MoveBy(Direction direction)
     {
         bool canMove = false;
@@ -126,7 +143,7 @@ public abstract class TankController : MonoBehaviour
 
         // 停止当前动画，防止插值冲突
         transform.DOKill();
-        bool underice = MapManager.Instance.HasTankInIce(Pos.x, Pos.y);
+        bool underice = MapManager.Instance.HasTankInMapTypes(Pos.x, Pos.y,new List<MapType> { MapType.ice });
         if (underice)
         {
             Vector2Int targetPos = Pos + new Vector2Int(dx, dy);
@@ -165,30 +182,13 @@ public abstract class TankController : MonoBehaviour
         }
 
         // 旋转也用DOTween
-        transform.DORotate(rotation, currentData.moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.OutQuad);
+        transform.DORotate(rotation, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.OutQuad);
         return canMove;
     }
 
     public abstract void Shoot();
+
     
-
-
-    void CheckMovementState()
-    {
-        if (isDead) return;
-        if (isMoving)
-        {
-            if (NetworkManager.Instance.currentFrame - lastAnimStartFrame > currentData.moveIntervalFrame)
-            {
-                isMoving = false;
-                animator.Play("Idle" + animType);
-            }
-        }
-        else
-        {
-            animator.Play("Idle" + animType);
-        }
-    }
 
     public abstract void AddOrignalHP(int num);
 

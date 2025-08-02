@@ -5,15 +5,15 @@ using DG.Tweening;
 using UnityEngine;
 using Tankgame;
 using TMPro;
+using UnityEngine.Serialization;
 
 
 public class EnemyManager : SingletonMono<EnemyManager>
 {
     
     public EnemyTankController enemyTankPrefab; // 改为 TankController 类型
-    public ObjectPool<EnemyTankController > TankPool { get; private set; }
-
-    public List<EnemyTankController > activeTanks;
+    public ObjectPool<EnemyTankController > enemyTankPool { get; private set; }
+    public List<EnemyTankController > activeEnemies;
 
 
     public List<TankData> orignalDatas;
@@ -24,7 +24,6 @@ public class EnemyManager : SingletonMono<EnemyManager>
     
     public int maxEnemies = 3; // 场上最大敌人数量
     public int enemySpawnInterval = 200; // 敌人生成间隔
-    public List<EnemyTankController> activeEnemies = new List<EnemyTankController>();//激活的敌人坦克
     public int leafEnemies = 0;
     private long lastSpawnFrame = 0;
     
@@ -39,7 +38,51 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public long pauseEndFrame=0;
     
     
-    
+    private void Awake()
+    {
+        enemyTankPool = new ObjectPool<EnemyTankController >(
+            prefab: enemyTankPrefab,
+            onSpawn: CreateTank,
+            onDespawn: KillTank
+        );
+        activeEnemies = new List<EnemyTankController >();
+    }
+
+    private void CreateTank(EnemyTankController  tank)
+    {
+        tank.isDead = false;
+        tank.lastMoveFrame = 0;
+        tank.lastShootFrame = 0;
+        tank.lastAnimStartFrame = 0;
+   
+
+        activeEnemies.Add(tank);
+        tank.gameObject.SetActive(true);
+        EntityManager.Instance. allTanks.Add(tank); 
+    }
+
+    private void KillTank(EnemyTankController  tank)
+    {
+        tank.gameObject.SetActive(false);
+        
+        leafEnemies--;
+        enemyleafText.text= leafEnemies.ToString();
+        
+        if (leafEnemies == 0)
+        {
+            GameStateManager.Instance.GameOver(true);
+
+        }
+        var a = tank.GetComponent<Special>();
+        if (a != null)
+        {
+            Destroy(a);
+        }
+        EntityManager.Instance. allTanks.Remove(tank); 
+
+        activeEnemies.Remove(tank);
+    }
+
     
 
     public void LoadLevel(Level levelData)
@@ -76,7 +119,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public void UpdateFrame()
     {
         CheckEnemySpawn();
-        activeTanks.ToList().ForEach(a=>a.UpdateFrame());
+        activeEnemies.ToList().ForEach(a=>a.UpdateFrame());
     }
 
     void CheckEnemySpawn()
@@ -149,65 +192,18 @@ public class EnemyManager : SingletonMono<EnemyManager>
         return  tanks.Count>0;
     }
     
-    public void RemoveEnemy(EnemyTankController enemy)
-    {
-       
-        activeEnemies.Remove(enemy);
-        leafEnemies--;
-        enemyleafText.text= leafEnemies.ToString();
-        
-        if (leafEnemies == 0)
-        {
-            GameStateManager.Instance.GameOver(true);
-
-        }
-        
-    }
-
+  
   
 
 
-    private void Awake()
-    {
-        TankPool = new ObjectPool<EnemyTankController >(
-            prefab: enemyTankPrefab,
-            onSpawn: CreateTank,
-            onDespawn: KillTank
-        );
-        activeTanks = new List<EnemyTankController >();
-    }
-
-    private void CreateTank(EnemyTankController  tank)
-    {
-        tank.isDead = false;
-        tank.lastMoveFrame = 0;
-        tank.lastShootFrame = 0;
-        tank.lastAnimStartFrame = 0;
    
-
-        activeTanks.Add(tank);
-        tank.gameObject.SetActive(true);
-    }
-
-    private void KillTank(EnemyTankController  tank)
-    {
-        tank.gameObject.SetActive(false);
-        var a = tank.GetComponent<Special>();
-        if (a != null)
-        {
-            Destroy(a);
-        }
-
-        activeTanks.Remove(tank);
-    }
-
 
 
 
     
     public EnemyTankController InitialEnemy(string tankID, string tankName, int x, int y, int dataIndex)
     {
-        EnemyTankController temp = TankPool.GetObject();
+        EnemyTankController temp = enemyTankPool.GetObject();
 
 
         temp.tankID = tankID;
@@ -229,19 +225,20 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.random = new System.Random(seed);
 
 
-        temp.currentData = ScriptableObject.CreateInstance<TankData>();
-        temp.currentData.InitializeTankData(orignalDatas[dataIndex]);
+        TankData data = orignalDatas[dataIndex];
+        temp.moveIntervalFrame=data.moveIntervalFrame;
+        temp.shootIntervalFrame = data.shootIntervalFrame;
+        temp.orignalHP=data.orignalHP;
+        temp.HP=data.HP;
         temp.animType = dataIndex;
-        EnemyManager.Instance.activeEnemies.Add(temp);
 
 
         return temp;
     }
 
-    public EnemyTankController InitialSpecialEnemy(string playerID, string playerName, int x, int y,
-        int dataIndex)
+    public EnemyTankController InitialSpecialEnemy(string playerID, string playerName, int x, int y, int dataIndex)
     {
-        EnemyTankController temp = TankPool.GetObject();
+        EnemyTankController temp = enemyTankPool.GetObject();
 
 
         temp.tankID = playerID;
@@ -262,16 +259,17 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
         temp.random = new System.Random(seed);
 
-
-        temp.currentData = ScriptableObject.CreateInstance<TankData>();
-        temp.currentData.InitializeTankData(orignalDatas[dataIndex]);
+ TankData data = orignalDatas[dataIndex];
+        temp.moveIntervalFrame=data.moveIntervalFrame;
+        temp.shootIntervalFrame = data.shootIntervalFrame;
+        temp.orignalHP=data.orignalHP;
+        temp.HP=data.HP;
 
 
         temp.animType = dataIndex;
 
         temp.gameObject.AddComponent<Special>();
 
-        EnemyManager.Instance.activeEnemies.Add(temp);
         return temp;
     }
 

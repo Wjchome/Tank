@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bomb
   m_EditorClassIdentifier: 
   foodType: 1
-  sprite: {fileID: 21300000, guid: 5993bce3879d84332bde166cdd9b74f3, type: 3}
+  sprite: {fileID: 21300000, guid: 2f511b26106c044b6b2754ca3ed227cf, type: 3}
   foodName: "\u70B8\u5F39"
   foodDescription:
   - "\u5BF9\u6240\u6709\u654C\u4EBA\u9020\u621010\u70B9\u4F24\u5BB3"

@@ -11,7 +11,7 @@ public class ShovelController : UITimerEntity
         {
             MapManager.Instance.isChange = true;
             MapManager.Instance.ironWallEndFrames = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(stopTimerNum/ Constant.FrameInterval);
-            MapManager.Instance.HomeWall(MapType.wall);
+            MapManager.Instance.SetHomeWall(MapType.wall);
             tank.bombAnimator.Play("Shovel", 0, 0);
         }
         

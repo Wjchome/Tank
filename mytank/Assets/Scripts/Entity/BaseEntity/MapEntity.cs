@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class MapEntity : MonoBehaviour, IEntity
 {
-    public PlayerTankController tank;
+    public TankController tank;
     public Vector2Int Pos;
 
     public abstract void UpdateFrame();

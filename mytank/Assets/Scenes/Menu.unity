@@ -2903,6 +2903,7 @@ MonoBehaviour:
   almightyTurretMachinePrefab: {fileID: 6158564772937240892, guid: c2de5e98af9724fe289f2e158a6fa381, type: 3}
   timeStormControllerPrefab: {fileID: 4687413944728002130, guid: 4018358c86d6248dc8c21e70d51a5a38, type: 3}
   activeBullets: []
+  allTanks: []
 --- !u!1 &477763092
 GameObject:
   m_ObjectHideFlags: 0
@@ -10905,7 +10906,7 @@ MonoBehaviour:
   foodDatas:
   - {fileID: 11400000, guid: ed267d32158f44e5180d3c4b68b2773f, type: 2}
   - {fileID: 11400000, guid: 0cf209985a8cf4437a46a3656a240def, type: 2}
-  - {fileID: 11400000, guid: 5de8281c6b6604f1c8398dcf713c41a5, type: 2}
+  - {fileID: 11400000, guid: abef0f49fcbe64a0e8cd422ee51604de, type: 2}
   - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
   playerFoodUIPrefab: {fileID: 8705780682468749850, guid: d862115454b734bb695bc8eaf11980cc, type: 3}
   panelParent: {fileID: 408527372}
@@ -13265,7 +13266,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1738175250}
-  - component: {fileID: 1738175252}
   - component: {fileID: 1738175254}
   - component: {fileID: 1738175253}
   m_Layer: 0
@@ -13290,26 +13290,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 219629758}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1738175252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1738175249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cc5ea3efaa4b4b7d99c773e20e04480, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tankPrefab: {fileID: -8170977891461103507, guid: f04e0bd1079d84378a7069370189a33a, type: 3}
-  activeTanks: []
-  orignalDatas:
-  - {fileID: 11400000, guid: fd160f31b6d1647e5b30fb752773ce7b, type: 2}
-  - {fileID: 11400000, guid: 04c6ae03f8ed14d6a932636ad8d11e18, type: 2}
-  - {fileID: 11400000, guid: 9fc398549609548ebba66381e9559d40, type: 2}
-  - {fileID: 11400000, guid: e038be583b6354ea7b8172137cd1d406, type: 2}
-  - {fileID: 11400000, guid: a6623fde369f44043bdc3de491ea2105, type: 2}
 --- !u!114 &1738175253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13322,10 +13302,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402cfed182ab5465baa4d34c920d27bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sumEnemies: 0
-  maxEnemies: 5
-  enemySpawnInterval: 200
+  enemyTankPrefab: {fileID: -2687135769070647202, guid: e64eb4194b5c541e2812ce42fea1fdcb, type: 3}
   activeEnemies: []
+  orignalDatas:
+  - {fileID: 11400000, guid: fd160f31b6d1647e5b30fb752773ce7b, type: 2}
+  - {fileID: 11400000, guid: 04c6ae03f8ed14d6a932636ad8d11e18, type: 2}
+  - {fileID: 11400000, guid: 9fc398549609548ebba66381e9559d40, type: 2}
+  - {fileID: 11400000, guid: e038be583b6354ea7b8172137cd1d406, type: 2}
+  - {fileID: 11400000, guid: a6623fde369f44043bdc3de491ea2105, type: 2}
+  sumEnemies: 0
+  maxEnemies: 10
+  enemySpawnInterval: 40
   leafEnemies: 0
   enemyleafText: {fileID: 272430327}
   specialRange: 1
@@ -13344,6 +13331,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activePlayers: []
   recoverTime: 200
+  playerTankControllerPrefab: {fileID: 7221023760519817669, guid: f04e0bd1079d84378a7069370189a33a, type: 3}
+  playerTankData: {fileID: 11400000, guid: fd160f31b6d1647e5b30fb752773ce7b, type: 2}
 --- !u!1 &1743229176
 GameObject:
   m_ObjectHideFlags: 0

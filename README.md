@@ -101,7 +101,7 @@ Encouage Shoe SpikeTrap
 
 SteelHelmet WarCar Protect
 => 原效果不变
-=> WarCar每次调用无脑加一点上限
+=> WarCar每次调用无脑加一点上限,恢复血量
 
 Bomb Discipline PocketWatch
 =>将这三个控制器都变成一个控制器
@@ -113,4 +113,4 @@ Pistol Star RearFire
 
 Shovel GhostGuard Boat
 => 保持原有效果
-=> Shovel GhostGuard时间间隔减少
+=> Shovel GhostGuard时间间隔减少,经过河的时候移速增加

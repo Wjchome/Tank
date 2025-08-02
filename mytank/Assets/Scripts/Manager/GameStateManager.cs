@@ -182,17 +182,17 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.Shoe:
                 if (num == 0)
                 {
-                    tank.currentData.moveIntervalFrame--;
+                    tank.moveIntervalFrame--;
                     tank.shoeShow.SetActive(true);
                 }
                 else if (num == 1)
                 {
-                    tank.currentData.moveIntervalFrame--;
+                    tank.moveIntervalFrame--;
                     tank.shoeShow.GetComponent<SpriteRenderer>().color = new Color32(0, 180, 0, 255);
                 }
                 else if (num == 2)
                 {
-                    tank.currentData.moveIntervalFrame--;
+                    tank.moveIntervalFrame--;
                     tank.shoeShow.GetComponent<SpriteRenderer>().color = new Color32(0, 90, 0, 255);
                 }
 
@@ -203,7 +203,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                     MapManager.Instance.isChange = true;
                     MapManager.Instance.ironWallEndFrames = NetworkManager.Instance.currentFrame +
                                                             Mathf.RoundToInt(10 / Constant.FrameInterval);
-                    MapManager.Instance.HomeWall(MapType.wall);
+                    MapManager.Instance.SetHomeWall(MapType.wall);
                     tank.bombAnimator.Play("Shovel", 0, 0);
                 }
                 else if (num == 1)
@@ -211,7 +211,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                     MapManager.Instance.isChange = true;
                     MapManager.Instance.ironWallEndFrames = NetworkManager.Instance.currentFrame +
                                                             Mathf.RoundToInt(30 / Constant.FrameInterval);
-                    MapManager.Instance.HomeWall(MapType.wall);
+                    MapManager.Instance.SetHomeWall(MapType.wall);
                     tank.bombAnimator.Play("Shovel", 0, 0);
                 }
                 else if (num == 2)
