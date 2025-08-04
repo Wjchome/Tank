@@ -389,7 +389,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 stream.Write(data, 0, data.Length);
                 stream.Flush();
-                LogMessage("[Client]", message);
+           //     LogMessage("[Client]", message);
             }
         }
         catch (Exception e)

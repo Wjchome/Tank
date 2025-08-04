@@ -191,7 +191,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
         tank.HP = tank.orignalHP;
 
-        tank.playerPanelUI?.UpdateUI();
+        tank.playerPanelUI.UpdateUI();
 
         return tank;
     }

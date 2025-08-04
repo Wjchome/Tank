@@ -949,6 +949,7 @@ Transform:
   - {fileID: 844532307}
   - {fileID: 470047796}
   - {fileID: 1362382135}
+  - {fileID: 1558422553}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &223813547
@@ -5462,7 +5463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &754405182
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11853,6 +11854,52 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1558422552
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1558422553}
+  - component: {fileID: 1558422554}
+  m_Layer: 0
+  m_Name: KillFeedManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1558422553
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558422552}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 219629758}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1558422554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558422552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8fc2a48513f34039acc5c1ac3e8ec27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  killFeedbackPrefab: {fileID: 959942673698503892, guid: 4447b7635aa0243c696cff969b4e350c, type: 3}
+  offset: {x: 50, y: 170}
 --- !u!1 &1566001314
 GameObject:
   m_ObjectHideFlags: 0
@@ -13311,8 +13358,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e038be583b6354ea7b8172137cd1d406, type: 2}
   - {fileID: 11400000, guid: a6623fde369f44043bdc3de491ea2105, type: 2}
   sumEnemies: 0
-  maxEnemies: 10
-  enemySpawnInterval: 40
+  maxEnemies: 2
+  enemySpawnInterval: 100
   leafEnemies: 0
   enemyleafText: {fileID: 272430327}
   specialRange: 1

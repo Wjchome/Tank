@@ -24,7 +24,7 @@
             HashSet<TankController> tanksSet=new HashSet<TankController>(tanks);
             foreach (EnemyTankController a in tanksSet.ToList())
             {
-                a.DamageHP(damageNum, tank);
+                a.DamageHP(damageNum, tank,DamageType.Protect);
             }
             
             tank.bombAnimator.Play("Protect",0,0);

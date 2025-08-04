@@ -8,20 +8,24 @@
 
     public class PlayerPanelUI:MonoBehaviour
     {
+        [Header("Player Info")]
         public Transform playerInfo;
         public TextMeshProUGUI playerNameText;
         public Image playerImage;
         public TextMeshProUGUI playerHealthText;
         public TextMeshProUGUI playerKillText;
         public Image HPbar;
+        public Image HPDelaybar;
+        public RectTransform killShowPos;
 
         public int interval;
-
+        
+        [Header("Player Food UI")]
         public Transform scollView;
         public Transform content;
         
         
-
+    
         public Button button;
         public bool isOpenFood=false;
 
@@ -29,13 +33,11 @@
         public Vector2 rightPos = Vector2.zero; 
         
         public PlayerTankController tank;
-        public string tankID;
         
         private Dictionary<FoodType, PlayerFoodUI> foodUIDict = new Dictionary<FoodType, PlayerFoodUI>();
         public void Init(PlayerTankController tankController, int index)
         {
             tank=tankController;
-            tankID=tank.tankID;
             HPbar.color = tank.playerColor;
             
             GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
@@ -57,8 +59,30 @@
                 playerNameText.color = Color.yellow;
             }
             playerImage.color = tank.playerColor;
+            UpdateHP();
+            playerKillText.text = "击杀:" + tank.killNum;
+            
+           
+        }
+
+
+        public void UpdateHP()
+        {
             playerHealthText.text=tank.HP+" / "+tank.orignalHP;
-            playerKillText.text="击杀:"+tank.killNum.ToString();
+            float rate=(float)tank.HP / tank.orignalHP;
+            HPbar.fillAmount = rate;
+            HPDelaybar.DOFillAmount(rate, 0.5f);
+        }
+        
+        public void UpdateKillCount(int newKillCount)
+        {
+            playerKillText.text = "击杀:" + tank.killNum;
+            
+           KillFeedbackManager.Instance. ShowKillFeedback(newKillCount,killShowPos);
+            // 添加击杀数更新动画
+            playerKillText.transform.DOScale(1.2f, 0.1f).OnComplete(() => {
+                playerKillText.transform.DOScale(1f, 0.1f);
+            });
         }
 
         private void Update()
@@ -79,19 +103,6 @@
             {
                 playerInfo.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
                 scollView.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
-                // 清除所有子物体
-               /* for (int i = content.childCount - 1; i >= 0; i--)
-                {
-                    DestroyImmediate(content.GetChild(i).gameObject);
-                }
-
-                foreach (var kv in tank.foodDict)
-                {
-                    var foodUI = Instantiate(playerFoodUIPrefab, content);
-                    foodUI.image.sprite=FoodManager.Instance.foodDict[kv.Key].sprite;
-                    foodUI.text.text = kv.Value.ToString();
-                }*/
-                
                 
                 isOpenFood=true;
             }

@@ -101,12 +101,12 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.Bomb:
                 if (num == 0)
                 {
-                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(10, tank));
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(10, tank,DamageType.Bomb));
                     tank.bombAnimator.Play("BombShow", 0, 0);
                 }
                 else if (num == 1)
                 {
-                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(20, tank));
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(20, tank,DamageType.Bomb));
                     tank.bombAnimator.Play("BombShow", 0, 0);
                 }
                 else if (num == 2)
@@ -381,6 +381,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 {
                     tank.isSpikeTrap = true;
                     tank.spikeTrapDurationFrame = Mathf.RoundToInt(1 / Constant.FrameInterval);
+                    tank.spikeTrapShow.SetActive(true);
                 }
                 else if (num == 1)
                 {
@@ -506,6 +507,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 break;
             case FoodType.SpeedKiller:
                 tank.isSpeedKiller = true;
+                tank.speedKillerShow.SetActive(true);
                 break;
             case FoodType.LifeEnhancement:
                 WarCarController a=EntityManager.Instance.FindFirstOrDefaultUIEntity<WarCarController>(tank);
@@ -540,6 +542,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.PenetratingBullet:
                 
                     tank.isPenetrate = true;
+                    tank.penetrateShow.SetActive(true);
                 
                 break;
     

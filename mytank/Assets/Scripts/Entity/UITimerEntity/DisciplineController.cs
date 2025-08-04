@@ -13,7 +13,7 @@
             int num = targetNum;
             foreach(var a in EnemyManager.Instance.activeEnemies)
             {
-                a.DamageHP(damageNum, tank);
+                a.DamageHP(damageNum, tank,DamageType.Discipline);
                 num--;
                 if (num == 0)
                 {

@@ -2,21 +2,35 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
+public enum DamageType
+{
+    Bullet, 
+    Landmine,
+    SpikeTrap,
+    Bomb,
+    Discipline,
+    Protect,
+}
+
+
+
 public class EnemyTankController : TankController
 {
+    public EnemyTankUI enemyTankUI;
     public override void UpdateFrame()
     {
         base.UpdateFrame();
         if (identity == Identity.Enemy && !isDead &&
             NetworkManager.Instance.currentFrame >= EnemyManager.Instance.pauseEndFrame)
         {
-            AiControls();
+            AiControls(); 
         }
     }
 
 
     void AiControls()
     {
+        
         if (NetworkManager.Instance.currentFrame - lastMoveFrame > moveIntervalFrame)
         {
             if (!MoveBy(tankDirection))
@@ -67,9 +81,12 @@ public class EnemyTankController : TankController
         HP = Mathf.Min(HP + num, orignalHP);
     }
 
-    public void DamageHP(int damage, PlayerTankController attacker)
+    public void DamageHP(int damage, PlayerTankController attacker,DamageType damageType)
     {
         HP -= damage;
+        
+        enemyTankUI.UpdateHealthBar();
+        
         if (HP <= 0)
         {
             Dead(attacker);

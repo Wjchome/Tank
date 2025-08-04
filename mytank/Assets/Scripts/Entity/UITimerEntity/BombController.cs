@@ -12,7 +12,7 @@
 
         protected override void ApplyEffect()
         {
-            EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(damageNum, tank));
+            EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(damageNum, tank,DamageType.Bomb));
             tank.bombAnimator.Play("BombShow", 0, 0);
         }
 

@@ -15,7 +15,7 @@
             long targetFrame = NetworkManager.Instance.currentFrame + Mathf.RoundToInt(stopTimerNum / Constant.FrameInterval);
             EnemyManager.Instance.pauseEndFrame = targetFrame;
             
-            EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(damageNum, tank));
+            EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(damageNum, tank,DamageType.Bomb));
             
             
             tank.bombAnimator.Play("PocketWatch", 0, 0);

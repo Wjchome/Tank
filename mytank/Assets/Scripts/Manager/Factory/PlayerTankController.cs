@@ -12,6 +12,7 @@ public class PlayerTankController : TankController
     public PlayerPanelUI playerPanelUI;
 
     public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
+    
     public bool isBoat = false;
     public long boatFrame = -1;
     public GameObject boatShow;
@@ -47,6 +48,7 @@ public class PlayerTankController : TankController
 
     public bool isSpikeTrap = false;
     public int spikeTrapDurationFrame = 0;
+    public GameObject spikeTrapShow;
 
     public GameObject shoeShow;
 
@@ -54,8 +56,10 @@ public class PlayerTankController : TankController
 
 
     public bool isSpeedKiller;
+    public GameObject speedKillerShow;
 
     public bool isPenetrate;
+    public GameObject penetrateShow;
 
 
     public override void UpdateFrame()
@@ -288,14 +292,14 @@ public class PlayerTankController : TankController
     {
         bombAnimator.Play("Heal", 0, 0);
         orignalHP += num;
-        playerPanelUI.UpdateUI(); // 更新血量显示
+        playerPanelUI.UpdateHP(); // 更新血量显示
     }
 
     public override void AddHP(int num)
     {
         bombAnimator.Play("Heal", 0, 0);
         HP = Mathf.Min(HP + num, orignalHP);
-        playerPanelUI?.UpdateUI(); // 更新血量显示
+        playerPanelUI.UpdateHP(); // 更新血量显示
     }
 
     public void DamageHP(int damage)
@@ -303,8 +307,8 @@ public class PlayerTankController : TankController
         if (isInvincible) return;
 
 
-        HP -= damage;
-        playerPanelUI.UpdateUI(); // 更新血量显示
+        HP = Mathf.Max(HP- damage,0);
+        playerPanelUI.UpdateHP(); // 更新血量显示
 
         if (HP <= 0)
         {
@@ -324,7 +328,10 @@ public class PlayerTankController : TankController
     public void Kill(bool isSpecial)
     {
         killNum++;
-        playerPanelUI.UpdateUI(); // 更新血量显示
+        playerPanelUI.UpdateKillCount(1);
+        
+
+        
         if (isSpecial && identity == Identity.Myself)
         {
             FoodManager.Instance.chooseNum++;

@@ -78,7 +78,7 @@ public class BulletController :MapEntity
                 {
                     if (tank is EnemyTankController enemy)
                     {
-                        enemy.DamageHP(damageNum, this.tank as PlayerTankController);
+                        enemy.DamageHP(damageNum, this.tank as PlayerTankController,DamageType.Bullet);
                         
                     }
                     else if(tank is PlayerTankController player)

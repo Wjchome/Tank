@@ -54,8 +54,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         tank.lastMoveFrame = 0;
         tank.lastShootFrame = 0;
         tank.lastAnimStartFrame = 0;
-   
-
+ 
         activeEnemies.Add(tank);
         tank.gameObject.SetActive(true);
         EntityManager.Instance. allTanks.Add(tank); 
@@ -64,7 +63,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     private void KillTank(EnemyTankController  tank)
     {
         tank.gameObject.SetActive(false);
-        
+   
         leafEnemies--;
         enemyleafText.text= leafEnemies.ToString();
         
@@ -240,7 +239,6 @@ public class EnemyManager : SingletonMono<EnemyManager>
     {
         EnemyTankController temp = enemyTankPool.GetObject();
 
-
         temp.tankID = playerID;
         temp.tankDirection = Direction.Up;
         temp.Pos = new Vector2Int(x, y); // 左下角坐标
@@ -267,7 +265,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
 
         temp.animType = dataIndex;
-
+        temp.enemyTankUI.UpdateHealthBar();
+        
         temp.gameObject.AddComponent<Special>();
 
         return temp;
