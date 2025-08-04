@@ -94,8 +94,7 @@ MonoBehaviour:
   genateIntervalFrame: 2400
   lastTriggerFrame: 0
   eventTrigger: {fileID: 2183134660804735332}
-  title: 
-  description: 
+  stopTimerNum: 10
 --- !u!114 &2183134660804735332
 MonoBehaviour:
   m_ObjectHideFlags: 0

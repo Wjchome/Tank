@@ -308,6 +308,7 @@ public class PlayerTankController : TankController
 
 
         HP = Mathf.Max(HP- damage,0);
+        DamageUIManager.Instance. ShowDamageWord(DamageType.Bullet,damage,transform);
         playerPanelUI.UpdateHP(); // 更新血量显示
 
         if (HP <= 0)

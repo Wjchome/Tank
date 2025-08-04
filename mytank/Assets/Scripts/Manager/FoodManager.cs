@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -46,6 +47,7 @@ public class FoodManager : SingletonMono<FoodManager>
 
     public RectTransform panelParent;
     public Button openOrCloseButton;
+    public TextMeshProUGUI openOrCloseButtonText;
     public List<FoodUIPanel> panels;
     public Dictionary<FoodType, FoodData> foodDict = new Dictionary<FoodType, FoodData>();
 
@@ -113,6 +115,7 @@ public class FoodManager : SingletonMono<FoodManager>
 
 
         openOrCloseButton.gameObject.SetActive(isChooseOpen);
+        openOrCloseButtonText.text = chooseNum.ToString();
     }
 
     private bool isOpenPanel = false;

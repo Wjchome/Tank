@@ -2,15 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public enum DamageType
-{
-    Bullet, 
-    Landmine,
-    SpikeTrap,
-    Bomb,
-    Discipline,
-    Protect,
-}
+
 
 
 
@@ -83,8 +75,9 @@ public class EnemyTankController : TankController
 
     public void DamageHP(int damage, PlayerTankController attacker,DamageType damageType)
     {
-        HP -= damage;
         
+        HP = Mathf.Max(HP- damage,0);
+        DamageUIManager.Instance. ShowDamageWord(damageType,damage,transform);
         enemyTankUI.UpdateHealthBar();
         
         if (HP <= 0)

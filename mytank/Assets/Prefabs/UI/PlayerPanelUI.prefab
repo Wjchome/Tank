@@ -100,7 +100,7 @@ MonoBehaviour:
   HPbar: {fileID: 5350486664827639161}
   HPDelaybar: {fileID: 4748528617215798079}
   killShowPos: {fileID: 6488153602228852654}
-  interval: 200
+  interval: 250
   scollView: {fileID: 6351871612418504779}
   content: {fileID: 6379685077951765537}
   button: {fileID: 634111549729839996}

@@ -950,6 +950,7 @@ Transform:
   - {fileID: 470047796}
   - {fileID: 1362382135}
   - {fileID: 1558422553}
+  - {fileID: 2102273662}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &223813547
@@ -6659,7 +6660,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 385, y: -394.99994}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 160, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &854361747
 GameObject:
@@ -10906,12 +10907,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foodDatas:
   - {fileID: 11400000, guid: ed267d32158f44e5180d3c4b68b2773f, type: 2}
-  - {fileID: 11400000, guid: 0cf209985a8cf4437a46a3656a240def, type: 2}
-  - {fileID: 11400000, guid: abef0f49fcbe64a0e8cd422ee51604de, type: 2}
+  - {fileID: 11400000, guid: f852203a403bb4626afffb7010e0049e, type: 2}
+  - {fileID: 11400000, guid: 1bd6473d56710473691c9770b1d627d6, type: 2}
   - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
   playerFoodUIPrefab: {fileID: 8705780682468749850, guid: d862115454b734bb695bc8eaf11980cc, type: 3}
   panelParent: {fileID: 408527372}
   openOrCloseButton: {fileID: 850812654}
+  openOrCloseButtonText: {fileID: 1965751365}
   panels:
   - {fileID: 229438876}
   - {fileID: 1685713533}
@@ -15674,6 +15676,53 @@ RectTransform:
   m_AnchoredPosition: {x: -612, y: 336}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2102273661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2102273662}
+  - component: {fileID: 2102273663}
+  m_Layer: 0
+  m_Name: DamageUIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2102273662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102273661}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 219629758}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2102273663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2102273661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27018bf5363c4aef92f6f938af71f074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iconDatabase: {fileID: 11400000, guid: d1e56c93da6d2457897b870eeed3d752, type: 2}
+  damageWordUIPrefab: {fileID: 2869910757681401335, guid: dae6dab3519934e4ea8428fa6a6cd4ce, type: 3}
+  parent: {fileID: 1480527955}
 --- !u!1001 &4238262865474294156
 PrefabInstance:
   m_ObjectHideFlags: 0

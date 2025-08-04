@@ -14,12 +14,15 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     public PlayerTankController playerTankControllerPrefab;
     public TankData playerTankData;
+    Dictionary<PlayerTankController, int> deadPlayerDic = new Dictionary<PlayerTankController, int>();
+
+    private int playerNum;
 
     public void OnGameStart(List<PlayerInfo> playerInfos)
     {
-        //      清除
-        //ClearAllPlayers();
         playerNum = playerInfos.Count;
+        
+        activePlayers.Clear();
         // 创建所有玩家的坦克
         CreateAllPlayerTanks(playerInfos);
     }
@@ -31,27 +34,22 @@ public class PlayerManager : SingletonMono<PlayerManager>
         for (int i = 0; i < playerInfos.Count; i++)
         {
             var playerInfo = playerInfos[i];
-
-
             // 获取出生点
             Vector2Int spawnPoint = LevelManager.Instance.currentLevel.playerTankPawns[i];
-
-
             Color color = new Color(
                 playerInfo.ColorR / 255f,
                 playerInfo.ColorG / 255f,
                 playerInfo.ColorB / 255f
             );
-           InitialPlayer(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
+            InitialPlayer(playerInfo.PlayerId, playerInfo.PlayerName, spawnPoint.x,
                 spawnPoint.y, color, playerInfo.PlayerRole);
         }
     }
 
 
-    private int playerNum;
-
     public void DeadPlayer(PlayerTankController tank)
     {
+        if (!NetworkManager.Instance.isGameing) return;
         playerNum--;
         if (playerNum == 0)
         {
@@ -63,12 +61,10 @@ public class PlayerManager : SingletonMono<PlayerManager>
         }
     }
 
-    Dictionary<PlayerTankController, int> deadPlayerDic = new Dictionary<PlayerTankController, int>();
 
     public void UpdateFrame()
     {
-        
-        activePlayers.ToList().ForEach(a=>a.UpdateFrame());
+        activePlayers.ToList().ForEach(a => a.UpdateFrame());
         if (deadPlayerDic.Count > 0)
         {
             // 反向遍历，避免修改集合的问题
@@ -129,10 +125,10 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.random = new System.Random(seed);
 
         TankData data = playerTankData;
-        temp.moveIntervalFrame=data.moveIntervalFrame;
+        temp.moveIntervalFrame = data.moveIntervalFrame;
         temp.shootIntervalFrame = data.shootIntervalFrame;
-        temp.orignalHP=data.orignalHP;
-        temp.HP=data.HP;
+        temp.orignalHP = data.orignalHP;
+        temp.HP = data.HP;
 
 
         temp.playerPanelUI =
@@ -144,7 +140,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.animType = dataIndex;
 
         activePlayers.Add(temp);
-        EntityManager.Instance. allTanks.Add(temp);
+        EntityManager.Instance.allTanks.Add(temp);
         switch (dataIndex)
         {
             case 1:

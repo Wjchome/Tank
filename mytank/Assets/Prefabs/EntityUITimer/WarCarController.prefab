@@ -108,3 +108,4 @@ MonoBehaviour:
   lastTriggerFrame: 0
   eventTrigger: {fileID: 2183134660804735332}
   addNum: 1
+  islimited: 1
