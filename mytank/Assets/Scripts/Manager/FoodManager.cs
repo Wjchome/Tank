@@ -214,8 +214,17 @@ public class FoodManager : SingletonMono<FoodManager>
         var panel = panels[index];
         panel.gameObject.SetActive(true);
         panel.chooseButton.interactable = true;
+        
         panel.image.sprite = food.sprite;
         panel.foodName.text = food.foodName;
+        if (superFoodDatas.Contains(food))
+        {
+            panel.foodName.color = Color.red;
+        }
+        else
+        {
+            panel.foodName.color = Color.white;
+        }
         panel.foodDescription.text = food.foodDescription[num];
         for (int i = 0; i < 3; i++)
         {

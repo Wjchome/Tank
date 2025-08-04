@@ -21,7 +21,7 @@ public class Landmine : MapEntity
         }
         else
         {
-            var tanks = MapManager.Instance.GetTankInArea(Pos.x, Pos.y, 1, 1);
+            var tanks = MapManager.Instance.GetEnemyTankInArea(Pos.x, Pos.y, 1, 1);
             if (tanks != null&&tanks.Count>0)
             {
                 Trigger();

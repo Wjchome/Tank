@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Tankgame;
@@ -53,6 +54,7 @@ public class PlayerTankController : TankController
     public GameObject shoeShow;
 
     public Animator bombAnimator;
+    public Animator tankAnimator2;
 
 
     public bool isSpeedKiller;
@@ -60,6 +62,8 @@ public class PlayerTankController : TankController
 
     public bool isPenetrate;
     public GameObject penetrateShow;
+
+
 
 
     public override void UpdateFrame()
@@ -286,6 +290,7 @@ public class PlayerTankController : TankController
             secondDir = tankDirection;
             secondPos = Pos;
         }
+        AudioManager.Instance.Play("Shoot");
     }
 
     public override void AddOrignalHP(int num)
@@ -322,6 +327,7 @@ public class PlayerTankController : TankController
         if (isDead) return;
         isDead = true;
         animator.Play("BigBoom");
+        AudioManager.Instance.Play("Bomb");
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
         Pos = new Vector2Int(-2, -2);
     }

@@ -17,6 +17,8 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 if (tank.tankID == foodRequest.PlayerId)
                 {
                     ApplyFoodToTank(tank, foodRequest.FoodId);
+                    AudioManager.Instance.Play("GetUp");
+                    tank.tankAnimator2.Play("GetUp");
                 }
             }
         }
@@ -101,12 +103,12 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.Bomb:
                 if (num == 0)
                 {
-                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(10, tank,DamageType.Bomb));
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(10, tank, DamageType.Bomb));
                     tank.bombAnimator.Play("BombShow", 0, 0);
                 }
                 else if (num == 1)
                 {
-                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(20, tank,DamageType.Bomb));
+                    EnemyManager.Instance.activeEnemies.ForEach((a) => a.DamageHP(20, tank, DamageType.Bomb));
                     tank.bombAnimator.Play("BombShow", 0, 0);
                 }
                 else if (num == 2)
@@ -510,7 +512,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 tank.speedKillerShow.SetActive(true);
                 break;
             case FoodType.LifeEnhancement:
-                WarCarController a=EntityManager.Instance.FindFirstOrDefaultUIEntity<WarCarController>(tank);
+                WarCarController a = EntityManager.Instance.FindFirstOrDefaultUIEntity<WarCarController>(tank);
                 a.islimited = false;
                 break;
             case FoodType.TimeStorm:
@@ -518,34 +520,33 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 var bombControllers = EntityManager.Instance.FindUIEntities<BombController>(tank);
                 var disciplineControllers = EntityManager.Instance.FindUIEntities<DisciplineController>(tank);
                 var pocketWatchControllers = EntityManager.Instance.FindUIEntities<PocketWatchController>(tank);
-    
+
                 // 销毁所有控制器
                 foreach (var controller in bombControllers)
                 {
                     controller.Destroy();
                 }
-    
+
                 foreach (var controller in disciplineControllers)
                 {
                     controller.Destroy();
                 }
-    
+
                 foreach (var controller in pocketWatchControllers)
                 {
                     controller.Destroy();
                 }
-    
+
                 // 生成新的TimeController
                 EntityManager.Instance.InitTimeStormController(tank);
                 break;
-                
+
             case FoodType.PenetratingBullet:
-                
-                    tank.isPenetrate = true;
-                    tank.penetrateShow.SetActive(true);
-                
+
+                tank.isPenetrate = true;
+                tank.penetrateShow.SetActive(true);
+
                 break;
-    
         }
     }
 
@@ -569,7 +570,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
        */
 
         PlayerManager.Instance.activePlayers.ForEach(a => a.Dead());
-         EnemyManager.Instance.activeEnemies.ForEach(a => a.Dead(null));
+        EnemyManager.Instance.activeEnemies.ForEach(a => a.Dead(null));
         EntityManager.Instance.GameOver();
 
         MapManager.Instance.ClearMap();

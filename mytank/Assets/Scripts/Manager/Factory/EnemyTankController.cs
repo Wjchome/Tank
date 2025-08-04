@@ -61,6 +61,8 @@ public class EnemyTankController : TankController
     public override void Shoot()
     {
         EntityManager.Instance.InitializeBullet(tankDirection, this, Pos, bulletDamageNum);
+        //AudioManager.Instance.Play("Shoot");
+        
     }
 
     public override void AddOrignalHP(int num)
@@ -91,6 +93,8 @@ public class EnemyTankController : TankController
         if (isDead) return;
         isDead = true;
         animator.Play("BigBoom");
+        AudioManager.Instance.Play("Bomb");
+        
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
         if (attacker != null)
         {

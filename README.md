@@ -114,3 +114,7 @@ Pistol Star RearFire
 Shovel GhostGuard Boat
 => 保持原有效果
 => Shovel GhostGuard时间间隔减少,经过河的时候移速增加
+
+1.UI表现
+2.顶级技能
+3.初始角色选择
