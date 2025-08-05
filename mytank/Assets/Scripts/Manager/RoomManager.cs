@@ -158,6 +158,7 @@ public class RoomManager : SingletonMono<RoomManager>
                 {
                     foodDescShow.text += $"{i++}.{desc}\n";
                 }
+
                 AudioManager.Instance.Play("Illustration");
             });
             if (!isFirst)
@@ -176,6 +177,24 @@ public class RoomManager : SingletonMono<RoomManager>
         }
     }
 
+    void AnimateButton(Button button)
+    {
+        var originalScale = button.transform.localScale;
+        // 按下动画
+        button.transform.DOScale(originalScale * 0.9f, 0.1f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                // 释放动画（带弹性效果）
+                button.transform.DOScale(originalScale * 1.1f, 0.3f)
+                    .SetEase(Ease.OutElastic)
+                    .OnComplete(() =>
+                    {
+                        // 确保最终恢复精确原始大小
+                        button.transform.localScale = originalScale;
+                    });
+            });
+    }
 
     void SubscribeToEvents()
     {
@@ -184,6 +203,7 @@ public class RoomManager : SingletonMono<RoomManager>
         {
             ShowPanel(1);
             AudioManager.Instance.Play("UIClick");
+            // AnimateButton(mySettingsButton);
         });
         createRoomButton.onClick.AddListener(() =>
         {
@@ -262,23 +282,42 @@ public class RoomManager : SingletonMono<RoomManager>
 
     void ShowPanel(int index)
     {
-        for (int i = 0; i < panels.Count; i++)
+        if (currentPanelIndex == index) return;
+        if (currentPanelIndex == -1)
         {
-            panels[i].SetActive(i == index);
+            panels[index].SetActive(true);
+            panels[index].transform.rotation = Quaternion.Euler(0, 90, 0);
+            panels[index].transform.DORotate(new Vector3(0, 0, 0), 0.5f).SetEase(Ease.InOutQuad);
+            currentPanelIndex = index;
         }
-
-        currentPanelIndex = index;
+        else
+        {
+            panels[currentPanelIndex].transform.DORotate(new Vector3(0, 90, 0), 0.4f)
+                .SetEase(Ease.InOutQuad)
+                .OnComplete(() =>
+                {
+                    panels[currentPanelIndex].SetActive(false);
+                    panels[index].SetActive(true);
+                    panels[index].transform.rotation = Quaternion.Euler(0, 90, 0);
+                    panels[index].transform.DORotate(new Vector3(0, 0, 0), 0.4f).SetEase(Ease.InOutQuad);
+                    currentPanelIndex = index;
+                });
+        }
+   
+ 
     }
 
     public void OnGameStartRoom()
     {
-        for (int i = 0; i < panels.Count; i++)
-        {
-            int num = i;
-            panels[num].SetActive(false);
-        }
+        
+        panels[currentPanelIndex].transform.DORotate(new Vector3(0, 90, 0), 0.5f)
+            .SetEase(Ease.InOutQuad)
+            .OnComplete(() =>
+            {
+                panels[currentPanelIndex].SetActive(false);
 
-        currentPanelIndex = -1;
+                currentPanelIndex = -1;
+            });
     }
 
 

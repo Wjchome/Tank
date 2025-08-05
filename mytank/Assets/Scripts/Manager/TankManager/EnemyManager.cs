@@ -19,11 +19,14 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public List<TankData> orignalDatas;
 
     
-    public int sumEnemies = 0;//总敌人数量
     private List<Vector2Int> tankPawnsPos;
     
-    public int maxEnemies = 3; // 场上最大敌人数量
-    public int enemySpawnInterval = 200; // 敌人生成间隔
+    
+    public int sumEnemies = 0;//总敌人数量
+    public int maxEnemies ; // 场上最大敌人数量
+    public int enemySpawnInterval; // 敌人生成间隔
+    public int specialRange ;
+    
     public int leafEnemies = 0;
     private long lastSpawnFrame = 0;
     
@@ -31,7 +34,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public TextMeshProUGUI enemyleafText;
     public System.Random random;
 
-    public int specialRange = 5;
+   
 
     
     
@@ -86,8 +89,12 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     public void LoadLevel(Level levelData)
     {
-        sumEnemies = levelData.enemyNum;
+        sumEnemies = levelData.enemySum;
         tankPawnsPos=levelData.enemyTankPawns.ToList();
+        maxEnemies=levelData.maxEnemies;
+        enemySpawnInterval = levelData.enemySpawnFrame;
+        specialRange = levelData.specialRate;
+        
         leafEnemies=sumEnemies;
         lastSpawnFrame = 0;
         enemyleafText.text= leafEnemies.ToString();
