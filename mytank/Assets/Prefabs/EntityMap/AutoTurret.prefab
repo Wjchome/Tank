@@ -103,4 +103,4 @@ MonoBehaviour:
   tank: {fileID: 0}
   Pos: {x: 0, y: 0}
   shootIntervalFrame: 80
-  damageNum: 5
+  damageNum: 3

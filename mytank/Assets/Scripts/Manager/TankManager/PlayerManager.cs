@@ -101,7 +101,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.tankDirection = Direction.Up;
         temp.transform.rotation = Quaternion.identity;
         temp.Pos = new Vector2Int(x, y); // 左下角坐标
-        temp.scaleSize=new Vector2(1f, 1f);
+        temp.scaleSize=new Vector2(2f, 2f);
         if (tankID == NetworkManager.Instance.playerID)
         {
             temp.identity = Identity.Myself;

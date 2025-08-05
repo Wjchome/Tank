@@ -445,7 +445,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
 
                     if (targetDiscipline != null)
                     {
-                        targetDiscipline.targetNum = 3;
+                        targetDiscipline.targetNum = 4;
                     }
                 }
 
@@ -547,6 +547,12 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 tank.penetrateShow.SetActive(true);
 
                 break;
+           case FoodType.SuperDefense:
+                GhostGuardMachine ghostGuard = EntityManager.Instance.FindFirstOrDefaultUIEntity<GhostGuardMachine>(tank);
+                ghostGuard.genateIntervalFrame = (int)(15 / Constant.FrameInterval);
+                ProtectController protectController = EntityManager.Instance.FindFirstOrDefaultUIEntity<ProtectController>(tank);
+                protectController.range = 2;
+break;
         }
     }
 

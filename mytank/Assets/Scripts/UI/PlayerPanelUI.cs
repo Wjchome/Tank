@@ -39,7 +39,7 @@
         {
             tank=tankController;
             HPbar.color = tank.playerColor;
-            
+            HPDelaybar.color = new Color(tank.playerColor.r,tank.playerColor.g,tank.playerColor.b,0.5f);
             GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
             leftPos=playerInfo.GetComponent<RectTransform>().anchoredPosition;
             rightPos=scollView.GetComponent<RectTransform>().anchoredPosition;

@@ -206,7 +206,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
 
         temp.tankID = tankID;
-        temp.tankDirection = Direction.Up;
+        int dir=random.Next(0, 4);
+        
+        temp.tankDirection = (Direction)dir;
 
         temp.Pos = new Vector2Int(x, y); // 左下角坐标
 
@@ -240,7 +242,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
         EnemyTankController temp = enemyTankPool.GetObject();
 
         temp.tankID = playerID;
-        temp.tankDirection = Direction.Up;
+        int dir=random.Next(0, 4);
+        temp.tankDirection = (Direction)dir;
+
         temp.Pos = new Vector2Int(x, y); // 左下角坐标
 
         temp.identity = Identity.Enemy;

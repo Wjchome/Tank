@@ -136,11 +136,18 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
         else if (message.RoomInfo != null)
         {
-          
-            
-            currentRoom = message.RoomInfo;
+
+            if (isGameing)
+            {
+                GameStateManager.Instance.GameOver(false);
+            }
+            else
+            {
+                currentRoom = message.RoomInfo;
          
-            RoomManager.Instance.  OnRoomInfoUpdate(message.RoomInfo);
+                RoomManager.Instance.  OnRoomInfoUpdate(message.RoomInfo);
+            }
+          
 
             
         }

@@ -11,6 +11,8 @@
 
 
         public int damageNum = 1;
+
+        public int range = 1;
         protected override void ApplyEffect()
         {
             Pos = tank.Pos;
@@ -26,8 +28,15 @@
             {
                 a.DamageHP(damageNum, tank,DamageType.Protect);
             }
-            
-            tank.bombAnimator.Play("Protect",0,0);
+
+            if (range == 1)
+            {
+                tank.bombAnimator.Play("Protect",0,0);
+            }
+            else
+            {
+                tank.bombAnimator.Play("Protect2",0,0);
+            }
         }
         
         
@@ -37,29 +46,19 @@
 // 1 1 1 1
         List<Vector2Int> FindAll()
         {
-            List<Vector2Int> list = new List<Vector2Int>
+            List<Vector2Int> list = new List<Vector2Int>();
+          
+            for (int x = Pos.x - range; x <= Pos.x +range+ 1; x++)
             {
-                new Vector2Int(Pos.x-1,Pos.y),
-                new Vector2Int(Pos.x-1,Pos.y-1),
-                new Vector2Int(Pos.x-1,Pos.y+1),
-                new Vector2Int(Pos.x-1,Pos.y+2),
-                new Vector2Int(Pos.x,Pos.y-1),
-                new Vector2Int(Pos.x,Pos.y+2),
-                new Vector2Int(Pos.x+1,Pos.y-1),
-                new Vector2Int(Pos.x+1,Pos.y+2),
-                new Vector2Int(Pos.x+2,Pos.y-1),
-                new Vector2Int(Pos.x+2,Pos.y),
-                new Vector2Int(Pos.x+2,Pos.y+1),
-                new Vector2Int(Pos.x+2,Pos.y+2),
-            };
-            foreach (var item in list.ToList())
-            {
-                if (!MapManager.Instance.IsVailePos(item))
+                for (int y = Pos.y - range; y <= Pos.y + range+1; y++)
                 {
-                    list.Remove(item);
+                    if (MapManager.Instance.IsVailePos(new Vector2Int(x, y)))
+                    {
+                        list.Add(new Vector2Int(x, y));
+                    }
                 }
             }
-            
+   
             return list;
         }
         
