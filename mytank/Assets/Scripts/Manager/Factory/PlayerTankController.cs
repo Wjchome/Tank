@@ -276,6 +276,7 @@ public class PlayerTankController : TankController
         {
             EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this, Pos, bulletDamageNum);
         }
+
         if (isShootThree)
         {
             int intervalFrame = 8;
@@ -283,6 +284,7 @@ public class PlayerTankController : TankController
             threeDir = tankDirection;
             threePos = Pos;
         }
+
         if (isShootTwice)
         {
             int intervalFrame = 4;
@@ -290,8 +292,12 @@ public class PlayerTankController : TankController
             secondDir = tankDirection;
             secondPos = Pos;
         }
+
         AudioManager.Instance.Play("Shoot");
     }
+
+
+
 
     public override void AddOrignalHP(int num)
     {
@@ -305,16 +311,23 @@ public class PlayerTankController : TankController
         bombAnimator.Play("Heal", 0, 0);
         HP = Mathf.Min(HP + num, orignalHP);
         playerPanelUI.UpdateHP(); // 更新血量显示
+        
+      
+        
+   
     }
 
     public void DamageHP(int damage)
     {
         if (isInvincible) return;
 
-
         HP = Mathf.Max(HP- damage,0);
         DamageUIManager.Instance. ShowDamageWord(DamageType.Bullet,damage,transform);
         playerPanelUI.UpdateHP(); // 更新血量显示
+
+     
+        
+    
 
         if (HP <= 0)
         {
@@ -328,8 +341,14 @@ public class PlayerTankController : TankController
         isDead = true;
         animator.Play("BigBoom");
         AudioManager.Instance.Play("Bomb");
+        CamController.Instance.ShakeDead();
+        
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
         Pos = new Vector2Int(-2, -2);
+        
+    
+        
+
     }
 
     public void Kill(bool isSpecial)

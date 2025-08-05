@@ -207,6 +207,7 @@ public class BulletController : MapEntity
         transform.position += (Vector3)randomPos;
         animator.Play("SmallBoom");
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
+   
     }
 
     // 执行死亡后的逻辑

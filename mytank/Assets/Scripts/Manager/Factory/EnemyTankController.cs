@@ -94,6 +94,7 @@ public class EnemyTankController : TankController
         isDead = true;
         animator.Play("BigBoom");
         AudioManager.Instance.Play("Bomb");
+        CamController.Instance.ShakeDead();
         
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
         if (attacker != null)

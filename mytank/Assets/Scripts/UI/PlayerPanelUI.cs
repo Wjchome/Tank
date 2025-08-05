@@ -4,6 +4,7 @@
     using DG.Tweening;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.Serialization;
     using UnityEngine.UI;
 
     public class PlayerPanelUI:MonoBehaviour
@@ -21,7 +22,7 @@
         public int interval;
         
         [Header("Player Food UI")]
-        public Transform scollView;
+        public Transform foodScollView;
         public Transform content;
         
         
@@ -42,7 +43,7 @@
             HPDelaybar.color = new Color(tank.playerColor.r,tank.playerColor.g,tank.playerColor.b,0.5f);
             GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
             leftPos=playerInfo.GetComponent<RectTransform>().anchoredPosition;
-            rightPos=scollView.GetComponent<RectTransform>().anchoredPosition;
+            rightPos=foodScollView.GetComponent<RectTransform>().anchoredPosition;
             button.onClick.AddListener(Change);
         }
 
@@ -96,13 +97,13 @@
             if (isOpenFood)
             {
                 playerInfo.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
-                scollView.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
+                foodScollView.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
                 isOpenFood=false;
             }
             else
             {
                 playerInfo.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
-                scollView.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
+                foodScollView.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
                 
                 isOpenFood=true;
             }

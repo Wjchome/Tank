@@ -64,6 +64,9 @@ public class FoodManager : SingletonMono<FoodManager>
 
     public bool isChooseOpen = false;
 
+    public Sprite getSprite0;
+    public Sprite getSprite1;
+
     private void Start()
     {
         foreach (var foodData in foodDatas)
@@ -194,7 +197,6 @@ public class FoodManager : SingletonMono<FoodManager>
     {
         panelParent.DOAnchorPos(new Vector2(0, -800), 0.5f);
         isOpenPanel = false;
-        
     }
 
     void SetupPanel(int index, FoodData food, PlayerTankController tank)
@@ -214,7 +216,7 @@ public class FoodManager : SingletonMono<FoodManager>
         var panel = panels[index];
         panel.gameObject.SetActive(true);
         panel.chooseButton.interactable = true;
-        
+
         panel.image.sprite = food.sprite;
         panel.foodName.text = food.foodName;
         if (superFoodDatas.Contains(food))
@@ -225,16 +227,17 @@ public class FoodManager : SingletonMono<FoodManager>
         {
             panel.foodName.color = Color.white;
         }
+
         panel.foodDescription.text = food.foodDescription[num];
         for (int i = 0; i < 3; i++)
         {
             if (i < num)
             {
-                panel.isGetImage[i].gameObject.SetActive(true);
+                panel.isGetImage[i].sprite = getSprite0;
             }
             else
             {
-                panel.isGetImage[i].gameObject.SetActive(false);
+                panel.isGetImage[i].sprite = getSprite1;
             }
         }
 
@@ -245,14 +248,11 @@ public class FoodManager : SingletonMono<FoodManager>
                 p.chooseButton.interactable = false;
             chooseNum--;
             isChooseOpen = false;
-
             // 2. 发送网络请求
             NetworkManager.Instance.FoodChooseRequest(food.foodType);
 
             // 3. 关闭面板
             ClosePanels();
-            
-          
         });
     }
 }

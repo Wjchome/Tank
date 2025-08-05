@@ -10,4 +10,6 @@
         public TextMeshProUGUI foodDescription;
         public Button chooseButton;
         public Image[] isGetImage;
+        
+        
     }
