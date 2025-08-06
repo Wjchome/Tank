@@ -126,4 +126,8 @@ MonoBehaviour:
   - {x: 47, y: 1}
   - {x: 10, y: 1}
   - {x: 14, y: 1}
-  enemyNum: 200
+  enemySum: 100
+  enemySpawnFrame: 100
+  maxEnemies: 100
+  specialRate: 1
+  enemiesUp: []

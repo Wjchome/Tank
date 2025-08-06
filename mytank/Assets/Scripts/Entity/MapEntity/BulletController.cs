@@ -19,7 +19,9 @@ public class BulletController : MapEntity
     public Vector2Int dir;
 
 
-    // 坐标系统辅助方法
+    public Vector2Int PosUp => new Vector2Int(Pos.x, Pos.y + 1);
+    public Vector2Int PosUpRight => new Vector2Int(Pos.x + 1, Pos.y + 1);
+    public Vector2Int PosRight => new Vector2Int(Pos.x + 1, Pos.y);
 
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
@@ -109,7 +111,7 @@ public class BulletController : MapEntity
                         bullet.DestroyBullet();
                     }
 
-                   
+
                     break;
                 }
             }
@@ -192,7 +194,7 @@ public class BulletController : MapEntity
         }
         else if (tank is PlayerTankController player)
         {
-            if (player.isBreakWall&&wallType == MapType.wall)
+            if (player.isBreakWall && wallType == MapType.wall)
             {
                 MapManager.Instance.SetWallType(wallPos.x, wallPos.y, MapType.floor);
             }
@@ -208,7 +210,6 @@ public class BulletController : MapEntity
         transform.position += (Vector3)randomPos;
         animator.Play("SmallBoom");
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
-   
     }
 
     // 执行死亡后的逻辑

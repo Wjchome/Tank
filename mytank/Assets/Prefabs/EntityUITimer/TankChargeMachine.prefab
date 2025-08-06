@@ -104,6 +104,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
   timerImage: {fileID: 2623925226714571180}
-  genateIntervalFrame: 40
+  genateIntervalFrame: 400
   lastTriggerFrame: 0
   eventTrigger: {fileID: -2617099068761851106}

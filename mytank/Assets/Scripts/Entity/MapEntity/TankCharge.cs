@@ -9,7 +9,7 @@ public class TankCharge : MapEntity
     public int moveIntervalFrame = 10;
     private long lastMoveFrame;
 
-
+    public bool isCanBullet = false;
     public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
     public int damageNum;
@@ -30,6 +30,23 @@ public class TankCharge : MapEntity
                     poss.Contains(enemyTankController.PosRight) || poss.Contains(enemyTankController.PosUpRight))
                 {
                     enemyTankController.DamageHP(damageNum, tank as PlayerTankController, DamageType.Charge);
+                }
+            }
+
+            if (isCanBullet)
+            {
+                var bullets = EntityManager.Instance.activeBullets;
+                foreach (var bulletController in bullets)
+                {
+                    if (bulletController.isPlayerBullet == false)
+                    {
+                        if (poss.Contains(bulletController.Pos) || poss.Contains(bulletController.PosUp) ||
+                            poss.Contains(bulletController.PosRight) || poss.Contains(bulletController.PosUpRight))
+                        {
+                            bulletController.isShouldDestroy = true;
+                            bulletController.DestroyBullet();
+                        }
+                    }
                 }
             }
 

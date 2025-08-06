@@ -433,7 +433,7 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnMapEntity(pulseTurretPrefab, tank, new Vector2(pos.x, pos.y), pos);
     }
 
-    public void InitTankCharge(PlayerTankController tank)
+    public void InitTankCharge(PlayerTankController tank,bool isCanBullet)
     {
         int a = tank.random.Next(4);
         Direction dir = Direction.Up;
@@ -473,8 +473,46 @@ public class EntityManager : SingletonMono<EntityManager>
             spawnPos);
         tankCharge.transform.rotation = Quaternion.Euler(rot);
         tankCharge.moveDirection = dir;
+        tankCharge.isCanBullet = isCanBullet;
         tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
     }
+    public void InitTankCharge(PlayerTankController tank ,bool isCanBullet,Vector2Int pos)
+        {
+            int a = tank.random.Next(4);
+            Direction dir = Direction.Up;
+            Vector3 rot = Vector3.forward;
+            switch (a)
+            {
+                case 0:
+                    dir = Direction.Up;
+                    rot = new Vector3(0, 0, 0);
+                    break;
+                case 1:
+                    dir = Direction.Left;
+                    rot = new Vector3(0, 0, 90);
+                    
+                    break;
+                case 2:
+                    dir = Direction.Down;
+                  rot = new Vector3(0, 0, 180);
+                    
+                    break;
+                case 3:
+                    dir = Direction.Right;
+                    rot = new Vector3(0, 0, -90);
+                    break;
+            }
+            Color tankColor = tank.playerColor;
+            Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
+    
+            var tankCharge = SpawnMapEntity(tankChargePrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f),
+                pos);
+            tankCharge.transform.rotation = Quaternion.Euler(rot);
+            tankCharge.moveDirection = dir;
+            tankCharge.isCanBullet=isCanBullet;
+            tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
+        }
+    
 
     public void InitAlmightyTurretMachine(PlayerTankController tank)
     {

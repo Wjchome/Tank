@@ -1,9 +1,11 @@
 
     public class TankChargeMachina:UITimerEntity
     {
+                       
+        public bool isCanBullet=false;
         protected override void ApplyEffect()
         {
-            EntityManager.Instance.InitTankCharge(tank);
+            EntityManager.Instance.InitTankCharge(tank,isCanBullet);
 
         }
         protected override void ShowTooltip()

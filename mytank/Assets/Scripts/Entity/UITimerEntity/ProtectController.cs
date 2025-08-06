@@ -23,8 +23,7 @@
                     a => vets.Contains(a.Pos)||vets.Contains(a.PosUp)||
                          vets.Contains(a.PosUpRight)||vets.Contains(a.PosRight));
             
-            HashSet<TankController> tanksSet=new HashSet<TankController>(tanks);
-            foreach (EnemyTankController a in tanksSet.ToList())
+            foreach (EnemyTankController a in tanks )
             {
                 a.DamageHP(damageNum, tank,DamageType.Protect);
             }

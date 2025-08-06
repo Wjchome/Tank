@@ -62,8 +62,12 @@ public class PlayerTankController : TankController
     public bool isPenetrate;
     public GameObject penetrateShow;
 
+    public bool isChainImplosion;
+    public int chainImplosionDamage;
+    public int chainImplosionRange;
+    public GameObject chainImplosionShow;
 
-
+    public bool isLegionoftheFallen;
 
     public override void UpdateFrame()
     {

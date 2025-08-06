@@ -23,7 +23,6 @@ public class PulseTurret : MapEntity
             animator.Play("Pulse", 0, 0);
             var bullets = EntityManager.Instance.activeBullets.FindAll(bullet => bullet.isPlayerBullet == false);
 
-            List<BulletController> targets = new List<BulletController>();
 
             foreach (BulletController bullet in bullets)
             {
@@ -31,15 +30,12 @@ public class PulseTurret : MapEntity
                     points.Contains(bullet.Pos + new Vector2Int(1, 1)) ||
                     points.Contains(bullet.Pos + new Vector2Int(1, 0)))
                 {
-                    targets.Add(bullet);
+                    bullet.isShouldDestroy = true;
+                    bullet.DestroyBullet();
                 }
             }
 
-            foreach (BulletController bullet in targets)
-            {
-                bullet.isShouldDestroy = true;
-                bullet.DestroyBullet();
-            }
+          
 
             lastTargetFrame = NetworkManager.Instance.currentFrame;
         }
