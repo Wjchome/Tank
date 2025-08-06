@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net"
@@ -16,6 +17,14 @@ import (
 const (
 	FRAME_INTERVAL = 25 * time.Millisecond // 20帧每秒
 )
+
+// 服务器信息结构
+type ServerInfo struct {
+	ServerIP   string `json:"serverIP"`
+	GamePort   int    `json:"gamePort"`
+	ServerName string `json:"serverName"`
+	Version    string `json:"version"`
+}
 
 type Client struct {
 	ID         string
@@ -45,22 +54,37 @@ type Room struct {
 type Server struct {
 	Rooms map[string]*Room
 	Mutex sync.Mutex
+	// 新增字段
+	broadcastPort int
+	serverInfo    ServerInfo
+	stopBroadcast chan bool
 }
 
 // 服务器唯一
 func NewServer() *Server {
 	return &Server{
-		Rooms: make(map[string]*Room),
+		Rooms:         make(map[string]*Room),
+		broadcastPort: 9999,
+		serverInfo: ServerInfo{
+			ServerName: "Tank Game Server",
+			Version:    "1.0",
+			GamePort:   8080,
+		},
+		stopBroadcast: make(chan bool),
 	}
 }
 
 func (s *Server) Start() {
+	// 启动UDP广播
+	go s.startBroadcast()
+
 	ln, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer ln.Close()
 	fmt.Println("Frame Sync Relay Server with Room Management started on :8080")
+	fmt.Println("UDP broadcast started on :9999")
 
 	for {
 		conn, err := ln.Accept()
@@ -71,6 +95,72 @@ func (s *Server) Start() {
 		//监测到客户端连接，执行逻辑
 		go s.handleClient(conn)
 	}
+}
+
+// 新增：启动UDP广播
+func (s *Server) startBroadcast() {
+	// 获取本机IP
+	localIP := s.getLocalIP()
+	if localIP == "" {
+		log.Println("Failed to get local IP")
+		return
+	}
+
+	s.serverInfo.ServerIP = localIP
+
+	// 创建UDP连接
+	conn, err := net.DialUDP("udp", nil, &net.UDPAddr{
+		IP:   net.IPv4(255, 255, 255, 255),
+		Port: s.broadcastPort,
+	})
+	if err != nil {
+		log.Println("Failed to create UDP broadcast connection:", err)
+		return
+	}
+	defer conn.Close()
+
+	ticker := time.NewTicker(2 * time.Second) // 每2秒广播一次
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			s.broadcastServerInfo(conn)
+		case <-s.stopBroadcast:
+			return
+		}
+	}
+}
+
+// 新增：广播服务器信息
+func (s *Server) broadcastServerInfo(conn *net.UDPConn) {
+	data, err := json.Marshal(s.serverInfo)
+	if err != nil {
+		log.Println("Failed to marshal server info:", err)
+		return
+	}
+
+	_, err = conn.Write(data)
+	if err != nil {
+		log.Println("Failed to broadcast server info:", err)
+	}
+}
+
+// 新增：获取本机IP
+func (s *Server) getLocalIP() string {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return ""
+	}
+
+	for _, addr := range addrs {
+		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				return ipnet.IP.String()
+			}
+		}
+	}
+	return ""
 }
 
 func (s *Server) handleClient(conn net.Conn) {

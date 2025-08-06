@@ -9,6 +9,19 @@ using System.Threading;
 using Tankgame;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using System.Net;
+using System.Text;
+using Newtonsoft.Json;
+
+// 服务器信息结构
+[System.Serializable]
+public class ServerInfo
+{
+    public string serverIP;
+    public int gamePort;
+    public string serverName;
+    public string version;
+}
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
@@ -30,15 +43,92 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private Thread receiveThread;
     private bool shouldStopThread = false;
 
-    public string serverIP = "10.30.29.192";
+    // 新增字段
+    private UdpClient discoveryClient;
+    private Thread discoveryThread;
+    private bool shouldStopDiscovery = false;
+    private ServerInfo discoveredServer;
+    private bool serverDiscovered = false;
+    private bool serverInfoUpdated = false; // 新增：标记服务器信息是否更新
+    
+    // 默认连接信息（如果没发现服务器时使用）
+    public string serverIP = "127.0.0.1";
     public int serverPort = 8080;
 
     public PlayerTankController myTank;
     private void Start()
     {
+        StartDiscovery();
+        // 延迟连接，等待发现服务器
+        StartCoroutine(DelayedConnect());
+    }
+    
+    // 新增：延迟连接
+    private IEnumerator DelayedConnect()
+    {
+        yield return new WaitForSeconds(3f); // 等待3秒发现服务器
+        
+        if (serverDiscovered && discoveredServer != null)
+        {
+            serverIP = discoveredServer.serverIP;
+            serverPort = discoveredServer.gamePort;
+            Debug.Log($"Discovered server: {serverIP}:{serverPort}");
+        }
+        else
+        {
+            Debug.Log("No server discovered, using default IP");
+        }
+        
         ConnectToServer();
+    }
+    
+    // 新增：启动服务器发现
+    private void StartDiscovery()
+    {
+        try
+        {
+            discoveryClient = new UdpClient(9999);
+            discoveryThread = new Thread(DiscoveryThread);
+            discoveryThread.IsBackground = true;
+            discoveryThread.Start();
+            Debug.Log("Started server discovery on port 9999");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to start discovery: {e.Message}");
+        }
+    }
+    
+    // 新增：发现线程
+    private void DiscoveryThread()
+    {
+        IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 9999);
         
-        
+        while (!shouldStopDiscovery)
+        {
+            try
+            {
+                byte[] data = discoveryClient.Receive(ref remoteEP);
+                string json = Encoding.UTF8.GetString(data);
+                
+                ServerInfo serverInfo = JsonConvert.DeserializeObject<ServerInfo>(json);
+                
+                // 直接更新变量，在Update中处理
+                lock (queueLock)
+                {
+                    discoveredServer = serverInfo;
+                    serverDiscovered = true;
+                    serverInfoUpdated = true;
+                }
+            }
+            catch (Exception e)
+            {
+                if (!shouldStopDiscovery)
+                {
+                    Debug.LogError($"Discovery error: {e.Message}");
+                }
+            }
+        }
     }
     
     
@@ -77,6 +167,19 @@ public class NetworkManager : SingletonMono<NetworkManager>
     //每帧处理一个服务端传输来的消息
     void Update()
     {
+        // 处理服务器发现结果
+        if (serverInfoUpdated)
+        {
+            lock (queueLock)
+            {
+                serverInfoUpdated = false;
+                if (discoveredServer != null)
+                {
+                    Debug.Log($"Server discovered: {discoveredServer.serverName} at {discoveredServer.serverIP}:{discoveredServer.gamePort}");
+                }
+            }
+        }
+        
         // 在主线程处理消息队列
         ServerMessage msg = null;
         lock (queueLock)
@@ -416,7 +519,15 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     void OnDestroy()
     {
-       
+        // 停止发现线程
+        shouldStopDiscovery = true;
+        discoveryClient?.Close();
+        if (discoveryThread != null && discoveryThread.IsAlive)
+        {
+            discoveryThread.Join(1000);
+        }
+        
+        // 原有的清理代码
         shouldStopThread = true;
         isConnected = false;
         stream?.Close();
