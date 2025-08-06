@@ -120,6 +120,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
                     serverDiscovered = true;
                     serverInfoUpdated = true;
                 }
+                
+                // 找到服务器后停止UDP监听
+                Debug.Log("Server found, stopping UDP discovery");
+                shouldStopDiscovery = true;
+                break;
             }
             catch (Exception e)
             {

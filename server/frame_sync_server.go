@@ -143,6 +143,8 @@ func (s *Server) broadcastServerInfo(conn *net.UDPConn) {
 	_, err = conn.Write(data)
 	if err != nil {
 		log.Println("Failed to broadcast server info:", err)
+	} else {
+		log.Printf("Broadcasting server info: %s:%d", s.serverInfo.ServerIP, s.serverInfo.GamePort)
 	}
 }
 
