@@ -24,6 +24,11 @@ using UnityEngine;
         public Vector2 firstPos1=new Vector2(-1000, 0); 
         public Vector2 secondPos1=new Vector2(-600, 0);
         
+        public InputButton upButton;
+        public InputButton leftButton;
+        public InputButton downButton;
+        public InputButton rightButton;
+        public InputButton shootButton;
         private void Awake()
         {
             gameOverButton.onClick.AddListener(Gameover);

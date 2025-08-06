@@ -195,6 +195,7 @@ public class PlayerTankController : TankController
     {
         if (NetworkManager.Instance.currentFrame - lastMoveFrame > CurrentMoveIntervalFrame())
         {
+#if UNITY_STANDALONE_OSX
             if (Input.GetKey(KeyCode.W))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
@@ -215,6 +216,32 @@ public class PlayerTankController : TankController
                 NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
                 lastMoveFrame = NetworkManager.Instance.currentFrame;
             }
+#elif UNITY_ANDROID
+
+            if (GameUIManager.Instance.upButton.isPressed)
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
+                lastMoveFrame = NetworkManager.Instance.currentFrame;
+            }
+            else if (GameUIManager.Instance.downButton.isPressed)
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
+                lastMoveFrame = NetworkManager.Instance.currentFrame;
+            }
+            else if (GameUIManager.Instance.leftButton.isPressed)
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
+                lastMoveFrame = NetworkManager.Instance.currentFrame;
+            }
+            else if (GameUIManager.Instance.rightButton.isPressed)
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
+                lastMoveFrame = NetworkManager.Instance.currentFrame;
+            }
+            
+#endif
+            
+
         }
     }
 
@@ -222,11 +249,20 @@ public class PlayerTankController : TankController
     {
         if (NetworkManager.Instance.currentFrame - lastShootFrame > CurrentShootIntervalFrame())
         {
+#if UNITY_STANDALONE_OSX
             if (Input.GetKey(KeyCode.Space))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
                 lastShootFrame = NetworkManager.Instance.currentFrame;
             }
+            #elif UNITY_ANDROID
+            if (GameUIManager.Instance.shootButton.isPressed)
+            {
+                NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
+                lastShootFrame = NetworkManager.Instance.currentFrame;
+            }
+#endif
+            
         }
     }
 
