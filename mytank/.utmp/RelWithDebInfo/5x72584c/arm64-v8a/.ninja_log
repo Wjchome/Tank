@@ -1,12 +1,12 @@
 # ninja log v5
-4	460	1754468272243802223	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	f0444ec391e8da3d
-461	600	1754468272376236933	/Users/apple/wujincheng/mytank/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5x72584c/obj/arm64-v8a/libswappywrapper.so	aec8bec09fe4500a
-1	1005	1754468272791718064	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	acff703f905b54ee
-1	1051	1754468272837255136	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b6b9d5d9c955754a
-0	1060	1754468272846949499	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	330fcb40a6405e3e
-2	1067	1754468272853643702	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	7cbee98dc010fbb9
-0	1118	1754468272905927561	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	c2d06bcc89079799
-3	1163	1754468272950421830	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	b98348da4d388fcc
-1	1275	1754468273063153143	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	bfc05ba4c2eaa031
-0	1358	1754468273145246850	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	4ecdf4d464a26ccf
-1358	1420	1754468273209166094	/Users/apple/wujincheng/mytank/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5x72584c/obj/arm64-v8a/libgame.so	593978f31b4847c9
+4	507	1754480149905693784	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	f0444ec391e8da3d
+507	732	1754480150055836063	/Users/apple/wujincheng/mytank/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5x72584c/obj/arm64-v8a/libswappywrapper.so	aec8bec09fe4500a
+2	1238	1754480150632749516	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	acff703f905b54ee
+1	1277	1754480150671240452	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	b6b9d5d9c955754a
+1	1308	1754480150702873502	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	330fcb40a6405e3e
+2	1326	1754480150723829035	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	7cbee98dc010fbb9
+1	1374	1754480150772014444	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	c2d06bcc89079799
+4	1404	1754480150803419452	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	b98348da4d388fcc
+2	1547	1754480150945574343	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	bfc05ba4c2eaa031
+0	1613	1754480151012095365	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	4ecdf4d464a26ccf
+1613	1681	1754480151081365141	/Users/apple/wujincheng/mytank/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/5x72584c/obj/arm64-v8a/libgame.so	593978f31b4847c9

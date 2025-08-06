@@ -66,7 +66,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     // 新增：延迟连接
     private IEnumerator DelayedConnect()
     {
-        yield return new WaitForSeconds(3f); // 等待3秒发现服务器
+        yield return new WaitForSeconds(2f); // 等待2秒发现服务器
         
         if (serverDiscovered && discoveredServer != null)
         {

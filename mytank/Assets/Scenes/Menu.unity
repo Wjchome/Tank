@@ -250,7 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 26269427}
   - component: {fileID: 26269426}
-  - component: {fileID: 26269425}
+  - component: {fileID: 26269428}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -258,37 +258,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &26269425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 26269424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_MoveRepeatDelay: 0.5
-  m_MoveRepeatRate: 0.1
-  m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
-  m_DeselectOnBackgroundClick: 1
-  m_PointerBehavior: 0
-  m_CursorLockBehavior: 0
-  m_ScrollDeltaPerTick: 6
 --- !u!114 &26269426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,6 +288,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &26269428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26269424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
 --- !u!1 &37982774
 GameObject:
   m_ObjectHideFlags: 0
@@ -5335,7 +5324,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1688796586}
   m_Father: {fileID: 1814831118}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -7373,7 +7363,7 @@ MonoBehaviour:
   currentFrame: 0
   isGameing: 0
   seed: 0
-  serverIP: 10.30.23.36
+  serverIP: 
   serverPort: 8080
   myTank: {fileID: 0}
 --- !u!1 &843415143
@@ -8888,7 +8878,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 381906566}
   m_HandleRect: {fileID: 381906565}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -12510,10 +12500,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodDatas:
-  - {fileID: 11400000, guid: dcd8a5f430d6a4becb139bde2a89bf54, type: 2}
+  - {fileID: 11400000, guid: 543caeb1337484578869d18b43bb3602, type: 2}
+  - {fileID: 11400000, guid: 0c3f1a6badc0b47e5a83d6fdcce8a9c3, type: 2}
+  - {fileID: 11400000, guid: 5de8281c6b6604f1c8398dcf713c41a5, type: 2}
   - {fileID: 11400000, guid: d18ca0ee953444df1a0550461bf47648, type: 2}
-  - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
   - {fileID: 11400000, guid: ee3524a502a77411cb400aeda19107c9, type: 2}
+  - {fileID: 11400000, guid: ed267d32158f44e5180d3c4b68b2773f, type: 2}
+  - {fileID: 11400000, guid: 13abcfc6c314f4a82a4c8d328194dcd2, type: 2}
+  - {fileID: 11400000, guid: abef0f49fcbe64a0e8cd422ee51604de, type: 2}
+  - {fileID: 11400000, guid: 0e6f5bf1c2d9d49258ed4a4a6125112f, type: 2}
+  - {fileID: 11400000, guid: 1bd6473d56710473691c9770b1d627d6, type: 2}
+  - {fileID: 11400000, guid: e8926549c198d4e1ba68d2f4737c2aed, type: 2}
+  - {fileID: 11400000, guid: 0cf209985a8cf4437a46a3656a240def, type: 2}
+  - {fileID: 11400000, guid: f852203a403bb4626afffb7010e0049e, type: 2}
+  - {fileID: 11400000, guid: 1d7ceed3120c74e57906e8a2a24629af, type: 2}
+  - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
+  - {fileID: 11400000, guid: 6676d2430654149178c78814c408ad98, type: 2}
+  - {fileID: 11400000, guid: 37f875ec6e2914f408789d6a1145213b, type: 2}
+  - {fileID: 11400000, guid: bce80924cecdc4093a393d0e8f22c6a8, type: 2}
+  - {fileID: 11400000, guid: a408ce0e4d256407e939776e9cc772b9, type: 2}
+  - {fileID: 11400000, guid: dcd8a5f430d6a4becb139bde2a89bf54, type: 2}
+  - {fileID: 11400000, guid: 10dfb54718d4342c3a50a7e007c16ff6, type: 2}
   playerFoodUIPrefab: {fileID: 8705780682468749850, guid: d862115454b734bb695bc8eaf11980cc, type: 3}
   panelParent: {fileID: 408527372}
   openOrCloseButton: {fileID: 850812654}
@@ -12523,8 +12530,20 @@ MonoBehaviour:
   - {fileID: 1685713533}
   - {fileID: 881868523}
   superFoodDatas:
+  - {fileID: 11400000, guid: 35294966234b544688ee5f92418f3d86, type: 2}
   - {fileID: 11400000, guid: 6dc298552cbc8446680cb461e9047389, type: 2}
+  - {fileID: 11400000, guid: 25b1202e2933940c2aff3eb6c3efd2f4, type: 2}
+  - {fileID: 11400000, guid: c9b2513ab74a84afeb9881b770a51b3a, type: 2}
+  - {fileID: 11400000, guid: 55dcd16e1e4734e368336dae701bf220, type: 2}
+  - {fileID: 11400000, guid: f2166849b727d4985be26fa91ad92e8c, type: 2}
+  - {fileID: 11400000, guid: bfa69864b252c42b38e52f869cdfb35a, type: 2}
   foodCombinations:
+  - {fileID: 11400000, guid: af03f670429e248d6820f5ff6c9744ba, type: 2}
+  - {fileID: 11400000, guid: ef93bb81cc1fc49e99ec4bfb827617fd, type: 2}
+  - {fileID: 11400000, guid: 835552de9c4d14b62adc58bfcd613b26, type: 2}
+  - {fileID: 11400000, guid: 3e377d7e443bc448cb6f79b90df5b188, type: 2}
+  - {fileID: 11400000, guid: 6295ebf2fe05c40d89eb3fb50751a232, type: 2}
+  - {fileID: 11400000, guid: 7e4e7a197dc4a44c0807bf315dae364a, type: 2}
   - {fileID: 11400000, guid: 09234a0fc5a384dc99c0ee7c014fe9b1, type: 2}
   chooseNum: 0
   isChooseOpen: 0
@@ -12684,7 +12703,7 @@ MonoBehaviour:
   firstPos: {x: -150, y: 300}
   secondPos: {x: -800, y: 300}
   gameOverButton: {fileID: 1692776427}
-  foodPanel: {fileID: 1688796585}
+  foodPanel: {fileID: 630266769}
   backButton: {fileID: 623344067}
   backSprites:
   - {fileID: 21300000, guid: 010e7d5e0141d2f43baad877efda2e88, type: 3}
@@ -15336,11 +15355,11 @@ RectTransform:
   m_Children:
   - {fileID: 1788318956}
   - {fileID: 950466884}
-  m_Father: {fileID: 1814831118}
+  m_Father: {fileID: 630266770}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -604.9412, y: -22.706}
+  m_AnchoredPosition: {x: 1.0587158, y: 5.2940083}
   m_SizeDelta: {x: 234.3544, y: 358.9433}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1688796587
@@ -16308,7 +16327,6 @@ RectTransform:
   m_Children:
   - {fileID: 2094892124}
   - {fileID: 630266770}
-  - {fileID: 1688796586}
   - {fileID: 1692776426}
   - {fileID: 623344066}
   - {fileID: 1263419293}
