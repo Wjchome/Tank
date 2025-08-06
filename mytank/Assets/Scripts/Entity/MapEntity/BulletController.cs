@@ -106,9 +106,10 @@ public class BulletController : MapEntity
                     if (bullet.penetrationCount <= 0)
                     {
                         bullet.isShouldDestroy = true;
+                        bullet.DestroyBullet();
                     }
 
-                    bullet.DestroyBullet();
+                   
                     break;
                 }
             }

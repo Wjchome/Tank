@@ -53,7 +53,6 @@ public class PlayerTankController : TankController
 
     public GameObject shoeShow;
 
-    public Animator bombAnimator;
     public Animator tankAnimator2;
 
 

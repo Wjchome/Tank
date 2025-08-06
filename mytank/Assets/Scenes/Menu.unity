@@ -3360,6 +3360,8 @@ MonoBehaviour:
   spikeTrapPrefab: {fileID: 5265131791465059852, guid: c208852355021443eb8c93590ed62cfe, type: 3}
   ghostGuardPrefab: {fileID: 6581307129808243645, guid: f79c1918aef274b9784109a10675aa5e, type: 3}
   almightyTurretPrefab: {fileID: -2558446868349466866, guid: a4b3c501ff5844854bda5520bb698361, type: 3}
+  pulseTurretPrefab: {fileID: -2701719679973946147, guid: ef88fb604225a4a36808a430908ad4c0, type: 3}
+  tankChargePrefab: {fileID: 2092227418594372726, guid: 42c31fc80fa8949499ea2acf8b65f3c9, type: 3}
   landmineMachinePrefab: {fileID: 3364237908212559664, guid: f3c66f2a6cf264d60b270b1d40e642c1, type: 3}
   bombControllerPrefab: {fileID: 3859500663799134593, guid: 7cdf9cdbf56ed44f68dd7a72754497f8, type: 3}
   pocketWatchControllerPrefab: {fileID: 3681391883020070046, guid: 93931f4b5ccdb460ca1c6a48473dfbdd, type: 3}
@@ -3369,6 +3371,7 @@ MonoBehaviour:
   disciplineControllerPrefab: {fileID: 3782525686423470398, guid: 6ad67b6e392c747b480c97ac1f459e0d, type: 3}
   ghostGuardMachinePrefab: {fileID: -2865518096813212923, guid: 660e26c93ed7c46fd85ca1426955c85c, type: 3}
   warCarControllerPrefab: {fileID: -3034586624797461125, guid: ec13b59982bf843fcb7d15f637fcf229, type: 3}
+  tankChargeMachinePrefab: {fileID: 8990238230621878243, guid: 1880740de259e4405b9cc47aec0cd2af, type: 3}
   almightyTurretMachinePrefab: {fileID: 6158564772937240892, guid: c2de5e98af9724fe289f2e158a6fa381, type: 3}
   timeStormControllerPrefab: {fileID: 4687413944728002130, guid: 4018358c86d6248dc8c21e70d51a5a38, type: 3}
   activeBullets: []
@@ -12299,24 +12302,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodDatas:
-  - {fileID: 11400000, guid: 543caeb1337484578869d18b43bb3602, type: 2}
-  - {fileID: 11400000, guid: 0c3f1a6badc0b47e5a83d6fdcce8a9c3, type: 2}
-  - {fileID: 11400000, guid: 5de8281c6b6604f1c8398dcf713c41a5, type: 2}
-  - {fileID: 11400000, guid: ed267d32158f44e5180d3c4b68b2773f, type: 2}
-  - {fileID: 11400000, guid: 13abcfc6c314f4a82a4c8d328194dcd2, type: 2}
-  - {fileID: 11400000, guid: abef0f49fcbe64a0e8cd422ee51604de, type: 2}
-  - {fileID: 11400000, guid: 0e6f5bf1c2d9d49258ed4a4a6125112f, type: 2}
-  - {fileID: 11400000, guid: 1bd6473d56710473691c9770b1d627d6, type: 2}
-  - {fileID: 11400000, guid: e8926549c198d4e1ba68d2f4737c2aed, type: 2}
-  - {fileID: 11400000, guid: 0cf209985a8cf4437a46a3656a240def, type: 2}
-  - {fileID: 11400000, guid: f852203a403bb4626afffb7010e0049e, type: 2}
-  - {fileID: 11400000, guid: 1d7ceed3120c74e57906e8a2a24629af, type: 2}
+  - {fileID: 11400000, guid: dcd8a5f430d6a4becb139bde2a89bf54, type: 2}
+  - {fileID: 11400000, guid: d18ca0ee953444df1a0550461bf47648, type: 2}
   - {fileID: 11400000, guid: a4538786c259f43f68bccf48d1a97317, type: 2}
-  - {fileID: 11400000, guid: 6676d2430654149178c78814c408ad98, type: 2}
-  - {fileID: 11400000, guid: 37f875ec6e2914f408789d6a1145213b, type: 2}
-  - {fileID: 11400000, guid: bce80924cecdc4093a393d0e8f22c6a8, type: 2}
-  - {fileID: 11400000, guid: a408ce0e4d256407e939776e9cc772b9, type: 2}
-  - {fileID: 11400000, guid: 10dfb54718d4342c3a50a7e007c16ff6, type: 2}
   playerFoodUIPrefab: {fileID: 8705780682468749850, guid: d862115454b734bb695bc8eaf11980cc, type: 3}
   panelParent: {fileID: 408527372}
   openOrCloseButton: {fileID: 850812654}
@@ -12325,20 +12313,8 @@ MonoBehaviour:
   - {fileID: 229438876}
   - {fileID: 1685713533}
   - {fileID: 881868523}
-  superFoodDatas:
-  - {fileID: 11400000, guid: 35294966234b544688ee5f92418f3d86, type: 2}
-  - {fileID: 11400000, guid: 25b1202e2933940c2aff3eb6c3efd2f4, type: 2}
-  - {fileID: 11400000, guid: c9b2513ab74a84afeb9881b770a51b3a, type: 2}
-  - {fileID: 11400000, guid: 55dcd16e1e4734e368336dae701bf220, type: 2}
-  - {fileID: 11400000, guid: f2166849b727d4985be26fa91ad92e8c, type: 2}
-  - {fileID: 11400000, guid: bfa69864b252c42b38e52f869cdfb35a, type: 2}
-  foodCombinations:
-  - {fileID: 11400000, guid: af03f670429e248d6820f5ff6c9744ba, type: 2}
-  - {fileID: 11400000, guid: ef93bb81cc1fc49e99ec4bfb827617fd, type: 2}
-  - {fileID: 11400000, guid: 835552de9c4d14b62adc58bfcd613b26, type: 2}
-  - {fileID: 11400000, guid: 3e377d7e443bc448cb6f79b90df5b188, type: 2}
-  - {fileID: 11400000, guid: 6295ebf2fe05c40d89eb3fb50751a232, type: 2}
-  - {fileID: 11400000, guid: 7e4e7a197dc4a44c0807bf315dae364a, type: 2}
+  superFoodDatas: []
+  foodCombinations: []
   chooseNum: 0
   isChooseOpen: 0
   getSprite0: {fileID: 21300048, guid: 1eaee135ce037439d925cee5e41ce026, type: 3}

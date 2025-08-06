@@ -15,6 +15,8 @@ public class EntityManager : SingletonMono<EntityManager>
     public SpikeTrap spikeTrapPrefab;
     public GhostGuard ghostGuardPrefab;
     public AlmightyTurret almightyTurretPrefab;
+    public PulseTurret pulseTurretPrefab;
+    public TankCharge tankChargePrefab;
 
 
     [Header("UI Timer Entity Prefabs")] public LandmineMachine landmineMachinePrefab;
@@ -26,8 +28,8 @@ public class EntityManager : SingletonMono<EntityManager>
     public DisciplineController disciplineControllerPrefab;
     public GhostGuardMachine ghostGuardMachinePrefab;
     public WarCarController warCarControllerPrefab;
+    public TankChargeMachina tankChargeMachinePrefab;
     public AlmightyTurretMachine almightyTurretMachinePrefab;
-
     public TimeStormController timeStormControllerPrefab;
 
     // 分类管理
@@ -38,9 +40,9 @@ public class EntityManager : SingletonMono<EntityManager>
     public ObjectPool<BulletController> BulletPool { get; private set; }
     public List<BulletController> activeBullets = new List<BulletController>();
 
-    
+
     public List<TankController> allTanks = new List<TankController>();
-    
+
     private void Awake()
     {
         InitializeBulletPool();
@@ -423,6 +425,57 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnMapEntity(almightyTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
     }
 
+    public void InitPulseTurret(PlayerTankController tank)
+    {
+        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
+            .Except(MapManager.Instance.GetAllTankPos()).ToList();
+        var pos = spawnPos[tank.random.Next(spawnPos.Count)];
+        SpawnMapEntity(pulseTurretPrefab, tank, new Vector2(pos.x, pos.y), pos);
+    }
+
+    public void InitTankCharge(PlayerTankController tank)
+    {
+        int a = tank.random.Next(4);
+        Direction dir = Direction.Up;
+        Vector2Int spawnPos = Vector2Int.zero;
+        Vector3 rot = Vector3.forward;
+        switch (a)
+        {
+            case 0:
+                dir = Direction.Up;
+                spawnPos = new Vector2Int(tank.random.Next(MapManager.Instance.mapWidth - 2), 0);
+                rot = new Vector3(0, 0, 0);
+                break;
+            case 1:
+                dir = Direction.Left;
+                spawnPos = new Vector2Int(MapManager.Instance.mapWidth - 2,
+                    tank.random.Next(MapManager.Instance.mapHeight - 2));
+                rot = new Vector3(0, 0, 90);
+                
+                break;
+            case 2:
+                dir = Direction.Down;
+                spawnPos = new Vector2Int(tank.random.Next(MapManager.Instance.mapWidth - 2),
+                    MapManager.Instance.mapHeight - 2);
+                rot = new Vector3(0, 0, 180);
+                
+                break;
+            case 3:
+                dir = Direction.Right;
+                spawnPos = new Vector2Int(0, tank.random.Next(MapManager.Instance.mapHeight - 2));
+                rot = new Vector3(0, 0, -90);
+                break;
+        }
+        Color tankColor = tank.playerColor;
+        Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
+
+        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, new Vector2(spawnPos.x + 0.5f, spawnPos.y + 0.5f),
+            spawnPos);
+        tankCharge.transform.rotation = Quaternion.Euler(rot);
+        tankCharge.moveDirection = dir;
+        tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
+    }
+
     public void InitAlmightyTurretMachine(PlayerTankController tank)
     {
         SpawnUIEntity(almightyTurretMachinePrefab, tank);
@@ -471,6 +524,11 @@ public class EntityManager : SingletonMono<EntityManager>
     public void InitWarCarController(PlayerTankController tank)
     {
         SpawnUIEntity(warCarControllerPrefab, tank);
+    }
+
+    public void InitTankChargeMachine(PlayerTankController tank)
+    {
+        SpawnUIEntity(tankChargeMachinePrefab, tank);
     }
 
     public void InitTimeStormController(PlayerTankController tank)

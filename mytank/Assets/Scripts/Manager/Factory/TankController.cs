@@ -59,6 +59,8 @@ public abstract class TankController : MonoBehaviour
 
     //本地动画机
     public Animator animator;
+    public Animator bombAnimator;
+    
     public SpriteRenderer spriteRenderer;
 
     public System.Random random = new System.Random();

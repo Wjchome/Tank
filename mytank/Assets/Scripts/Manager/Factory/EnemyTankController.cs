@@ -81,7 +81,10 @@ public class EnemyTankController : TankController
         HP = Mathf.Max(HP- damage,0);
         DamageUIManager.Instance. ShowDamageWord(damageType,damage,transform);
         enemyTankUI.UpdateHealthBar();
-        
+        if (damageType == DamageType.Discipline)
+        {
+            bombAnimator.Play("DisciplineDamage",0,0);
+        }
         if (HP <= 0)
         {
             Dead(attacker);

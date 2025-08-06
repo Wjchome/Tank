@@ -77,7 +77,7 @@ MonoBehaviour:
   enemySum: 30
   enemySpawnFrame: 400
   maxEnemies: 5
-  specialRate: 2
+  specialRate: 1
   enemiesUp:
   - numEnemies: 1
     enemyEvent: 0

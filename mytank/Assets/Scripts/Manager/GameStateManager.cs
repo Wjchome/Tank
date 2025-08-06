@@ -281,20 +281,25 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
 
                 break;
-            case FoodType.GenerateWall:
+            case FoodType.BulletDeadzone:
                 if (num == 0)
                 {
-                    MapManager.Instance.GenerateWall(3, tank.random);
+                    EntityManager.Instance.InitPulseTurret(tank);
                     tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
                 else if (num == 1)
                 {
-                    MapManager.Instance.GenerateWall(4, tank.random);
+                    EntityManager.Instance.InitPulseTurret(tank);
+                    EntityManager.Instance.InitPulseTurret(tank);
+
                     tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
                 else if (num == 2)
                 {
-                    MapManager.Instance.GenerateWall(5, tank.random);
+                    EntityManager.Instance.InitPulseTurret(tank);
+                    EntityManager.Instance.InitPulseTurret(tank);
+                    EntityManager.Instance.InitPulseTurret(tank);
+
                     tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
 
@@ -466,6 +471,22 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
 
                 break;
+            case FoodType.TankCharge:
+                if (num == 0)
+                {
+                    EntityManager.Instance.InitTankCharge(tank);
+                }
+                else if (num == 1)
+                {
+                    EntityManager.Instance.InitTankChargeMachine(tank);
+                }
+                else if (num == 2)
+                {
+                    EntityManager.Instance.InitTankChargeMachine(tank);
+                    EntityManager.Instance.InitTankChargeMachine(tank);
+                }
+
+                break;
             case FoodType.AlmightyTurret:
                 //  => 所有地雷制造机变成自动发射机 所有现存自动炮台，地雷，治疗花园
                 // => 变成自动设计台（能发射子弹，子弹可以打敌人，打玩家可以恢复血量，敌人触碰爆炸） 
@@ -547,12 +568,14 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 tank.penetrateShow.SetActive(true);
 
                 break;
-           case FoodType.SuperDefense:
-                GhostGuardMachine ghostGuard = EntityManager.Instance.FindFirstOrDefaultUIEntity<GhostGuardMachine>(tank);
+            case FoodType.SuperDefense:
+                GhostGuardMachine ghostGuard =
+                    EntityManager.Instance.FindFirstOrDefaultUIEntity<GhostGuardMachine>(tank);
                 ghostGuard.genateIntervalFrame = (int)(15 / Constant.FrameInterval);
-                ProtectController protectController = EntityManager.Instance.FindFirstOrDefaultUIEntity<ProtectController>(tank);
+                ProtectController protectController =
+                    EntityManager.Instance.FindFirstOrDefaultUIEntity<ProtectController>(tank);
                 protectController.range = 2;
-break;
+                break;
         }
     }
 

@@ -11,6 +11,7 @@
         Bomb,
         Discipline,
         Protect,
+        Charge
     }
     public class DamageUIManager:SingletonMono<DamageUIManager>
     {

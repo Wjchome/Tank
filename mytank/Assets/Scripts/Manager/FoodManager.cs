@@ -19,7 +19,7 @@ public enum FoodType
     Star,
     SteelHelmet,
     WarCar,
-    GenerateWall,
+    BulletDeadzone,//子弹禁区
     AutoTurret,
     Landmine,
     HealingGarden,
@@ -28,7 +28,8 @@ public enum FoodType
     Protect,
     Discipline,
     GhostGuard,
-
+    TankCharge,//坦克冲锋
+    ChainImplosion,//连锁爆炸
     //19个道具
 
     // 新增合成道具
@@ -37,7 +38,8 @@ public enum FoodType
     LifeEnhancement, // 生命强化
     TimeStorm, // 时间风暴
     PenetratingBullet, // 穿透子弹
-    SuperDefense // 超级守卫
+    SuperDefense, // 超级守卫
+    LegionoftheFallen//死亡军团协议
 }
 
 public class FoodManager : SingletonMono<FoodManager>

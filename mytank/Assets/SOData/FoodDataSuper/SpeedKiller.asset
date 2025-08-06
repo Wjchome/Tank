@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69da5b62024463c8b8b6fee80637b96, type: 3}
   m_Name: SpeedKiller
   m_EditorClassIdentifier: 
-  foodType: 20
+  foodType: 22
   sprite: {fileID: 21300000, guid: 8a2c80a7f67e5447f809a5c5137714e8, type: 3}
   foodName: "\u6025\u901F\u6740\u624B"
   foodDescription:

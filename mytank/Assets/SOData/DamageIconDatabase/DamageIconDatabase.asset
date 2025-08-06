@@ -31,3 +31,6 @@ MonoBehaviour:
   - type: 5
     icon: {fileID: 21300000, guid: 335de69b9336c4f579b1f00216383268, type: 3}
     damageColor: {r: 0.9056604, g: 0, b: 0.52341735, a: 0}
+  - type: 6
+    icon: {fileID: 21300000, guid: 18faf426d460ece49970252ef5e8a56d, type: 3}
+    damageColor: {r: 0.5826187, g: 0, b: 1, a: 0}
