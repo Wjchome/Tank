@@ -136,7 +136,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.playerPanelUI =
             Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent)
                 .GetComponent<PlayerPanelUI>();
-        temp.playerPanelUI.Init(temp, PlayerManager.Instance.activePlayers.Count);
+        temp.playerPanelUI.Init(temp);
 
         temp.playerPanelUI.UpdateUI();
         temp.animType = dataIndex;

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foodType: 3
   sprite: {fileID: 21300000, guid: 0f92b6a1422a849c89c21356085b5f78, type: 3}
-  foodName: "\u624B\u67AA"
+  foodName: "\u5206\u5B50\u89E3\u6784\u5668"
   foodDescription:
   - "\u53EF\u4EE5\u6253\u7834\u5899\u4F5310\u79D2"
   - "\u53EF\u4EE5\u6253\u7834\u5899\u4F5330\u79D2"
-  - "\u53EF\u4EE5\u6C38\u4E45\u6253\u7834\u5899\u4F53"
+  - "\u6C38\u4E45\u5206\u5B50\u89E3\u6784"
+  foodCombination: {fileID: 0}

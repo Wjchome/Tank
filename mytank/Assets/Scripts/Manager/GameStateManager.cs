@@ -463,7 +463,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.TankCharge:
                 if (num == 0)
                 {
-                    EntityManager.Instance.InitTankCharge(tank,false);
+                    EntityManager.Instance.InitTankCharge(tank, false);
                 }
                 else if (num == 1)
                 {
@@ -483,13 +483,10 @@ public class GameStateManager : SingletonMono<GameStateManager>
                     tank.chainImplosionDamage = 5;
                     tank.chainImplosionRange = 1;
                     tank.chainImplosionShow.SetActive(true);
-    
                 }
                 else if (num == 1)
                 {
                     tank.chainImplosionDamage = 8;
-                    
-    
                 }
                 else if (num == 2)
                 {
@@ -585,15 +582,16 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 ghostGuard.genateIntervalFrame = (int)(15 / Constant.FrameInterval);
                 ProtectController protectController =
                     EntityManager.Instance.FindFirstOrDefaultUIEntity<ProtectController>(tank);
-                protectController.range = 2;
+                if (protectController != null)
+                    protectController.range = 2;
                 break;
-            
+
             case FoodType.LegionoftheFallen:
-                
+
                 tank.isLegionoftheFallen = true;
-                
-                EntityManager.Instance.FindUIEntities<TankChargeMachina>(tank).ForEach(
-                    machina =>machina.isCanBullet=true );
+
+                EntityManager.Instance.FindUIEntities<TankChargeMachina>(tank)
+                    .ForEach(machina => machina.isCanBullet = true);
                 break;
         }
     }

@@ -1,82 +1,94 @@
-
 using System;
 using DG.Tweening;
 using UnityEngine;
-    using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-    public class GameUIManager:SingletonMono<GameUIManager>
+public class GameUIManager : SingletonMono<GameUIManager>
+{
+    public GameObject gamePanel;
+
+    public Transform playerPanelParent;
+    public GameObject playerPanelPrefab;
+    public Vector2 firstPos;
+    public Vector2 secondPos;
+
+
+    public Button gameOverButton;
+
+    public Vector2 firstPos1;
+    public Vector2 secondPos1;
+    public GameObject foodPanel;
+    public Button backButton1;
+
+    public Vector2 firstPos2;
+    public Vector2 secondPos2;
+    public GameObject playerInfoPanel;
+    public Button backButton2;
+    
+    
+   
+    public RectTransform canvas;
+    public RectTransform moveParent;
+    public InputButton upButton;
+    public InputButton leftButton;
+    public InputButton downButton;
+    public InputButton rightButton;
+    public RectTransform shootPos;
+    public InputButton shootButton;
+
+
+    private void Awake()
     {
-
-        public GameObject gamePanel;
+        secondPos1 = foodPanel.GetComponent<RectTransform>().anchoredPosition;
+        firstPos1 = secondPos1 - new Vector2(400, 0);
         
-        public Transform playerPanelParent;
-        public GameObject playerPanelPrefab;
-        public Vector2 firstPos; 
-        public Vector2 secondPos;
+        secondPos2 = playerInfoPanel.GetComponent<RectTransform>().anchoredPosition;
+        firstPos2 =secondPos2 -new Vector2(1400, 0);
+
+        gameOverButton.onClick.AddListener(Gameover);
+        gameOverButton.gameObject.SetActive(false); 
         
+        backButton1.onClick.AddListener(()=>GoLeft(backButton1,foodPanel.GetComponent<RectTransform>(),firstPos1,secondPos1));
         
-        public Button gameOverButton;
+        backButton2.onClick.AddListener(()=>GoLeft(backButton2,playerInfoPanel.GetComponent<RectTransform>(),firstPos2,secondPos2));
 
-        public GameObject foodPanel;
-        public Button backButton;
-        
-        public Sprite[] backSprites;
-        public Vector2 firstPos1=new Vector2(-1000, 0); 
-        public Vector2 secondPos1=new Vector2(-600, 0);
-        
-        public InputButton upButton;
-        public InputButton leftButton;
-        public InputButton downButton;
-        public InputButton rightButton;
-        public InputButton shootButton;
-        private void Awake()
-        {
-            gameOverButton.onClick.AddListener(Gameover);
-            gameOverButton.gameObject.SetActive(false);
-            backButton.onClick.AddListener(GoLeft);
-        }
-
-        void GoLeft()
-        {
-            foodPanel.GetComponent<RectTransform>().DOAnchorPos(firstPos1, 0.5f);
-            backButton.GetComponent<Image>().sprite = backSprites[0];
-            backButton.onClick.RemoveAllListeners();
-            backButton.onClick.AddListener(GoRight);
-        }
-
-        void GoRight()
-        {
-            foodPanel.GetComponent<RectTransform>().DOAnchorPos(secondPos1, 0.5f);
-            backButton.GetComponent<Image>().sprite = backSprites[1];
-            backButton.onClick.RemoveAllListeners();
-            backButton.onClick.AddListener(GoLeft);
-        }
-        
-        
-        void Gameover()
-        {
-            playerPanelParent.GetComponent<RectTransform>().DOAnchorPos(firstPos,0.5f).SetEase(Ease.OutQuad);
-            NetworkManager.Instance.GameOverRequest(NetworkManager.Instance.currentRoom.RoomId);
-            gameOverButton.gameObject.SetActive(false);
-            
-            DOVirtual.DelayedCall(0.5f, () =>
-            {
-                ResetGame();
-
-            });
-        }
-
-
-        private void ResetGame()
-        {
-            for (int i = playerPanelParent.childCount - 1; i >= 0; i--)
-            {
-                Destroy(playerPanelParent.GetChild(i).gameObject);
-                
-            }
-
-            LevelManager.Instance.levelNameText.text = "";
-            gamePanel.SetActive(false);
-            
-        }
     }
+
+    void GoLeft(Button thisBtn,RectTransform moveTarget,Vector2 leftPos,Vector2 rightPos)
+    {
+        moveTarget.DOAnchorPos(leftPos, 0.5f);
+        thisBtn.onClick.RemoveAllListeners();
+        thisBtn.onClick.AddListener(()=>GoRight(thisBtn,moveTarget,leftPos,rightPos));
+    }
+
+    void GoRight(Button thisBtn,RectTransform moveTarget,Vector2 leftPos,Vector2 rightPos)
+    {
+        moveTarget.DOAnchorPos(rightPos, 0.5f);
+        thisBtn.onClick.RemoveAllListeners();
+        thisBtn.onClick.AddListener(()=>GoLeft(thisBtn,moveTarget,leftPos,rightPos));
+    }
+
+
+    void Gameover()
+    {
+        playerPanelParent.GetComponent<RectTransform>().DOAnchorPos(firstPos, 0.5f).SetEase(Ease.OutQuad);
+        NetworkManager.Instance.GameOverRequest(NetworkManager.Instance.currentRoom.RoomId);
+        gameOverButton.gameObject.SetActive(false);
+
+        DOVirtual.DelayedCall(0.5f, () => { ResetGame(); });
+    }
+
+
+    private void ResetGame()
+    {
+        for (int i = playerPanelParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(playerPanelParent.GetChild(i).gameObject);
+        }
+
+        LevelManager.Instance.levelNameText.text = "";
+        gamePanel.SetActive(false);
+    }
+}

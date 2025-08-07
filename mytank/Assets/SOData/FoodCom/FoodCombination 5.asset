@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   food1: 6
   food2: 18
-  food3: 0
+  food3: 16
   foodTarget: 26

@@ -385,7 +385,7 @@ public class RoomManager : SingletonMono<RoomManager>
     }
 
 
-    void CreateRoomUIItem(RoomInfo room, int index)
+    void CreateRoomUIItem(RoomInfo room)
     {
         var roomUIItem = Instantiate(roomUIItemPrefab, roomListContent).GetComponent<RoomUIItem>();
         roomItems.Add(roomUIItem);
@@ -402,7 +402,7 @@ public class RoomManager : SingletonMono<RoomManager>
         if (room.PlayerIds.Count >= room.MaxPlayers)
         {
             roomUIItem.joinButton.interactable = false;
-            roomUIItem.joinButton.GetComponentInChildren<TextMeshProUGUI>().text = "Full";
+            roomUIItem.joinButton.GetComponentInChildren<TextMeshProUGUI>().text = "人已满";
         }
         else
         {
@@ -415,7 +415,6 @@ public class RoomManager : SingletonMono<RoomManager>
 
         //设置房间位置
         RectTransform rectTransform = roomUIItem.transform.GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = new Vector2(0, -100 * index);
     }
 
 
@@ -429,7 +428,6 @@ public class RoomManager : SingletonMono<RoomManager>
 
         playerUIItems.Clear();
 
-        int index = 0;
         foreach (var playerInfo in NetworkManager.Instance.currentRoom.PlayerInfos)
         {
             PlayerUIItem playerUIItem = Instantiate(playerUIItemPrefab, playerListContent).GetComponent<PlayerUIItem>();
@@ -442,7 +440,6 @@ public class RoomManager : SingletonMono<RoomManager>
 
             // 设置位置
             RectTransform rectTransform = playerUIItem.transform.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = new Vector2(0, -100 * index++);
             // 设置玩家颜色
             Color playerColor = new Color(
                 playerInfo.ColorR / 255f,
@@ -507,12 +504,11 @@ public class RoomManager : SingletonMono<RoomManager>
         }
 
         roomItems.Clear();
-        int index = 0;
         foreach (var room in rooms)
         {
             if (room.Status == "waiting")
             {
-                CreateRoomUIItem(room, index++);
+                CreateRoomUIItem(room);
             }
         }
     }

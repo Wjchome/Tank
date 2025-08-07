@@ -8,5 +8,6 @@
         public Sprite  sprite;
         public string  foodName;
         public string[]  foodDescription;
+        public FoodCombination  foodCombination;
     }
 

@@ -10,7 +10,6 @@
     public class PlayerPanelUI:MonoBehaviour
     {
         [Header("Player Info")]
-        public Transform playerInfo;
         public TextMeshProUGUI playerNameText;
         public Image playerImage;
         public TextMeshProUGUI playerHealthText;
@@ -19,39 +18,25 @@
         public Image HPDelaybar;
         public RectTransform killShowPos;
 
-        public int interval;
         
         [Header("Player Food UI")]
-        public Transform foodScollView;
         public Transform content;
         
         
     
-        public Button button;
-        public bool isOpenFood=false;
-
-        public Vector2 leftPos = Vector2.zero; 
-        public Vector2 rightPos = Vector2.zero; 
-        
+       
         public PlayerTankController tank;
         
         private Dictionary<FoodType, PlayerFoodUI> foodUIDict = new Dictionary<FoodType, PlayerFoodUI>();
-        public void Init(PlayerTankController tankController, int index)
+        public void Init(PlayerTankController tankController)
         {
             tank=tankController;
             HPbar.color = tank.playerColor;
             HPDelaybar.color = new Color(tank.playerColor.r,tank.playerColor.g,tank.playerColor.b,0.5f);
-            GetComponent<RectTransform>().anchoredPosition=new Vector2(0,-index*interval);
-            leftPos=playerInfo.GetComponent<RectTransform>().anchoredPosition;
-            rightPos=foodScollView.GetComponent<RectTransform>().anchoredPosition;
-            button.onClick.AddListener(Change);
+
         }
 
-        public void Revival(PlayerTankController tankController)
-        {
-            tank=tankController;
-            UpdateUI();
-        }
+      
         public void UpdateUI()
         {
             playerNameText.text=tank.playerName;
@@ -92,22 +77,7 @@
 
         }
 
-        public void Change()
-        {
-            if (isOpenFood)
-            {
-                playerInfo.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
-                foodScollView.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
-                isOpenFood=false;
-            }
-            else
-            {
-                playerInfo.GetComponent<RectTransform>().DOAnchorPos(rightPos, 0.5f);
-                foodScollView.GetComponent<RectTransform>().DOAnchorPos(leftPos, 0.5f);
-                
-                isOpenFood=true;
-            }
-        }
+       
         
         public void UpdateFoodUI(FoodType foodType, int level)
         {
