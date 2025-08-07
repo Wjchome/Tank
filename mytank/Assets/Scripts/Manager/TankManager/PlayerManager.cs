@@ -9,6 +9,7 @@ using UnityEngine;
 public class PlayerManager : SingletonMono<PlayerManager>
 {
     public List<PlayerTankController> activePlayers = new List<PlayerTankController>();
+    public Dictionary<string ,PlayerTankController> activePlayerDic = new Dictionary<string ,PlayerTankController>();
 
     public int recoverTime = 200;
 
@@ -23,6 +24,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         playerNum = playerInfos.Count;
         
         activePlayers.Clear();
+        activePlayerDic.Clear();
         // 创建所有玩家的坦克
         CreateAllPlayerTanks(playerInfos);
     }
@@ -140,6 +142,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.animType = dataIndex;
 
         activePlayers.Add(temp);
+        activePlayerDic.Add(tankID, temp);
         EntityManager.Instance.allTanks.Add(temp);
         switch (dataIndex)
         {

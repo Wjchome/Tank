@@ -12,15 +12,10 @@ public class GameStateManager : SingletonMono<GameStateManager>
     {
         foreach (var foodRequest in foodRequests)
         {
-            foreach (var tank in PlayerManager.Instance.activePlayers.ToList())
-            {
-                if (tank.tankID == foodRequest.PlayerId)
-                {
-                    ApplyFoodToTank(tank, foodRequest.FoodId);
-                    AudioManager.Instance.Play("GetUp");
-                    tank.tankAnimator2.Play("GetUp");
-                }
-            }
+            PlayerTankController tank = PlayerManager.Instance.activePlayerDic[foodRequest.PlayerId];
+            ApplyFoodToTank(tank, foodRequest.FoodId);
+            AudioManager.Instance.Play("GetUp");
+            tank.tankAnimator2.Play("GetUp");
         }
     }
 
@@ -28,13 +23,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
     {
         foreach (var input in inputs)
         {
-            foreach (var tank in PlayerManager.Instance.activePlayers.ToList())
-            {
-                if (tank.tankID == input.PlayerId)
-                {
-                    ApplyInputToTank(tank, input);
-                }
-            }
+            ApplyInputToTank(PlayerManager.Instance.activePlayerDic[input.PlayerId], input);
         }
     }
 

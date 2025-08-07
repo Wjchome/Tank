@@ -167,6 +167,12 @@ func (s *Server) getLocalIP() string {
 
 func (s *Server) handleClient(conn net.Conn) {
 	defer conn.Close()
+
+	// 禁用Nagle算法，减少网络延迟
+	if tcpConn, ok := conn.(*net.TCPConn); ok {
+		tcpConn.SetNoDelay(true)
+	}
+
 	clientID := fmt.Sprintf("client_%d", time.Now().UnixNano())
 	client := &Client{ID: clientID, Conn: conn}
 
@@ -514,8 +520,11 @@ func (s *Server) startGame(room *Room, level int32) {
 		s.sendMessage(c.Conn, serverMsg)
 	}
 
-	// 启动房间帧循环
-	go room.frameLoop()
+	// 延迟启动房间帧循环，确保GameStart消息先到达客户端
+	go func() {
+		time.Sleep(100 * time.Millisecond) // 等待100ms确保GameStart消息到达
+		room.frameLoop()
+	}()
 
 	fmt.Printf("Game started in room %s with %d players\n", room.ID, len(room.Clients))
 }
@@ -694,7 +703,6 @@ func (s *Server) handleChooseFood(client *Client, req *myproto.ChooseFoodRequest
 func (room *Room) frameLoop() {
 	ticker := time.NewTicker(FRAME_INTERVAL)
 	defer ticker.Stop()
-	// startTime := time.Now() // 已不再使用，移除
 
 	for range ticker.C {
 		room.Mutex.Lock()

@@ -76,6 +76,10 @@ public class EntityManager : SingletonMono<EntityManager>
         activeBullets.Remove(bullet);
     }
 
+    public void GameStart()
+    {
+        allTanks.Clear();
+    }
     public void UpdateFrame()
     {
         // 更新地图实体

@@ -19,7 +19,7 @@ public enum FoodType
     Star,
     SteelHelmet,
     WarCar,
-    BulletDeadzone,//子弹禁区
+    BulletDeadzone,//脉冲塔
     AutoTurret,
     Landmine,
     HealingGarden,

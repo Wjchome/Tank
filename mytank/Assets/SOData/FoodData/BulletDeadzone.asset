@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BulletDeadzone
   m_EditorClassIdentifier: 
   foodType: 10
-  sprite: {fileID: 0}
-  foodName: "\u5B50\u5F39\u7981\u533A"
+  sprite: {fileID: 21300000, guid: f3200ceb67cb04aa4a513b037927c0e7, type: 3}
+  foodName: "\u8109\u51B2\u5854"
   foodDescription:
   - "\u751F\u62101\u4E2A\u8109\u51B2\u5854\u80FD\u6E05\u9664\u533A\u5757\u5185\u5B50\u5F39"
   - "\u751F\u62102\u4E2A\u8109\u51B2\u5854\u80FD\u6E05\u9664\u533A\u5757\u5185\u5B50\u5F39"

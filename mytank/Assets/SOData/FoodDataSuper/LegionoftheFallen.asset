@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LegionoftheFallen
   m_EditorClassIdentifier: 
   foodType: 27
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: ee345bc0b143545aa8217b24ab290dbb, type: 3}
   foodName: "\u6B7B\u4EA1\u519B\u56E2\u534F\u8BAE"
   foodDescription:
   - "\u654C\u4EBA\u6B7B\u4EA1\u751F\u6210\u51B2\u523A\u5766\u514B"

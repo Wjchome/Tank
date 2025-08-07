@@ -73,6 +73,11 @@ public class PlayerTankController : TankController
     {
         base.UpdateFrame();
         HandleBuff();
+      
+    }
+
+    private void Update()
+    {
         if (identity == Identity.Myself && !isDead)
         {
             HandleMovementInput();

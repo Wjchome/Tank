@@ -25,19 +25,19 @@ public class ServerInfo
 
 public class NetworkManager : SingletonMono<NetworkManager>
 {
-    private TcpClient tcpClient;//代表自己的连接
-    private NetworkStream stream;//网络流
+    private TcpClient tcpClient; //代表自己的连接
+    private NetworkStream stream; //网络流
     private bool isConnected = false;
-    
-    public string playerID;//连接成功就赋值
-    public long currentFrame = 0;//收到输入和空帧就赋值
-    public RoomInfo currentRoom;//收到房间信息就赋值
-    public bool isHost =>currentRoom?.HostId == playerID;
+
+    public string playerID; //连接成功就赋值
+    public long currentFrame = 0; //收到输入和空帧就赋值
+    public RoomInfo currentRoom; //收到房间信息就赋值
+    public bool isHost => currentRoom?.HostId == playerID;
     public bool isGameing = false;
 
     public long seed;
 
-    
+
     private Queue<ServerMessage> messageQueue = new Queue<ServerMessage>();
     private object queueLock = new object();
     private Thread receiveThread;
@@ -50,24 +50,29 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private ServerInfo discoveredServer;
     private bool serverDiscovered = false;
     private bool serverInfoUpdated = false; // 新增：标记服务器信息是否更新
-    
+
     // 默认连接信息（如果没发现服务器时使用）
     public string serverIP = "127.0.0.1";
     public int serverPort = 8080;
 
     public PlayerTankController myTank;
+
     private void Start()
     {
+        Application.targetFrameRate = 60;
         StartDiscovery();
         // 延迟连接，等待发现服务器
         StartCoroutine(DelayedConnect());
+        
+        style.fontSize = 30;
+        style.normal.textColor = Color.white;
     }
-    
+
     // 新增：延迟连接
     private IEnumerator DelayedConnect()
     {
         yield return new WaitForSeconds(2f); // 等待2秒发现服务器
-        
+
         if (serverDiscovered && discoveredServer != null)
         {
             serverIP = discoveredServer.serverIP;
@@ -78,10 +83,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             Debug.Log("No server discovered, using default IP");
         }
-        
+
         ConnectToServer();
     }
-    
+
     // 新增：启动服务器发现
     private void StartDiscovery()
     {
@@ -98,21 +103,21 @@ public class NetworkManager : SingletonMono<NetworkManager>
             Debug.LogError($"Failed to start discovery: {e.Message}");
         }
     }
-    
+
     // 新增：发现线程
     private void DiscoveryThread()
     {
         IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 9999);
-        
+
         while (!shouldStopDiscovery)
         {
             try
             {
                 byte[] data = discoveryClient.Receive(ref remoteEP);
                 string json = Encoding.UTF8.GetString(data);
-                
+
                 ServerInfo serverInfo = JsonConvert.DeserializeObject<ServerInfo>(json);
-                
+
                 // 直接更新变量，在Update中处理
                 lock (queueLock)
                 {
@@ -120,7 +125,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
                     serverDiscovered = true;
                     serverInfoUpdated = true;
                 }
-                
+
                 // 找到服务器后停止UDP监听
                 Debug.Log("Server found, stopping UDP discovery");
                 shouldStopDiscovery = true;
@@ -135,13 +140,16 @@ public class NetworkManager : SingletonMono<NetworkManager>
             }
         }
     }
-    
-    
+
+
     private async void ConnectToServer()
     {
         try
         {
             tcpClient = new TcpClient();
+
+            // 禁用Nagle算法，减少网络延迟
+            tcpClient.NoDelay = true;
             var connectTask = tcpClient.ConnectAsync(serverIP, serverPort);
             float timeout = 5f; // 5秒超时
             if (await Task.WhenAny(connectTask, Task.Delay(TimeSpan.FromSeconds(timeout))) == connectTask)
@@ -149,6 +157,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
                 // 连接成功
                 stream = tcpClient.GetStream();
                 isConnected = true;
+
                 Debug.Log($"Connected to frame sync server ({serverIP}:{serverPort})");
                 // 启动独立线程读取消息
                 receiveThread = new Thread(ReceiveMessagesThread);
@@ -167,11 +176,15 @@ public class NetworkManager : SingletonMono<NetworkManager>
         }
     }
 
-    
-    
-    //每帧处理一个服务端传输来的消息
+    private float fps;
+    private GUIStyle style = new GUIStyle();
+    void OnGUI()
+    {
+        GUI.Label(new Rect(20, 20, 200, 50), $"FPS: {fps.ToString("F1")}", style);
+    }
     void Update()
     {
+        fps = 1.0f / Time.deltaTime;
         // 处理服务器发现结果
         if (serverInfoUpdated)
         {
@@ -180,11 +193,12 @@ public class NetworkManager : SingletonMono<NetworkManager>
                 serverInfoUpdated = false;
                 if (discoveredServer != null)
                 {
-                    Debug.Log($"Server discovered: {discoveredServer.serverName} at {discoveredServer.serverIP}:{discoveredServer.gamePort}");
+                    Debug.Log(
+                        $"Server discovered: {discoveredServer.serverName} at {discoveredServer.serverIP}:{discoveredServer.gamePort}");
                 }
             }
         }
-        
+
         // 在主线程处理消息队列
         ServerMessage msg = null;
         lock (queueLock)
@@ -198,53 +212,49 @@ public class NetworkManager : SingletonMono<NetworkManager>
         if (msg != null)
         {
             ProcessServerMessage(msg);
-    
         }
     }
 
     void ProcessServerMessage(ServerMessage message)
     {
-
         if (message.FrameMessage != null)
         {
             currentFrame = message.FrameMessage.FrameNumber;
-            GameStateManager.Instance. OnFrameInputs(message.FrameMessage.Inputs.ToList());
-            GameStateManager.Instance. OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
-            MapManager.Instance.UpdateFrame();//有关道具
-            EnemyManager.Instance.UpdateFrame();//生成敌人
-            FoodManager.Instance.UpdateFrame();//选择道具
-            PlayerManager.Instance.UpdateFrame();//复活队友
-            EntityManager.Instance.UpdateFrame();//实体推进
+            GameStateManager.Instance.OnFrameInputs(message.FrameMessage.Inputs.ToList());
+            GameStateManager.Instance.OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
+            MapManager.Instance.UpdateFrame(); //有关道具
+            EnemyManager.Instance.UpdateFrame(); //生成敌人
+            FoodManager.Instance.UpdateFrame(); //选择道具
+            PlayerManager.Instance.UpdateFrame(); //复活队友
+            EntityManager.Instance.UpdateFrame(); //实体推进
         }
         else if (message.GameStart != null)
         {
             seed = message.GameStart.RandomSeed;
             isGameing = true;
             currentFrame = 0;
-            //?
-          
+
+            EntityManager.Instance.GameStart();
+
             LevelManager.Instance.GameStart(message.GameStart.Level);
             MapManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
             EnemyManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
-            PlayerManager.Instance.  OnGameStart(message.GameStart.PlayerInfos.ToList());
-            CamController.Instance.Change(MapManager.Instance.mapWidth/2);
-           RoomManager.Instance. OnGameStartRoom();
-           FoodManager.Instance.GameStart();
-
+            PlayerManager.Instance.OnGameStart(message.GameStart.PlayerInfos.ToList());
+            CamController.Instance.Change(MapManager.Instance.mapWidth / 2);
+            RoomManager.Instance.OnGameStartRoom();
+            FoodManager.Instance.GameStart();
         }
         else if (message.ConnectSuccess != null)
         {
-             playerID = message.ConnectSuccess.YourPlayerId;
-            
+            playerID = message.ConnectSuccess.YourPlayerId;
         }
         else if (message.RoomList != null)
         {
             currentRoom = null;
-            RoomManager.Instance.  OnRoomListReceived(message.RoomList.Rooms.ToList());
+            RoomManager.Instance.OnRoomListReceived(message.RoomList.Rooms.ToList());
         }
         else if (message.RoomInfo != null)
         {
-
             if (isGameing)
             {
                 GameStateManager.Instance.GameOver(false);
@@ -252,12 +262,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
             else
             {
                 currentRoom = message.RoomInfo;
-         
-                RoomManager.Instance.  OnRoomInfoUpdate(message.RoomInfo);
-            }
-          
 
-            
+                RoomManager.Instance.OnRoomInfoUpdate(message.RoomInfo);
+            }
         }
         else
         {
@@ -283,7 +290,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
                 // 解析消息长度（大端序）
                 int messageLength = (lengthBytes[0] << 24) | (lengthBytes[1] << 16) |
-                                   (lengthBytes[2] << 8) | lengthBytes[3];
+                                    (lengthBytes[2] << 8) | lengthBytes[3];
 
                 // 读取消息内容
                 byte[] messageBytes = new byte[messageLength];
@@ -296,6 +303,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
                         Debug.LogError("Connection closed by server");
                         break;
                     }
+
                     bytesRead += read;
                 }
 
@@ -324,16 +332,16 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     #region ClientRequest
 
-    
-
     // 请求房间列表
     public void RequestRoomList()
     {
         var msg = new ClientMessage { RoomListRequest = new RoomListRequest() };
         SendMessage(msg);
     }
+
     // 请求创建房间
-    public void CreateRoom(string roomName, int maxPlayers, string playerName, int colorR, int colorG, int colorB,PlayerRole playerRole)
+    public void CreateRoom(string roomName, int maxPlayers, string playerName, int colorR, int colorG, int colorB,
+        PlayerRole playerRole)
     {
         if (!isConnected)
         {
@@ -351,14 +359,14 @@ public class NetworkManager : SingletonMono<NetworkManager>
                 ColorR = colorR,
                 ColorG = colorG,
                 ColorB = colorB,
-                PlayerRole =  (int)playerRole
+                PlayerRole = (int)playerRole
             }
         };
         SendMessage(message);
     }
-    
+
     // 请求加入房间
-    public void JoinRoom(string roomId, string playerName, int colorR, int colorG, int colorB,PlayerRole playerRole)
+    public void JoinRoom(string roomId, string playerName, int colorR, int colorG, int colorB, PlayerRole playerRole)
     {
         if (!isConnected)
         {
@@ -380,7 +388,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         };
         SendMessage(message);
     }
-    
+
     // 请求离开房间
     public void LeaveRoom(string roomId)
     {
@@ -419,7 +427,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         };
         SendMessage(message);
     }
-    
+
     // 发送玩家输入
     public void SendPlayerInput(InputType inputType)
     {
@@ -435,7 +443,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 PlayerId = playerID,
                 InputType = inputType,
-     
             }
         };
         SendMessage(message);
@@ -450,11 +457,14 @@ public class NetworkManager : SingletonMono<NetworkManager>
             return;
         }
 
-        var message = new ClientMessage { GameStartRequest = new GameStartRequest()
+        var message = new ClientMessage
         {
-            RoomId = roomId,
-            Level = level
-        }};
+            GameStartRequest = new GameStartRequest()
+            {
+                RoomId = roomId,
+                Level = level
+            }
+        };
         SendMessage(message);
     }
 
@@ -467,25 +477,30 @@ public class NetworkManager : SingletonMono<NetworkManager>
             return;
         }
 
-        var message = new ClientMessage { GameOverRequest = new GameOverRequest()
+        var message = new ClientMessage
         {
-            RoomId = roomId,
-        }};
+            GameOverRequest = new GameOverRequest()
+            {
+                RoomId = roomId,
+            }
+        };
         SendMessage(message);
     }
 
 
-    public void FoodChooseRequest(FoodType foodType )
+    public void FoodChooseRequest(FoodType foodType)
     {
-        var message = new ClientMessage { ChooseFoodRequest = new ChooseFoodRequest()
+        var message = new ClientMessage
         {
-            PlayerId = playerID,
-            FoodId = (int)foodType
-        }};
+            ChooseFoodRequest = new ChooseFoodRequest()
+            {
+                PlayerId = playerID,
+                FoodId = (int)foodType
+            }
+        };
         SendMessage(message);
     }
-    
-    
+
     #endregion
 
     // 发送消息到服务器
@@ -504,7 +519,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 stream.Write(data, 0, data.Length);
                 stream.Flush();
-           //     LogMessage("[Client]", message);
+                //     LogMessage("[Client]", message);
             }
         }
         catch (Exception e)
@@ -512,7 +527,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             Debug.LogError($"Send error: {e.Message}");
         }
     }
-    
+
     // 打印消息内容（调试用）
     private void LogMessage(string prefix, object message)
     {
@@ -531,7 +546,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         {
             discoveryThread.Join(1000);
         }
-        
+
         // 原有的清理代码
         shouldStopThread = true;
         isConnected = false;
