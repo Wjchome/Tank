@@ -50,25 +50,12 @@ public class GameUIManager : SingletonMono<GameUIManager>
         gameOverButton.onClick.AddListener(Gameover);
         gameOverButton.gameObject.SetActive(false); 
         
-        backButton1.onClick.AddListener(()=>GoLeft(backButton1,foodPanel.GetComponent<RectTransform>(),firstPos1,secondPos1));
+        backButton1.onClick.AddListener(()=>UIChange. GoLeft(backButton1,foodPanel.GetComponent<RectTransform>(),firstPos1,secondPos1));
         
-        backButton2.onClick.AddListener(()=>GoLeft(backButton2,playerInfoPanel.GetComponent<RectTransform>(),firstPos2,secondPos2));
+        backButton2.onClick.AddListener(()=>UIChange. GoLeft(backButton2,playerInfoPanel.GetComponent<RectTransform>(),firstPos2,secondPos2));
 
     }
 
-    void GoLeft(Button thisBtn,RectTransform moveTarget,Vector2 leftPos,Vector2 rightPos)
-    {
-        moveTarget.DOAnchorPos(leftPos, 0.5f);
-        thisBtn.onClick.RemoveAllListeners();
-        thisBtn.onClick.AddListener(()=>GoRight(thisBtn,moveTarget,leftPos,rightPos));
-    }
-
-    void GoRight(Button thisBtn,RectTransform moveTarget,Vector2 leftPos,Vector2 rightPos)
-    {
-        moveTarget.DOAnchorPos(rightPos, 0.5f);
-        thisBtn.onClick.RemoveAllListeners();
-        thisBtn.onClick.AddListener(()=>GoLeft(thisBtn,moveTarget,leftPos,rightPos));
-    }
 
 
     void Gameover()

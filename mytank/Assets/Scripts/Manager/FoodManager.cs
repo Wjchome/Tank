@@ -46,29 +46,33 @@ public class FoodManager : SingletonMono<FoodManager>
 {
     public List<FoodData> foodDatas;
     public PlayerFoodUI playerFoodUIPrefab;
-
+    
+    public Vector2 firstPos;
+    public Vector2 secondPos;
     public RectTransform panelParent;
     public Button openOrCloseButton;
+    
     public TextMeshProUGUI openOrCloseButtonText;
     public List<FoodUIPanel> panels;
     public Dictionary<FoodType, FoodData> foodDict = new Dictionary<FoodType, FoodData>();
 
-
+    [Header("食物数值")]
     public List<FoodData> superFoodDatas = new List<FoodData>();
-
     public List<FoodCombination> foodCombinations = new List<FoodCombination>();
-
-    // 合成条件配置
     private Dictionary<FoodType, List<FoodType>> combinationRequirements = new Dictionary<FoodType, List<FoodType>>();
 
-
+    // 新增状态跟踪
+    private bool isFoodPanelActive = false;
     public int chooseNum = 0;
-
-    public bool isChooseOpen = false;
+    
+    // 新增：延迟显示相关变量
+    private bool needDelayedShow = false;
+    private long delayedShowFrame = 0;
 
     public Sprite getSprite0;
     public Sprite getSprite1;
 
+  
     private void Start()
     {
         foreach (var foodData in foodDatas)
@@ -91,43 +95,65 @@ public class FoodManager : SingletonMono<FoodManager>
             };
         }
 
-
+        secondPos =panelParent.anchoredPosition ;
+        firstPos=secondPos+new Vector2(0, 800);
+        
+       
         openOrCloseButton.onClick.AddListener(() =>
         {
-            if (isOpenPanel)
-            {
-                ClosePanels();
-            }
-            else
-            {
-                ShowPanels();
-            }
+            UIChange.GoLeft(openOrCloseButton,panelParent,firstPos,secondPos);
         });
     }
-
+  
     public void GameStart()
     {
         chooseNum = 0;
+        isFoodPanelActive = false;
+        needDelayedShow = false;
+        delayedShowFrame = 0;
+        openOrCloseButtonText.text = "待选：" + chooseNum;
+    }
+
+    // 新增：外部调用的方法，用于增加选择次数
+    public void AddChooseNum(int amount = 1)
+    {
+        chooseNum += amount;
+        openOrCloseButtonText.text = "待选：" + chooseNum;
+        
+        // 如果面板没有激活且有选择次数，则显示食物选择
+        if (!isFoodPanelActive && chooseNum > 0)
+        {
+            ShowFoodSelection();
+        }
     }
 
     public void UpdateFrame()
     {
-        if (chooseNum > 0 && !isChooseOpen)
+        // 检查是否需要延迟显示食物选择
+        if (needDelayedShow && NetworkManager.Instance.currentFrame >= delayedShowFrame)
         {
-            isChooseOpen = true;
-            ShowPanelAndFoods(NetworkManager.Instance.myTank);
+            needDelayedShow = false;
+            if (chooseNum > 0 && !isFoodPanelActive)
+            {
+                ShowFoodSelection();
+            }
         }
+    }
+    
+    // 新增：显示食物选择面板
+    public void ShowFoodSelection()
+    {
+        if (chooseNum <= 0 || isFoodPanelActive)
+            return;
 
-
-        openOrCloseButton.gameObject.SetActive(isChooseOpen);
-        openOrCloseButtonText.text = chooseNum.ToString();
+        isFoodPanelActive = true;
+        ShowPanelAndFoods();
     }
 
-    private bool isOpenPanel = false;
-
-    private void ShowPanelAndFoods(PlayerTankController tank)
+    // 修改：私有方法，实际显示食物选择
+    private void ShowPanelAndFoods()
     {
-        ShowPanels();
+        PlayerTankController tank = NetworkManager.Instance.myTank;
         // 1. 先移除所有监听器，防止重复绑定
         foreach (var panel in panels)
         {
@@ -153,11 +179,7 @@ public class FoodManager : SingletonMono<FoodManager>
                 availableFoods.Add(foodData);
             }
         }
-
-        if (availableFoods.Count == 0)
-        {
-            ClosePanels();
-        }
+        
 
         // 3. 随机选取不重复的食物
         for (int i = 0; i < 3; i++)
@@ -186,19 +208,6 @@ public class FoodManager : SingletonMono<FoodManager>
         return tank.foodDict.ContainsKey(requirement[0]) && tank.foodDict[requirement[0]] >= 3 &&
                tank.foodDict.ContainsKey(requirement[1]) && tank.foodDict[requirement[1]] >= 3 &&
                tank.foodDict.ContainsKey(requirement[2]) && tank.foodDict[requirement[2]] >= 3;
-    }
-
-
-    void ShowPanels()
-    {
-        panelParent.DOAnchorPos(new Vector2(0, 0), 0.5f);
-        isOpenPanel = true;
-    }
-
-    void ClosePanels()
-    {
-        panelParent.DOAnchorPos(new Vector2(0, -800), 0.5f);
-        isOpenPanel = false;
     }
 
     void SetupPanel(int index, FoodData food, PlayerTankController tank)
@@ -248,13 +257,23 @@ public class FoodManager : SingletonMono<FoodManager>
             // 1. 禁用所有按钮，防止多次点击
             foreach (var p in panels)
                 p.chooseButton.interactable = false;
+            
+            // 2. 减少选择次数
             chooseNum--;
-            isChooseOpen = false;
-            // 2. 发送网络请求
+            openOrCloseButtonText.text = "待选：" + chooseNum;
+            
+            // 3. 标记面板为非激活状态
+            isFoodPanelActive = false;
+            
+            // 4. 发送网络请求
             NetworkManager.Instance.FoodChooseRequest(food.foodType);
-
-            // 3. 关闭面板
-            ClosePanels();
+            
+            // 5. 如果还有选择次数，设置延迟显示
+            if (chooseNum > 0)
+            {
+                needDelayedShow = true;
+                delayedShowFrame = NetworkManager.Instance.currentFrame + 1; // 延迟一帧
+            }
         });
     }
 }

@@ -56,13 +56,14 @@ public class GameStateManager : SingletonMono<GameStateManager>
         int num = 0;
         if (tank.foodDict.ContainsKey(foodType)) // 0 
         {
-            num = tank.foodDict[foodType]++;
+            num = tank.foodDict[foodType]; // 先获取当前等级
+            tank.foodDict[foodType]++; // 然后递增
         }
         else
         {
             tank.foodDict.Add(foodType, 1);
+            num = 0; // 新道具的等级是0
         }
-
         tank.playerPanelUI.UpdateFoodUI(foodType, num);
         switch (foodType)
         {
