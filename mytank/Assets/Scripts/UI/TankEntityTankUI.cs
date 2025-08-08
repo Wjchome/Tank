@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ public class TankEntityTankUI : MonoBehaviour
 {
     public Image healthBarFill;       // 实际血条
     public Image healthBarDelay;     // 延迟缓动的血条
-    
+    public TextMeshProUGUI nameText;
     public float delayEffectDuration = 1f;
 
     

@@ -225,7 +225,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             MapManager.Instance.UpdateFrame(); //有关道具
             EnemyManager.Instance.UpdateFrame(); //生成敌人
             FoodManager.Instance.UpdateFrame(); //选择道具
-            PlayerManager.Instance.UpdateFrame(); //复活队友
+            PlayerManager.Instance.UpdateFrame(); //
             EntityManager.Instance.UpdateFrame(); //实体推进
         }
         else if (message.GameStart != null)
@@ -234,7 +234,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
             isGameing = true;
             currentFrame = 0;
 
-            EntityManager.Instance.GameStart();
 
             LevelManager.Instance.GameStart(message.GameStart.Level);
             MapManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);

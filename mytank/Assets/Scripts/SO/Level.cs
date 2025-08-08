@@ -31,5 +31,6 @@ public enum EnemyEvent
 {
     HP_Add_20,
     Shoot_Interval_1,
-    Move_Interval_1
+    Move_Interval_1,
+    Spawn_Interval_80,
 }

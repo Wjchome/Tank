@@ -76,10 +76,7 @@ public class EntityManager : SingletonMono<EntityManager>
         activeBullets.Remove(bullet);
     }
 
-    public void GameStart()
-    {
-        allTanks.Clear();
-    }
+
     public void UpdateFrame()
     {
         // 更新地图实体
@@ -144,6 +141,7 @@ public class EntityManager : SingletonMono<EntityManager>
                 BulletPool.ReturnObject(bullet);
             }
         }
+        allTanks.Clear();
     }
 
     public void AddUIEntity(UITimerEntity entity)

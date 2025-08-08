@@ -80,7 +80,7 @@ MonoBehaviour:
   specialRate: 1
   enemiesUp:
   - numEnemies: 1
-    enemyEvent: 0
+    enemyEvent: 3
   - numEnemies: 2
     enemyEvent: 0
   - numEnemies: 3

@@ -171,18 +171,23 @@ public class EnemyManager : SingletonMono<EnemyManager>
         // 创建敌人坦克
         string enemyID = $"enemy_{enemyIndex++}";
 
-        var ab = enemyUp.Find(a => a.numEnemies == enemyIndex);
-        if (ab != null)
+        var levelEnemy = enemyUp.Find(a => a.numEnemies == enemyIndex);
+        if (levelEnemy != null)
         {
-            if (enemyEvents.ContainsKey(ab.enemyEvent))
+            if (enemyEvents.ContainsKey(levelEnemy.enemyEvent))
             {
-                enemyEvents[ab.enemyEvent]++;
+                enemyEvents[levelEnemy.enemyEvent]++;
             }
             else
             {
                 enemyEvents.Add(
-                    ab.enemyEvent ,1
+                    levelEnemy.enemyEvent ,1
                 );
+            }
+
+            if (levelEnemy.enemyEvent == EnemyEvent.Spawn_Interval_80)
+            {
+                enemySpawnInterval = (int)(enemySpawnInterval * 0.8f);
             }
         }
 

@@ -276,6 +276,10 @@ public class FoodManager : SingletonMono<FoodManager>
                 needDelayedShow = true;
                 delayedShowFrame = NetworkManager.Instance.currentFrame + 1; // 延迟一帧
             }
+            else
+            {
+                openOrCloseButton.onClick.Invoke();
+            }
         });
     }
 }

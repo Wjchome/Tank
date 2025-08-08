@@ -100,6 +100,8 @@ public class PlayerManager : SingletonMono<PlayerManager>
         );
         delayColor.a = 0.8f; // 适当透明度
         temp.tankEntityTankUI.healthBarDelay.color = delayColor;
+        temp.tankEntityTankUI.nameText.color = color;
+        temp.tankEntityTankUI.nameText.text = tankName;
 
 
         temp.animType = dataIndex;
