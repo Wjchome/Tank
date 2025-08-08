@@ -21,6 +21,7 @@ public class TooltipUI : SingletonMono<TooltipUI>
         
         // Calculate the tooltip size once (assuming it doesn't change)
         tooltipSize = rectTransform.sizeDelta/* * canvas.scaleFactor*/;
+        Debug.Log(tooltipSize);
     }
 
     private void Update()
@@ -33,40 +34,36 @@ public class TooltipUI : SingletonMono<TooltipUI>
     Vector2 mousePos = Vector2.zero;
     private void FollowMouse()
     {
-         mousePos = Input.mousePosition;
-        Vector2 adjustedPosition = mousePos + offset;
-        
-        // Adjust position to keep tooltip on screen
-        adjustedPosition = ClampToScreen(adjustedPosition);
-        
+        mousePos = Input.mousePosition;
+        Vector2 adjustedPosition = ClampToScreen(mousePos);
         rectTransform.position = adjustedPosition;
     }
 
     private Vector2 ClampToScreen(Vector2 desiredPosition)
     {
         Vector2 screenSize = new Vector2(Screen.width, Screen.height);
+        Vector2 finalOffset = offset; // Start with original offset
     
-        // 计算tooltip的边界
-        float halfWidth = tooltipSize.x / 2;
-        float halfHeight = tooltipSize.y / 2;
-
-        if (desiredPosition.x + halfWidth > screenSize.x)
+        // Check right edge
+        if (desiredPosition.x + tooltipSize.x > screenSize.x)
         {
-            desiredPosition.x  -= halfWidth;
+            finalOffset.x = -offset.x; // Flip X offset
         }
-
-        if (desiredPosition.y + halfHeight > screenSize.y)
+    
+        // Check top edge
+        if (desiredPosition.y + tooltipSize.y > screenSize.y)
         {
-            desiredPosition.y -= halfHeight;
+            finalOffset.y = -offset.y; // Flip Y offset
         }
-        
-        // 限制X轴：确保tooltip的左右边界都在屏幕内
-       // float clampedX = Mathf.Clamp(desiredPosition.x, halfWidth, screenSize.x - halfWidth);
     
-        // 限制Y轴：确保tooltip的上下边界都在屏幕内
-      //  float clampedY = Mathf.Clamp(desiredPosition.y, halfHeight, screenSize.y - halfHeight);
+        // Apply the possibly flipped offset
+        Vector2 adjustedPosition = mousePos + finalOffset;
     
-        return desiredPosition;
+        // Final clamp to ensure it's still on screen after flipping
+      //  adjustedPosition.x = Mathf.Clamp(adjustedPosition.x, 0, screenSize.x - tooltipSize.x);
+    //    adjustedPosition.y = Mathf.Clamp(adjustedPosition.y, 0, screenSize.y - tooltipSize.y);
+    
+        return adjustedPosition;
     }
     public void Hide()
     {

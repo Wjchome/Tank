@@ -59,7 +59,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3436699327138580769, guid: b9263dfe7463f470ea272af1313e1d22, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3f1f7f91d38f6479fa3c109f5d661d6d, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -107,3 +107,4 @@ MonoBehaviour:
   genateIntervalFrame: 400
   lastTriggerFrame: 0
   eventTrigger: {fileID: -2617099068761851106}
+  isCanBullet: 0
