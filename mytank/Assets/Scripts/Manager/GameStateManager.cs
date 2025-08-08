@@ -64,6 +64,7 @@ public class GameStateManager : SingletonMono<GameStateManager>
             tank.foodDict.Add(foodType, 1);
             num = 0; // 新道具的等级是0
         }
+
         tank.playerPanelUI.UpdateFoodUI(foodType, num);
         switch (foodType)
         {
@@ -601,25 +602,15 @@ public class GameStateManager : SingletonMono<GameStateManager>
     public void GameOver(bool isWin)
     {
         if (!NetworkManager.Instance.isGameing) return;
-        GameUIManager.Instance.playerPanelParent.GetComponent<RectTransform>()
-            .DOAnchorPos(GameUIManager.Instance.secondPos, 0.5f).SetEase(Ease.OutQuad);
         GameUIManager.Instance.gameOverButton.GetComponentInChildren<TextMeshProUGUI>().text =
             isWin ? "You Win" : "You Lose!";
         GameUIManager.Instance.gameOverButton.gameObject.SetActive(true);
+        GameUIManager.Instance.backButton2.onClick.Invoke();
+        
         NetworkManager.Instance.isGameing = false;
-
-        /*
-        BulletFactory.Instance.ClearAllBullets();
-        TankFactory.Instance.ClearAllTank();
-
-        PlayerManager.Instance.activePlayers.Clear();
-        EnemyManager.Instance.activeEnemies.Clear();
-       */
-
-        PlayerManager.Instance.activePlayers.ForEach(a => a.Dead());
+        PlayerManager.Instance.OnGameOver();
         EnemyManager.Instance.activeEnemies.ForEach(a => a.Dead(null));
         EntityManager.Instance.GameOver();
-
         MapManager.Instance.ClearMap();
     }
 }

@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyTankUI : MonoBehaviour
+public class TankEntityTankUI : MonoBehaviour
 {
     public Image healthBarFill;       // 实际血条
     public Image healthBarDelay;     // 延迟缓动的血条
@@ -11,7 +11,7 @@ public class EnemyTankUI : MonoBehaviour
     public float delayEffectDuration = 0.7f;
 
     
-    public EnemyTankController enemyTank;
+    public TankController enemyTank;
     private float currentFillAmount;
 
 

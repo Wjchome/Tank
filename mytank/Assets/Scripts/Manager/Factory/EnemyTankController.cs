@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 public class EnemyTankController : TankController
 {
-    public EnemyTankUI enemyTankUI;
 
     public override void UpdateFrame()
     {
@@ -75,7 +75,7 @@ public class EnemyTankController : TankController
     {
         HP = Mathf.Max(HP - damage, 0);
         DamageUIManager.Instance.ShowDamageWord(damageType, damage, transform);
-        enemyTankUI.UpdateHealthBar();
+        tankEntityTankUI.UpdateHealthBar();
         if (damageType == DamageType.Discipline)
         {
             bombAnimator.Play("DisciplineDamage", 0, 0);

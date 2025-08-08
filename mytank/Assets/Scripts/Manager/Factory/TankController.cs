@@ -60,6 +60,7 @@ public abstract class TankController : MonoBehaviour
     //本地动画机
     public Animator animator;
     public Animator bombAnimator;
+    public TankEntityTankUI tankEntityTankUI;
     
     public SpriteRenderer spriteRenderer;
 

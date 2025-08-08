@@ -11,21 +11,13 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public List<PlayerTankController> activePlayers = new List<PlayerTankController>();
     public Dictionary<string ,PlayerTankController> activePlayerDic = new Dictionary<string ,PlayerTankController>();
 
-    public int recoverTime = 200;
 
     public PlayerTankController playerTankControllerPrefab;
     public TankData playerTankData;
-    Dictionary<PlayerTankController, int> deadPlayerDic = new Dictionary<PlayerTankController, int>();
 
-    private int playerNum;
 
     public void OnGameStart(List<PlayerInfo> playerInfos)
     {
-        playerNum = playerInfos.Count;
-        
-        activePlayers.Clear();
-        activePlayerDic.Clear();
-        // 创建所有玩家的坦克
         CreateAllPlayerTanks(playerInfos);
     }
 
@@ -49,49 +41,13 @@ public class PlayerManager : SingletonMono<PlayerManager>
     }
 
 
-    public void DeadPlayer(PlayerTankController tank)
-    {
-        if (!NetworkManager.Instance.isGameing) return;
-        playerNum--;
-        if (playerNum == 0)
-        {
-            GameStateManager.Instance.GameOver(false);
-        }
-        else
-        {
-            deadPlayerDic.Add(tank, recoverTime);
-        }
-    }
+
 
 
     public void UpdateFrame()
     {
         activePlayers.ToList().ForEach(a => a.UpdateFrame());
-        if (deadPlayerDic.Count > 0)
-        {
-            // 反向遍历，避免修改集合的问题
-            var keys = deadPlayerDic.Keys.ToList();
-
-            for (int i = keys.Count - 1; i >= 0; i--)
-            {
-                var tank = keys[i];
-                var timer = deadPlayerDic[tank] - 1;
-
-                if (timer <= 0)
-                {
-                    var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
-                        .Except(MapManager.Instance.GetAllTankPos()).ToList();
-                    var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-                    RevivalPlayer(tank, pos.x, pos.y);
-                    playerNum++;
-                    deadPlayerDic.Remove(tank);
-                }
-                else
-                {
-                    deadPlayerDic[tank] = timer;
-                }
-            }
-        }
+      
     }
 
     public PlayerTankController InitialPlayer(string tankID, string tankName, int x, int y, Color color, int dataIndex)
@@ -137,10 +93,13 @@ public class PlayerManager : SingletonMono<PlayerManager>
             Instantiate(GameUIManager.Instance.playerPanelPrefab, GameUIManager.Instance.playerPanelParent)
                 .GetComponent<PlayerPanelUI>();
         temp.playerPanelUI.Init(temp);
-
         temp.playerPanelUI.UpdateUI();
+        
+        temp.tankEntityTankUI.healthBarFill.color = color;
+        temp.tankEntityTankUI.healthBarDelay.color =new Color( color.g,color.g,color.b,0.5f);
+        
+        
         temp.animType = dataIndex;
-
         activePlayers.Add(temp);
         activePlayerDic.Add(tankID, temp);
         EntityManager.Instance.allTanks.Add(temp);
@@ -177,6 +136,15 @@ public class PlayerManager : SingletonMono<PlayerManager>
         return temp;
     }
 
+    public void OnGameOver()
+    {
+        foreach (var playerTank in activePlayers.ToList())
+        {
+            Destroy(playerTank.gameObject);
+        }
+        activePlayers.Clear();
+        activePlayerDic.Clear();
+    }
     public TankController RevivalPlayer(PlayerTankController tank, int x, int y)
     {
         tank.isDead = false;

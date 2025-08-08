@@ -2,12 +2,15 @@ package main
 
 import (
 	"bufio"
+	"crypto/rand"
 	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	myproto "github.com/WjcHome/gohello/proto" // 替换为你的proto包路径
@@ -15,8 +18,26 @@ import (
 )
 
 const (
-	FRAME_INTERVAL = 25 * time.Millisecond // 20帧每秒
+	FRAME_INTERVAL = 25 * time.Millisecond // 40帧每秒
 )
+
+// 全局客户端计数器
+var clientCounter int64 = 0
+
+// 生成唯一客户端ID
+func generateClientID() string {
+	// 使用原子操作递增计数器
+	counter := atomic.AddInt64(&clientCounter, 1)
+
+	// 生成随机字节
+	randomBytes := make([]byte, 8)
+	rand.Read(randomBytes)
+	randomHex := hex.EncodeToString(randomBytes)
+
+	// 组合时间戳、计数器和随机数
+	timestamp := time.Now().UnixNano()
+	return fmt.Sprintf("client_%d_%d_%s", timestamp, counter, randomHex[:8])
+}
 
 // 服务器信息结构
 type ServerInfo struct {
@@ -173,7 +194,7 @@ func (s *Server) handleClient(conn net.Conn) {
 		tcpConn.SetNoDelay(true)
 	}
 
-	clientID := fmt.Sprintf("client_%d", time.Now().UnixNano())
+	clientID := generateClientID()
 	client := &Client{ID: clientID, Conn: conn}
 
 	// 发送连接成功消息

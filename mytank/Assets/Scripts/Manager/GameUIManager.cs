@@ -60,22 +60,19 @@ public class GameUIManager : SingletonMono<GameUIManager>
 
     void Gameover()
     {
-        playerPanelParent.GetComponent<RectTransform>().DOAnchorPos(firstPos, 0.5f).SetEase(Ease.OutQuad);
         NetworkManager.Instance.GameOverRequest(NetworkManager.Instance.currentRoom.RoomId);
         gameOverButton.gameObject.SetActive(false);
-
-        DOVirtual.DelayedCall(0.5f, () => { ResetGame(); });
-    }
-
-
-    private void ResetGame()
-    {
+    
+        // 清除玩家面板
         for (int i = playerPanelParent.childCount - 1; i >= 0; i--)
         {
             Destroy(playerPanelParent.GetChild(i).gameObject);
         }
 
         LevelManager.Instance.levelNameText.text = "";
+
+    
         gamePanel.SetActive(false);
     }
+
 }

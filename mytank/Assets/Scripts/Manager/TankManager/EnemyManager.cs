@@ -67,24 +67,19 @@ public class EnemyManager : SingletonMono<EnemyManager>
     private void KillTank(EnemyTankController tank)
     {
         tank.gameObject.SetActive(false);
-
         leafEnemies--;
         enemyleafText.text = leafEnemies.ToString();
-
-        if (leafEnemies == 0)
-        {
-            GameStateManager.Instance.GameOver(true);
-        }
-
         var a = tank.GetComponent<Special>();
         if (a != null)
         {
             Destroy(a);
         }
-
         EntityManager.Instance.allTanks.Remove(tank);
-
         activeEnemies.Remove(tank);
+        if (leafEnemies == 0)
+        {
+            GameStateManager.Instance.GameOver(true);
+        }
     }
 
 
@@ -245,7 +240,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         InitialEnemyData(temp, data);
 
         temp.animType = dataIndex;
-        temp.enemyTankUI.UpdateHealthBar();
+        temp.tankEntityTankUI.UpdateHealthBar();
 
 
         return temp;
@@ -281,7 +276,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
 
         temp.animType = dataIndex;
-        temp.enemyTankUI.UpdateHealthBar();
+        temp.tankEntityTankUI.UpdateHealthBar();
 
         temp.gameObject.AddComponent<Special>();
 

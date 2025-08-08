@@ -367,6 +367,7 @@ public class PlayerTankController : TankController
 
         HP = Mathf.Max(HP- damage,0);
         DamageUIManager.Instance. ShowDamageWord(DamageType.Bullet,damage,transform);
+        tankEntityTankUI.UpdateHealthBar();
         playerPanelUI.UpdateHP(); // 更新血量显示
 
      
@@ -410,7 +411,8 @@ public class PlayerTankController : TankController
 
     protected override void ExecuteDeathLogic()
     {
-        PlayerManager.Instance.DeadPlayer(this);
+        GameStateManager.Instance.GameOver(false);
+
         transform.position = new Vector2(-100, 0);
     }
 }
