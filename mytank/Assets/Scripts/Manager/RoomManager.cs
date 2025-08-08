@@ -39,6 +39,7 @@ public class RoomManager : SingletonMono<RoomManager>
     public ToggleGroup toggleGroup;
     public PlayerRole playerRole;
     public Sprite[] sprites;
+    public Button randomizeButton; // 新增一个随机按钮
 
 
     [Header("Create Room")] public TMP_InputField roomNameInput;
@@ -80,6 +81,56 @@ public class RoomManager : SingletonMono<RoomManager>
     public Dictionary<string, PlayerRole> playerRoleDict = new Dictionary<string, PlayerRole>();
     public Dictionary<PlayerRole, Sprite> playerRoleSpriteDict = new Dictionary<PlayerRole, Sprite>();
 
+    
+    private string[] adjectives = 
+    {
+        // 正面特质
+        "英勇的", "智慧的", "敏捷的", "强大的", "神秘的", "快乐的", "狡猾的", "疯狂的",
+        "无敌的", "传奇的", "光明的", "黑暗的", "神圣的", "邪恶的", "幸运的", "幽默的",
+        "冷静的", "热情的", "优雅的", "狂野的", "沉默的", "暴躁的", "温柔的", "坚毅的",
+    
+        // 搞笑/无厘头
+        "贪吃的", "打瞌睡的", "放屁的", "迷路的", "话痨的", "自恋的", "发呆的", "摸鱼的",
+        "熬夜的", "秃头的", "穿反裤的", "左脚踩右脚的", "不会数数的", "反向抽烟的",
+    
+        // 职业/身份
+        "总统的", "坦克的", "领导的", "教授的", "快递的", "外卖的", "程序员的", "画家的",
+    
+        // 抽象/奇怪
+        "量子态的", "薛定谔的", "混沌的", "元宇宙的", "赛博的", "虚拟的", "二进制的", "404的",
+    
+        // 颜色/材质
+        "彩虹的", "不锈钢的", "透明的", "五彩斑斓黑的", "会发光的", "掉色的", "像素化的",
+    
+        // 动物/自然
+        "恐龙般的", "喵星的", "汪星的", "会飞的", "深海里的", "火山口的", "在逃的", "光合作用的"
+    };
+    private string[] nouns = 
+    {
+        // 经典职业/种族
+        "战士", "法师", "盗贼", "猎人", "牧师", "圣骑士", "死灵法师", "德鲁伊",
+        "精灵", "矮人", "兽人", "吸血鬼", "狼人", "巨龙", "天使", "恶魔",
+    
+        // 动物/萌系
+        "熊猫", "柯基", "哈士奇", "橘猫", "仓鼠", "松鼠", "企鹅", "海豹",
+        "章鱼", "水母", "树懒", "浣熊", "狐狸", "柴犬", "兔兔", "咕咕鸡",
+    
+        // 食物/饮料
+        "巧克力", "抹茶", "草莓", "芝士", "火锅", "螺蛳粉", "奶茶", "咖啡",
+        "泡面", "寿司", "汉堡", "披萨", "薯条", "冰淇淋", "甜甜圈", "煎饼果子",
+    
+        // 武器/装备
+        "大剑", "法杖", "弓箭", "盾牌", "双刀", "狙击枪", "火箭筒", "光剑",
+        "平底锅", "折凳", "咸鱼", "键盘", "鼠标", "显示器", "主机的",
+    
+        // 搞笑/抽象
+        "土豆", "韭菜", "韭菜盒子", "摸鱼", "躺平", "内卷", "996", "007",
+        "BUG", "异常", "闪退", "蓝屏", "404", "乱码", "表情包", "弹幕",
+    
+        // 自然/科幻
+        "黑洞", "超新星", "彗星", "陨石", "机器人", "AI", "无人机", "卫星",
+        "太空站", "外星人", "时间旅行者", "平行宇宙", "虫洞", "反物质", "量子纠缠"
+    };
     void Start()
     {
         InitializeUI();
@@ -143,6 +194,9 @@ public class RoomManager : SingletonMono<RoomManager>
         levelDropdown.AddOptions(levelOptions);
         levelDropdown.value = 0; // 默认选择第一个关卡
 
+        RandomizeSettings();
+
+   
         bool isFirst = false;
         foreach (var food in FoodManager.Instance.foodDatas.Union(FoodManager.Instance.superFoodDatas))
         {
@@ -176,25 +230,14 @@ public class RoomManager : SingletonMono<RoomManager>
             }
         }
     }
-
-    void AnimateButton(Button button)
+    private string GetRandomName()
     {
-        var originalScale = button.transform.localScale;
-        // 按下动画
-        button.transform.DOScale(originalScale * 0.9f, 0.1f)
-            .SetEase(Ease.OutQuad)
-            .OnComplete(() =>
-            {
-                // 释放动画（带弹性效果）
-                button.transform.DOScale(originalScale * 1.1f, 0.3f)
-                    .SetEase(Ease.OutElastic)
-                    .OnComplete(() =>
-                    {
-                        // 确保最终恢复精确原始大小
-                        button.transform.localScale = originalScale;
-                    });
-            });
+        string adj = adjectives[Random.Range(0, adjectives.Length)];
+        string noun = nouns[Random.Range(0, nouns.Length)];
+        return adj + noun;
     }
+
+
 
     void SubscribeToEvents()
     {
@@ -222,6 +265,7 @@ public class RoomManager : SingletonMono<RoomManager>
         });
         quitButton.onClick.AddListener(QuitGame); //本地退出
         // 设置
+        randomizeButton.onClick.AddListener(RandomizeSettings);
         myColorR.onValueChanged.AddListener(ColorShow);
         myColorG.onValueChanged.AddListener(ColorShow);
         myColorB.onValueChanged.AddListener(ColorShow);
@@ -273,7 +317,33 @@ public class RoomManager : SingletonMono<RoomManager>
             AudioManager.Instance.Play("UIClick");
         });
     }
-
+    private Color GetRandomColor()
+    {
+        float r = Random.Range(0f, 1f);
+        float g = Random.Range(0f, 1f);
+        float b = Random.Range(0f, 1f);
+        return new Color(r, g, b);
+    }
+    public void RandomizeSettings()
+    {
+        // 随机名字
+        myNameInput.text = GetRandomName();
+    
+        // 随机颜色
+        Color randomColor = GetRandomColor();
+        myColorR.value = randomColor.r;
+        myColorG.value = randomColor.g;
+        myColorB.value = randomColor.b;
+        colorShow.color = randomColor; // 更新颜色显示
+    
+        // 随机角色（如果有ToggleGroup）
+        if (toggleGroup != null)
+        {
+            Toggle[] toggles = toggleGroup.GetComponentsInChildren<Toggle>();
+            int randomIndex = Random.Range(0, toggles.Length);
+            toggles[randomIndex].isOn = true;
+        }
+    }
     void ColorShow(float colorValue)
     {
         colorShow.color = new Color(myColorR.value, myColorG.value, myColorB.value);

@@ -240,7 +240,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: dcdc43f7a0ad67b4ab3e3db38233dfae, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
@@ -1270,7 +1270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBarFill: {fileID: 4863567990387805655}
   healthBarDelay: {fileID: 7398074925543453750}
-  delayEffectDuration: 0.7
+  delayEffectDuration: 1
   enemyTank: {fileID: -2687135769070647202}
 --- !u!1 &9142472675628475945
 GameObject:

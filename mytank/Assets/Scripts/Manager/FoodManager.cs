@@ -112,6 +112,7 @@ public class FoodManager : SingletonMono<FoodManager>
         needDelayedShow = false;
         delayedShowFrame = 0;
         openOrCloseButtonText.text = "待选：" + chooseNum;
+        panelParent.anchoredPosition=secondPos;
     }
 
     // 新增：外部调用的方法，用于增加选择次数
@@ -257,7 +258,8 @@ public class FoodManager : SingletonMono<FoodManager>
             // 1. 禁用所有按钮，防止多次点击
             foreach (var p in panels)
                 p.chooseButton.interactable = false;
-            
+            if(!NetworkManager.Instance.isGameing)
+                return;
             // 2. 减少选择次数
             chooseNum--;
             openOrCloseButtonText.text = "待选：" + chooseNum;

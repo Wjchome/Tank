@@ -488,7 +488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBarFill: {fileID: 3820797947271869838}
   healthBarDelay: {fileID: 5022876684364503548}
-  delayEffectDuration: 0.7
+  delayEffectDuration: 1
   enemyTank: {fileID: 7221023760519817669}
 --- !u!1 &1676952676713191606
 GameObject:

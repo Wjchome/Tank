@@ -26,9 +26,8 @@ public class GameUIManager : SingletonMono<GameUIManager>
     public Vector2 secondPos2;
     public GameObject playerInfoPanel;
     public Button backButton2;
-    
-    
-   
+
+
     public RectTransform canvas;
     public RectTransform moveParent;
     public InputButton upButton;
@@ -43,26 +42,33 @@ public class GameUIManager : SingletonMono<GameUIManager>
     {
         secondPos1 = foodPanel.GetComponent<RectTransform>().anchoredPosition;
         firstPos1 = secondPos1 - new Vector2(400, 0);
-        
+
         secondPos2 = playerInfoPanel.GetComponent<RectTransform>().anchoredPosition;
-        firstPos2 =secondPos2 -new Vector2(1400, 0);
+        firstPos2 = secondPos2 - new Vector2(1400, 0);
 
         gameOverButton.onClick.AddListener(Gameover);
-        gameOverButton.gameObject.SetActive(false); 
-        
-        backButton1.onClick.AddListener(()=>UIChange. GoLeft(backButton1,foodPanel.GetComponent<RectTransform>(),firstPos1,secondPos1));
-        
-        backButton2.onClick.AddListener(()=>UIChange. GoLeft(backButton2,playerInfoPanel.GetComponent<RectTransform>(),firstPos2,secondPos2));
+        gameOverButton.gameObject.SetActive(false);
 
+        backButton1.onClick.AddListener(() =>
+            UIChange.GoLeft(backButton1, foodPanel.GetComponent<RectTransform>(), firstPos1, secondPos1));
+
+        backButton2.onClick.AddListener(() =>
+            UIChange.GoLeft(backButton2, playerInfoPanel.GetComponent<RectTransform>(), firstPos2, secondPos2));
     }
 
+    public void GameStart()
+    {
+        gamePanel.SetActive(true);
+        foodPanel.GetComponent<RectTransform>().anchoredPosition = secondPos1;
+        playerInfoPanel.GetComponent<RectTransform>().anchoredPosition = secondPos2;
+    }
 
 
     void Gameover()
     {
         NetworkManager.Instance.GameOverRequest(NetworkManager.Instance.currentRoom.RoomId);
         gameOverButton.gameObject.SetActive(false);
-    
+
         // 清除玩家面板
         for (int i = playerPanelParent.childCount - 1; i >= 0; i--)
         {
@@ -71,8 +77,7 @@ public class GameUIManager : SingletonMono<GameUIManager>
 
         LevelManager.Instance.levelNameText.text = "";
 
-    
+
         gamePanel.SetActive(false);
     }
-
 }

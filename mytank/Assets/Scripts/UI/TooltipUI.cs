@@ -21,7 +21,6 @@ public class TooltipUI : SingletonMono<TooltipUI>
         
         // Calculate the tooltip size once (assuming it doesn't change)
         tooltipSize = rectTransform.sizeDelta/* * canvas.scaleFactor*/;
-        Debug.Log(tooltipSize);
     }
 
     private void Update()

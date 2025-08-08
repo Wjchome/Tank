@@ -9,7 +9,7 @@ using UnityEngine;
 public class PlayerManager : SingletonMono<PlayerManager>
 {
     public List<PlayerTankController> activePlayers = new List<PlayerTankController>();
-    public Dictionary<string ,PlayerTankController> activePlayerDic = new Dictionary<string ,PlayerTankController>();
+    public Dictionary<string, PlayerTankController> activePlayerDic = new Dictionary<string, PlayerTankController>();
 
 
     public PlayerTankController playerTankControllerPrefab;
@@ -41,13 +41,9 @@ public class PlayerManager : SingletonMono<PlayerManager>
     }
 
 
-
-
-
     public void UpdateFrame()
     {
         activePlayers.ToList().ForEach(a => a.UpdateFrame());
-      
     }
 
     public PlayerTankController InitialPlayer(string tankID, string tankName, int x, int y, Color color, int dataIndex)
@@ -59,7 +55,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.tankDirection = Direction.Up;
         temp.transform.rotation = Quaternion.identity;
         temp.Pos = new Vector2Int(x, y); // 左下角坐标
-        temp.scaleSize=new Vector2(2f, 2f);
+        temp.scaleSize = new Vector2(2f, 2f);
         if (tankID == NetworkManager.Instance.playerID)
         {
             temp.identity = Identity.Myself;
@@ -94,11 +90,18 @@ public class PlayerManager : SingletonMono<PlayerManager>
                 .GetComponent<PlayerPanelUI>();
         temp.playerPanelUI.Init(temp);
         temp.playerPanelUI.UpdateUI();
-        
+
         temp.tankEntityTankUI.healthBarFill.color = color;
-        temp.tankEntityTankUI.healthBarDelay.color =new Color( color.g,color.g,color.b,0.5f);
-        
-        
+        Color.RGBToHSV(color, out float h, out float s, out float v);
+        Color delayColor = Color.HSVToRGB(
+            h, // 保持色相（Hue）不变
+            0.3f, // 降低饱和度（Saturation）
+            0.7f // 降低亮度（Value）
+        );
+        delayColor.a = 0.8f; // 适当透明度
+        temp.tankEntityTankUI.healthBarDelay.color = delayColor;
+
+
         temp.animType = dataIndex;
         activePlayers.Add(temp);
         activePlayerDic.Add(tankID, temp);
@@ -142,9 +145,11 @@ public class PlayerManager : SingletonMono<PlayerManager>
         {
             Destroy(playerTank.gameObject);
         }
+
         activePlayers.Clear();
         activePlayerDic.Clear();
     }
+
     public TankController RevivalPlayer(PlayerTankController tank, int x, int y)
     {
         tank.isDead = false;

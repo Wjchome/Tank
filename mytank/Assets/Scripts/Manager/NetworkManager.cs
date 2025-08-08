@@ -241,8 +241,10 @@ public class NetworkManager : SingletonMono<NetworkManager>
             EnemyManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
             PlayerManager.Instance.OnGameStart(message.GameStart.PlayerInfos.ToList());
             CamController.Instance.Change(MapManager.Instance.mapWidth / 2);
-            RoomManager.Instance.OnGameStartRoom();
-            FoodManager.Instance.GameStart();
+            
+            RoomManager.Instance.OnGameStartRoom();//关闭UI
+            GameUIManager.Instance.GameStart();//复原打开游戏UI
+            FoodManager.Instance.GameStart();//重新设置食物啥的
         }
         else if (message.ConnectSuccess != null)
         {

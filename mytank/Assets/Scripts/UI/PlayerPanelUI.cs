@@ -32,7 +32,14 @@
         {
             tank=tankController;
             HPbar.color = tank.playerColor;
-            HPDelaybar.color = new Color(tank.playerColor.r,tank.playerColor.g,tank.playerColor.b,0.5f);
+            Color.RGBToHSV(tank.playerColor, out float h, out float s, out float v);
+            Color delayColor = Color.HSVToRGB(
+                h, // 保持色相（Hue）不变
+                0.3f, // 降低饱和度（Saturation）
+                0.7f // 降低亮度（Value）
+            );
+            delayColor.a = 0.8f; // 适当透明度
+            HPDelaybar.color = delayColor;
 
         }
 

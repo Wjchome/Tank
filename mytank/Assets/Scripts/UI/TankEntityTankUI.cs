@@ -8,7 +8,7 @@ public class TankEntityTankUI : MonoBehaviour
     public Image healthBarFill;       // 实际血条
     public Image healthBarDelay;     // 延迟缓动的血条
     
-    public float delayEffectDuration = 0.7f;
+    public float delayEffectDuration = 1f;
 
     
     public TankController enemyTank;
