@@ -236,9 +236,17 @@ public class MapManager : SingletonMono<MapManager>
                 MapType wallType = GetWallType(x, y);
                 if (!allowTypes.Contains(wallType))
                     return false;
-
+                
+                // 新检查坦克碰撞
+                if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
+                {
+                    if (tankOn != null&&tankOn.tankID!=selfID)
+                    {
+                        return false;
+                    }
+                }
                 // 检查坦克碰撞
-                foreach (var tank in EntityManager.Instance.allTanks)
+             /*   foreach (var tank in EntityManager.Instance.allTanks)
                 {
                     if (tank.tankID == selfID) continue;
                     if (IsRectOverlap(startX, startY, width, height,
@@ -246,7 +254,7 @@ public class MapManager : SingletonMono<MapManager>
                     {
                         return false;
                     }
-                }
+                }*/
 
 
             }
@@ -333,21 +341,7 @@ public class MapManager : SingletonMono<MapManager>
 
         return res;
     }
-
-
-    public void GenerateWall(int num, Random random)
-    {
-        var candidates = GetMapTypePos(new List<MapType>() { MapType.floor });
-        candidates = candidates.Except(GetAllTankPos()).ToList();
-        int count = Math.Min(num, candidates.Count - 1);
-        for (int i = 0; i < count; i++)
-        {
-            int idx = random.Next(candidates.Count);
-            Vector2Int pos = candidates[idx];
-            SetWallType(pos.x, pos.y, MapType.wall);
-            candidates.RemoveAt(idx); // 防止重复
-        }
-    }
+    
 
     public bool IsHintHome(int startX, int startY, int width, int height)
     {
@@ -371,7 +365,23 @@ public class MapManager : SingletonMono<MapManager>
     public List<TankController> GetTankInArea(int startX, int startY, int width, int height)
     {
         List<TankController> tanks = new List<TankController>();
-        foreach (var tank in EntityManager.Instance.allTanks)
+        for (int x = startX; x < startX + width; x++)
+        {
+            for (int y = startY; y < startY + height; y++)
+            {
+                if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+                    continue;
+                // 新检查坦克碰撞
+                if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
+                {
+                    if (tankOn != null)
+                    {
+                        tanks.Add(tankOn);
+                    }
+                }
+            }
+        }
+        /*foreach (var tank in EntityManager.Instance.allTanks)
         {
             if (IsRectOverlap(startX, startY, width, height,
                     tank.Pos.x, tank.Pos.y, 2, 2))
@@ -379,7 +389,7 @@ public class MapManager : SingletonMono<MapManager>
                 tanks.Add(tank);
             }
         }
-
+*/
 
         return tanks;
     }
@@ -387,12 +397,20 @@ public class MapManager : SingletonMono<MapManager>
     public List<PlayerTankController> GetPlayerTankInArea(int startX, int startY, int width, int height)
     {
         List<PlayerTankController> tanks = new List<PlayerTankController>();
-        foreach (var tank in PlayerManager.Instance.activePlayers)
+        for (int x = startX; x < startX + width; x++)
         {
-            if (IsRectOverlap(startX, startY, width, height,
-                    tank.Pos.x, tank.Pos.y, 2, 2))
+            for (int y = startY; y < startY + height; y++)
             {
-                tanks.Add(tank);
+                if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+                    continue;
+                // 新检查坦克碰撞
+                if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
+                {
+                    if (tankOn != null&&tankOn is PlayerTankController playerTank)
+                    {
+                        tanks.Add(playerTank);
+                    }
+                }
             }
         }
 
@@ -402,12 +420,20 @@ public class MapManager : SingletonMono<MapManager>
     public List<EnemyTankController> GetEnemyTankInArea(int startX, int startY, int width, int height)
     {
         List<EnemyTankController> tanks = new List<EnemyTankController>();
-        foreach (var tank in EnemyManager.Instance.activeEnemies)
+        for (int x = startX; x < startX + width; x++)
         {
-            if (IsRectOverlap(startX, startY, width, height,
-                    tank.Pos.x, tank.Pos.y, 2, 2))
+            for (int y = startY; y < startY + height; y++)
             {
-                tanks.Add(tank);
+                if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
+                    continue;
+                // 新检查坦克碰撞
+                if (EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x, y), out var tankOn))
+                {
+                    if (tankOn != null && tankOn is EnemyTankController enemyTank)
+                    {
+                        tanks.Add(enemyTank);
+                    }
+                }
             }
         }
 

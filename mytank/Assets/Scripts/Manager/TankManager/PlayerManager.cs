@@ -108,6 +108,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         activePlayers.Add(temp);
         activePlayerDic.Add(tankID, temp);
         EntityManager.Instance.allTanks.Add(temp);
+        EntityManager.Instance. UpdateTankPos(temp,new Vector2Int(-2, -2),new Vector2Int(x,y));
         switch (dataIndex)
         {
             case 1:

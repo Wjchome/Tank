@@ -247,6 +247,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.animType = dataIndex;
         temp.tankEntityTankUI.UpdateHealthBar();
 
+        EntityManager.Instance. UpdateTankPos(temp,new Vector2Int(-2, -2),new Vector2Int(x,y));
 
         return temp;
     }
@@ -284,6 +285,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.tankEntityTankUI.UpdateHealthBar();
 
         temp.gameObject.AddComponent<Special>();
+        
+        EntityManager.Instance. UpdateTankPos(temp,new Vector2Int(-2, -2),new Vector2Int(x,y));
+        
 
         return temp;
     }

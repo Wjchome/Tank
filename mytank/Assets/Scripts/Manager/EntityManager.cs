@@ -42,8 +42,12 @@ public class EntityManager : SingletonMono<EntityManager>
 
 
     public List<TankController> allTanks = new List<TankController>();
-    private Dictionary<Vector2Int, TankController> tankPositionCache = new Dictionary<Vector2Int, TankController>();
-//TODO 清空
+    public Dictionary<Vector2Int, TankController> tankPositionCache = new Dictionary<Vector2Int, TankController>();
+   
+    private List<MapEntity> mapEntitiesToUpdate = new List<MapEntity>();
+    private List<UITimerEntity> uiEntitiesToUpdate = new List<UITimerEntity>();
+    private List<BulletController> bulletsToUpdate = new List<BulletController>();
+
     public void UpdateTankPos(TankController tank, Vector2Int originPos, Vector2Int targetPos)
     {
         tankPositionCache[originPos] = null;
@@ -92,8 +96,11 @@ public class EntityManager : SingletonMono<EntityManager>
     public void UpdateFrame()
     {
         // 更新地图实体
-        foreach (var entity in mapEntities.ToList())
+        mapEntitiesToUpdate.Clear();
+        mapEntitiesToUpdate.AddRange(mapEntities);
+        for (int i = mapEntitiesToUpdate.Count - 1; i >= 0; i--)
         {
+            var entity = mapEntitiesToUpdate[i];
             if (entity != null)
             {
                 entity.UpdateFrame();
@@ -105,8 +112,11 @@ public class EntityManager : SingletonMono<EntityManager>
         }
 
         // 更新UI实体
-        foreach (var entity in uiEntities.ToList())
+        uiEntitiesToUpdate.Clear();
+        uiEntitiesToUpdate.AddRange(uiEntities);
+        for (int i = uiEntitiesToUpdate.Count - 1; i >= 0; i--)
         {
+            var entity = uiEntitiesToUpdate[i];
             if (entity != null)
             {
                 entity.UpdateFrame();
@@ -118,8 +128,11 @@ public class EntityManager : SingletonMono<EntityManager>
         }
 
         // 更新子弹
-        foreach (var bullet in activeBullets.ToList())
+        bulletsToUpdate.Clear();
+        bulletsToUpdate.AddRange(activeBullets);
+        for (int i =bulletsToUpdate.Count - 1; i >= 0; i--)
         {
+            var bullet = bulletsToUpdate[i];
             if (bullet != null)
             {
                 bullet.UpdateFrame();
@@ -154,6 +167,7 @@ public class EntityManager : SingletonMono<EntityManager>
             }
         }
         allTanks.Clear();
+        tankPositionCache.Clear();
     }
 
     public void AddUIEntity(UITimerEntity entity)

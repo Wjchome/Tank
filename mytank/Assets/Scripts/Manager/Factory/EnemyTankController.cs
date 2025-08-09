@@ -47,6 +47,7 @@ public class EnemyTankController : TankController
 
     protected override void MoveTo(Vector2Int targetPos)
     {
+        EntityManager.Instance. UpdateTankPos(this,Pos,targetPos);
         Pos = targetPos;
         Vector2 centerPos = GetCenter();
         isMoving = true;
@@ -158,7 +159,8 @@ public class EnemyTankController : TankController
             }
             attacker.Kill(GetComponent<Special>() != null);
         }
-
+        EntityManager.Instance. UpdateTankPos(this,Pos,new Vector2Int(-2, -2));
+        
         Pos = new Vector2Int(-2, -2);
     }
 

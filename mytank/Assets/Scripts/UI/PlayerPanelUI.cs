@@ -78,11 +78,7 @@
             });
         }
 
-        private void Update()
-        {
-            HPbar.fillAmount = Mathf.Lerp(HPbar.fillAmount, ((float)tank.HP / tank.orignalHP),Time.deltaTime);
-
-        }
+   
 
        
         

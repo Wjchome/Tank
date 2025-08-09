@@ -305,6 +305,8 @@ public class PlayerTankController : TankController
                 EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
             }
         }
+        EntityManager.Instance. UpdateTankPos(this,Pos,targetPos);
+        
         Pos = targetPos;
         Vector2 centerPos = GetCenter();
         isMoving = true;

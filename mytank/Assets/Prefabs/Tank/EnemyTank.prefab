@@ -843,7 +843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6456788800352443388
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1270,6 +1270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBarFill: {fileID: 4863567990387805655}
   healthBarDelay: {fileID: 7398074925543453750}
+  nameText: {fileID: 0}
   delayEffectDuration: 1
   enemyTank: {fileID: -2687135769070647202}
 --- !u!1 &9142472675628475945
