@@ -13,7 +13,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	myproto "github.com/WjcHome/gohello/proto" // 替换为你的proto包路径
+	myproto "github.com/WjcHome/gohello/proto" // 使用模块路径导入proto包
 	"google.golang.org/protobuf/proto"
 )
 

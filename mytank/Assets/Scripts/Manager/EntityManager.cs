@@ -42,7 +42,19 @@ public class EntityManager : SingletonMono<EntityManager>
 
 
     public List<TankController> allTanks = new List<TankController>();
-
+    private Dictionary<Vector2Int, TankController> tankPositionCache = new Dictionary<Vector2Int, TankController>();
+//TODO 清空
+    public void UpdateTankPos(TankController tank, Vector2Int originPos, Vector2Int targetPos)
+    {
+        tankPositionCache[originPos] = null;
+        tankPositionCache[originPos+new Vector2Int(0,1)] = null;
+        tankPositionCache[originPos+new Vector2Int(1,1)] = null;
+        tankPositionCache[originPos+new Vector2Int(1,0)] = null;
+        tankPositionCache[targetPos] = tank;
+        tankPositionCache[targetPos+new Vector2Int(0,1)] = tank;
+        tankPositionCache[targetPos+new Vector2Int(1,1)] = tank;
+        tankPositionCache[targetPos+new Vector2Int(1,0)] = tank;
+    }
     private void Awake()
     {
         InitializeBulletPool();

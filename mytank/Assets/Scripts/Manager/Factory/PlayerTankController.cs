@@ -348,6 +348,8 @@ public class PlayerTankController : TankController
         bombAnimator.Play("Heal", 0, 0);
         orignalHP += num;
         playerPanelUI.UpdateHP(); // 更新血量显示
+        tankEntityTankUI.UpdateHealthBar();
+        
     }
 
     public override void AddHP(int num)
@@ -355,6 +357,7 @@ public class PlayerTankController : TankController
         bombAnimator.Play("Heal", 0, 0);
         HP = Mathf.Min(HP + num, orignalHP);
         playerPanelUI.UpdateHP(); // 更新血量显示
+        tankEntityTankUI.UpdateHealthBar();
         
       
         

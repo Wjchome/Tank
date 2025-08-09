@@ -222,11 +222,11 @@ public class NetworkManager : SingletonMono<NetworkManager>
             currentFrame = message.FrameMessage.FrameNumber;
             GameStateManager.Instance.OnFrameInputs(message.FrameMessage.Inputs.ToList());
             GameStateManager.Instance.OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
-            MapManager.Instance.UpdateFrame(); //有关道具
             EnemyManager.Instance.UpdateFrame(); //生成敌人
             FoodManager.Instance.UpdateFrame(); //选择道具
             PlayerManager.Instance.UpdateFrame(); //
             EntityManager.Instance.UpdateFrame(); //实体推进
+            MapManager.Instance.UpdateFrame(); //有关道具
         }
         else if (message.GameStart != null)
         {
