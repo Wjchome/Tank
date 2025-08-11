@@ -274,7 +274,7 @@ public class FoodManager : SingletonMono<FoodManager>
             if (chooseNum > 0)
             {
                 needDelayedShow = true;
-                delayedShowFrame = NetworkManager.Instance.currentFrame + 1; // 延迟一帧
+                delayedShowFrame = NetworkManager.Instance.currentFrame + 2; // 延迟一帧
             }
             else
             {

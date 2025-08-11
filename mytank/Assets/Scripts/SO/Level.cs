@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -23,7 +24,11 @@ public class Level : ScriptableObject
         public int numEnemies;//在产生这么多怪的情况下做什么
         public EnemyEvent enemyEvent;
     }
-    
+
+    public Dictionary<int, EnemyEvent> GetDic()
+    {
+        return  enemiesUp.ToDictionary(x=>x.numEnemies,x=>x.enemyEvent);
+    }
 
 }
 

@@ -365,31 +365,24 @@ public class MapManager : SingletonMono<MapManager>
     public List<TankController> GetTankInArea(int startX, int startY, int width, int height)
     {
         List<TankController> tanks = new List<TankController>();
+        HashSet<TankController> tankSet = new HashSet<TankController>();
+        
         for (int x = startX; x < startX + width; x++)
         {
             for (int y = startY; y < startY + height; y++)
             {
                 if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
                     continue;
-                // 新检查坦克碰撞
+                // 使用缓存检查坦克碰撞
                 if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
                 {
-                    if (tankOn != null)
+                    if (tankOn != null && tankSet.Add(tankOn)) // HashSet.Add返回true表示成功添加（之前不存在）
                     {
                         tanks.Add(tankOn);
                     }
                 }
             }
         }
-        /*foreach (var tank in EntityManager.Instance.allTanks)
-        {
-            if (IsRectOverlap(startX, startY, width, height,
-                    tank.Pos.x, tank.Pos.y, 2, 2))
-            {
-                tanks.Add(tank);
-            }
-        }
-*/
 
         return tanks;
     }
@@ -397,16 +390,18 @@ public class MapManager : SingletonMono<MapManager>
     public List<PlayerTankController> GetPlayerTankInArea(int startX, int startY, int width, int height)
     {
         List<PlayerTankController> tanks = new List<PlayerTankController>();
+        HashSet<PlayerTankController> tankSet = new HashSet<PlayerTankController>();
+        
         for (int x = startX; x < startX + width; x++)
         {
             for (int y = startY; y < startY + height; y++)
             {
                 if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
                     continue;
-                // 新检查坦克碰撞
+                // 使用缓存检查坦克碰撞
                 if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
                 {
-                    if (tankOn != null&&tankOn is PlayerTankController playerTank)
+                    if (tankOn != null && tankOn is PlayerTankController playerTank && tankSet.Add(playerTank))
                     {
                         tanks.Add(playerTank);
                     }
@@ -420,16 +415,18 @@ public class MapManager : SingletonMono<MapManager>
     public List<EnemyTankController> GetEnemyTankInArea(int startX, int startY, int width, int height)
     {
         List<EnemyTankController> tanks = new List<EnemyTankController>();
+        HashSet<EnemyTankController> tankSet = new HashSet<EnemyTankController>();
+        
         for (int x = startX; x < startX + width; x++)
         {
             for (int y = startY; y < startY + height; y++)
             {
                 if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
                     continue;
-                // 新检查坦克碰撞
+                // 使用缓存检查坦克碰撞
                 if (EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x, y), out var tankOn))
                 {
-                    if (tankOn != null && tankOn is EnemyTankController enemyTank)
+                    if (tankOn != null && tankOn is EnemyTankController enemyTank && tankSet.Add(enemyTank))
                     {
                         tanks.Add(enemyTank);
                     }

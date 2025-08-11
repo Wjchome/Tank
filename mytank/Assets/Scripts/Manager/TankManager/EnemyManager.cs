@@ -36,7 +36,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     public Dictionary<EnemyEvent, int> enemyEvents=new Dictionary<EnemyEvent, int>();
 
-    public List<Level.LevelEnemy> enemyUp=new List<Level.LevelEnemy>();
+    public Dictionary<int, EnemyEvent> enemyUp = new Dictionary<int, EnemyEvent>();
 
 
     public long pauseEndFrame = 0;
@@ -68,7 +68,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     {
         tank.gameObject.SetActive(false);
         leafEnemies--;
-        enemyleafText.text = leafEnemies.ToString();
+        enemyleafText.text = "剩余："+leafEnemies.ToString();
         var a = tank.GetComponent<Special>();
         if (a != null)
         {
@@ -90,7 +90,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         maxEnemies = levelData.maxEnemies;
         enemySpawnInterval = levelData.enemySpawnFrame;
         specialRange = levelData.specialRate;
-        enemyUp = levelData.enemiesUp.ToList();
+        enemyUp = levelData.GetDic();
         enemyEvents = new Dictionary<EnemyEvent, int>()
         {
             { EnemyEvent.Move_Interval_1, 0 },
@@ -99,7 +99,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         };
         leafEnemies = sumEnemies;
         lastSpawnFrame = 0;
-        enemyleafText.text = leafEnemies.ToString();
+        enemyleafText.text =  "剩余："+leafEnemies.ToString();
         enemyIndex = 0;
         pauseEndFrame = 0;
         // 清理现有敌人
@@ -171,24 +171,25 @@ public class EnemyManager : SingletonMono<EnemyManager>
         // 创建敌人坦克
         string enemyID = $"enemy_{enemyIndex++}";
 
-        var levelEnemy = enemyUp.Find(a => a.numEnemies == enemyIndex);
-        if (levelEnemy != null)
+        if (enemyUp.TryGetValue(enemyIndex, out var enemyEvent))
         {
-            if (enemyEvents.ContainsKey(levelEnemy.enemyEvent))
-            {
-                enemyEvents[levelEnemy.enemyEvent]++;
-            }
-            else
-            {
-                enemyEvents.Add(
-                    levelEnemy.enemyEvent ,1
-                );
-            }
+            
+                if (enemyEvents.ContainsKey(enemyEvent))
+                {
+                    enemyEvents[enemyEvent]++;
+                }
+                else
+                {
+                    enemyEvents.Add(
+                        enemyEvent, 1
+                    );
+                }
 
-            if (levelEnemy.enemyEvent == EnemyEvent.Spawn_Interval_80)
-            {
-                enemySpawnInterval = (int)(enemySpawnInterval * 0.8f);
-            }
+                if (enemyEvent == EnemyEvent.Spawn_Interval_80)
+                {
+                    enemySpawnInterval = (int)(enemySpawnInterval * 0.8f);
+                }
+            
         }
 
         // 使用确定性随机选择生成坦克类型

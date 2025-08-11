@@ -169,6 +169,19 @@ public class EntityManager : SingletonMono<EntityManager>
         allTanks.Clear();
         tankPositionCache.Clear();
     }
+    
+    // 清除坦克缓存（用于坦克死亡时）
+    public void ClearTankFromCache(TankController tank)
+    {
+        if (tank != null)
+        {
+            Vector2Int pos = tank.Pos;
+            tankPositionCache[pos] = null;
+            tankPositionCache[pos+new Vector2Int(0,1)] = null;
+            tankPositionCache[pos+new Vector2Int(1,1)] = null;
+            tankPositionCache[pos+new Vector2Int(1,0)] = null;
+        }
+    }
 
     public void AddUIEntity(UITimerEntity entity)
     {
