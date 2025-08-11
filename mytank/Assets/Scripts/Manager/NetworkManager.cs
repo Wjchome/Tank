@@ -60,7 +60,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private void Start()
     {
         Application.targetFrameRate = 60;
-        StartDiscovery();
+      //  StartDiscovery();
         // 延迟连接，等待发现服务器
         StartCoroutine(DelayedConnect());
         
@@ -108,7 +108,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
     private void DiscoveryThread()
     {
         IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, 9999);
-
         while (!shouldStopDiscovery)
         {
             try

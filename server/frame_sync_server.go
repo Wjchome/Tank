@@ -97,15 +97,15 @@ func NewServer() *Server {
 
 func (s *Server) Start() {
 	// 启动UDP广播
-	go s.startBroadcast()
+	//	go s.startBroadcast()
 
-	ln, err := net.Listen("tcp", ":8080")
+	ln, err := net.Listen("tcp", ":8088")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer ln.Close()
-	fmt.Println("Frame Sync Relay Server with Room Management started on :8080")
-	fmt.Println("UDP broadcast started on :9999")
+	//fmt.Println("Frame Sync Relay Server with Room Management started on :8080")
+	//fmt.Println("UDP broadcast started on :9999")
 
 	for {
 		conn, err := ln.Accept()
