@@ -62,7 +62,8 @@ public class NetworkManager : SingletonMono<NetworkManager>
         Application.targetFrameRate = 60;
       //  StartDiscovery();
         // 延迟连接，等待发现服务器
-        StartCoroutine(DelayedConnect());
+        //StartCoroutine(DelayedConnect());
+        ConnectToServer();
         
         style.fontSize = 30;
         style.normal.textColor = Color.white;

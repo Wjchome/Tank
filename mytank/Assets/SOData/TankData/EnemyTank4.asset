@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69fe692a07bb4f2386ed1c8c06b5cb5c, type: 3}
   m_Name: EnemyTank4
   m_EditorClassIdentifier: 
-  moveIntervalFrame: 20
+  moveIntervalFrame: 22
   shootIntervalFrame: 72
   HP: 20
   orignalHP: 20

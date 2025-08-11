@@ -67,7 +67,7 @@ type Room struct {
 	InputBuffer      []*myproto.PlayerInput
 	ChooseFoodBuffer []*myproto.ChooseFoodRequest // 新增：奖励选择缓冲区
 	FrameNumber      int64
-	Status           string // "waiting", "playing", "ended"
+	Status           string // "waiting", "playing"
 	MaxPlayers       int32
 	Mutex            sync.Mutex
 }
@@ -98,6 +98,9 @@ func NewServer() *Server {
 func (s *Server) Start() {
 	// 启动UDP广播
 	//	go s.startBroadcast()
+
+	// 启动定期清理任务
+	go s.cleanupEmptyRooms()
 
 	ln, err := net.Listen("tcp", ":8088")
 	if err != nil {
@@ -448,21 +451,8 @@ func (s *Server) handleKickPlayerRequest(client *Client, req *myproto.KickPlayer
 	fmt.Printf("Player %s was kicked from room %s by host %s\n", req.TargetPlayerId, room.ID, client.ID)
 }
 func (s *Server) handleGameOverRequest(client *Client, req *myproto.GameOverRequest) {
-	s.Mutex.Lock()
-	room := s.Rooms[client.RoomID]
-	s.Mutex.Unlock()
-	room.Mutex.Lock()
-	// 从房间中移除客户端
-	delete(room.Clients, client.ID)
-	client.RoomID = ""
-	client.IsHost = false
-	room.Mutex.Unlock()
-	// 发送房间列表给离开的客户端，表示已成功离开房间
-	s.sendRoomList(client.Conn)
+	fmt.Printf("Game over request from client %s in room %s\n", client.ID, client.RoomID)
 
-}
-
-func (s *Server) handleClientDisconnect(client *Client) {
 	if client.RoomID == "" {
 		return
 	}
@@ -472,14 +462,18 @@ func (s *Server) handleClientDisconnect(client *Client) {
 	s.Mutex.Unlock()
 
 	if !exists {
+		fmt.Printf("Room %s not found for game over request\n", client.RoomID)
 		return
 	}
 
 	room.Mutex.Lock()
+	// 从房间中移除客户端
 	delete(room.Clients, client.ID)
+	client.RoomID = ""
+	client.IsHost = false
 
 	// 如果房主离开，选择新的房主
-	if client.IsHost && len(room.Clients) > 0 {
+	if room.HostID == client.ID && len(room.Clients) > 0 {
 		for _, c := range room.Clients {
 			c.IsHost = true
 			room.HostID = c.ID
@@ -487,13 +481,66 @@ func (s *Server) handleClientDisconnect(client *Client) {
 		}
 	}
 
+	// 游戏结束后房间状态保持playing，等待玩家重新开始或离开
+	room.Mutex.Unlock()
+
+	// 如果房间空了，删除房间
+	if len(room.Clients) == 0 {
+		s.Mutex.Lock()
+		delete(s.Rooms, room.ID)
+		s.Mutex.Unlock()
+		fmt.Printf("Room %s deleted (empty after game over)\n", room.ID)
+	} else {
+		// 广播房间信息更新给剩余玩家
+		s.broadcastRoomInfo(room)
+	}
+
+	// 发送房间列表给离开的客户端
+	s.sendRoomList(client.Conn)
+	fmt.Printf("Client %s game over and left room %s\n", client.ID, req.RoomId)
+}
+
+func (s *Server) handleClientDisconnect(client *Client) {
+	fmt.Printf("Client %s disconnected\n", client.ID)
+
+	if client.RoomID == "" {
+		fmt.Printf("Client %s was not in any room\n", client.ID)
+		return
+	}
+
+	s.Mutex.Lock()
+	room, exists := s.Rooms[client.RoomID]
+	s.Mutex.Unlock()
+
+	if !exists {
+		fmt.Printf("Room %s not found for disconnected client %s\n", client.RoomID, client.ID)
+		return
+	}
+
+	room.Mutex.Lock()
+	delete(room.Clients, client.ID)
+	client.RoomID = ""
+	client.IsHost = false
+
+	// 如果房主离开，选择新的房主
+	if room.HostID == client.ID && len(room.Clients) > 0 {
+		for _, c := range room.Clients {
+			c.IsHost = true
+			room.HostID = c.ID
+			fmt.Printf("New host selected: %s in room %s\n", c.ID, room.ID)
+			break
+		}
+	}
+
+	// 客户端断开时保持房间状态不变，只有房主转移
+
 	// 如果房间空了，删除房间
 	if len(room.Clients) == 0 {
 		room.Mutex.Unlock()
 		s.Mutex.Lock()
 		delete(s.Rooms, room.ID)
 		s.Mutex.Unlock()
-		fmt.Printf("Room %s deleted (empty)\n", room.ID)
+		fmt.Printf("Room %s deleted (empty after disconnect)\n", room.ID)
 		return
 	}
 
@@ -501,7 +548,7 @@ func (s *Server) handleClientDisconnect(client *Client) {
 
 	// 广播房间信息更新
 	s.broadcastRoomInfo(room)
-	fmt.Printf("Client %s left room %s\n", client.ID, room.ID)
+	fmt.Printf("Client %s disconnected from room %s, %d players remaining\n", client.ID, room.ID, len(room.Clients))
 }
 
 func (s *Server) startGame(room *Room, level int32) {
@@ -721,9 +768,42 @@ func (s *Server) handleChooseFood(client *Client, req *myproto.ChooseFoodRequest
 	room.Mutex.Unlock()
 }
 
+// 定期清理空房间
+func (s *Server) cleanupEmptyRooms() {
+	ticker := time.NewTicker(30 * time.Second) // 每30秒检查一次
+	defer ticker.Stop()
+
+	for range ticker.C {
+		s.Mutex.Lock()
+		roomsToDelete := make([]string, 0)
+
+		for roomID, room := range s.Rooms {
+			room.Mutex.Lock()
+			if len(room.Clients) == 0 {
+				roomsToDelete = append(roomsToDelete, roomID)
+				fmt.Printf("Marking room %s for deletion (empty)\n", roomID)
+			}
+			room.Mutex.Unlock()
+		}
+
+		// 删除空房间
+		for _, roomID := range roomsToDelete {
+			delete(s.Rooms, roomID)
+			fmt.Printf("Room %s deleted by cleanup task\n", roomID)
+		}
+		s.Mutex.Unlock()
+
+		if len(roomsToDelete) > 0 {
+			fmt.Printf("Cleanup: deleted %d empty rooms\n", len(roomsToDelete))
+		}
+	}
+}
+
 func (room *Room) frameLoop() {
 	ticker := time.NewTicker(FRAME_INTERVAL)
 	defer ticker.Stop()
+
+	fmt.Printf("Frame loop started for room %s\n", room.ID)
 
 	for range ticker.C {
 		room.Mutex.Lock()
@@ -737,11 +817,17 @@ func (room *Room) frameLoop() {
 		for _, c := range room.Clients {
 			clients = append(clients, c)
 		}
+		clientCount := len(clients)
 		room.Mutex.Unlock()
 
-		if len(clients) == 0 {
-			continue
+		// 如果房间没有客户端，停止帧循环
+		if clientCount == 0 {
+			fmt.Printf("Room %s has no clients, stopping frame loop\n", room.ID)
+			return
 		}
+
+		// 房间状态检查：只有在没有客户端时才停止循环
+		// 游戏结束后房间状态保持playing，等待玩家重新开始
 
 		// 每帧都发送FrameMessage
 		frameMsg := &myproto.FrameMessage{
@@ -761,9 +847,18 @@ func (room *Room) frameLoop() {
 		}
 		lengthBytes := make([]byte, 4)
 		binary.BigEndian.PutUint32(lengthBytes, uint32(len(data)))
+
+		// 发送给所有客户端，如果发送失败则记录错误
 		for _, client := range clients {
-			client.Conn.Write(lengthBytes)
-			client.Conn.Write(data)
+			_, err := client.Conn.Write(lengthBytes)
+			if err != nil {
+				log.Printf("Failed to send frame to client %s: %v\n", client.ID, err)
+				continue
+			}
+			_, err = client.Conn.Write(data)
+			if err != nil {
+				log.Printf("Failed to send frame data to client %s: %v\n", client.ID, err)
+			}
 		}
 	}
 }
