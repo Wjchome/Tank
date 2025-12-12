@@ -203,7 +203,16 @@ public abstract class TankController : MonoBehaviour
 
     protected abstract void ExecuteDeathLogic();
 
-
+    private void OnDrawGizmos()
+    {
+        var bound = myFixRect.GetBoundingRect();
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(new Vector2((float)bound.X,(float)bound.Y),new Vector2((float)(bound.X+bound.Width),(float)bound.Y));
+        Gizmos.DrawLine(new Vector2((float)(bound.X+bound.Width),(float)bound.Y),new Vector2((float)(bound.X+bound.Width),(float)(bound.Y+bound.Height)));
+        Gizmos.DrawLine(new Vector2((float)(bound.X+bound.Width),(float)(bound.Y+bound.Height)),new Vector2((float)(bound.X),(float)(bound.Y+bound.Height)));
+        Gizmos.DrawLine(new Vector2((float)(bound.X),(float)(bound.Y+bound.Height)),new Vector2((float)bound.X,(float)bound.Y));
+            
+    }
 
 
 }
