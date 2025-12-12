@@ -36,7 +36,7 @@
         }
         private void Shoot()
         {
-            EntityManager.Instance.InitializeBullet(moveDirection, tank, Pos,damageNum);
+            EntityManager.Instance.InitializeBullet(moveDirection, tank, tank.myFixRect,damageNum);
         }
 
         private void Move()

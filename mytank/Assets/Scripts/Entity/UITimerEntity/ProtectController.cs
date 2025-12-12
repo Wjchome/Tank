@@ -18,10 +18,10 @@
             Pos = tank.Pos;
             List<Vector2Int> vets = FindAll();
 
-            List<EnemyTankController> tanks 
-                = EnemyManager.Instance.activeEnemies.FindAll(
-                    a => vets.Contains(a.Pos)||vets.Contains(a.PosUp)||
-                         vets.Contains(a.PosUpRight)||vets.Contains(a.PosRight));
+            List<EnemyTankController> tanks = new List<EnemyTankController>();
+            //     = EnemyManager.Instance.activeEnemies.FindAll(
+            //         a => vets.Contains(a.Pos)||vets.Contains(a.PosUp)||
+            //              vets.Contains(a.PosUpRight)||vets.Contains(a.PosRight));
             
             foreach (EnemyTankController a in tanks )
             {

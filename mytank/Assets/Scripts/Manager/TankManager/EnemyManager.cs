@@ -57,9 +57,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     private void CreateTank(EnemyTankController tank)
     {
         tank.isDead = false;
-        tank.lastMoveFrame = 0;
         tank.lastShootFrame = 0;
-        tank.lastAnimStartFrame = 0;
 
         activeEnemies.Add(tank);
         tank.gameObject.SetActive(true);
@@ -224,17 +222,15 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
 
         temp.tankID = tankID;
-        int dir = random.Next(0, 4);
+        int dir = random.Next(0, 8);
 
         temp.tankDirection = (Direction)dir;
 
-        temp.Pos = new Vector2Int(x, y); // 左下角坐标
 
         temp.identity = Identity.Enemy;
         temp.playerName = tankName;
 
         // 设置坦克中心位置
-        temp.transform.position = temp.GetCenter();
 
         FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
             (Fix64)(y - MapManager.Instance.gridSize / 2),
@@ -243,7 +239,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
         //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
 
+        temp.transform.position = new Vector2((float)fixRect.CenterX, (float)fixRect.CenterY);
        
+        
         temp.playerColor = Color.red;
         temp.GetComponent<SpriteRenderer>().material.color = Color.red;
         int seed =
@@ -272,15 +270,13 @@ public class EnemyManager : SingletonMono<EnemyManager>
         int dir = random.Next(0, 4);
         temp.tankDirection = (Direction)dir;
 
-        temp.Pos = new Vector2Int(x, y); // 左下角坐标
-
         temp.identity = Identity.Enemy;
 
         temp.playerName = playerName;
         temp.playerColor = Color.red;
 
         // 设置坦克中心位置
-        temp.transform.position = temp.GetCenter();
+     
         
         FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
             (Fix64)(y - MapManager.Instance.gridSize / 2),
@@ -288,7 +284,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.myFixRect = fixRect;
        // temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
-
+        temp.transform.position =  (Vector2)fixRect.Center;
         int seed =
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);
@@ -313,7 +309,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     void InitialEnemyData(EnemyTankController temp, TankData data)
     {
-        temp.moveIntervalFrame = data.moveIntervalFrame - enemyEvents[EnemyEvent.Move_Interval_1];
+        //temp.moveIntervalFrame = data.moveIntervalFrame - enemyEvents[EnemyEvent.Move_Interval_1];
         temp.shootIntervalFrame = data.shootIntervalFrame - enemyEvents[EnemyEvent.Shoot_Interval_1];
         temp.orignalHP = (int)(data.orignalHP * Mathf.Pow(1.2f, enemyEvents[EnemyEvent.HP_Add_20]));
         temp.HP = temp.orignalHP;

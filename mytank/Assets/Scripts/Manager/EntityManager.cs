@@ -177,14 +177,14 @@ public class EntityManager : SingletonMono<EntityManager>
     // 清除坦克缓存（用于坦克死亡时）
     public void ClearTankFromCache(TankController tank)
     {
-        if (tank != null)
-        {
-            Vector2Int pos = tank.Pos;
-            tankPositionCache[pos] = null;
-            tankPositionCache[pos + new Vector2Int(0, 1)] = null;
-            tankPositionCache[pos + new Vector2Int(1, 1)] = null;
-            tankPositionCache[pos + new Vector2Int(1, 0)] = null;
-        }
+        // if (tank != null)
+        // {
+        //     Vector2Int pos;//= tank.Pos;
+        //     tankPositionCache[pos] = null;
+        //     tankPositionCache[pos + new Vector2Int(0, 1)] = null;
+        //     tankPositionCache[pos + new Vector2Int(1, 1)] = null;
+        //     tankPositionCache[pos + new Vector2Int(1, 0)] = null;
+        // }
     }
 
     public void AddUIEntity(UITimerEntity entity)
@@ -283,7 +283,7 @@ public class EntityManager : SingletonMono<EntityManager>
     #region 生成方法
 
     // 子弹生成方法
-    public void InitializeBullet(Direction direction, TankController tank, Vector2Int pos, int damageNum)
+    public void InitializeBullet(Direction direction, TankController tank, FixRect rect, int damageNum)
     {
         BulletController bullet = BulletPool.GetObject();
         bullet.direction = direction;
@@ -301,14 +301,12 @@ public class EntityManager : SingletonMono<EntityManager>
         bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
 
 
-        bullet.myFixRect = tank.myFixRect;
+        bullet.myFixRect = rect;
         QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject);
-        bullet.UpdatePos();
+        bullet.transform.position = (Vector2)bullet.myFixRect.Center;
 
-        
 
-        bullet.transform.rotation = Quaternion.Euler(new Vector3(0,0,(float)rotation));
-        bullet.Pos = pos;
+        bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, (float)rotation));
         //bullet.transform.position = bullet.GetCenter();
         bullet.damageNum = damageNum;
 

@@ -641,17 +641,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 258f85b71ce246189d63a7ae50341aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveIntervalFrame: 0
+  Pos: {x: 0, y: 0}
   shootIntervalFrame: 0
   HP: 0
   orignalHP: 0
   tankID: 
   tankDirection: 0
-  Pos: {x: 0, y: 0}
-  moveSpeed: 0
-  lastMoveFrame: 0
+  moveSpeed: 0.1
   lastShootFrame: 0
-  lastAnimStartFrame: 0
   playerName: 
   playerColor: {r: 0, g: 0, b: 0, a: 0}
   identity: 0

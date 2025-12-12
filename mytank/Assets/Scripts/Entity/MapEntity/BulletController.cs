@@ -58,7 +58,6 @@ public class BulletController : MapEntity
         return isPlayer == isPlayerBullet;
     }
 
-    private Vector2 _targetPos;
     private Vector2 _smoothVelocity;
     private void Update()
     {
@@ -67,10 +66,7 @@ public class BulletController : MapEntity
 
     public void UpdatePos()
     {
-        var centerX = (float)(myFixRect.X + myFixRect.Width / new Fix64(2));
-        var centerY = (float)(myFixRect.Y + myFixRect.Height / new Fix64(2));
-        _targetPos = new Vector2(centerX, centerY);
-        transform.position = Vector2.SmoothDamp(transform.position, _targetPos, ref _smoothVelocity, 0.1f);
+        transform.position = Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
 
     }
     public override void UpdateFrame()

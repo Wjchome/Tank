@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using FixMath.NET;
+using QuadTreeV3;
 using Tankgame;
 using UnityEngine;
 
@@ -29,10 +30,10 @@ public class PlayerTankController : TankController
     public bool isShootThree = false;
     public long secondShootFrame = -1;
     public Direction secondDir;
-    public Vector2Int secondPos;
+    public FixRect secondPos;
     public long threeShootFrame = -1;
     public Direction threeDir;
-    public Vector2Int threePos;
+    public FixRect threePos;
     public GameObject shootTwiceShow;
 
     public bool isBreakWall = false;
@@ -74,16 +75,6 @@ public class PlayerTankController : TankController
     {
         base.UpdateFrame();
         HandleBuff();
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        if (identity == Identity.Myself && !isDead)
-        {
-            HandleMovementInput();
-            HandleShootInput();
-        }
     }
 
     void HandleBuff()
@@ -165,21 +156,16 @@ public class PlayerTankController : TankController
         }
     }
 
-    int CurrentMoveIntervalFrame()
+    public override void Update()
     {
-        if (isSpeedKiller)
+        base.Update();
+        if (identity == Identity.Myself && !isDead)
         {
-            return (int)(moveIntervalFrame * 0.25f);
+            HandleMovementInput();
+            HandleShootInput();
         }
-
-        if (isEncourage)
-        {
-            return (int)(moveIntervalFrame * 0.5f);
-        }
-
-        return moveIntervalFrame;
     }
-
+    
     int CurrentShootIntervalFrame()
     {
         if (isSpeedKiller)
@@ -199,68 +185,53 @@ public class PlayerTankController : TankController
 
     void HandleMovementInput()
     {
-        // if (NetworkManager.Instance.currentFrame - lastMoveFrame > CurrentMoveIntervalFrame())
-        // {
-//#if UNITY_STANDALONE_OSX
         Vector2Int moveDir = Vector2Int.zero;
-        
+
         if (Input.GetKey(KeyCode.W))
         {
             moveDir.y += 1;
-            //NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-           //lastMoveFrame = NetworkManager.Instance.currentFrame;
         }
+
         if (Input.GetKey(KeyCode.S))
         {
             moveDir.y -= 1;
-            //NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-          //  lastMoveFrame = NetworkManager.Instance.currentFrame;
         }
+
         if (Input.GetKey(KeyCode.A))
         {
             moveDir.x -= 1;
-           // NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-           // lastMoveFrame = NetworkManager.Instance.currentFrame;
         }
         else if (Input.GetKey(KeyCode.D))
         {
             moveDir.x += 1;
-          //  NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-           // lastMoveFrame = NetworkManager.Instance.currentFrame;
         }
 
         if (moveDir != Vector2Int.zero)
         {
-           var inputType= moveDir.ToDirection().ToInputType();
-           NetworkManager.Instance.SendPlayerInput(inputType);
-            //进一步处理
-        }
-//#elif UNITY_ANDROID
-
-        if (GameUIManager.Instance.upButton.isPressed)
-        {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-            lastMoveFrame = NetworkManager.Instance.currentFrame;
-        }
-        else if (GameUIManager.Instance.downButton.isPressed)
-        {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-            lastMoveFrame = NetworkManager.Instance.currentFrame;
-        }
-        else if (GameUIManager.Instance.leftButton.isPressed)
-        {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-            lastMoveFrame = NetworkManager.Instance.currentFrame;
-        }
-        else if (GameUIManager.Instance.rightButton.isPressed)
-        {
-            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-            lastMoveFrame = NetworkManager.Instance.currentFrame;
+            var inputType = moveDir.ToDirection().ToInputType();
+            NetworkManager.Instance.SendPlayerInput(inputType);
         }
 
-//#endif
-
-
+        // 触屏问题
+        // if (GameUIManager.Instance.upButton.isPressed)
+        // {
+        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
+        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
+        // }
+        // else if (GameUIManager.Instance.downButton.isPressed)
+        // {
+        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
+        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
+        // }
+        // else if (GameUIManager.Instance.leftButton.isPressed)
+        // {
+        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
+        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
+        // }
+        // else if (GameUIManager.Instance.rightButton.isPressed)
+        // {
+        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
+        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
         // }
     }
 
@@ -268,82 +239,69 @@ public class PlayerTankController : TankController
     {
         if (NetworkManager.Instance.currentFrame - lastShootFrame > CurrentShootIntervalFrame())
         {
-//#if UNITY_STANDALONE_OSX
             if (Input.GetKey(KeyCode.Space))
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
                 lastShootFrame = NetworkManager.Instance.currentFrame;
             }
 
-            //       #elif UNITY_ANDROID
+
             if (GameUIManager.Instance.shootButton.isPressed)
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
                 lastShootFrame = NetworkManager.Instance.currentFrame;
             }
-//#endif
         }
     }
 
 
-    protected override bool IsCanMoveTo(Vector2Int targetPos)
-    {
-        List<MapType> allowTypes = new List<MapType> { MapType.floor, MapType.ice, MapType.tree };
-        List<MapType> allowTypes1 = new List<MapType> { MapType.floor, MapType.ice, MapType.tree, MapType.river };
-        return (isBoat && MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID, allowTypes1))
-               || MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID, allowTypes);
-    }
-
-    protected override void MoveTo(FixVector2 targetPos)
-    {
-    }
-
-    protected override void MoveTo(Vector2Int targetPos)
-    {
-        if (isSpikeTrap)
-        {
-            if (targetPos.x == Pos.x && targetPos.y == Pos.y + 1)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
-            }
-            else if (targetPos.x == Pos.x && targetPos.y == Pos.y - 1)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
-            }
-            else if (targetPos.x == Pos.x + 1 && targetPos.y == Pos.y)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
-            }
-            else if (targetPos.x == Pos.x - 1 && targetPos.y == Pos.y)
-            {
-                EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
-                EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
-            }
-        }
-
-        EntityManager.Instance.UpdateTankPos(this, Pos, targetPos);
-
-        myFixRect.X = (Fix64)(targetPos.x - MapManager.Instance.gridSize / 2);
-        myFixRect.Y = (Fix64)(targetPos.y - MapManager.Instance.gridSize / 2);
-        QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject, myFixRect);
-
-        Pos = targetPos;
-        Vector2 centerPos = GetCenter();
-        isMoving = true;
-        animator.Play("Tank" + animType);
-        lastAnimStartFrame = NetworkManager.Instance.currentFrame;
-        transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
-    }
+    // protected void MoveTo(Vector2Int targetPos)
+    // {
+    //     if (isSpikeTrap)
+    //     {
+    //         if (targetPos.x == Pos.x && targetPos.y == Pos.y + 1)
+    //         {
+    //             EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
+    //             EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
+    //         }
+    //         else if (targetPos.x == Pos.x && targetPos.y == Pos.y - 1)
+    //         {
+    //             EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
+    //             EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
+    //         }
+    //         else if (targetPos.x == Pos.x + 1 && targetPos.y == Pos.y)
+    //         {
+    //             EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
+    //             EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
+    //         }
+    //         else if (targetPos.x == Pos.x - 1 && targetPos.y == Pos.y)
+    //         {
+    //             EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
+    //             EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
+    //         }
+    //     }
+    //
+    //     EntityManager.Instance.UpdateTankPos(this, Pos, targetPos);
+    //
+    //     myFixRect.X = (Fix64)(targetPos.x - MapManager.Instance.gridSize / 2);
+    //     myFixRect.Y = (Fix64)(targetPos.y - MapManager.Instance.gridSize / 2);
+    //     QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject, myFixRect);
+    //
+    //     Pos = targetPos;
+    //     Vector2 centerPos = GetCenter();
+    //     isMoving = true;
+    //     animator.Play("Tank" + animType);
+    //     lastAnimStartFrame = NetworkManager.Instance.currentFrame;
+    //     transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
+    // }
 
     public override void Shoot()
     {
-        EntityManager.Instance.InitializeBullet(tankDirection, this, Pos, bulletDamageNum);
+        FixRect currentPos = myFixRect;
+        EntityManager.Instance.InitializeBullet(tankDirection, this,   currentPos,bulletDamageNum);
         if (rearFire)
         {
-            EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this, Pos, bulletDamageNum);
+            EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this,  currentPos,bulletDamageNum);
         }
 
         if (isShootThree)
@@ -351,7 +309,7 @@ public class PlayerTankController : TankController
             int intervalFrame = 8;
             threeShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
             threeDir = tankDirection;
-            threePos = Pos;
+            threePos = currentPos;
         }
 
         if (isShootTwice)
@@ -359,7 +317,7 @@ public class PlayerTankController : TankController
             int intervalFrame = 4;
             secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
             secondDir = tankDirection;
-            secondPos = Pos;
+            secondPos = currentPos;
         }
 
         AudioManager.Instance.Play("Shoot");
@@ -407,7 +365,7 @@ public class PlayerTankController : TankController
         CamController.Instance.ShakeDead();
 
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
-        Pos = new Vector2Int(-2, -2);
+        QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
     }
 
     public void Kill(bool isSpecial)

@@ -146,7 +146,7 @@ public class MapManager : SingletonMono<MapManager>
             GameObject obj = Instantiate(prefab, new Vector2(x, y), Quaternion.identity, wallsParent);
             gridObjects[x, y] = obj;
 
-            if (wallType == MapType.wall || wallType == MapType.breakableWall)
+            if (wallType == MapType.wall || wallType == MapType.breakableWall||wallType == MapType.ice||wallType == MapType.river)
             {
                 FixRect fixRect = new FixRect((Fix64)(x-gridSize/2), (Fix64)(y-gridSize/2), (Fix64)gridSize, (Fix64)gridSize);
                 QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect,obj);
@@ -345,10 +345,10 @@ public class MapManager : SingletonMono<MapManager>
 
         foreach (var tank in EntityManager.Instance.allTanks)
         {
-            res.Add(tank.Pos);
-            res.Add(tank.Pos + new Vector2Int(1, 0));
-            res.Add(tank.Pos + new Vector2Int(1, 1));
-            res.Add(tank.Pos + new Vector2Int(0, 1));
+            // res.Add(tank.Pos);
+            // res.Add(tank.Pos + new Vector2Int(1, 0));
+            // res.Add(tank.Pos + new Vector2Int(1, 1));
+            // res.Add(tank.Pos + new Vector2Int(0, 1));
         }
 
 

@@ -26,11 +26,11 @@ public class TankCharge : MapEntity
             var enemyTank = EnemyManager.Instance.activeEnemies;
             foreach (var enemyTankController in enemyTank)
             {
-                if (poss.Contains(enemyTankController.Pos) || poss.Contains(enemyTankController.PosUp) ||
-                    poss.Contains(enemyTankController.PosRight) || poss.Contains(enemyTankController.PosUpRight))
-                {
+                // if (poss.Contains(enemyTankController.Pos) || poss.Contains(enemyTankController.PosUp) ||
+                //     poss.Contains(enemyTankController.PosRight) || poss.Contains(enemyTankController.PosUpRight))
+                // {
                     enemyTankController.DamageHP(damageNum, tank as PlayerTankController, DamageType.Charge);
-                }
+               // }
             }
 
             if (isCanBullet)

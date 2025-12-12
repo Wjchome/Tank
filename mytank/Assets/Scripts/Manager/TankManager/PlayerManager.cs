@@ -56,7 +56,6 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.tankID = tankID;
         temp.tankDirection = Direction.Up;
         temp.transform.rotation = Quaternion.identity;
-        temp.Pos = new Vector2Int(x, y); // 左下角坐标
         temp.scaleSize = temp.transform.localScale;
         if (tankID == NetworkManager.Instance.playerID)
         {
@@ -72,7 +71,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
         // 设置坦克中心位置
         
-        temp.transform.position = temp.GetCenter();
+     
         FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
             (Fix64)(y - MapManager.Instance.gridSize / 2),
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
@@ -80,6 +79,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
         
+        temp.transform.position = (Vector2)fixRect.Center;
         temp.playerColor = color;
         temp.GetComponent<SpriteRenderer>().material.color = color;
         int seed =
@@ -89,7 +89,6 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.random = new System.Random(seed);
 
         TankData data = playerTankData;
-        temp.moveIntervalFrame = data.moveIntervalFrame;
         temp.shootIntervalFrame = data.shootIntervalFrame;
         temp.orignalHP = data.orignalHP;
         temp.HP = data.HP;
@@ -168,11 +167,10 @@ public class PlayerManager : SingletonMono<PlayerManager>
         tank.isDead = false;
         tank.tankDirection = Direction.Up;
         tank.transform.rotation = Quaternion.identity;
-        tank.Pos = new Vector2Int(x, y); // 左下角坐标
 
 
         // 设置坦克中心位置
-        tank.transform.position = tank.GetCenter();
+        tank.transform.position =new Vector3(x,y,0);
 
         tank.HP = tank.orignalHP;
 

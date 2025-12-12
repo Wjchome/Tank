@@ -187,17 +187,14 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case FoodType.Shoe:
                 if (num == 0)
                 {
-                    tank.moveIntervalFrame--;
                     tank.shoeShow.SetActive(true);
                 }
                 else if (num == 1)
                 {
-                    tank.moveIntervalFrame--;
                     tank.shoeShow.GetComponent<SpriteRenderer>().color = new Color32(0, 180, 0, 255);
                 }
                 else if (num == 2)
                 {
-                    tank.moveIntervalFrame--;
                     tank.shoeShow.GetComponent<SpriteRenderer>().color = new Color32(0, 90, 0, 255);
                 }
 
