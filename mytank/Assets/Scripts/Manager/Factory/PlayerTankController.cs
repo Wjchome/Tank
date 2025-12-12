@@ -14,7 +14,7 @@ public class PlayerTankController : TankController
     public PlayerPanelUI playerPanelUI;
 
     public Dictionary<FoodType, int> foodDict = new Dictionary<FoodType, int>();
-    
+
     public bool isBoat = false;
     public long boatFrame = -1;
     public GameObject boatShow;
@@ -74,11 +74,11 @@ public class PlayerTankController : TankController
     {
         base.UpdateFrame();
         HandleBuff();
-      
     }
 
-    private void Update()
+    public override void Update()
     {
+        base.Update();
         if (identity == Identity.Myself && !isDead)
         {
             HandleMovementInput();
@@ -199,56 +199,69 @@ public class PlayerTankController : TankController
 
     void HandleMovementInput()
     {
-        if (NetworkManager.Instance.currentFrame - lastMoveFrame > CurrentMoveIntervalFrame())
-        {
+        // if (NetworkManager.Instance.currentFrame - lastMoveFrame > CurrentMoveIntervalFrame())
+        // {
 //#if UNITY_STANDALONE_OSX
-            if (Input.GetKey(KeyCode.W))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
+        Vector2Int moveDir = Vector2Int.zero;
+        
+        if (Input.GetKey(KeyCode.W))
+        {
+            moveDir.y += 1;
+            //NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
+           //lastMoveFrame = NetworkManager.Instance.currentFrame;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            moveDir.y -= 1;
+            //NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
+          //  lastMoveFrame = NetworkManager.Instance.currentFrame;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            moveDir.x -= 1;
+           // NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
+           // lastMoveFrame = NetworkManager.Instance.currentFrame;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            moveDir.x += 1;
+          //  NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
+           // lastMoveFrame = NetworkManager.Instance.currentFrame;
+        }
+
+        if (moveDir != Vector2Int.zero)
+        {
+           var inputType= moveDir.ToDirection().ToInputType();
+           NetworkManager.Instance.SendPlayerInput(inputType);
+            //进一步处理
+        }
 //#elif UNITY_ANDROID
 
-            if (GameUIManager.Instance.upButton.isPressed)
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (GameUIManager.Instance.downButton.isPressed)
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (GameUIManager.Instance.leftButton.isPressed)
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            else if (GameUIManager.Instance.rightButton.isPressed)
-            {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-                lastMoveFrame = NetworkManager.Instance.currentFrame;
-            }
-            
-//#endif
-            
-
+        if (GameUIManager.Instance.upButton.isPressed)
+        {
+            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
+            lastMoveFrame = NetworkManager.Instance.currentFrame;
         }
+        else if (GameUIManager.Instance.downButton.isPressed)
+        {
+            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
+            lastMoveFrame = NetworkManager.Instance.currentFrame;
+        }
+        else if (GameUIManager.Instance.leftButton.isPressed)
+        {
+            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
+            lastMoveFrame = NetworkManager.Instance.currentFrame;
+        }
+        else if (GameUIManager.Instance.rightButton.isPressed)
+        {
+            NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
+            lastMoveFrame = NetworkManager.Instance.currentFrame;
+        }
+
+//#endif
+
+
+        // }
     }
 
     void HandleShootInput()
@@ -261,14 +274,14 @@ public class PlayerTankController : TankController
                 NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
                 lastShootFrame = NetworkManager.Instance.currentFrame;
             }
-     //       #elif UNITY_ANDROID
+
+            //       #elif UNITY_ANDROID
             if (GameUIManager.Instance.shootButton.isPressed)
             {
                 NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
                 lastShootFrame = NetworkManager.Instance.currentFrame;
             }
 //#endif
-            
         }
     }
 
@@ -279,6 +292,10 @@ public class PlayerTankController : TankController
         List<MapType> allowTypes1 = new List<MapType> { MapType.floor, MapType.ice, MapType.tree, MapType.river };
         return (isBoat && MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID, allowTypes1))
                || MapManager.Instance.IsAreaWalkable(targetPos.x, targetPos.y, 2, 2, tankID, allowTypes);
+    }
+
+    protected override void MoveTo(FixVector2 targetPos)
+    {
     }
 
     protected override void MoveTo(Vector2Int targetPos)
@@ -306,12 +323,13 @@ public class PlayerTankController : TankController
                 EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
             }
         }
-        EntityManager.Instance. UpdateTankPos(this,Pos,targetPos);
-        
-        myFixRect.X = (Fix64)(targetPos.x -MapManager.Instance.gridSize / 2);
-        myFixRect.Y = (Fix64)(targetPos.y -MapManager.Instance.gridSize / 2);
-        QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject,myFixRect);
-        
+
+        EntityManager.Instance.UpdateTankPos(this, Pos, targetPos);
+
+        myFixRect.X = (Fix64)(targetPos.x - MapManager.Instance.gridSize / 2);
+        myFixRect.Y = (Fix64)(targetPos.y - MapManager.Instance.gridSize / 2);
+        QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject, myFixRect);
+
         Pos = targetPos;
         Vector2 centerPos = GetCenter();
         isMoving = true;
@@ -348,15 +366,12 @@ public class PlayerTankController : TankController
     }
 
 
-
-
     public override void AddOrignalHP(int num)
     {
         bombAnimator.Play("Heal", 0, 0);
         orignalHP += num;
         playerPanelUI.UpdateHP(); // 更新血量显示
         tankEntityTankUI.UpdateHealthBar();
-        
     }
 
     public override void AddHP(int num)
@@ -365,24 +380,17 @@ public class PlayerTankController : TankController
         HP = Mathf.Min(HP + num, orignalHP);
         playerPanelUI.UpdateHP(); // 更新血量显示
         tankEntityTankUI.UpdateHealthBar();
-        
-      
-        
-   
     }
 
     public void DamageHP(int damage)
     {
         if (isInvincible) return;
 
-        HP = Mathf.Max(HP- damage,0);
-        DamageUIManager.Instance. ShowDamageWord(DamageType.Bullet,damage,transform);
+        HP = Mathf.Max(HP - damage, 0);
+        DamageUIManager.Instance.ShowDamageWord(DamageType.Bullet, damage, transform);
         tankEntityTankUI.UpdateHealthBar();
         playerPanelUI.UpdateHP(); // 更新血量显示
 
-     
-        
-    
 
         if (HP <= 0)
         {
@@ -397,22 +405,17 @@ public class PlayerTankController : TankController
         animator.Play("BigBoom");
         AudioManager.Instance.Play("Bomb");
         CamController.Instance.ShakeDead();
-        
+
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
         Pos = new Vector2Int(-2, -2);
-        
-    
-        
-
     }
 
     public void Kill(bool isSpecial)
     {
         killNum++;
         playerPanelUI.UpdateKillCount(1);
-        
 
-        
+
         if (isSpecial && identity == Identity.Myself)
         {
             FoodManager.Instance.AddChooseNum();

@@ -70,10 +70,13 @@ namespace Tankgame {
             "MhsudGFua2dhbWUuS2lja1BsYXllclJlcXVlc3RIABI2ChFnYW1lX292ZXJf",
             "cmVxdWVzdBgIIAEoCzIZLnRhbmtnYW1lLkdhbWVPdmVyUmVxdWVzdEgAEjoK",
             "E2Nob29zZV9mb29kX3JlcXVlc3QYCSABKAsyGy50YW5rZ2FtZS5DaG9vc2VG",
-            "b29kUmVxdWVzdEgAQgYKBGRhdGEqfwoJSW5wdXRUeXBlEg4KCklOUFVUX05P",
-            "TkUQABIRCg1JTlBVVF9NT1ZFX1VQEAESEwoPSU5QVVRfTU9WRV9ET1dOEAIS",
-            "EwoPSU5QVVRfTU9WRV9MRUZUEAMSFAoQSU5QVVRfTU9WRV9SSUdIVBAEEg8K",
-            "C0lOUFVUX1NIT09UEAVCDloMc2VydmVyL3Byb3RvYgZwcm90bzM="));
+            "b29kUmVxdWVzdEgAQgYKBGRhdGEq5QEKCUlucHV0VHlwZRIOCgpJTlBVVF9O",
+            "T05FEAASEQoNSU5QVVRfTU9WRV9VUBABEhMKD0lOUFVUX01PVkVfRE9XThAC",
+            "EhMKD0lOUFVUX01PVkVfTEVGVBADEhQKEElOUFVUX01PVkVfUklHSFQQBBIP",
+            "CgtJTlBVVF9TSE9PVBAFEhYKEklOUFVUX01PVkVfVVBfTEVGVBAGEhcKE0lO",
+            "UFVUX01PVkVfVVBfUklHSFQQBxIYChRJTlBVVF9NT1ZFX0RPV05fTEVGVBAI",
+            "EhkKFUlOUFVUX01PVkVfRE9XTl9SSUdIVBAJQg5aDHNlcnZlci9wcm90b2IG",
+            "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tankgame.InputType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -101,7 +104,7 @@ namespace Tankgame {
   }
   #region Enums
   /// <summary>
-  /// 玩家输入类型
+  /// 玩家输入类型（8方向移动）
   /// </summary>
   public enum InputType {
     [pbr::OriginalName("INPUT_NONE")] InputNone = 0,
@@ -110,6 +113,22 @@ namespace Tankgame {
     [pbr::OriginalName("INPUT_MOVE_LEFT")] InputMoveLeft = 3,
     [pbr::OriginalName("INPUT_MOVE_RIGHT")] InputMoveRight = 4,
     [pbr::OriginalName("INPUT_SHOOT")] InputShoot = 5,
+    /// <summary>
+    /// 左上
+    /// </summary>
+    [pbr::OriginalName("INPUT_MOVE_UP_LEFT")] InputMoveUpLeft = 6,
+    /// <summary>
+    /// 右上
+    /// </summary>
+    [pbr::OriginalName("INPUT_MOVE_UP_RIGHT")] InputMoveUpRight = 7,
+    /// <summary>
+    /// 左下
+    /// </summary>
+    [pbr::OriginalName("INPUT_MOVE_DOWN_LEFT")] InputMoveDownLeft = 8,
+    /// <summary>
+    /// 右下
+    /// </summary>
+    [pbr::OriginalName("INPUT_MOVE_DOWN_RIGHT")] InputMoveDownRight = 9,
   }
 
   #endregion

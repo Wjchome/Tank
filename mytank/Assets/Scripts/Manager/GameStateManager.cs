@@ -44,6 +44,18 @@ public class GameStateManager : SingletonMono<GameStateManager>
             case InputType.InputMoveRight:
                 tank.MoveBy(Direction.Right);
                 break;
+            case InputType.InputMoveDownLeft:
+                tank.MoveBy(Direction.LeftDown);
+                break;
+            case InputType.InputMoveDownRight:
+                tank.MoveBy(Direction.RightDown);
+                break;
+            case InputType.InputMoveUpLeft:
+                tank.MoveBy(Direction.LeftUp);
+                break;
+            case InputType.InputMoveUpRight:
+                tank.MoveBy(Direction.RightUp);
+                break;
             case InputType.InputShoot:
                 tank.Shoot();
                 break;

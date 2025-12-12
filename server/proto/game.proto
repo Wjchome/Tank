@@ -76,7 +76,7 @@ message GameOverRequest{
 }
 
 
-// 玩家输入类型
+// 玩家输入类型（8方向移动）
 enum InputType {
   INPUT_NONE = 0;
   INPUT_MOVE_UP = 1;
@@ -84,6 +84,10 @@ enum InputType {
   INPUT_MOVE_LEFT = 3;
   INPUT_MOVE_RIGHT = 4;
   INPUT_SHOOT = 5;
+  INPUT_MOVE_UP_LEFT = 6;    // 左上
+  INPUT_MOVE_UP_RIGHT = 7;   // 右上
+  INPUT_MOVE_DOWN_LEFT = 8;  // 左下
+  INPUT_MOVE_DOWN_RIGHT = 9; // 右下
 }
 
 // 玩家输入

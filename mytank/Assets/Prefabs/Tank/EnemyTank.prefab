@@ -524,7 +524,7 @@ GameObject:
   - component: {fileID: -2687135769070647202}
   m_Layer: 0
   m_Name: EnemyTank
-  m_TagString: Untagged
+  m_TagString: Tank
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -648,6 +648,7 @@ MonoBehaviour:
   tankID: 
   tankDirection: 0
   Pos: {x: 0, y: 0}
+  moveSpeed: 0
   lastMoveFrame: 0
   lastShootFrame: 0
   lastAnimStartFrame: 0

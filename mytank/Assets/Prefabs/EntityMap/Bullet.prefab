@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8540193828245787508}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,18 +101,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7717f86c3a584d1d9407c12a6e3e8b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 0
-  ownerTank: {fileID: 0}
-  isPlayerBullet: 0
-  moveInterval: 0.1
-  lastMoveTime: 0
-  dir: {x: 0, y: 0}
+  tank: {fileID: 0}
   Pos: {x: 0, y: 0}
-  moveDuration: 0.1
+  direction: 0
+  isPlayerBullet: 0
+  moveIntervalFrame: 4
+  lastMoveTimeFrame: 0
+  dir: {x: 0, y: 0}
+  moveSpeed: 0.1
   animator: {fileID: 8540193828245787508}
   isShouldDestroy: 0
   animTime: 0.55
-  isCanBreakWall: 0
+  damageNum: 0
+  penetrationCount: 0
+  isDead: 0
+  deathDelayFrames: 0
 --- !u!95 &8540193828245787508
 Animator:
   serializedVersion: 7

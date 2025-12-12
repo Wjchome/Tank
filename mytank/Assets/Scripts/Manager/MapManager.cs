@@ -11,14 +11,14 @@ public enum Direction
     Up,
     Left,
     Down,
-    Right
+    Right,
+    LeftUp,
+    RightDown,
+    LeftDown,
+    RightUp,
 }
 
-public enum QuadTreeLayerType
-{
-    wall=1,
-    breakableWall=2,
-}
+
 
 public enum MapType
 {

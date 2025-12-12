@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FixMath.NET;
+using QuadTreeV3;
 using UnityEngine;
 
 public class EntityManager : SingletonMono<EntityManager>
@@ -43,7 +45,7 @@ public class EntityManager : SingletonMono<EntityManager>
 
     public List<TankController> allTanks = new List<TankController>();
     public Dictionary<Vector2Int, TankController> tankPositionCache = new Dictionary<Vector2Int, TankController>();
-   
+
     private List<MapEntity> mapEntitiesToUpdate = new List<MapEntity>();
     private List<UITimerEntity> uiEntitiesToUpdate = new List<UITimerEntity>();
     private List<BulletController> bulletsToUpdate = new List<BulletController>();
@@ -51,16 +53,15 @@ public class EntityManager : SingletonMono<EntityManager>
     public void UpdateTankPos(TankController tank, Vector2Int originPos, Vector2Int targetPos)
     {
         tankPositionCache[originPos] = null;
-        tankPositionCache[originPos+new Vector2Int(0,1)] = null;
-        tankPositionCache[originPos+new Vector2Int(1,1)] = null;
-        tankPositionCache[originPos+new Vector2Int(1,0)] = null;
+        tankPositionCache[originPos + new Vector2Int(0, 1)] = null;
+        tankPositionCache[originPos + new Vector2Int(1, 1)] = null;
+        tankPositionCache[originPos + new Vector2Int(1, 0)] = null;
         tankPositionCache[targetPos] = tank;
-        tankPositionCache[targetPos+new Vector2Int(0,1)] = tank;
-        tankPositionCache[targetPos+new Vector2Int(1,1)] = tank;
-        tankPositionCache[targetPos+new Vector2Int(1,0)] = tank;
-        
-        
+        tankPositionCache[targetPos + new Vector2Int(0, 1)] = tank;
+        tankPositionCache[targetPos + new Vector2Int(1, 1)] = tank;
+        tankPositionCache[targetPos + new Vector2Int(1, 0)] = tank;
     }
+
     private void Awake()
     {
         InitializeBulletPool();
@@ -132,7 +133,7 @@ public class EntityManager : SingletonMono<EntityManager>
         // 更新子弹
         bulletsToUpdate.Clear();
         bulletsToUpdate.AddRange(activeBullets);
-        for (int i =bulletsToUpdate.Count - 1; i >= 0; i--)
+        for (int i = bulletsToUpdate.Count - 1; i >= 0; i--)
         {
             var bullet = bulletsToUpdate[i];
             if (bullet != null)
@@ -168,10 +169,11 @@ public class EntityManager : SingletonMono<EntityManager>
                 BulletPool.ReturnObject(bullet);
             }
         }
+
         allTanks.Clear();
         tankPositionCache.Clear();
     }
-    
+
     // 清除坦克缓存（用于坦克死亡时）
     public void ClearTankFromCache(TankController tank)
     {
@@ -179,9 +181,9 @@ public class EntityManager : SingletonMono<EntityManager>
         {
             Vector2Int pos = tank.Pos;
             tankPositionCache[pos] = null;
-            tankPositionCache[pos+new Vector2Int(0,1)] = null;
-            tankPositionCache[pos+new Vector2Int(1,1)] = null;
-            tankPositionCache[pos+new Vector2Int(1,0)] = null;
+            tankPositionCache[pos + new Vector2Int(0, 1)] = null;
+            tankPositionCache[pos + new Vector2Int(1, 1)] = null;
+            tankPositionCache[pos + new Vector2Int(1, 0)] = null;
         }
     }
 
@@ -286,7 +288,6 @@ public class EntityManager : SingletonMono<EntityManager>
         BulletController bullet = BulletPool.GetObject();
         bullet.direction = direction;
         bullet.tank = tank;
-
         if (tank.identity == Identity.Myself || tank.identity == Identity.OtherPlayer)
             bullet.isPlayerBullet = true;
         else
@@ -295,29 +296,20 @@ public class EntityManager : SingletonMono<EntityManager>
         }
 
         // 设置子弹朝向
-        Vector3 rotation = Vector3.zero;
-        bullet.dir = direction.ToVector2Int();
+        Fix64 rotation;
+        (bullet.dir, rotation) = direction.ToFixVector2();
         bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
 
-        switch (direction)
-        {
-            case Direction.Up:
-                rotation = new Vector3(0, 0, 0);
-                break;
-            case Direction.Down:
-                rotation = new Vector3(0, 0, 180);
-                break;
-            case Direction.Left:
-                rotation = new Vector3(0, 0, 90);
-                break;
-            case Direction.Right:
-                rotation = new Vector3(0, 0, -90);
-                break;
-        }
 
-        bullet.transform.rotation = Quaternion.Euler(rotation);
+        bullet.myFixRect = tank.myFixRect;
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject);
+        bullet.UpdatePos();
+
+        
+
+        bullet.transform.rotation = Quaternion.Euler(new Vector3(0,0,(float)rotation));
         bullet.Pos = pos;
-        bullet.transform.position = bullet.GetCenter();
+        //bullet.transform.position = bullet.GetCenter();
         bullet.damageNum = damageNum;
 
         if (tank is PlayerTankController playerTank)
@@ -476,7 +468,7 @@ public class EntityManager : SingletonMono<EntityManager>
         SpawnMapEntity(pulseTurretPrefab, tank, new Vector2(pos.x, pos.y), pos);
     }
 
-    public void InitTankCharge(PlayerTankController tank,bool isCanBullet)
+    public void InitTankCharge(PlayerTankController tank, bool isCanBullet)
     {
         int a = tank.random.Next(4);
         Direction dir = Direction.Up;
@@ -494,14 +486,14 @@ public class EntityManager : SingletonMono<EntityManager>
                 spawnPos = new Vector2Int(MapManager.Instance.mapWidth - 2,
                     tank.random.Next(MapManager.Instance.mapHeight - 2));
                 rot = new Vector3(0, 0, 90);
-                
+
                 break;
             case 2:
                 dir = Direction.Down;
                 spawnPos = new Vector2Int(tank.random.Next(MapManager.Instance.mapWidth - 2),
                     MapManager.Instance.mapHeight - 2);
                 rot = new Vector3(0, 0, 180);
-                
+
                 break;
             case 3:
                 dir = Direction.Right;
@@ -509,6 +501,7 @@ public class EntityManager : SingletonMono<EntityManager>
                 rot = new Vector3(0, 0, -90);
                 break;
         }
+
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
@@ -519,43 +512,45 @@ public class EntityManager : SingletonMono<EntityManager>
         tankCharge.isCanBullet = isCanBullet;
         tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
     }
-    public void InitTankCharge(PlayerTankController tank ,bool isCanBullet,Vector2Int pos)
+
+    public void InitTankCharge(PlayerTankController tank, bool isCanBullet, Vector2Int pos)
+    {
+        int a = tank.random.Next(4);
+        Direction dir = Direction.Up;
+        Vector3 rot = Vector3.forward;
+        switch (a)
         {
-            int a = tank.random.Next(4);
-            Direction dir = Direction.Up;
-            Vector3 rot = Vector3.forward;
-            switch (a)
-            {
-                case 0:
-                    dir = Direction.Up;
-                    rot = new Vector3(0, 0, 0);
-                    break;
-                case 1:
-                    dir = Direction.Left;
-                    rot = new Vector3(0, 0, 90);
-                    
-                    break;
-                case 2:
-                    dir = Direction.Down;
-                  rot = new Vector3(0, 0, 180);
-                    
-                    break;
-                case 3:
-                    dir = Direction.Right;
-                    rot = new Vector3(0, 0, -90);
-                    break;
-            }
-            Color tankColor = tank.playerColor;
-            Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
-    
-            var tankCharge = SpawnMapEntity(tankChargePrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f),
-                pos);
-            tankCharge.transform.rotation = Quaternion.Euler(rot);
-            tankCharge.moveDirection = dir;
-            tankCharge.isCanBullet=isCanBullet;
-            tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
+            case 0:
+                dir = Direction.Up;
+                rot = new Vector3(0, 0, 0);
+                break;
+            case 1:
+                dir = Direction.Left;
+                rot = new Vector3(0, 0, 90);
+
+                break;
+            case 2:
+                dir = Direction.Down;
+                rot = new Vector3(0, 0, 180);
+
+                break;
+            case 3:
+                dir = Direction.Right;
+                rot = new Vector3(0, 0, -90);
+                break;
         }
-    
+
+        Color tankColor = tank.playerColor;
+        Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
+
+        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f),
+            pos);
+        tankCharge.transform.rotation = Quaternion.Euler(rot);
+        tankCharge.moveDirection = dir;
+        tankCharge.isCanBullet = isCanBullet;
+        tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
+    }
+
 
     public void InitAlmightyTurretMachine(PlayerTankController tank)
     {

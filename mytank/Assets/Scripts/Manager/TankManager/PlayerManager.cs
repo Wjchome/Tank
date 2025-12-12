@@ -77,6 +77,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
             (Fix64)(y - MapManager.Instance.gridSize / 2),
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
+        //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
         
         temp.playerColor = color;

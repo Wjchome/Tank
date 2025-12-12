@@ -240,8 +240,10 @@ public class EnemyManager : SingletonMono<EnemyManager>
             (Fix64)(y - MapManager.Instance.gridSize / 2),
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
+        //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
 
+       
         temp.playerColor = Color.red;
         temp.GetComponent<SpriteRenderer>().material.color = Color.red;
         int seed =
@@ -284,6 +286,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
             (Fix64)(y - MapManager.Instance.gridSize / 2),
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
+       // temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
 
         int seed =

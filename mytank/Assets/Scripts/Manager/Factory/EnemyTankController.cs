@@ -46,6 +46,10 @@ public class EnemyTankController : TankController
             new List<MapType> { MapType.floor, MapType.tree, MapType.ice });
     }
 
+    protected override void MoveTo(FixVector2 targetPos)
+    {
+        
+    }
     protected override void MoveTo(Vector2Int targetPos)
     {
         EntityManager.Instance. UpdateTankPos(this,Pos,targetPos);
@@ -53,6 +57,7 @@ public class EnemyTankController : TankController
         myFixRect.X = (Fix64)(targetPos.x -MapManager.Instance.gridSize / 2);
         myFixRect.Y = (Fix64)(targetPos.y -MapManager.Instance.gridSize / 2);
         QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject,myFixRect);
+        
         
         Pos = targetPos;
         Vector2 centerPos = GetCenter();
