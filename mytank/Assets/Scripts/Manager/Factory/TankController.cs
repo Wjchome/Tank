@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Tankgame;
 using DG.Tweening;
+using QuadTreeV3;
 using UnityEngine.Serialization;
 
 
@@ -26,6 +27,7 @@ public abstract class TankController : MonoBehaviour
 
     public Vector2Int Pos;
 
+    public FixRect myFixRect;
     // 坐标系统辅助方法
     public Vector2Int PosUp => new Vector2Int(Pos.x, Pos.y + 1);
     public Vector2Int PosUpRight => new Vector2Int(Pos.x + 1, Pos.y + 1);

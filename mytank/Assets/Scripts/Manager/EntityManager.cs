@@ -58,6 +58,8 @@ public class EntityManager : SingletonMono<EntityManager>
         tankPositionCache[targetPos+new Vector2Int(0,1)] = tank;
         tankPositionCache[targetPos+new Vector2Int(1,1)] = tank;
         tankPositionCache[targetPos+new Vector2Int(1,0)] = tank;
+        
+        
     }
     private void Awake()
     {

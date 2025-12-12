@@ -10,14 +10,9 @@ namespace QuadTreeV3
     /// 四叉树空间分区系统（用于帧同步碰撞检测）
     /// 支持矩形和圆形碰撞体，支持旋转矩形，支持层过滤
     /// </summary>
-    public class QuadTreeV3 : MonoBehaviour
+    public class QuadTreeV3 : SingletonMono<QuadTreeV3>
     {
-        /// <summary>
-        /// 单例实例
-        /// </summary>
-        public static QuadTreeV3 Instance { get; private set; }
-
-
+        
         [Header("四叉树配置")] [Tooltip("根节点覆盖的区域（整个地图范围）")]
         public Rect Bounds = Rect.zero;
 
@@ -32,17 +27,8 @@ namespace QuadTreeV3
 
         private QuadTreeNode _rootNode; // 四叉树根节点
 
-        private void Awake()
+        public void Init()
         {
-            // 单例初始化
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-
             RootRect = new FixRect((Fix64)Bounds.x, (Fix64)Bounds.y, (Fix64)Bounds.width, (Fix64)Bounds.height);
             DeterministicIdGenerator.Initialize();
 
@@ -50,13 +36,7 @@ namespace QuadTreeV3
             _rootNode = new QuadTreeNode(RootRect, 0, MaxObjectsPerNode, MaxDepth);
         }
 
-        private void OnDestroy()
-        {
-            if (Instance == this)
-            {
-                Instance = null;
-            }
-        }
+  
 
         #region 添加物体
 

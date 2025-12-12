@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using FixMath.NET;
+using QuadTreeV3;
 using Tankgame;
 using TMPro;
 using UnityEngine;
@@ -69,7 +71,14 @@ public class PlayerManager : SingletonMono<PlayerManager>
         temp.playerName = tankName;
 
         // 设置坦克中心位置
+        
         temp.transform.position = temp.GetCenter();
+        FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
+            (Fix64)(y - MapManager.Instance.gridSize / 2),
+            (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
+        temp.myFixRect = fixRect;
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
+        
         temp.playerColor = color;
         temp.GetComponent<SpriteRenderer>().material.color = color;
         int seed =

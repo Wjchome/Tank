@@ -234,7 +234,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             isGameing = true;
             currentFrame = 0;
 
-
+            
             LevelManager.Instance.GameStart(message.GameStart.Level);
             MapManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);
             EnemyManager.Instance.LoadLevel(LevelManager.Instance.currentLevel);

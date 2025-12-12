@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using FixMath.NET;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -48,6 +49,11 @@ public class EnemyTankController : TankController
     protected override void MoveTo(Vector2Int targetPos)
     {
         EntityManager.Instance. UpdateTankPos(this,Pos,targetPos);
+        
+        myFixRect.X = (Fix64)(targetPos.x -MapManager.Instance.gridSize / 2);
+        myFixRect.Y = (Fix64)(targetPos.y -MapManager.Instance.gridSize / 2);
+        QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject,myFixRect);
+        
         Pos = targetPos;
         Vector2 centerPos = GetCenter();
         isMoving = true;

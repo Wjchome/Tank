@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using FixMath.NET;
+using QuadTreeV3;
 using Random = System.Random;
 
 public enum Direction
@@ -12,6 +14,11 @@ public enum Direction
     Right
 }
 
+public enum QuadTreeLayerType
+{
+    wall=1,
+    breakableWall=2,
+}
 
 public enum MapType
 {
@@ -47,7 +54,7 @@ public class MapManager : SingletonMono<MapManager>
 
     public long ironWallEndFrames;
     public bool isChange;
-    
+
     private void Awake()
     {
         typeToPrefab = new Dictionary<MapType, GameObject>()
@@ -138,6 +145,13 @@ public class MapManager : SingletonMono<MapManager>
 
             GameObject obj = Instantiate(prefab, new Vector2(x, y), Quaternion.identity, wallsParent);
             gridObjects[x, y] = obj;
+
+            if (wallType == MapType.wall || wallType == MapType.breakableWall)
+            {
+                FixRect fixRect = new FixRect((Fix64)(x-gridSize/2), (Fix64)(y-gridSize/2), (Fix64)gridSize, (Fix64)gridSize);
+                QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect,obj);
+            }
+            
         }
     }
 
@@ -182,6 +196,10 @@ public class MapManager : SingletonMono<MapManager>
         ironWallEndFrames = 0;
         isChange = false;
 
+        //加载四叉树
+        QuadTreeV3.QuadTreeV3.Instance.Bounds =
+            new Rect(-gridSize, -gridSize, mapWidth * gridSize + gridSize, mapHeight * gridSize + gridSize);
+        QuadTreeV3.QuadTreeV3.Instance.Init();
 
         // 解析地图数据
         LoadMapFromString(level.mapData);
@@ -221,7 +239,7 @@ public class MapManager : SingletonMono<MapManager>
     }
 
     // 检查区域是否可通行,检测地形和坦克碰撞
-    public bool IsAreaWalkable(int startX, int startY, int width, int height, string selfID,List<MapType> allowTypes)
+    public bool IsAreaWalkable(int startX, int startY, int width, int height, string selfID, List<MapType> allowTypes)
     {
         // 检查区域内的每个格子
         for (int x = startX; x < startX + width; x++)
@@ -236,34 +254,30 @@ public class MapManager : SingletonMono<MapManager>
                 MapType wallType = GetWallType(x, y);
                 if (!allowTypes.Contains(wallType))
                     return false;
-                
+
                 // 新检查坦克碰撞
-                if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
+                if (EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x, y), out var tankOn))
                 {
-                    if (tankOn != null&&tankOn.tankID!=selfID)
+                    if (tankOn != null && tankOn.tankID != selfID)
                     {
                         return false;
                     }
                 }
                 // 检查坦克碰撞
-             /*   foreach (var tank in EntityManager.Instance.allTanks)
-                {
-                    if (tank.tankID == selfID) continue;
-                    if (IsRectOverlap(startX, startY, width, height,
-                            tank.Pos.x, tank.Pos.y, 2, 2))
-                    {
-                        return false;
-                    }
-                }*/
-
-
+                /*   foreach (var tank in EntityManager.Instance.allTanks)
+                   {
+                       if (tank.tankID == selfID) continue;
+                       if (IsRectOverlap(startX, startY, width, height,
+                               tank.Pos.x, tank.Pos.y, 2, 2))
+                       {
+                           return false;
+                       }
+                   }*/
             }
         }
 
         return true;
     }
-
-
 
 
     // 检查2x2区域子弹是否可通过
@@ -337,11 +351,10 @@ public class MapManager : SingletonMono<MapManager>
             res.Add(tank.Pos + new Vector2Int(0, 1));
         }
 
- 
 
         return res;
     }
-    
+
 
     public bool IsHintHome(int startX, int startY, int width, int height)
     {
@@ -366,7 +379,7 @@ public class MapManager : SingletonMono<MapManager>
     {
         List<TankController> tanks = new List<TankController>();
         HashSet<TankController> tankSet = new HashSet<TankController>();
-        
+
         for (int x = startX; x < startX + width; x++)
         {
             for (int y = startY; y < startY + height; y++)
@@ -374,7 +387,7 @@ public class MapManager : SingletonMono<MapManager>
                 if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
                     continue;
                 // 使用缓存检查坦克碰撞
-                if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
+                if (EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x, y), out var tankOn))
                 {
                     if (tankOn != null && tankSet.Add(tankOn)) // HashSet.Add返回true表示成功添加（之前不存在）
                     {
@@ -391,7 +404,7 @@ public class MapManager : SingletonMono<MapManager>
     {
         List<PlayerTankController> tanks = new List<PlayerTankController>();
         HashSet<PlayerTankController> tankSet = new HashSet<PlayerTankController>();
-        
+
         for (int x = startX; x < startX + width; x++)
         {
             for (int y = startY; y < startY + height; y++)
@@ -399,7 +412,7 @@ public class MapManager : SingletonMono<MapManager>
                 if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
                     continue;
                 // 使用缓存检查坦克碰撞
-                if(EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x,y),out var tankOn))
+                if (EntityManager.Instance.tankPositionCache.TryGetValue(new Vector2Int(x, y), out var tankOn))
                 {
                     if (tankOn != null && tankOn is PlayerTankController playerTank && tankSet.Add(playerTank))
                     {
@@ -416,7 +429,7 @@ public class MapManager : SingletonMono<MapManager>
     {
         List<EnemyTankController> tanks = new List<EnemyTankController>();
         HashSet<EnemyTankController> tankSet = new HashSet<EnemyTankController>();
-        
+
         for (int x = startX; x < startX + width; x++)
         {
             for (int y = startY; y < startY + height; y++)

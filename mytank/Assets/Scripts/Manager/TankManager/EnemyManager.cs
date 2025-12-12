@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using FixMath.NET;
+using QuadTreeV3;
 using UnityEngine;
 using Tankgame;
 using TMPro;
@@ -34,7 +36,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public System.Random random;
 
 
-    public Dictionary<EnemyEvent, int> enemyEvents=new Dictionary<EnemyEvent, int>();
+    public Dictionary<EnemyEvent, int> enemyEvents = new Dictionary<EnemyEvent, int>();
 
     public Dictionary<int, EnemyEvent> enemyUp = new Dictionary<int, EnemyEvent>();
 
@@ -68,12 +70,13 @@ public class EnemyManager : SingletonMono<EnemyManager>
     {
         tank.gameObject.SetActive(false);
         leafEnemies--;
-        enemyleafText.text = "剩余："+leafEnemies.ToString();
+        enemyleafText.text = "剩余：" + leafEnemies.ToString();
         var a = tank.GetComponent<Special>();
         if (a != null)
         {
             Destroy(a);
         }
+
         EntityManager.Instance.allTanks.Remove(tank);
         activeEnemies.Remove(tank);
         if (leafEnemies == 0)
@@ -99,7 +102,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         };
         leafEnemies = sumEnemies;
         lastSpawnFrame = 0;
-        enemyleafText.text =  "剩余："+leafEnemies.ToString();
+        enemyleafText.text = "剩余：" + leafEnemies.ToString();
         enemyIndex = 0;
         pauseEndFrame = 0;
         // 清理现有敌人
@@ -173,23 +176,21 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
         if (enemyUp.TryGetValue(enemyIndex, out var enemyEvent))
         {
-            
-                if (enemyEvents.ContainsKey(enemyEvent))
-                {
-                    enemyEvents[enemyEvent]++;
-                }
-                else
-                {
-                    enemyEvents.Add(
-                        enemyEvent, 1
-                    );
-                }
+            if (enemyEvents.ContainsKey(enemyEvent))
+            {
+                enemyEvents[enemyEvent]++;
+            }
+            else
+            {
+                enemyEvents.Add(
+                    enemyEvent, 1
+                );
+            }
 
-                if (enemyEvent == EnemyEvent.Spawn_Interval_80)
-                {
-                    enemySpawnInterval = (int)(enemySpawnInterval * 0.8f);
-                }
-            
+            if (enemyEvent == EnemyEvent.Spawn_Interval_80)
+            {
+                enemySpawnInterval = (int)(enemySpawnInterval * 0.8f);
+            }
         }
 
         // 使用确定性随机选择生成坦克类型
@@ -234,6 +235,13 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
         // 设置坦克中心位置
         temp.transform.position = temp.GetCenter();
+
+        FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
+            (Fix64)(y - MapManager.Instance.gridSize / 2),
+            (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
+        temp.myFixRect = fixRect;
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
+
         temp.playerColor = Color.red;
         temp.GetComponent<SpriteRenderer>().material.color = Color.red;
         int seed =
@@ -248,7 +256,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.animType = dataIndex;
         temp.tankEntityTankUI.UpdateHealthBar();
 
-        EntityManager.Instance. UpdateTankPos(temp,new Vector2Int(-2, -2),new Vector2Int(x,y));
+        EntityManager.Instance.UpdateTankPos(temp, new Vector2Int(-2, -2), new Vector2Int(x, y));
 
         return temp;
     }
@@ -271,6 +279,12 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
         // 设置坦克中心位置
         temp.transform.position = temp.GetCenter();
+        
+        FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
+            (Fix64)(y - MapManager.Instance.gridSize / 2),
+            (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
+        temp.myFixRect = fixRect;
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
 
         int seed =
             (int)(NetworkManager.Instance.seed +
@@ -286,9 +300,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.tankEntityTankUI.UpdateHealthBar();
 
         temp.gameObject.AddComponent<Special>();
-        
-        EntityManager.Instance. UpdateTankPos(temp,new Vector2Int(-2, -2),new Vector2Int(x,y));
-        
+
+        EntityManager.Instance.UpdateTankPos(temp, new Vector2Int(-2, -2), new Vector2Int(x, y));
+
 
         return temp;
     }
@@ -296,9 +310,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     void InitialEnemyData(EnemyTankController temp, TankData data)
     {
-        temp.moveIntervalFrame = data.moveIntervalFrame-enemyEvents[EnemyEvent.Move_Interval_1];
-        temp.shootIntervalFrame = data.shootIntervalFrame-enemyEvents[EnemyEvent.Shoot_Interval_1];
-        temp.orignalHP = (int)(data.orignalHP*Mathf.Pow(1.2f,enemyEvents[EnemyEvent.HP_Add_20]));
+        temp.moveIntervalFrame = data.moveIntervalFrame - enemyEvents[EnemyEvent.Move_Interval_1];
+        temp.shootIntervalFrame = data.shootIntervalFrame - enemyEvents[EnemyEvent.Shoot_Interval_1];
+        temp.orignalHP = (int)(data.orignalHP * Mathf.Pow(1.2f, enemyEvents[EnemyEvent.HP_Add_20]));
         temp.HP = temp.orignalHP;
     }
 }
