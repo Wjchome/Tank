@@ -237,7 +237,10 @@ public class EnemyManager : SingletonMono<EnemyManager>
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
         //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
+        QuadTreeLayer layer =
+            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
+           
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject,layer);
 
         temp.transform.position = new Vector2((float)fixRect.CenterX, (float)fixRect.CenterY);
        
@@ -282,8 +285,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
             (Fix64)(y - MapManager.Instance.gridSize / 2),
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
-       // temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
+        QuadTreeLayer layer =
+            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject,layer);
         temp.transform.position =  (Vector2)fixRect.Center;
         int seed =
             (int)(NetworkManager.Instance.seed +

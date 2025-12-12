@@ -119,6 +119,7 @@ namespace QuadTreeV3
         /// <returns>匹配的物体列表（已排序，确定性）</returns>
         public List<QuadTreeObject> Query(FixRect area, QuadTreeLayer layerMask = default)
         {
+            layerMask = QuadTreeLayer.Everything;
             var result = new HashSet<QuadTreeObject>();
             _rootNode.GetObjectsInArea(area, result, layerMask);
             var list = result.ToList();

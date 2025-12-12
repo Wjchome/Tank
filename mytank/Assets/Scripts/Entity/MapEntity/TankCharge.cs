@@ -40,12 +40,12 @@ public class TankCharge : MapEntity
                 {
                     if (bulletController.isPlayerBullet == false)
                     {
-                        if (poss.Contains(bulletController.Pos) || poss.Contains(bulletController.PosUp) ||
-                            poss.Contains(bulletController.PosRight) || poss.Contains(bulletController.PosUpRight))
-                        {
-                            bulletController.isShouldDestroy = true;
+                        // if (poss.Contains(bulletController.Pos) || poss.Contains(bulletController.PosUp) ||
+                        //     poss.Contains(bulletController.PosRight) || poss.Contains(bulletController.PosUpRight))
+                        // {
+                            bulletController.isDead = true;
                             bulletController.DestroyBullet();
-                        }
+                        //}
                     }
                 }
             }

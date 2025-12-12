@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using FixMath.NET;
 
@@ -33,6 +34,8 @@ namespace QuadTreeV3
         /// 物体所在的层（位掩码，支持多层）
         /// </summary>
         public QuadTreeLayer Layer;
+
+
 
         /// <summary>
         /// 矩形物体构造函数

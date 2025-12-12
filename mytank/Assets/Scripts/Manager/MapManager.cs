@@ -19,7 +19,6 @@ public enum Direction
 }
 
 
-
 public enum MapType
 {
     error = -1,
@@ -146,12 +145,28 @@ public class MapManager : SingletonMono<MapManager>
             GameObject obj = Instantiate(prefab, new Vector2(x, y), Quaternion.identity, wallsParent);
             gridObjects[x, y] = obj;
 
-            if (wallType == MapType.wall || wallType == MapType.breakableWall||wallType == MapType.ice||wallType == MapType.river)
+            FixRect fixRect = new FixRect((Fix64)(x - gridSize / 2), (Fix64)(y - gridSize / 2), (Fix64)gridSize,
+                (Fix64)gridSize);
+            QuadTreeLayer layer;
+            switch (wallType)
             {
-                FixRect fixRect = new FixRect((Fix64)(x-gridSize/2), (Fix64)(y-gridSize/2), (Fix64)gridSize, (Fix64)gridSize);
-                QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect,obj);
+                case MapType.breakableWall:
+                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall);
+                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
+                    break;
+                case MapType.wall:
+                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall);
+                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
+                    break;
+                case MapType.ice:
+                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Ice);
+                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
+                    break;
+                case MapType.river:
+                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.River);
+                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
+                    break;
             }
-            
         }
     }
 

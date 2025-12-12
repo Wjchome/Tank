@@ -16,9 +16,21 @@ public enum Identity
     Enemy
 }
 
+//给碰撞用的
+public enum QuadTreeLayerType : Int32
+{
+    Wall,
+    BreakableWall,
+    River,
+    Ice,
+    TankFriend,
+    TankEnemy,
+    BulletFriend,
+    BulletEnemy
+}
+
 public abstract class TankController : MonoBehaviour
 {
-
     public Vector2Int Pos;
     public int shootIntervalFrame;
     public int HP;
@@ -36,17 +48,22 @@ public abstract class TankController : MonoBehaviour
 
     // 一些计时器
     public long lastShootFrame;
+
     // 玩家自选名字
     public string playerName;
+
     // 玩家自选颜色
     public Color playerColor;
+
     // 身份
     public Identity identity;
 
     // 控制动画
     public bool isMoving = false;
+
     //死亡动画时间
     public float animTime = 0.5f;
+
     //是否死亡
     public bool isDead;
 
@@ -109,15 +126,14 @@ public abstract class TankController : MonoBehaviour
 
     public void UpdatePos()
     {
-       
-        transform.position = Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
+        transform.position =
+            Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, 0f, (float)rotationF),
             5 * Time.deltaTime);
     }
 
-    
-    
+
     //是否撞到墙
     public bool MoveBy(Direction direction)
     {
@@ -133,7 +149,7 @@ public abstract class TankController : MonoBehaviour
                 continue;
             }
 
-            if (item.Target.CompareTag("Ice"))
+            if (item.Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Ice) ))
             {
                 moveMul = new Fix64(2);
                 break;
@@ -142,11 +158,11 @@ public abstract class TankController : MonoBehaviour
 
         FixVector2 moveVec = dxy * (moveSpeedF * moveMul);
         transform.DOKill();
-        // FixVector2 targetPos = PosF + new FixVector2((Fix64)dx, (Fix64)dy)*moveSpeedF;
         FixRect targetRect = new FixRect(myFixRect.X + moveVec.x, myFixRect.Y + moveVec.y,
             myFixRect.Width, myFixRect.Height);
         List<QuadTreeObject> get = QuadTreeV3.QuadTreeV3.Instance.Query(targetRect);
         bool isOk = true;
+        
         for (int i = 0; i < get.Count; i++)
         {
             if (get[i].Target == gameObject)
@@ -154,8 +170,12 @@ public abstract class TankController : MonoBehaviour
                 continue;
             }
 
-            if (get[i].Target.CompareTag("Wall") || get[i].Target.CompareTag("BreakableWall") ||
-                get[i].Target.CompareTag("Tank") || get[i].Target.CompareTag("River"))
+
+            if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall) |
+                                        QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall) |
+                                        QuadTreeLayer.GetLayer((int)QuadTreeLayerType.River) |
+                                        QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy) |
+                                        QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend)))
             {
                 canMove = true;
                 FixRect other = get[i].Bounds;

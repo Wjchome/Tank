@@ -30,7 +30,7 @@ public class PulseTurret : MapEntity
                     points.Contains(bullet.Pos + new Vector2Int(1, 1)) ||
                     points.Contains(bullet.Pos + new Vector2Int(1, 0)))
                 {
-                    bullet.isShouldDestroy = true;
+                    bullet.isDead = true;
                     bullet.DestroyBullet();
                 }
             }

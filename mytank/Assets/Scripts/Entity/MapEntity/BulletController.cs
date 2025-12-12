@@ -15,25 +15,15 @@ public class BulletController : MapEntity
 
     public bool isPlayerBullet;
 
-    public int moveIntervalFrame = 4;
-
-    public long lastMoveTimeFrame;
 
     public FixVector2 dir;
     public FixRect myFixRect;
     public float moveSpeed;
     public Fix64 moveSpeedF => (Fix64)moveSpeed;
 
-    public Vector2Int PosUp => new Vector2Int(Pos.x, Pos.y + 1);
-    public Vector2Int PosUpRight => new Vector2Int(Pos.x + 1, Pos.y + 1);
-    public Vector2Int PosRight => new Vector2Int(Pos.x + 1, Pos.y);
-
-    public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
-
 
     public Animator animator;
 
-    public bool isShouldDestroy = false;
     public float animTime = 0.3f;
 
     public int damageNum;
@@ -43,13 +33,6 @@ public class BulletController : MapEntity
     public bool isDead = false;
     public long deathDelayFrames;
 
-    public void UpdatePosition(int x, int y)
-    {
-        direction.ToVector2Int().Set(x, y);
-        Pos = new Vector2Int(x, y);
-        transform.DOKill();
-        transform.DOMove(GetCenter(), moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
-    }
 
     bool ShouldCollide(Identity identity)
     {
@@ -59,6 +42,7 @@ public class BulletController : MapEntity
     }
 
     private Vector2 _smoothVelocity;
+
     private void Update()
     {
         UpdatePos();
@@ -66,21 +50,20 @@ public class BulletController : MapEntity
 
     public void UpdatePos()
     {
-        transform.position = Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
-
+        transform.position =
+            Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
     }
+
     public override void UpdateFrame()
     {
-        if (!isShouldDestroy)
+        if (!isDead)
         {
-            transform.DOKill();
-
             FixRect targetRect = new FixRect(myFixRect.X + (Fix64)dir.x * moveSpeedF,
                 myFixRect.Y + (Fix64)dir.y * moveSpeedF,
                 myFixRect.Width, myFixRect.Height);
             List<QuadTreeObject> get = QuadTreeV3.QuadTreeV3.Instance.Query(targetRect);
 
-            bool isOk = true;
+            bool isCango = true;
             for (int i = 0; i < get.Count; i++)
             {
                 if (get[i].Target == gameObject)
@@ -88,168 +71,162 @@ public class BulletController : MapEntity
                     continue;
                 }
 
-                if (get[i].Target.CompareTag("Wall"))
+                if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall)))
                 {
-                    isDead = true;
-                    isOk = false;
+                    DestroyBullet();
+
+                    isCango = false;
                 }
 
-                if (get[i].Target.CompareTag("BreakableWall"))
+                if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall)))
                 {
-                    isDead = true;
-                    isOk = false;
+                    //删除 这个墙
+                    DestroyBullet();
+
+                    isCango = false;
                 }
 
-                if (get[i].Target.CompareTag("Tank"))
+                if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy)))
                 {
-                    if (!ShouldCollide(get[i].Target.GetComponent<TankController>().identity))
+                    if (isPlayerBullet)
                     {
-                        isDead = true;
-                        isOk = false;
+                        BulletController _bulletController = get[i].Target.GetComponent<BulletController>();
+
+                        penetrationCount--;
+                        if (penetrationCount <= 0)
+                        {
+                            DestroyBullet();
+
+                            isCango = false;
+
+                            _bulletController.penetrationCount--;
+                            if (_bulletController.penetrationCount <= 0)
+                            {
+                                DestroyBullet();
+                            }
+                        }
                     }
-                }
 
-                if (get[i].Target.CompareTag("Bullet"))
-                {
-                    if (isPlayerBullet != get[i].Target.GetComponent<BulletController>().isPlayerBullet)
+                    if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletFriend)))
                     {
-                        isDead = true;
-                        isOk = false;
+                        if (!isPlayerBullet)
+                        {
+                            BulletController _bulletController = get[i].Target.GetComponent<BulletController>();
+
+                            penetrationCount--;
+                            if (penetrationCount <= 0)
+                            {
+                                DestroyBullet();
+
+                                isCango = false;
+
+                                _bulletController.penetrationCount--;
+                                if (_bulletController.penetrationCount <= 0)
+                                {
+                                    DestroyBullet();
+                                }
+                            }
+                        }
+                    }
+
+                    if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy)))
+                    {
+                        if (isPlayerBullet)
+                        {
+                            EnemyTankController enemy = get[i].Target.GetComponent<EnemyTankController>();
+                            enemy.DamageHP(damageNum, this.tank as PlayerTankController, DamageType.Bullet);
+
+
+                            penetrationCount--;
+                            if (penetrationCount <= 0)
+                            {
+                                DestroyBullet();
+                                isCango = false;
+                            }
+                        }
+                    }
+
+                    if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend)))
+                    {
+                        if (!isPlayerBullet)
+                        {
+                            PlayerTankController player = get[i].Target.GetComponent<PlayerTankController>();
+                            player.DamageHP(damageNum);
+
+                            penetrationCount--;
+                            if (penetrationCount <= 0)
+                            {
+                                DestroyBullet();
+                                isCango = false;
+                            }
+                        }
                     }
                 }
             }
 
-            if (isOk)
+            if (isCango)
             {
                 myFixRect = targetRect;
             }
 
             QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject, myFixRect);
-        }
 
-        // if (!isShouldDestroy && NetworkManager.Instance.currentFrame - lastMoveTimeFrame > moveIntervalFrame)
-        // {
-        //     lastMoveTimeFrame = NetworkManager.Instance.currentFrame;
-        //     bool isShouldMove = false;
-        //
-        //     Vector2Int newPos = Pos + dir;
-        //
-        //     // 检查2x2区域碰撞
-        //     var tanks = MapManager.Instance.GetTankInArea(newPos.x, newPos.y, 2, 2);
-        //
-        //     foreach (var tank in tanks)
-        //     {
-        // if (tank != null && ShouldCollide(tank.identity))
-        //         {
-        //             isShouldMove = true;
-        //         }
-        //         else if (tank != null && !ShouldCollide(tank.identity))
-        //         {
-        //             if (tank is EnemyTankController enemy)
-        //             {
-        //                 enemy.DamageHP(damageNum, this.tank as PlayerTankController, DamageType.Bullet);
-        //             }
-        //             else if (tank is PlayerTankController player)
-        //             {
-        //                 player.DamageHP(damageNum);
-        //             }
-        //
-        //             // 穿透逻辑：减少穿透次数而不是直接销毁
-        //             penetrationCount--;
-        //             if (penetrationCount <= 0)
-        //             {
-        //                 isShouldDestroy = true;
-        //             }
-        //         }
-        //     }
-        //
-        //     foreach (var bullet in EntityManager.Instance.activeBullets)
-        //     {
-        //         if (bullet == this) continue;
-        //         if (bullet.Pos == Pos && bullet.isPlayerBullet != isPlayerBullet)
-        //         {
-        //             // 穿透逻辑：减少穿透次数而不是直接销毁
-        //             penetrationCount--;
-        //             if (penetrationCount <= 0)
-        //             {
-        //                 isShouldDestroy = true;
-        //             }
-        //
-        //             // 对方子弹也减少穿透次数
-        //             bullet.penetrationCount--;
-        //             if (bullet.penetrationCount <= 0)
-        //             {
-        //                 bullet.isShouldDestroy = true;
-        //                 bullet.DestroyBullet();
-        //             }
-        //
-        //
-        //             break;
-        //         }
-        //     }
-        //
-        //
-        //     if (MapManager.Instance.IsAreaBulletPassable(newPos.x, newPos.y, 2, 2))
-        //     {
-        //         isShouldMove = true;
-        //     }
-        //     else if (MapManager.Instance.IsHintHome(newPos.x, newPos.y, 2, 2))
-        //     {
-        //         GameStateManager.Instance.GameOver(false);
-        //     }
-        //     else
-        //     {
-        //         Vector2Int wallPos1, wallPos2;
-        //
-        //         if (dir == new Vector2Int(0, -1)) // 向下
-        //         {
-        //             wallPos1 = new Vector2Int(Pos.x, Pos.y - 1);
-        //             wallPos2 = new Vector2Int(Pos.x + 1, Pos.y - 1);
-        //         }
-        //         else if (dir == new Vector2Int(0, 1)) // 向上
-        //         {
-        //             wallPos1 = new Vector2Int(Pos.x, Pos.y + 2);
-        //             wallPos2 = new Vector2Int(Pos.x + 1, Pos.y + 2);
-        //         }
-        //         else if (dir == new Vector2Int(1, 0)) // 向右
-        //         {
-        //             wallPos1 = new Vector2Int(Pos.x + 2, Pos.y);
-        //             wallPos2 = new Vector2Int(Pos.x + 2, Pos.y + 1);
-        //         }
-        //         else if (dir == new Vector2Int(-1, 0)) // 向左
-        //         {
-        //             wallPos1 = new Vector2Int(Pos.x - 1, Pos.y);
-        //             wallPos2 = new Vector2Int(Pos.x - 1, Pos.y + 1);
-        //         }
-        //         else
-        //         {
-        //             return; // 无效方向
-        //         }
-        //
-        //         // 破坏两个墙壁位置
-        //         BreakWallIfPossible(wallPos1);
-        //         BreakWallIfPossible(wallPos2);
-        //
-        //         isShouldDestroy = true;
-        //     }
-        //
-        //     if (isShouldMove)
-        //     {
-        //         UpdatePosition(newPos.x, newPos.y);
-        //     }
-        //
-        //     if (isShouldDestroy)
-        //     {
-        //         DestroyBullet();
-        //     }
-        // }
-        //
-        if (isDead)
+
+            //     if (MapManager.Instance.IsHintHome(newPos.x, newPos.y, 2, 2))
+            //     {
+            //         GameStateManager.Instance.GameOver(false);
+            //     }
+            //     else
+            //     {
+            //         Vector2Int wallPos1, wallPos2;
+            //
+            //         if (dir == new Vector2Int(0, -1)) // 向下
+            //         {
+            //             wallPos1 = new Vector2Int(Pos.x, Pos.y - 1);
+            //             wallPos2 = new Vector2Int(Pos.x + 1, Pos.y - 1);
+            //         }
+            //         else if (dir == new Vector2Int(0, 1)) // 向上
+            //         {
+            //             wallPos1 = new Vector2Int(Pos.x, Pos.y + 2);
+            //             wallPos2 = new Vector2Int(Pos.x + 1, Pos.y + 2);
+            //         }
+            //         else if (dir == new Vector2Int(1, 0)) // 向右
+            //         {
+            //             wallPos1 = new Vector2Int(Pos.x + 2, Pos.y);
+            //             wallPos2 = new Vector2Int(Pos.x + 2, Pos.y + 1);
+            //         }
+            //         else if (dir == new Vector2Int(-1, 0)) // 向左
+            //         {
+            //             wallPos1 = new Vector2Int(Pos.x - 1, Pos.y);
+            //             wallPos2 = new Vector2Int(Pos.x - 1, Pos.y + 1);
+            //         }
+            //         else
+            //         {
+            //             return; // 无效方向
+            //         }
+            //
+            //         // 破坏两个墙壁位置
+            //         BreakWallIfPossible(wallPos1);
+            //         BreakWallIfPossible(wallPos2);
+            //
+            //         isShouldDestroy = true;
+            //     }
+            //
+            //     if (isShouldMove)
+            //     {
+            //         UpdatePosition(newPos.x, newPos.y);
+            //     }
+            //
+            //     if (isShouldDestroy)
+            //     {
+            //         DestroyBullet();
+            //     }
+            // }
+        }
+        else
         {
-            Debug.Log(NetworkManager.Instance.currentFrame);
             if (NetworkManager.Instance.currentFrame >= deathDelayFrames)
             {
-                // 执行死亡后的逻辑
                 ExecuteDeathLogic();
             }
         }
@@ -260,8 +237,7 @@ public class BulletController : MapEntity
         MapType wallType = MapManager.Instance.GetWallType(wallPos.x, wallPos.y);
 
         // 检查是否可以破坏墙壁
-        if (wallType == MapType.breakableWall
-           )
+        if (wallType == MapType.breakableWall)
         {
             MapManager.Instance.SetWallType(wallPos.x, wallPos.y, MapType.floor);
         }
@@ -276,18 +252,25 @@ public class BulletController : MapEntity
 
     public void DestroyBullet()
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            Debug.Log("赋值死亡多次");
+            return;
+        }
+        Debug.Log("死亡 "+ NetworkManager.Instance.currentFrame);
         isDead = true;
         Pos = new Vector2Int(-1, -1);
-        Vector2 randomPos = new Vector2(Random.Range(0f, (float)dir.x), Random.Range(0f, (float)dir.y));
-        transform.position += (Vector3)randomPos;
+
         animator.Play("SmallBoom");
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
+        QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
     }
 
     // 执行死亡后的逻辑
     void ExecuteDeathLogic()
     {
+        Debug.Log("真死亡 "+ NetworkManager.Instance.currentFrame);
+        
         EntityManager.Instance.BulletPool.ReturnObject(this);
     }
 

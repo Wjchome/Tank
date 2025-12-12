@@ -69,15 +69,16 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
         temp.playerName = tankName;
 
-        // 设置坦克中心位置
+      
         
      
         FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
             (Fix64)(y - MapManager.Instance.gridSize / 2),
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
-        //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject);
+        QuadTreeLayer layer =
+            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend);
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject,layer);
         
         temp.transform.position = (Vector2)fixRect.Center;
         temp.playerColor = color;

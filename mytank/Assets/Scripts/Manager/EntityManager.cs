@@ -83,8 +83,6 @@ public class EntityManager : SingletonMono<EntityManager>
     {
         bullet.isDead = false;
         bullet.gameObject.SetActive(true);
-        bullet.isShouldDestroy = false;
-        bullet.lastMoveTimeFrame = 0;
         bullet.animator.Play("Idle", 0, 0);
         activeBullets.Add(bullet);
     }
@@ -302,7 +300,11 @@ public class EntityManager : SingletonMono<EntityManager>
 
 
         bullet.myFixRect = rect;
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject);
+        
+        QuadTreeLayer layer =bullet.isPlayerBullet?
+            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletFriend):
+            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy);
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject,layer);
         bullet.transform.position = (Vector2)bullet.myFixRect.Center;
 
 
