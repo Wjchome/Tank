@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	FRAME_INTERVAL = 25 * time.Millisecond // 40帧每秒
+	FRAME_INTERVAL = 50 * time.Millisecond // 20帧每秒
 )
 
 // 全局客户端计数器
