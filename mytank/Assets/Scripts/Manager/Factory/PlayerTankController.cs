@@ -337,7 +337,6 @@ public class PlayerTankController : TankController
         
         Fix64 targetXFix = Fix64.FromRaw(targetX);
         Fix64 targetYFix = Fix64.FromRaw(targetY);
-        Debug.Log(targetXFix+" 2 "+targetYFix);
         
         FixVector2 targetPos = new FixVector2(targetXFix, targetYFix);
         // 计算从坦克中心到目标位置的方向向量
