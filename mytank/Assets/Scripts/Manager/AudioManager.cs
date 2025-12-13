@@ -12,7 +12,8 @@ public class AudioManager : SingletonMono<AudioManager>
         public bool loop = false;
         [HideInInspector] public AudioSource source;
     }
-    
+
+    public bool isMute;
     public List<Sound> sounds;
     public Dictionary<string, Sound> soundsMap;
     
@@ -31,6 +32,10 @@ public class AudioManager : SingletonMono<AudioManager>
     
     public void Play(string name)
     {
+        if (isMute)
+        {
+            return;
+        }
         if(soundsMap.TryGetValue(name, out Sound s))
         {
              s.source.Play();
