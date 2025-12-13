@@ -31,7 +31,9 @@ public enum QuadTreeLayerType : Int32
 
 public abstract class TankController : MonoBehaviour
 {
-    public Vector2Int Pos;
+    public Transform body;
+    public Transform barrel;
+    
     public int shootIntervalFrame;
     public int HP;
     public int orignalHP;
@@ -129,7 +131,7 @@ public abstract class TankController : MonoBehaviour
         transform.position =
             Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, 0f, (float)rotationF),
+        body.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, 0f, (float)rotationF),
             5 * Time.deltaTime);
     }
 

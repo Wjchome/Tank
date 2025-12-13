@@ -15,7 +15,7 @@
         public int range = 1;
         protected override void ApplyEffect()
         {
-            Pos = tank.Pos;
+           // Pos = tank.Pos;
             List<Vector2Int> vets = FindAll();
 
             List<EnemyTankController> tanks = new List<EnemyTankController>();

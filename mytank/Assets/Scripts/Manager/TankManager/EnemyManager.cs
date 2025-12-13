@@ -211,8 +211,13 @@ public class EnemyManager : SingletonMono<EnemyManager>
     bool IsPositionOccupied(Vector2Int pos)
     {
         // 检查是否有坦克占用2x2区域
-        List<TankController> tanks = MapManager.Instance.GetTankInArea(pos.x, pos.y, 2, 2);
-        return tanks.Count > 0;
+        var res = QuadTreeV3.QuadTreeV3.Instance.Query(
+            new FixRect((Fix64)(pos.x - MapManager.Instance.gridSize / 2),
+                (Fix64)(pos.y - MapManager.Instance.gridSize / 2),
+                (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2)),
+            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy) |
+            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend));
+        return res.Count > 0;
     }
 
 
@@ -239,14 +244,14 @@ public class EnemyManager : SingletonMono<EnemyManager>
         //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeLayer layer =
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
-           
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject,layer);
+
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
 
         temp.transform.position = new Vector2((float)fixRect.CenterX, (float)fixRect.CenterY);
-       
-        
+
+
         temp.playerColor = Color.red;
-        temp.GetComponent<SpriteRenderer>().material.color = Color.red;
+        temp.spriteRenderer.color = Color.red;
         int seed =
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);
@@ -279,16 +284,16 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.playerColor = Color.red;
 
         // 设置坦克中心位置
-     
-        
+
+
         FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
             (Fix64)(y - MapManager.Instance.gridSize / 2),
             (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
         QuadTreeLayer layer =
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject,layer);
-        temp.transform.position =  (Vector2)fixRect.Center;
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
+        temp.transform.position = (Vector2)fixRect.Center;
         int seed =
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);
@@ -302,8 +307,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.animType = dataIndex;
         temp.tankEntityTankUI.UpdateHealthBar();
 
-        temp.gameObject.AddComponent<Special>();
-
+        var a= temp.gameObject.AddComponent<Special>();
+        a.spriteRenderer= temp.spriteRenderer;
         EntityManager.Instance.UpdateTankPos(temp, new Vector2Int(-2, -2), new Vector2Int(x, y));
 
 

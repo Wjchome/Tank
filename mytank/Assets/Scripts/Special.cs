@@ -5,12 +5,11 @@
 
     public class Special:MonoBehaviour
     {
-        SpriteRenderer spriteRenderer;
+        public SpriteRenderer spriteRenderer;
         
  
         private void Start()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
             StartCoroutine(ChangeColor());
         }
 

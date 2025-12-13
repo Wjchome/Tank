@@ -50,6 +50,8 @@ public class MapManager : SingletonMono<MapManager>
     private MapType[,] map;
     private Dictionary<MapType, GameObject> typeToPrefab;
     private GameObject[,] gridObjects; // 记录每个格子的实例
+    
+    private Dictionary<GameObject,FixRect> walls=new Dictionary<GameObject,FixRect>();
 
     public long ironWallEndFrames;
     public bool isChange;

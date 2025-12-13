@@ -219,7 +219,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
     {
         if (message.ServerFrame != null)
         {
+            currentFrame = message.ServerFrame.TimeStamp;
             GameStateManager.Instance.OnServerFrame(message.ServerFrame);
+            InputManager.Instance.UpdateFrame();
             EnemyManager.Instance.UpdateFrame(); //生成敌人
             FoodManager.Instance.UpdateFrame(); //选择道具
             PlayerManager.Instance.UpdateFrame(); //
@@ -441,7 +443,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         var frameData = new FrameData
         {
             PlayerId = playerID,
-            TimeStamp = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            TimeStamp = currentFrame,
             InputType = inputType,
             ShootX = shootX,
             ShootY = shootY,
@@ -455,11 +457,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         SendMessage(message);
     }
 
-    // 兼容旧接口，发送移动输入
-    public void SendPlayerInput(InputType inputType)
-    {
-        SendFrameData(inputType: inputType);
-    }
+ 
     // 请求开始游戏
 
     public void GameStartRequest(string roomId, int level = 0)
@@ -501,17 +499,6 @@ public class NetworkManager : SingletonMono<NetworkManager>
     }
 
 
-    // 兼容旧接口，发送食物选择请求
-    public void FoodChooseRequest(FoodType foodType)
-    {
-        SendFrameData(foodId: (int)foodType);
-    }
-
-    // 兼容旧接口，发送开火请求
-    public void SendShootRequest(long x, long y)
-    {
-        SendFrameData(shootX: x, shootY: y);
-    }
 
     #endregion
 

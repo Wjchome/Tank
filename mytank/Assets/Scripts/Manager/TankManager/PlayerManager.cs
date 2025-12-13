@@ -82,7 +82,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         
         temp.transform.position = (Vector2)fixRect.Center;
         temp.playerColor = color;
-        temp.GetComponent<SpriteRenderer>().material.color = color;
+        temp.spriteRenderer.color = color;
         int seed =
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);

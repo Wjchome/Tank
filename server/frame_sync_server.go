@@ -814,9 +814,9 @@ func (room *Room) frameLoop() {
 		// 游戏结束后房间状态保持playing，等待玩家重新开始
 
 		// 每帧都发送ServerFrame
-		currentTime := time.Now().UnixNano()
+
 		serverFrame := &myproto.ServerFrame{
-			TimeStamp:  currentTime,
+			TimeStamp:  room.FrameNumber,
 			FrameDatas: frameDatas,
 		}
 		serverMsg := &myproto.ServerMessage{

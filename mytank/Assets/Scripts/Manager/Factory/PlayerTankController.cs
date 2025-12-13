@@ -159,14 +159,9 @@ public class PlayerTankController : TankController
     public override void Update()
     {
         base.Update();
-        if (identity == Identity.Myself && !isDead)
-        {
-            HandleMovementInput();
-            HandleShootInput();
-        }
     }
 
-    int CurrentShootIntervalFrame()
+    public int CurrentShootIntervalFrame()
     {
         if (isSpeedKiller)
         {
@@ -183,154 +178,8 @@ public class PlayerTankController : TankController
         }
     }
 
-    void HandleMovementInput()
-    {
-        Vector2Int moveDir = Vector2Int.zero;
 
-        if (Input.GetKey(KeyCode.W))
-        {
-            moveDir.y += 1;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            moveDir.y -= 1;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveDir.x -= 1;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            moveDir.x += 1;
-        }
-
-        if (moveDir != Vector2Int.zero)
-        {
-            var inputType = moveDir.ToDirection().ToInputType();
-            NetworkManager.Instance.SendFrameData(inputType: inputType);
-        }
-
-        // 触屏问题
-        // if (GameUIManager.Instance.upButton.isPressed)
-        // {
-        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveUp);
-        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
-        // }
-        // else if (GameUIManager.Instance.downButton.isPressed)
-        // {
-        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveDown);
-        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
-        // }
-        // else if (GameUIManager.Instance.leftButton.isPressed)
-        // {
-        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveLeft);
-        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
-        // }
-        // else if (GameUIManager.Instance.rightButton.isPressed)
-        // {
-        //     NetworkManager.Instance.SendPlayerInput(InputType.InputMoveRight);
-        //     lastMoveFrame = NetworkManager.Instance.currentFrame;
-        // }
-    }
-
-    void HandleShootInput()
-    {
-        if (NetworkManager.Instance.currentFrame - lastShootFrame > CurrentShootIntervalFrame())
-        {
-            Vector2 targetPos = Vector2.zero;
-            bool shouldShoot = false;
-
-            // 键盘输入：使用鼠标位置作为开火目标
-            if (Input.GetMouseButton(0))
-            {
-                // 将鼠标世界坐标转换为Fix64坐标
-                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                mouseWorldPos.z = 0;
-                targetPos = mouseWorldPos;
-                shouldShoot = true;
-            }
-
-            // // 触屏输入：使用触摸位置作为开火目标
-            // if (GameUIManager.Instance.shootButton.isPressed)
-            // {
-            //     // 使用触摸位置或按钮位置
-            //     if (Input.touchCount > 0)
-            //     {
-            //         Vector3 touchWorldPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            //         touchWorldPos.z = 0;
-            //         targetPos = touchWorldPos;
-            //     }
-            //     else
-            //     {
-            //         // 如果没有触摸，使用鼠标位置
-            //         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //         mouseWorldPos.z = 0;
-            //         targetPos = mouseWorldPos;
-            //     }
-            //
-            //     shouldShoot = true;
-            // }
-
-            if (shouldShoot)
-            {
-                // 将Vector2转换为Fix64，然后获取原始值（rawValue）
-                Fix64 targetXFix = (Fix64)targetPos.x;
-                Fix64 targetYFix = (Fix64)targetPos.y;
-
-                // 获取Fix64的原始值（rawValue），用于网络传输
-                long targetX = targetXFix.RawValue;
-                long targetY = targetYFix.RawValue;
-
-                NetworkManager.Instance.SendFrameData(shootX: targetX, shootY: targetY);
-                lastShootFrame = NetworkManager.Instance.currentFrame;
-            }
-        }
-    }
-
-
-    // protected void MoveTo(Vector2Int targetPos)
-    // {
-    //     if (isSpikeTrap)
-    //     {
-    //         if (targetPos.x == Pos.x && targetPos.y == Pos.y + 1)
-    //         {
-    //             EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
-    //             EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
-    //         }
-    //         else if (targetPos.x == Pos.x && targetPos.y == Pos.y - 1)
-    //         {
-    //             EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
-    //             EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
-    //         }
-    //         else if (targetPos.x == Pos.x + 1 && targetPos.y == Pos.y)
-    //         {
-    //             EntityManager.Instance.InitSpikeTrap(this, Pos, spikeTrapDurationFrame);
-    //             EntityManager.Instance.InitSpikeTrap(this, PosUp, spikeTrapDurationFrame);
-    //         }
-    //         else if (targetPos.x == Pos.x - 1 && targetPos.y == Pos.y)
-    //         {
-    //             EntityManager.Instance.InitSpikeTrap(this, PosRight, spikeTrapDurationFrame);
-    //             EntityManager.Instance.InitSpikeTrap(this, PosUpRight, spikeTrapDurationFrame);
-    //         }
-    //     }
-    //
-    //     EntityManager.Instance.UpdateTankPos(this, Pos, targetPos);
-    //
-    //     myFixRect.X = (Fix64)(targetPos.x - MapManager.Instance.gridSize / 2);
-    //     myFixRect.Y = (Fix64)(targetPos.y - MapManager.Instance.gridSize / 2);
-    //     QuadTreeV3.QuadTreeV3.Instance.UpdateObject(gameObject, myFixRect);
-    //
-    //     Pos = targetPos;
-    //     Vector2 centerPos = GetCenter();
-    //     isMoving = true;
-    //     animator.Play("Tank" + animType);
-    //     lastAnimStartFrame = NetworkManager.Instance.currentFrame;
-    //     transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
-    // }
-
- 
+    
 
     public void ShootAt(long targetX, long targetY)
     {
@@ -426,6 +275,7 @@ public class PlayerTankController : TankController
         QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
     }
 
+    public FoodType testFoodType;
     public void Kill(bool isSpecial)
     {
         killNum++;
@@ -435,6 +285,9 @@ public class PlayerTankController : TankController
         if (isSpecial && identity == Identity.Myself)
         {
             FoodManager.Instance.AddChooseNum();
+            //等会删除
+            InputManager.Instance.AddFood((int)testFoodType);
+            
         }
     }
 

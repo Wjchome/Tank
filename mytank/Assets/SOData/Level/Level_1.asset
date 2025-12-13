@@ -75,9 +75,9 @@ MonoBehaviour:
   - {x: 4, y: 2}
   - {x: 21, y: 2}
   enemySum: 30
-  enemySpawnFrame: 200
+  enemySpawnFrame: 100
   maxEnemies: 5
-  specialRate: 1000
+  specialRate: 1
   enemiesUp:
   - numEnemies: 10
     enemyEvent: 0

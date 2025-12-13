@@ -19,7 +19,7 @@ public enum FoodType
     Star,
     SteelHelmet,
     WarCar,
-    BulletDeadzone,//脉冲塔
+    BulletDeadzone, //脉冲塔
     AutoTurret,
     Landmine,
     HealingGarden,
@@ -28,8 +28,8 @@ public enum FoodType
     Protect,
     Discipline,
     GhostGuard,
-    TankCharge,//坦克冲锋
-    ChainImplosion,//连锁爆炸
+    TankCharge, //坦克冲锋
+    ChainImplosion, //连锁爆炸
     //19个道具
 
     // 新增合成道具
@@ -39,32 +39,31 @@ public enum FoodType
     TimeStorm, // 时间风暴
     PenetratingBullet, // 穿透子弹
     SuperDefense, // 超级守卫
-    LegionoftheFallen//死亡军团协议
+    LegionoftheFallen //死亡军团协议
 }
 
 public class FoodManager : SingletonMono<FoodManager>
 {
     public List<FoodData> foodDatas;
     public PlayerFoodUI playerFoodUIPrefab;
-    
+
     public Vector2 firstPos;
     public Vector2 secondPos;
     public RectTransform panelParent;
     public Button openOrCloseButton;
-    
+
     public TextMeshProUGUI openOrCloseButtonText;
     public List<FoodUIPanel> panels;
     public Dictionary<FoodType, FoodData> foodDict = new Dictionary<FoodType, FoodData>();
 
-    [Header("食物数值")]
-    public List<FoodData> superFoodDatas = new List<FoodData>();
+    [Header("食物数值")] public List<FoodData> superFoodDatas = new List<FoodData>();
     public List<FoodCombination> foodCombinations = new List<FoodCombination>();
     private Dictionary<FoodType, List<FoodType>> combinationRequirements = new Dictionary<FoodType, List<FoodType>>();
 
     // 新增状态跟踪
     private bool isFoodPanelActive = false;
     public int chooseNum = 0;
-    
+
     // 新增：延迟显示相关变量
     private bool needDelayedShow = false;
     private long delayedShowFrame = 0;
@@ -72,7 +71,7 @@ public class FoodManager : SingletonMono<FoodManager>
     public Sprite getSprite0;
     public Sprite getSprite1;
 
-  
+
     private void Start()
     {
         foreach (var foodData in foodDatas)
@@ -95,16 +94,16 @@ public class FoodManager : SingletonMono<FoodManager>
             };
         }
 
-        secondPos =panelParent.anchoredPosition ;
-        firstPos=secondPos+new Vector2(0, 800);
-        
-       
+        secondPos = panelParent.anchoredPosition;
+        firstPos = secondPos + new Vector2(0, 800);
+
+
         openOrCloseButton.onClick.AddListener(() =>
         {
-            UIChange.GoLeft(openOrCloseButton,panelParent,firstPos,secondPos);
+            UIChange.GoLeft(openOrCloseButton, panelParent, firstPos, secondPos);
         });
     }
-  
+
     public void GameStart()
     {
         chooseNum = 0;
@@ -112,7 +111,7 @@ public class FoodManager : SingletonMono<FoodManager>
         needDelayedShow = false;
         delayedShowFrame = 0;
         openOrCloseButtonText.text = "待选：" + chooseNum;
-        panelParent.anchoredPosition=secondPos;
+        panelParent.anchoredPosition = secondPos;
     }
 
     // 新增：外部调用的方法，用于增加选择次数
@@ -120,7 +119,7 @@ public class FoodManager : SingletonMono<FoodManager>
     {
         chooseNum += amount;
         openOrCloseButtonText.text = "待选：" + chooseNum;
-        
+
         // 如果面板没有激活且有选择次数，则显示食物选择
         if (!isFoodPanelActive && chooseNum > 0)
         {
@@ -140,8 +139,7 @@ public class FoodManager : SingletonMono<FoodManager>
             }
         }
     }
-    
-    // 新增：显示食物选择面板
+
     public void ShowFoodSelection()
     {
         if (chooseNum <= 0 || isFoodPanelActive)
@@ -151,7 +149,6 @@ public class FoodManager : SingletonMono<FoodManager>
         ShowPanelAndFoods();
     }
 
-    // 修改：私有方法，实际显示食物选择
     private void ShowPanelAndFoods()
     {
         PlayerTankController tank = NetworkManager.Instance.myTank;
@@ -180,7 +177,7 @@ public class FoodManager : SingletonMono<FoodManager>
                 availableFoods.Add(foodData);
             }
         }
-        
+
 
         // 3. 随机选取不重复的食物
         for (int i = 0; i < 3; i++)
@@ -258,18 +255,20 @@ public class FoodManager : SingletonMono<FoodManager>
             // 1. 禁用所有按钮，防止多次点击
             foreach (var p in panels)
                 p.chooseButton.interactable = false;
-            if(!NetworkManager.Instance.isGameing)
+            if (!NetworkManager.Instance.isGameing)
                 return;
             // 2. 减少选择次数
             chooseNum--;
             openOrCloseButtonText.text = "待选：" + chooseNum;
-            
+
             // 3. 标记面板为非激活状态
             isFoodPanelActive = false;
-            
-            // 4. 发送网络请求
-            NetworkManager.Instance.SendFrameData(foodId: (int)food.foodType);
-            
+
+            // 4. 发送网络请求（通过InputManager，但食物选择立即发送）
+
+            InputManager.Instance.AddFood((int)food.foodType);
+
+
             // 5. 如果还有选择次数，设置延迟显示
             if (chooseNum > 0)
             {
