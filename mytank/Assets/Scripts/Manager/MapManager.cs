@@ -9,12 +9,12 @@ using Random = System.Random;
 public enum Direction
 {
     Up,
-    Left,
-    Down,
-    Right,
     LeftUp,
-    RightDown,
+    Left,
     LeftDown,
+    Down,
+    RightDown,
+    Right,
     RightUp,
 }
 
@@ -35,8 +35,12 @@ public class MapManager : SingletonMono<MapManager>
 {
     [Header("Map Settings")] public int mapWidth = 20;
     public int mapHeight = 20;
-    public float gridSize = 1f;
+    public float gridSize = 1;
 
+    public Fix64 MapWidthF => (Fix64)mapWidth;
+    public Fix64 MapHeightF => (Fix64)mapHeight;
+    public Fix64 GridSizeF => (Fix64)gridSize;
+    public Fix64 HalfGridSizeF => (Fix64)gridSize / (Fix64)2;
 
     [Header("Prefabs")] public GameObject floorPrefab;
     public GameObject wallPrefab;
@@ -49,9 +53,7 @@ public class MapManager : SingletonMono<MapManager>
 
     private MapType[,] map;
     private Dictionary<MapType, GameObject> typeToPrefab;
-    private GameObject[,] gridObjects; // 记录每个格子的实例
-    
-    private Dictionary<GameObject,FixRect> walls=new Dictionary<GameObject,FixRect>();
+
 
     public long ironWallEndFrames;
     public bool isChange;
@@ -136,19 +138,12 @@ public class MapManager : SingletonMono<MapManager>
         {
             map[x, y] = wallType;
 
-            if (gridObjects[x, y] != null)
-            {
-                Destroy(gridObjects[x, y]);
-                gridObjects[x, y] = null;
-            }
 
             GameObject prefab = typeToPrefab[wallType];
 
             GameObject obj = Instantiate(prefab, new Vector2(x, y), Quaternion.identity, wallsParent);
-            gridObjects[x, y] = obj;
 
-            FixRect fixRect = new FixRect((Fix64)(x - gridSize / 2), (Fix64)(y - gridSize / 2), (Fix64)gridSize,
-                (Fix64)gridSize);
+            FixRect fixRect = new FixRect((Fix64)x - HalfGridSizeF, (Fix64)y - HalfGridSizeF, GridSizeF, GridSizeF);
             QuadTreeLayer layer;
             switch (wallType)
             {
@@ -191,8 +186,6 @@ public class MapManager : SingletonMono<MapManager>
                 for (int y = 0; y < mapHeight; y++)
                 {
                     map[x, y] = MapType.floor;
-
-                    gridObjects[x, y] = null;
                 }
             }
         }
@@ -201,8 +194,8 @@ public class MapManager : SingletonMono<MapManager>
     }
 
 
-	public void CreateWallType(FixRect fixRect,MapType wallType)
-	{
+    public void CreateWallType(FixRect fixRect, MapType wallType)
+    {
         GameObject prefab = typeToPrefab[wallType];
 
         switch (wallType)
@@ -227,9 +220,8 @@ public class MapManager : SingletonMono<MapManager>
         isChange = false;
 
         //加载四叉树
-        QuadTreeV3.QuadTreeV3.Instance.Bounds =
-            new Rect(-gridSize, -gridSize, mapWidth * gridSize + gridSize, mapHeight * gridSize + gridSize);
-        QuadTreeV3.QuadTreeV3.Instance.Init();
+        QuadTreeV3.QuadTreeV3.Instance.Init(new FixRect(-GridSizeF, -GridSizeF, MapWidthF * GridSizeF,
+            MapHeightF + GridSizeF));
 
         // 解析地图数据
         LoadMapFromString(level.mapData);
@@ -242,7 +234,6 @@ public class MapManager : SingletonMono<MapManager>
     {
         // 重新初始化数组
         map = new MapType[mapWidth, mapHeight];
-        gridObjects = new GameObject[mapWidth, mapHeight];
         string[] rows = mapData.Split('\n');
         // 解析瓦片数据
         for (int y = 0; y < mapHeight; y++)
@@ -486,7 +477,7 @@ public class MapManager : SingletonMono<MapManager>
         int x2, int y2, int w2, int h2)
     {
         return !(x1 + w1 <= x2 || x2 + w2 <= x1 ||
-                 y1 + h1 <= y2 || y2 + h2 <= y1); 
+                 y1 + h1 <= y2 || y2 + h2 <= y1);
     }
 
 

@@ -13,8 +13,7 @@ namespace QuadTreeV3
     public class QuadTreeV3 : SingletonMono<QuadTreeV3>
     {
         
-        [Header("四叉树配置")] [Tooltip("根节点覆盖的区域（整个地图范围）")]
-        public Rect Bounds = Rect.zero;
+        [Header("四叉树配置")] 
 
         [Tooltip("每个节点最大存储物体数（超过则分裂）")] public int MaxObjectsPerNode = 4;
 
@@ -27,9 +26,9 @@ namespace QuadTreeV3
 
         private QuadTreeNode _rootNode; // 四叉树根节点
 
-        public void Init()
+        public void Init(FixRect rootRect)
         {
-            RootRect = new FixRect((Fix64)Bounds.x, (Fix64)Bounds.y, (Fix64)Bounds.width, (Fix64)Bounds.height);
+            RootRect = rootRect;
             DeterministicIdGenerator.Initialize();
 
             // 初始化根节点

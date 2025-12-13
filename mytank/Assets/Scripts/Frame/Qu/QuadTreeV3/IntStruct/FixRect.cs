@@ -5,7 +5,7 @@ namespace QuadTreeV3
 {
     public struct FixRect : IEquatable<FixRect>, IComparable<FixRect>
     {
-        // 核心字段：全部为int，无float
+        
         public Fix64 X; // 左边界
         public Fix64 Y; // 下边界（和Unity Rect坐标系一致）
         public Fix64 Width; // 宽度（正数）

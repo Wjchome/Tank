@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,6 +13,7 @@ public class AutoTurret : MapEntity
     
     
     public int damageNum = 1;
+    
 
     public override void UpdateFrame()
     {
@@ -27,17 +29,11 @@ public class AutoTurret : MapEntity
 
     private void RotateDirection()
     {
-        currentDirection = (Direction)(((int)currentDirection + 1) % 4);
+        currentDirection = (Direction)(((int)currentDirection + 1) % 8);
+        var (dir, dr) = currentDirection.ToFixVector2();
 
 
-        Vector3 rotation = Vector3.zero;
-        switch (currentDirection)
-        {
-            case Direction.Up: rotation = new Vector3(0, 0, 0); break;
-            case Direction.Down: rotation = new Vector3(0, 0, 180); break;
-            case Direction.Left: rotation = new Vector3(0, 0, 90); break;
-            case Direction.Right: rotation = new Vector3(0, 0, -90); break;
-        }
+        Vector3 rotation = new Vector3(0, 0, (float)dr);
 
         // 旋转也用DOTween
         transform.DORotate(rotation, shootIntervalFrame * Constant.FrameInterval).SetEase(Ease.OutQuad);
@@ -45,6 +41,8 @@ public class AutoTurret : MapEntity
 
     private void Shoot()
     {
-        EntityManager.Instance.InitializeBullet(currentDirection.ToFixVector2().Item1, tank, tank.myFixRect,damageNum);
+        var (dir, dr) = currentDirection.ToFixVector2();
+        
+        EntityManager.Instance.InitializeBullet(dir, tank, myFixRect,damageNum);
     }
 }

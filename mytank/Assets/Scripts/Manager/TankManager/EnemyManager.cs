@@ -211,10 +211,8 @@ public class EnemyManager : SingletonMono<EnemyManager>
     bool IsPositionOccupied(Vector2Int pos)
     {
         // 检查是否有坦克占用2x2区域
-        var res = QuadTreeV3.QuadTreeV3.Instance.Query(
-            new FixRect((Fix64)(pos.x - MapManager.Instance.gridSize / 2),
-                (Fix64)(pos.y - MapManager.Instance.gridSize / 2),
-                (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2)),
+        var res = QuadTreeV3.QuadTreeV3.Instance.Query(new FixRect((Fix64)pos.x -Constant.tankSize, (Fix64)pos.y - Constant.tankSize,
+            Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2),
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy) |
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend));
         return res.Count > 0;
@@ -235,11 +233,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
         temp.identity = Identity.Enemy;
         temp.playerName = tankName;
 
-        // 设置坦克中心位置
-
-        FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
-            (Fix64)(y - MapManager.Instance.gridSize / 2),
-            (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
+  
+        FixRect fixRect = new FixRect((Fix64)x -Constant.tankSize, (Fix64)y -Constant.tankSize,
+            Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
         temp.myFixRect = fixRect;
         //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeLayer layer =
@@ -285,10 +281,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
         // 设置坦克中心位置
 
-
-        FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
-            (Fix64)(y - MapManager.Instance.gridSize / 2),
-            (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
+        
+        FixRect fixRect = new FixRect((Fix64)x - Constant.tankSize, (Fix64)y - Constant.tankSize,
+            Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
         temp.myFixRect = fixRect;
         QuadTreeLayer layer =
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);

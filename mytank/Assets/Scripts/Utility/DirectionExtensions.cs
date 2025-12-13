@@ -22,7 +22,7 @@ public static class DirectionExtensions
     {
         switch (direction)
         {
-            case Direction.Up: return (FixVector2.Up, Fix64.One);
+            case Direction.Up: return (FixVector2.Up, Fix64.Zero);
             case Direction.Down: return (FixVector2.Down,(Fix64)180);
             case Direction.Left: return (FixVector2.Left,(Fix64)90);
             case Direction.Right: return (FixVector2.Right,(Fix64)(-90));

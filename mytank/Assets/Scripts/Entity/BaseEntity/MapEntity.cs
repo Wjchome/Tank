@@ -15,6 +15,7 @@ public abstract class MapEntity : MonoBehaviour, IEntity
         tank = _tank;
         myFixRect = fixRect;
         spriteRenderer.material.color = tank.playerColor;
+        transform.position = (Vector2)fixRect.Center;
     }
 
     public abstract void UpdateFrame();

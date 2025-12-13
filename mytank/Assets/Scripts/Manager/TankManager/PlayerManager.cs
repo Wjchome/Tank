@@ -69,17 +69,15 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
         temp.playerName = tankName;
 
-      
+
+        FixRect fixRect = new FixRect((Fix64)x -Constant.tankSize, (Fix64)y - Constant.tankSize,
+            Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
         
-     
-        FixRect fixRect = new FixRect((Fix64)(x - MapManager.Instance.gridSize / 2),
-            (Fix64)(y - MapManager.Instance.gridSize / 2),
-            (Fix64)(MapManager.Instance.gridSize * 2), (Fix64)(MapManager.Instance.gridSize * 2));
         temp.myFixRect = fixRect;
         QuadTreeLayer layer =
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend);
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject,layer);
-        
+        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
+
         temp.transform.position = (Vector2)fixRect.Center;
         temp.playerColor = color;
         temp.spriteRenderer.color = color;
@@ -118,7 +116,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
         activePlayers.Add(temp);
         activePlayerDic.Add(tankID, temp);
         EntityManager.Instance.allTanks.Add(temp);
-        EntityManager.Instance. UpdateTankPos(temp,new Vector2Int(-2, -2),new Vector2Int(x,y));
+        EntityManager.Instance.UpdateTankPos(temp, new Vector2Int(-2, -2), new Vector2Int(x, y));
         switch (dataIndex)
         {
             case 1:
@@ -171,7 +169,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
 
         // 设置坦克中心位置
-        tank.transform.position =new Vector3(x,y,0);
+        tank.transform.position = new Vector3(x, y, 0);
 
         tank.HP = tank.orignalHP;
 
