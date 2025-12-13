@@ -268,7 +268,7 @@ public class FoodManager : SingletonMono<FoodManager>
             isFoodPanelActive = false;
             
             // 4. 发送网络请求
-            NetworkManager.Instance.FoodChooseRequest(food.foodType);
+            NetworkManager.Instance.SendFrameData(foodId: (int)food.foodType);
             
             // 5. 如果还有选择次数，设置延迟显示
             if (chooseNum > 0)

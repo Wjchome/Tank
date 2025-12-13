@@ -60,17 +60,15 @@ type Client struct {
 }
 
 type Room struct {
-	ID               string
-	Name             string
-	HostID           string
-	Clients          map[string]*Client
-	InputBuffer      []*myproto.PlayerInput
-	ChooseFoodBuffer []*myproto.ChooseFoodRequest // 奖励选择缓冲区
-	ShootBuffer      []*myproto.ShootRequest      // 开火请求缓冲区
-	FrameNumber      int64
-	Status           string // "waiting", "playing"
-	MaxPlayers       int32
-	Mutex            sync.Mutex
+	ID              string
+	Name            string
+	HostID          string
+	Clients         map[string]*Client
+	FrameDataBuffer []*myproto.FrameData // 帧数据缓冲区（包含移动、开火、选择食物）
+	FrameNumber     int64
+	Status          string // "waiting", "playing"
+	MaxPlayers      int32
+	Mutex           sync.Mutex
 }
 
 type Server struct {
@@ -234,8 +232,8 @@ func (s *Server) handleClient(conn net.Conn) {
 
 		// 处理不同类型的客户端消息
 		switch data := clientMsg.Data.(type) {
-		case *myproto.ClientMessage_PlayerInput:
-			s.handlePlayerInput(client, data.PlayerInput)
+		case *myproto.ClientMessage_FrameData:
+			s.handleFrameData(client, data.FrameData)
 		case *myproto.ClientMessage_CreateRoomRequest:
 			s.handleCreateRoom(client, data.CreateRoomRequest)
 		case *myproto.ClientMessage_JoinRoomRequest:
@@ -250,10 +248,6 @@ func (s *Server) handleClient(conn net.Conn) {
 			s.handleKickPlayerRequest(client, data.KickPlayerRequest)
 		case *myproto.ClientMessage_GameOverRequest:
 			s.handleGameOverRequest(client, data.GameOverRequest)
-		case *myproto.ClientMessage_ChooseFoodRequest:
-			s.handleChooseFood(client, data.ChooseFoodRequest)
-		case *myproto.ClientMessage_ShootRequest:
-			s.handleShoot(client, data.ShootRequest)
 		default:
 			log.Printf("Unknown message type from client %s", client.ID)
 		}
@@ -263,7 +257,7 @@ func (s *Server) handleClient(conn net.Conn) {
 	s.handleClientDisconnect(client)
 }
 
-func (s *Server) handlePlayerInput(client *Client, input *myproto.PlayerInput) {
+func (s *Server) handleFrameData(client *Client, frameData *myproto.FrameData) {
 	if client.RoomID == "" {
 		return
 	}
@@ -276,9 +270,14 @@ func (s *Server) handlePlayerInput(client *Client, input *myproto.PlayerInput) {
 		return
 	}
 
+	// 确保player_id正确
+	if frameData.PlayerId == "" {
+		frameData.PlayerId = client.ID
+	}
+
 	room.Mutex.Lock()
-	//将客户端的输入添加到房间的输入缓冲区
-	room.InputBuffer = append(room.InputBuffer, input)
+	// 将客户端的帧数据添加到房间的缓冲区
+	room.FrameDataBuffer = append(room.FrameDataBuffer, frameData)
 	room.Mutex.Unlock()
 }
 
@@ -756,37 +755,6 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 	s.sendMessage(conn, serverMsg)
 }
 
-func (s *Server) handleShoot(client *Client, req *myproto.ShootRequest) {
-	if client.RoomID == "" {
-		return
-	}
-	s.Mutex.Lock()
-	room, exists := s.Rooms[client.RoomID]
-	s.Mutex.Unlock()
-	if !exists {
-		return
-	}
-	room.Mutex.Lock()
-	// 将开火请求添加到房间的开火缓冲区
-	room.ShootBuffer = append(room.ShootBuffer, req)
-	room.Mutex.Unlock()
-}
-
-func (s *Server) handleChooseFood(client *Client, req *myproto.ChooseFoodRequest) {
-	if client.RoomID == "" {
-		return
-	}
-	s.Mutex.Lock()
-	room, exists := s.Rooms[client.RoomID]
-	s.Mutex.Unlock()
-	if !exists {
-		return
-	}
-	room.Mutex.Lock()
-	room.ChooseFoodBuffer = append(room.ChooseFoodBuffer, req)
-	room.Mutex.Unlock()
-}
-
 // 定期清理空房间
 func (s *Server) cleanupEmptyRooms() {
 	ticker := time.NewTicker(30 * time.Second) // 每30秒检查一次
@@ -826,13 +794,8 @@ func (room *Room) frameLoop() {
 
 	for range ticker.C {
 		room.Mutex.Lock()
-		inputs := room.InputBuffer
-		chooseFoods := room.ChooseFoodBuffer
-		shoots := room.ShootBuffer
-		frameNum := room.FrameNumber
-		room.InputBuffer = make([]*myproto.PlayerInput, 0)
-		room.ChooseFoodBuffer = make([]*myproto.ChooseFoodRequest, 0)
-		room.ShootBuffer = make([]*myproto.ShootRequest, 0)
+		frameDatas := room.FrameDataBuffer
+		room.FrameDataBuffer = make([]*myproto.FrameData, 0)
 		room.FrameNumber++
 		clients := make([]*Client, 0, len(room.Clients))
 		for _, c := range room.Clients {
@@ -850,16 +813,15 @@ func (room *Room) frameLoop() {
 		// 房间状态检查：只有在没有客户端时才停止循环
 		// 游戏结束后房间状态保持playing，等待玩家重新开始
 
-		// 每帧都发送FrameMessage
-		frameMsg := &myproto.FrameMessage{
-			FrameNumber:        frameNum,
-			Inputs:             inputs,
-			ChooseFoodRequests: chooseFoods,
-			ShootRequests:      shoots,
+		// 每帧都发送ServerFrame
+		currentTime := time.Now().UnixNano()
+		serverFrame := &myproto.ServerFrame{
+			TimeStamp:  currentTime,
+			FrameDatas: frameDatas,
 		}
 		serverMsg := &myproto.ServerMessage{
-			Data: &myproto.ServerMessage_FrameMessage{
-				FrameMessage: frameMsg,
+			Data: &myproto.ServerMessage_ServerFrame{
+				ServerFrame: serverFrame,
 			},
 		}
 		data, err := proto.Marshal(serverMsg)

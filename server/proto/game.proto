@@ -76,7 +76,7 @@ message GameOverRequest{
 }
 
 
-// 玩家输入类型（8方向移动，开火已分离）
+// 玩家输入类型（8方向移动）
 enum InputType {
   INPUT_NONE = 0;
   INPUT_MOVE_UP = 1;
@@ -87,19 +87,6 @@ enum InputType {
   INPUT_MOVE_UP_RIGHT = 6;   // 右上
   INPUT_MOVE_DOWN_LEFT = 7;  // 左下
   INPUT_MOVE_DOWN_RIGHT = 8; // 右下
-}
-
-// 玩家移动输入
-message PlayerInput {
-  string player_id = 1;
-  InputType input_type = 2;
-}
-
-// 玩家开火请求（包含开火位置）
-message ShootRequest {
-  string player_id = 1;
-  int64  x = 2;  
-  int64  y = 3;  
 }
 
 
@@ -119,22 +106,26 @@ message GameStartRequest{
   int32 level = 2; // 关卡索引
 }
 
-message ChooseFoodRequest{
-  string player_id=1;
-  int32 food_id=2;
+// 帧数据（客户端发送）
+message FrameData {
+  string player_id = 1;
+  int64 time_stamp = 2;
+  InputType input_type = 3;  // 移动输入，0表示无输入
+  int64 shoot_x = 4;  // 开火位置X，0表示未开火
+  int64 shoot_y = 5;  // 开火位置Y，0表示未开火
+  int32 food_id = 6;  // 选择的食物ID，0表示未选择
 }
 
-
-message FrameMessage{
-    int64 frame_number = 1;
-    repeated PlayerInput inputs = 2;
-    repeated ChooseFoodRequest choose_food_requests = 3;
-    repeated ShootRequest shoot_requests = 4;  // 开火请求列表
+// 服务器帧消息（服务器广播）
+message ServerFrame {
+  int64 time_stamp = 1;
+  repeated FrameData frame_datas = 2;
 }
+
 // 服务器消息
 message ServerMessage {
   oneof data {
-    FrameMessage frame_message = 1;
+    ServerFrame server_frame = 1;
     RoomInfo room_info = 2;
     GameStart game_start = 3;
     ConnectSuccess connect_success = 4;
@@ -148,7 +139,7 @@ message ServerMessage {
 // 客户端消息
 message ClientMessage {
   oneof data {
-    PlayerInput player_input = 1;
+    FrameData frame_data = 1;  // 帧数据（移动、开火、选择食物）
     CreateRoomRequest create_room_request = 2;
     JoinRoomRequest join_room_request = 3;
     LeaveRoomRequest leave_room_request = 4;
@@ -156,7 +147,5 @@ message ClientMessage {
     GameStartRequest game_start_request = 6;
     KickPlayerRequest kick_player_request = 7;
     GameOverRequest game_over_request = 8;
-    ChooseFoodRequest choose_food_request = 9;
-    ShootRequest shoot_request = 10;  // 开火请求
   }
 }

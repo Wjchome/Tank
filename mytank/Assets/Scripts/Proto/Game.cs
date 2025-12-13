@@ -42,44 +42,38 @@ namespace Tankgame {
             "Eg8KB2NvbG9yX2IYBSABKAUSEwoLcGxheWVyX3JvbGUYBiABKAUiIwoQTGVh",
             "dmVSb29tUmVxdWVzdBIPCgdyb29tX2lkGAEgASgJIj4KEUtpY2tQbGF5ZXJS",
             "ZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSGAoQdGFyZ2V0X3BsYXllcl9pZBgC",
-            "IAEoCSIiCg9HYW1lT3ZlclJlcXVlc3QSDwoHcm9vbV9pZBgBIAEoCSJJCgtQ",
-            "bGF5ZXJJbnB1dBIRCglwbGF5ZXJfaWQYASABKAkSJwoKaW5wdXRfdHlwZRgC",
-            "IAEoDjITLnRhbmtnYW1lLklucHV0VHlwZSI3CgxTaG9vdFJlcXVlc3QSEQoJ",
-            "cGxheWVyX2lkGAEgASgJEgkKAXgYAiABKAMSCQoBeRgDIAEoAyJsCglHYW1l",
-            "U3RhcnQSDwoHcm9vbV9pZBgBIAEoCRIqCgxwbGF5ZXJfaW5mb3MYAiADKAsy",
-            "FC50YW5rZ2FtZS5QbGF5ZXJJbmZvEhMKC3JhbmRvbV9zZWVkGAMgASgDEg0K",
-            "BWxldmVsGAQgASgFIhEKD1Jvb21MaXN0UmVxdWVzdCIyChBHYW1lU3RhcnRS",
-            "ZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSDQoFbGV2ZWwYAiABKAUiNwoRQ2hv",
-            "b3NlRm9vZFJlcXVlc3QSEQoJcGxheWVyX2lkGAEgASgJEg8KB2Zvb2RfaWQY",
-            "AiABKAUitgEKDEZyYW1lTWVzc2FnZRIUCgxmcmFtZV9udW1iZXIYASABKAMS",
-            "JQoGaW5wdXRzGAIgAygLMhUudGFua2dhbWUuUGxheWVySW5wdXQSOQoUY2hv",
-            "b3NlX2Zvb2RfcmVxdWVzdHMYAyADKAsyGy50YW5rZ2FtZS5DaG9vc2VGb29k",
-            "UmVxdWVzdBIuCg5zaG9vdF9yZXF1ZXN0cxgEIAMoCzIWLnRhbmtnYW1lLlNo",
-            "b290UmVxdWVzdCL6AQoNU2VydmVyTWVzc2FnZRIvCg1mcmFtZV9tZXNzYWdl",
-            "GAEgASgLMhYudGFua2dhbWUuRnJhbWVNZXNzYWdlSAASJwoJcm9vbV9pbmZv",
-            "GAIgASgLMhIudGFua2dhbWUuUm9vbUluZm9IABIpCgpnYW1lX3N0YXJ0GAMg",
-            "ASgLMhMudGFua2dhbWUuR2FtZVN0YXJ0SAASMwoPY29ubmVjdF9zdWNjZXNz",
-            "GAQgASgLMhgudGFua2dhbWUuQ29ubmVjdFN1Y2Nlc3NIABInCglyb29tX2xp",
-            "c3QYBSABKAsyEi50YW5rZ2FtZS5Sb29tTGlzdEgAQgYKBGRhdGEixwQKDUNs",
-            "aWVudE1lc3NhZ2USLQoMcGxheWVyX2lucHV0GAEgASgLMhUudGFua2dhbWUu",
-            "UGxheWVySW5wdXRIABI6ChNjcmVhdGVfcm9vbV9yZXF1ZXN0GAIgASgLMhsu",
-            "dGFua2dhbWUuQ3JlYXRlUm9vbVJlcXVlc3RIABI2ChFqb2luX3Jvb21fcmVx",
-            "dWVzdBgDIAEoCzIZLnRhbmtnYW1lLkpvaW5Sb29tUmVxdWVzdEgAEjgKEmxl",
-            "YXZlX3Jvb21fcmVxdWVzdBgEIAEoCzIaLnRhbmtnYW1lLkxlYXZlUm9vbVJl",
-            "cXVlc3RIABI2ChFyb29tX2xpc3RfcmVxdWVzdBgFIAEoCzIZLnRhbmtnYW1l",
-            "LlJvb21MaXN0UmVxdWVzdEgAEjgKEmdhbWVfc3RhcnRfcmVxdWVzdBgGIAEo",
-            "CzIaLnRhbmtnYW1lLkdhbWVTdGFydFJlcXVlc3RIABI6ChNraWNrX3BsYXll",
-            "cl9yZXF1ZXN0GAcgASgLMhsudGFua2dhbWUuS2lja1BsYXllclJlcXVlc3RI",
-            "ABI2ChFnYW1lX292ZXJfcmVxdWVzdBgIIAEoCzIZLnRhbmtnYW1lLkdhbWVP",
-            "dmVyUmVxdWVzdEgAEjoKE2Nob29zZV9mb29kX3JlcXVlc3QYCSABKAsyGy50",
-            "YW5rZ2FtZS5DaG9vc2VGb29kUmVxdWVzdEgAEi8KDXNob290X3JlcXVlc3QY",
-            "CiABKAsyFi50YW5rZ2FtZS5TaG9vdFJlcXVlc3RIAEIGCgRkYXRhKtQBCglJ",
-            "bnB1dFR5cGUSDgoKSU5QVVRfTk9ORRAAEhEKDUlOUFVUX01PVkVfVVAQARIT",
-            "Cg9JTlBVVF9NT1ZFX0RPV04QAhITCg9JTlBVVF9NT1ZFX0xFRlQQAxIUChBJ",
-            "TlBVVF9NT1ZFX1JJR0hUEAQSFgoSSU5QVVRfTU9WRV9VUF9MRUZUEAUSFwoT",
-            "SU5QVVRfTU9WRV9VUF9SSUdIVBAGEhgKFElOUFVUX01PVkVfRE9XTl9MRUZU",
-            "EAcSGQoVSU5QVVRfTU9WRV9ET1dOX1JJR0hUEAhCDloMc2VydmVyL3Byb3Rv",
-            "YgZwcm90bzM="));
+            "IAEoCSIiCg9HYW1lT3ZlclJlcXVlc3QSDwoHcm9vbV9pZBgBIAEoCSJsCglH",
+            "YW1lU3RhcnQSDwoHcm9vbV9pZBgBIAEoCRIqCgxwbGF5ZXJfaW5mb3MYAiAD",
+            "KAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvEhMKC3JhbmRvbV9zZWVkGAMgASgD",
+            "Eg0KBWxldmVsGAQgASgFIhEKD1Jvb21MaXN0UmVxdWVzdCIyChBHYW1lU3Rh",
+            "cnRSZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSDQoFbGV2ZWwYAiABKAUijgEK",
+            "CUZyYW1lRGF0YRIRCglwbGF5ZXJfaWQYASABKAkSEgoKdGltZV9zdGFtcBgC",
+            "IAEoAxInCgppbnB1dF90eXBlGAMgASgOMhMudGFua2dhbWUuSW5wdXRUeXBl",
+            "Eg8KB3Nob290X3gYBCABKAMSDwoHc2hvb3RfeRgFIAEoAxIPCgdmb29kX2lk",
+            "GAYgASgFIksKC1NlcnZlckZyYW1lEhIKCnRpbWVfc3RhbXAYASABKAMSKAoL",
+            "ZnJhbWVfZGF0YXMYAiADKAsyEy50YW5rZ2FtZS5GcmFtZURhdGEi+AEKDVNl",
+            "cnZlck1lc3NhZ2USLQoMc2VydmVyX2ZyYW1lGAEgASgLMhUudGFua2dhbWUu",
+            "U2VydmVyRnJhbWVIABInCglyb29tX2luZm8YAiABKAsyEi50YW5rZ2FtZS5S",
+            "b29tSW5mb0gAEikKCmdhbWVfc3RhcnQYAyABKAsyEy50YW5rZ2FtZS5HYW1l",
+            "U3RhcnRIABIzCg9jb25uZWN0X3N1Y2Nlc3MYBCABKAsyGC50YW5rZ2FtZS5D",
+            "b25uZWN0U3VjY2Vzc0gAEicKCXJvb21fbGlzdBgFIAEoCzISLnRhbmtnYW1l",
+            "LlJvb21MaXN0SABCBgoEZGF0YSLWAwoNQ2xpZW50TWVzc2FnZRIpCgpmcmFt",
+            "ZV9kYXRhGAEgASgLMhMudGFua2dhbWUuRnJhbWVEYXRhSAASOgoTY3JlYXRl",
+            "X3Jvb21fcmVxdWVzdBgCIAEoCzIbLnRhbmtnYW1lLkNyZWF0ZVJvb21SZXF1",
+            "ZXN0SAASNgoRam9pbl9yb29tX3JlcXVlc3QYAyABKAsyGS50YW5rZ2FtZS5K",
+            "b2luUm9vbVJlcXVlc3RIABI4ChJsZWF2ZV9yb29tX3JlcXVlc3QYBCABKAsy",
+            "Gi50YW5rZ2FtZS5MZWF2ZVJvb21SZXF1ZXN0SAASNgoRcm9vbV9saXN0X3Jl",
+            "cXVlc3QYBSABKAsyGS50YW5rZ2FtZS5Sb29tTGlzdFJlcXVlc3RIABI4ChJn",
+            "YW1lX3N0YXJ0X3JlcXVlc3QYBiABKAsyGi50YW5rZ2FtZS5HYW1lU3RhcnRS",
+            "ZXF1ZXN0SAASOgoTa2lja19wbGF5ZXJfcmVxdWVzdBgHIAEoCzIbLnRhbmtn",
+            "YW1lLktpY2tQbGF5ZXJSZXF1ZXN0SAASNgoRZ2FtZV9vdmVyX3JlcXVlc3QY",
+            "CCABKAsyGS50YW5rZ2FtZS5HYW1lT3ZlclJlcXVlc3RIAEIGCgRkYXRhKtQB",
+            "CglJbnB1dFR5cGUSDgoKSU5QVVRfTk9ORRAAEhEKDUlOUFVUX01PVkVfVVAQ",
+            "ARITCg9JTlBVVF9NT1ZFX0RPV04QAhITCg9JTlBVVF9NT1ZFX0xFRlQQAxIU",
+            "ChBJTlBVVF9NT1ZFX1JJR0hUEAQSFgoSSU5QVVRfTU9WRV9VUF9MRUZUEAUS",
+            "FwoTSU5QVVRfTU9WRV9VUF9SSUdIVBAGEhgKFElOUFVUX01PVkVfRE9XTl9M",
+            "RUZUEAcSGQoVSU5QVVRfTU9WRV9ET1dOX1JJR0hUEAhCDloMc2VydmVyL3By",
+            "b3RvYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tankgame.InputType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -92,15 +86,13 @@ namespace Tankgame {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.LeaveRoomRequest), global::Tankgame.LeaveRoomRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.KickPlayerRequest), global::Tankgame.KickPlayerRequest.Parser, new[]{ "RoomId", "TargetPlayerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameOverRequest), global::Tankgame.GameOverRequest.Parser, new[]{ "RoomId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.PlayerInput), global::Tankgame.PlayerInput.Parser, new[]{ "PlayerId", "InputType" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ShootRequest), global::Tankgame.ShootRequest.Parser, new[]{ "PlayerId", "X", "Y" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStart), global::Tankgame.GameStart.Parser, new[]{ "RoomId", "PlayerInfos", "RandomSeed", "Level" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomListRequest), global::Tankgame.RoomListRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStartRequest), global::Tankgame.GameStartRequest.Parser, new[]{ "RoomId", "Level" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ChooseFoodRequest), global::Tankgame.ChooseFoodRequest.Parser, new[]{ "PlayerId", "FoodId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.FrameMessage), global::Tankgame.FrameMessage.Parser, new[]{ "FrameNumber", "Inputs", "ChooseFoodRequests", "ShootRequests" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ServerMessage), global::Tankgame.ServerMessage.Parser, new[]{ "FrameMessage", "RoomInfo", "GameStart", "ConnectSuccess", "RoomList" }, new[]{ "Data" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ClientMessage), global::Tankgame.ClientMessage.Parser, new[]{ "PlayerInput", "CreateRoomRequest", "JoinRoomRequest", "LeaveRoomRequest", "RoomListRequest", "GameStartRequest", "KickPlayerRequest", "GameOverRequest", "ChooseFoodRequest", "ShootRequest" }, new[]{ "Data" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.FrameData), global::Tankgame.FrameData.Parser, new[]{ "PlayerId", "TimeStamp", "InputType", "ShootX", "ShootY", "FoodId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ServerFrame), global::Tankgame.ServerFrame.Parser, new[]{ "TimeStamp", "FrameDatas" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ServerMessage), global::Tankgame.ServerMessage.Parser, new[]{ "ServerFrame", "RoomInfo", "GameStart", "ConnectSuccess", "RoomList" }, new[]{ "Data" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ClientMessage), global::Tankgame.ClientMessage.Parser, new[]{ "FrameData", "CreateRoomRequest", "JoinRoomRequest", "LeaveRoomRequest", "RoomListRequest", "GameStartRequest", "KickPlayerRequest", "GameOverRequest" }, new[]{ "Data" }, null, null, null)
           }));
     }
     #endregion
@@ -108,7 +100,7 @@ namespace Tankgame {
   }
   #region Enums
   /// <summary>
-  /// 玩家输入类型（8方向移动，开火已分离）
+  /// 玩家输入类型（8方向移动）
   /// </summary>
   public enum InputType {
     [pbr::OriginalName("INPUT_NONE")] InputNone = 0,
@@ -2853,519 +2845,6 @@ namespace Tankgame {
   }
 
   /// <summary>
-  /// 玩家移动输入
-  /// </summary>
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class PlayerInput : pb::IMessage<PlayerInput>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<PlayerInput> _parser = new pb::MessageParser<PlayerInput>(() => new PlayerInput());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<PlayerInput> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[9]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PlayerInput() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PlayerInput(PlayerInput other) : this() {
-      playerId_ = other.playerId_;
-      inputType_ = other.inputType_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PlayerInput Clone() {
-      return new PlayerInput(this);
-    }
-
-    /// <summary>Field number for the "player_id" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private string playerId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string PlayerId {
-      get { return playerId_; }
-      set {
-        playerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "input_type" field.</summary>
-    public const int InputTypeFieldNumber = 2;
-    private global::Tankgame.InputType inputType_ = global::Tankgame.InputType.InputNone;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Tankgame.InputType InputType {
-      get { return inputType_; }
-      set {
-        inputType_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as PlayerInput);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(PlayerInput other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (PlayerId != other.PlayerId) return false;
-      if (InputType != other.InputType) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
-      if (InputType != global::Tankgame.InputType.InputNone) hash ^= InputType.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (PlayerId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(PlayerId);
-      }
-      if (InputType != global::Tankgame.InputType.InputNone) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) InputType);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(PlayerId);
-      }
-      if (InputType != global::Tankgame.InputType.InputNone) {
-        output.WriteRawTag(16);
-        output.WriteEnum((int) InputType);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (PlayerId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerId);
-      }
-      if (InputType != global::Tankgame.InputType.InputNone) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InputType);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(PlayerInput other) {
-      if (other == null) {
-        return;
-      }
-      if (other.PlayerId.Length != 0) {
-        PlayerId = other.PlayerId;
-      }
-      if (other.InputType != global::Tankgame.InputType.InputNone) {
-        InputType = other.InputType;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            PlayerId = input.ReadString();
-            break;
-          }
-          case 16: {
-            InputType = (global::Tankgame.InputType) input.ReadEnum();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            PlayerId = input.ReadString();
-            break;
-          }
-          case 16: {
-            InputType = (global::Tankgame.InputType) input.ReadEnum();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  /// <summary>
-  /// 玩家开火请求（包含开火位置）
-  /// </summary>
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class ShootRequest : pb::IMessage<ShootRequest>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<ShootRequest> _parser = new pb::MessageParser<ShootRequest>(() => new ShootRequest());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ShootRequest> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[10]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ShootRequest() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ShootRequest(ShootRequest other) : this() {
-      playerId_ = other.playerId_;
-      x_ = other.x_;
-      y_ = other.y_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ShootRequest Clone() {
-      return new ShootRequest(this);
-    }
-
-    /// <summary>Field number for the "player_id" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private string playerId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string PlayerId {
-      get { return playerId_; }
-      set {
-        playerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "x" field.</summary>
-    public const int XFieldNumber = 2;
-    private long x_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long X {
-      get { return x_; }
-      set {
-        x_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "y" field.</summary>
-    public const int YFieldNumber = 3;
-    private long y_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long Y {
-      get { return y_; }
-      set {
-        y_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as ShootRequest);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ShootRequest other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (PlayerId != other.PlayerId) return false;
-      if (X != other.X) return false;
-      if (Y != other.Y) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
-      if (X != 0L) hash ^= X.GetHashCode();
-      if (Y != 0L) hash ^= Y.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (PlayerId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(PlayerId);
-      }
-      if (X != 0L) {
-        output.WriteRawTag(16);
-        output.WriteInt64(X);
-      }
-      if (Y != 0L) {
-        output.WriteRawTag(24);
-        output.WriteInt64(Y);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(PlayerId);
-      }
-      if (X != 0L) {
-        output.WriteRawTag(16);
-        output.WriteInt64(X);
-      }
-      if (Y != 0L) {
-        output.WriteRawTag(24);
-        output.WriteInt64(Y);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (PlayerId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerId);
-      }
-      if (X != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(X);
-      }
-      if (Y != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Y);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ShootRequest other) {
-      if (other == null) {
-        return;
-      }
-      if (other.PlayerId.Length != 0) {
-        PlayerId = other.PlayerId;
-      }
-      if (other.X != 0L) {
-        X = other.X;
-      }
-      if (other.Y != 0L) {
-        Y = other.Y;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            PlayerId = input.ReadString();
-            break;
-          }
-          case 16: {
-            X = input.ReadInt64();
-            break;
-          }
-          case 24: {
-            Y = input.ReadInt64();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            PlayerId = input.ReadString();
-            break;
-          }
-          case 16: {
-            X = input.ReadInt64();
-            break;
-          }
-          case 24: {
-            Y = input.ReadInt64();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  /// <summary>
   /// 游戏开始
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -3383,7 +2862,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[11]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3687,7 +3166,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[12]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3848,7 +3327,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[13]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4071,22 +3550,25 @@ namespace Tankgame {
 
   }
 
+  /// <summary>
+  /// 帧数据（客户端发送）
+  /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class ChooseFoodRequest : pb::IMessage<ChooseFoodRequest>
+  public sealed partial class FrameData : pb::IMessage<FrameData>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<ChooseFoodRequest> _parser = new pb::MessageParser<ChooseFoodRequest>(() => new ChooseFoodRequest());
+    private static readonly pb::MessageParser<FrameData> _parser = new pb::MessageParser<FrameData>(() => new FrameData());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ChooseFoodRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<FrameData> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[14]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4097,7 +3579,7 @@ namespace Tankgame {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ChooseFoodRequest() {
+    public FrameData() {
       OnConstruction();
     }
 
@@ -4105,16 +3587,20 @@ namespace Tankgame {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ChooseFoodRequest(ChooseFoodRequest other) : this() {
+    public FrameData(FrameData other) : this() {
       playerId_ = other.playerId_;
+      timeStamp_ = other.timeStamp_;
+      inputType_ = other.inputType_;
+      shootX_ = other.shootX_;
+      shootY_ = other.shootY_;
       foodId_ = other.foodId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ChooseFoodRequest Clone() {
-      return new ChooseFoodRequest(this);
+    public FrameData Clone() {
+      return new FrameData(this);
     }
 
     /// <summary>Field number for the "player_id" field.</summary>
@@ -4129,9 +3615,69 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "time_stamp" field.</summary>
+    public const int TimeStampFieldNumber = 2;
+    private long timeStamp_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long TimeStamp {
+      get { return timeStamp_; }
+      set {
+        timeStamp_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "input_type" field.</summary>
+    public const int InputTypeFieldNumber = 3;
+    private global::Tankgame.InputType inputType_ = global::Tankgame.InputType.InputNone;
+    /// <summary>
+    /// 移动输入，0表示无输入
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Tankgame.InputType InputType {
+      get { return inputType_; }
+      set {
+        inputType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "shoot_x" field.</summary>
+    public const int ShootXFieldNumber = 4;
+    private long shootX_;
+    /// <summary>
+    /// 开火位置X，0表示未开火
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long ShootX {
+      get { return shootX_; }
+      set {
+        shootX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "shoot_y" field.</summary>
+    public const int ShootYFieldNumber = 5;
+    private long shootY_;
+    /// <summary>
+    /// 开火位置Y，0表示未开火
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long ShootY {
+      get { return shootY_; }
+      set {
+        shootY_ = value;
+      }
+    }
+
     /// <summary>Field number for the "food_id" field.</summary>
-    public const int FoodIdFieldNumber = 2;
+    public const int FoodIdFieldNumber = 6;
     private int foodId_;
+    /// <summary>
+    /// 选择的食物ID，0表示未选择
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int FoodId {
@@ -4144,12 +3690,12 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as ChooseFoodRequest);
+      return Equals(other as FrameData);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ChooseFoodRequest other) {
+    public bool Equals(FrameData other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -4157,6 +3703,10 @@ namespace Tankgame {
         return true;
       }
       if (PlayerId != other.PlayerId) return false;
+      if (TimeStamp != other.TimeStamp) return false;
+      if (InputType != other.InputType) return false;
+      if (ShootX != other.ShootX) return false;
+      if (ShootY != other.ShootY) return false;
       if (FoodId != other.FoodId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -4166,6 +3716,10 @@ namespace Tankgame {
     public override int GetHashCode() {
       int hash = 1;
       if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
+      if (TimeStamp != 0L) hash ^= TimeStamp.GetHashCode();
+      if (InputType != global::Tankgame.InputType.InputNone) hash ^= InputType.GetHashCode();
+      if (ShootX != 0L) hash ^= ShootX.GetHashCode();
+      if (ShootY != 0L) hash ^= ShootY.GetHashCode();
       if (FoodId != 0) hash ^= FoodId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -4189,8 +3743,24 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(PlayerId);
       }
-      if (FoodId != 0) {
+      if (TimeStamp != 0L) {
         output.WriteRawTag(16);
+        output.WriteInt64(TimeStamp);
+      }
+      if (InputType != global::Tankgame.InputType.InputNone) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) InputType);
+      }
+      if (ShootX != 0L) {
+        output.WriteRawTag(32);
+        output.WriteInt64(ShootX);
+      }
+      if (ShootY != 0L) {
+        output.WriteRawTag(40);
+        output.WriteInt64(ShootY);
+      }
+      if (FoodId != 0) {
+        output.WriteRawTag(48);
         output.WriteInt32(FoodId);
       }
       if (_unknownFields != null) {
@@ -4207,8 +3777,24 @@ namespace Tankgame {
         output.WriteRawTag(10);
         output.WriteString(PlayerId);
       }
-      if (FoodId != 0) {
+      if (TimeStamp != 0L) {
         output.WriteRawTag(16);
+        output.WriteInt64(TimeStamp);
+      }
+      if (InputType != global::Tankgame.InputType.InputNone) {
+        output.WriteRawTag(24);
+        output.WriteEnum((int) InputType);
+      }
+      if (ShootX != 0L) {
+        output.WriteRawTag(32);
+        output.WriteInt64(ShootX);
+      }
+      if (ShootY != 0L) {
+        output.WriteRawTag(40);
+        output.WriteInt64(ShootY);
+      }
+      if (FoodId != 0) {
+        output.WriteRawTag(48);
         output.WriteInt32(FoodId);
       }
       if (_unknownFields != null) {
@@ -4224,6 +3810,18 @@ namespace Tankgame {
       if (PlayerId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerId);
       }
+      if (TimeStamp != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(TimeStamp);
+      }
+      if (InputType != global::Tankgame.InputType.InputNone) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InputType);
+      }
+      if (ShootX != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(ShootX);
+      }
+      if (ShootY != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(ShootY);
+      }
       if (FoodId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(FoodId);
       }
@@ -4235,12 +3833,24 @@ namespace Tankgame {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ChooseFoodRequest other) {
+    public void MergeFrom(FrameData other) {
       if (other == null) {
         return;
       }
       if (other.PlayerId.Length != 0) {
         PlayerId = other.PlayerId;
+      }
+      if (other.TimeStamp != 0L) {
+        TimeStamp = other.TimeStamp;
+      }
+      if (other.InputType != global::Tankgame.InputType.InputNone) {
+        InputType = other.InputType;
+      }
+      if (other.ShootX != 0L) {
+        ShootX = other.ShootX;
+      }
+      if (other.ShootY != 0L) {
+        ShootY = other.ShootY;
       }
       if (other.FoodId != 0) {
         FoodId = other.FoodId;
@@ -4269,6 +3879,22 @@ namespace Tankgame {
             break;
           }
           case 16: {
+            TimeStamp = input.ReadInt64();
+            break;
+          }
+          case 24: {
+            InputType = (global::Tankgame.InputType) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            ShootX = input.ReadInt64();
+            break;
+          }
+          case 40: {
+            ShootY = input.ReadInt64();
+            break;
+          }
+          case 48: {
             FoodId = input.ReadInt32();
             break;
           }
@@ -4296,6 +3922,22 @@ namespace Tankgame {
             break;
           }
           case 16: {
+            TimeStamp = input.ReadInt64();
+            break;
+          }
+          case 24: {
+            InputType = (global::Tankgame.InputType) input.ReadEnum();
+            break;
+          }
+          case 32: {
+            ShootX = input.ReadInt64();
+            break;
+          }
+          case 40: {
+            ShootY = input.ReadInt64();
+            break;
+          }
+          case 48: {
             FoodId = input.ReadInt32();
             break;
           }
@@ -4306,22 +3948,25 @@ namespace Tankgame {
 
   }
 
+  /// <summary>
+  /// 服务器帧消息（服务器广播）
+  /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class FrameMessage : pb::IMessage<FrameMessage>
+  public sealed partial class ServerFrame : pb::IMessage<ServerFrame>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<FrameMessage> _parser = new pb::MessageParser<FrameMessage>(() => new FrameMessage());
+    private static readonly pb::MessageParser<ServerFrame> _parser = new pb::MessageParser<ServerFrame>(() => new ServerFrame());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<FrameMessage> Parser { get { return _parser; } }
+    public static pb::MessageParser<ServerFrame> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[15]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4332,7 +3977,7 @@ namespace Tankgame {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public FrameMessage() {
+    public ServerFrame() {
       OnConstruction();
     }
 
@@ -4340,87 +3985,58 @@ namespace Tankgame {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public FrameMessage(FrameMessage other) : this() {
-      frameNumber_ = other.frameNumber_;
-      inputs_ = other.inputs_.Clone();
-      chooseFoodRequests_ = other.chooseFoodRequests_.Clone();
-      shootRequests_ = other.shootRequests_.Clone();
+    public ServerFrame(ServerFrame other) : this() {
+      timeStamp_ = other.timeStamp_;
+      frameDatas_ = other.frameDatas_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public FrameMessage Clone() {
-      return new FrameMessage(this);
+    public ServerFrame Clone() {
+      return new ServerFrame(this);
     }
 
-    /// <summary>Field number for the "frame_number" field.</summary>
-    public const int FrameNumberFieldNumber = 1;
-    private long frameNumber_;
+    /// <summary>Field number for the "time_stamp" field.</summary>
+    public const int TimeStampFieldNumber = 1;
+    private long timeStamp_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long FrameNumber {
-      get { return frameNumber_; }
+    public long TimeStamp {
+      get { return timeStamp_; }
       set {
-        frameNumber_ = value;
+        timeStamp_ = value;
       }
     }
 
-    /// <summary>Field number for the "inputs" field.</summary>
-    public const int InputsFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Tankgame.PlayerInput> _repeated_inputs_codec
-        = pb::FieldCodec.ForMessage(18, global::Tankgame.PlayerInput.Parser);
-    private readonly pbc::RepeatedField<global::Tankgame.PlayerInput> inputs_ = new pbc::RepeatedField<global::Tankgame.PlayerInput>();
+    /// <summary>Field number for the "frame_datas" field.</summary>
+    public const int FrameDatasFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::Tankgame.FrameData> _repeated_frameDatas_codec
+        = pb::FieldCodec.ForMessage(18, global::Tankgame.FrameData.Parser);
+    private readonly pbc::RepeatedField<global::Tankgame.FrameData> frameDatas_ = new pbc::RepeatedField<global::Tankgame.FrameData>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Tankgame.PlayerInput> Inputs {
-      get { return inputs_; }
-    }
-
-    /// <summary>Field number for the "choose_food_requests" field.</summary>
-    public const int ChooseFoodRequestsFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Tankgame.ChooseFoodRequest> _repeated_chooseFoodRequests_codec
-        = pb::FieldCodec.ForMessage(26, global::Tankgame.ChooseFoodRequest.Parser);
-    private readonly pbc::RepeatedField<global::Tankgame.ChooseFoodRequest> chooseFoodRequests_ = new pbc::RepeatedField<global::Tankgame.ChooseFoodRequest>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Tankgame.ChooseFoodRequest> ChooseFoodRequests {
-      get { return chooseFoodRequests_; }
-    }
-
-    /// <summary>Field number for the "shoot_requests" field.</summary>
-    public const int ShootRequestsFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Tankgame.ShootRequest> _repeated_shootRequests_codec
-        = pb::FieldCodec.ForMessage(34, global::Tankgame.ShootRequest.Parser);
-    private readonly pbc::RepeatedField<global::Tankgame.ShootRequest> shootRequests_ = new pbc::RepeatedField<global::Tankgame.ShootRequest>();
-    /// <summary>
-    /// 开火请求列表
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Tankgame.ShootRequest> ShootRequests {
-      get { return shootRequests_; }
+    public pbc::RepeatedField<global::Tankgame.FrameData> FrameDatas {
+      get { return frameDatas_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as FrameMessage);
+      return Equals(other as ServerFrame);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(FrameMessage other) {
+    public bool Equals(ServerFrame other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (FrameNumber != other.FrameNumber) return false;
-      if(!inputs_.Equals(other.inputs_)) return false;
-      if(!chooseFoodRequests_.Equals(other.chooseFoodRequests_)) return false;
-      if(!shootRequests_.Equals(other.shootRequests_)) return false;
+      if (TimeStamp != other.TimeStamp) return false;
+      if(!frameDatas_.Equals(other.frameDatas_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4428,10 +4044,8 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (FrameNumber != 0L) hash ^= FrameNumber.GetHashCode();
-      hash ^= inputs_.GetHashCode();
-      hash ^= chooseFoodRequests_.GetHashCode();
-      hash ^= shootRequests_.GetHashCode();
+      if (TimeStamp != 0L) hash ^= TimeStamp.GetHashCode();
+      hash ^= frameDatas_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4450,13 +4064,11 @@ namespace Tankgame {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (FrameNumber != 0L) {
+      if (TimeStamp != 0L) {
         output.WriteRawTag(8);
-        output.WriteInt64(FrameNumber);
+        output.WriteInt64(TimeStamp);
       }
-      inputs_.WriteTo(output, _repeated_inputs_codec);
-      chooseFoodRequests_.WriteTo(output, _repeated_chooseFoodRequests_codec);
-      shootRequests_.WriteTo(output, _repeated_shootRequests_codec);
+      frameDatas_.WriteTo(output, _repeated_frameDatas_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -4467,13 +4079,11 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (FrameNumber != 0L) {
+      if (TimeStamp != 0L) {
         output.WriteRawTag(8);
-        output.WriteInt64(FrameNumber);
+        output.WriteInt64(TimeStamp);
       }
-      inputs_.WriteTo(ref output, _repeated_inputs_codec);
-      chooseFoodRequests_.WriteTo(ref output, _repeated_chooseFoodRequests_codec);
-      shootRequests_.WriteTo(ref output, _repeated_shootRequests_codec);
+      frameDatas_.WriteTo(ref output, _repeated_frameDatas_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -4484,12 +4094,10 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (FrameNumber != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(FrameNumber);
+      if (TimeStamp != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(TimeStamp);
       }
-      size += inputs_.CalculateSize(_repeated_inputs_codec);
-      size += chooseFoodRequests_.CalculateSize(_repeated_chooseFoodRequests_codec);
-      size += shootRequests_.CalculateSize(_repeated_shootRequests_codec);
+      size += frameDatas_.CalculateSize(_repeated_frameDatas_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -4498,16 +4106,14 @@ namespace Tankgame {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(FrameMessage other) {
+    public void MergeFrom(ServerFrame other) {
       if (other == null) {
         return;
       }
-      if (other.FrameNumber != 0L) {
-        FrameNumber = other.FrameNumber;
+      if (other.TimeStamp != 0L) {
+        TimeStamp = other.TimeStamp;
       }
-      inputs_.Add(other.inputs_);
-      chooseFoodRequests_.Add(other.chooseFoodRequests_);
-      shootRequests_.Add(other.shootRequests_);
+      frameDatas_.Add(other.frameDatas_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -4528,19 +4134,11 @@ namespace Tankgame {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            FrameNumber = input.ReadInt64();
+            TimeStamp = input.ReadInt64();
             break;
           }
           case 18: {
-            inputs_.AddEntriesFrom(input, _repeated_inputs_codec);
-            break;
-          }
-          case 26: {
-            chooseFoodRequests_.AddEntriesFrom(input, _repeated_chooseFoodRequests_codec);
-            break;
-          }
-          case 34: {
-            shootRequests_.AddEntriesFrom(input, _repeated_shootRequests_codec);
+            frameDatas_.AddEntriesFrom(input, _repeated_frameDatas_codec);
             break;
           }
         }
@@ -4563,19 +4161,11 @@ namespace Tankgame {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            FrameNumber = input.ReadInt64();
+            TimeStamp = input.ReadInt64();
             break;
           }
           case 18: {
-            inputs_.AddEntriesFrom(ref input, _repeated_inputs_codec);
-            break;
-          }
-          case 26: {
-            chooseFoodRequests_.AddEntriesFrom(ref input, _repeated_chooseFoodRequests_codec);
-            break;
-          }
-          case 34: {
-            shootRequests_.AddEntriesFrom(ref input, _repeated_shootRequests_codec);
+            frameDatas_.AddEntriesFrom(ref input, _repeated_frameDatas_codec);
             break;
           }
         }
@@ -4603,7 +4193,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[16]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4624,8 +4214,8 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ServerMessage(ServerMessage other) : this() {
       switch (other.DataCase) {
-        case DataOneofCase.FrameMessage:
-          FrameMessage = other.FrameMessage.Clone();
+        case DataOneofCase.ServerFrame:
+          ServerFrame = other.ServerFrame.Clone();
           break;
         case DataOneofCase.RoomInfo:
           RoomInfo = other.RoomInfo.Clone();
@@ -4650,15 +4240,15 @@ namespace Tankgame {
       return new ServerMessage(this);
     }
 
-    /// <summary>Field number for the "frame_message" field.</summary>
-    public const int FrameMessageFieldNumber = 1;
+    /// <summary>Field number for the "server_frame" field.</summary>
+    public const int ServerFrameFieldNumber = 1;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Tankgame.FrameMessage FrameMessage {
-      get { return dataCase_ == DataOneofCase.FrameMessage ? (global::Tankgame.FrameMessage) data_ : null; }
+    public global::Tankgame.ServerFrame ServerFrame {
+      get { return dataCase_ == DataOneofCase.ServerFrame ? (global::Tankgame.ServerFrame) data_ : null; }
       set {
         data_ = value;
-        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.FrameMessage;
+        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.ServerFrame;
       }
     }
 
@@ -4714,7 +4304,7 @@ namespace Tankgame {
     /// <summary>Enum of possible cases for the "data" oneof.</summary>
     public enum DataOneofCase {
       None = 0,
-      FrameMessage = 1,
+      ServerFrame = 1,
       RoomInfo = 2,
       GameStart = 3,
       ConnectSuccess = 4,
@@ -4749,7 +4339,7 @@ namespace Tankgame {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(FrameMessage, other.FrameMessage)) return false;
+      if (!object.Equals(ServerFrame, other.ServerFrame)) return false;
       if (!object.Equals(RoomInfo, other.RoomInfo)) return false;
       if (!object.Equals(GameStart, other.GameStart)) return false;
       if (!object.Equals(ConnectSuccess, other.ConnectSuccess)) return false;
@@ -4762,7 +4352,7 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (dataCase_ == DataOneofCase.FrameMessage) hash ^= FrameMessage.GetHashCode();
+      if (dataCase_ == DataOneofCase.ServerFrame) hash ^= ServerFrame.GetHashCode();
       if (dataCase_ == DataOneofCase.RoomInfo) hash ^= RoomInfo.GetHashCode();
       if (dataCase_ == DataOneofCase.GameStart) hash ^= GameStart.GetHashCode();
       if (dataCase_ == DataOneofCase.ConnectSuccess) hash ^= ConnectSuccess.GetHashCode();
@@ -4786,9 +4376,9 @@ namespace Tankgame {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (dataCase_ == DataOneofCase.FrameMessage) {
+      if (dataCase_ == DataOneofCase.ServerFrame) {
         output.WriteRawTag(10);
-        output.WriteMessage(FrameMessage);
+        output.WriteMessage(ServerFrame);
       }
       if (dataCase_ == DataOneofCase.RoomInfo) {
         output.WriteRawTag(18);
@@ -4816,9 +4406,9 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (dataCase_ == DataOneofCase.FrameMessage) {
+      if (dataCase_ == DataOneofCase.ServerFrame) {
         output.WriteRawTag(10);
-        output.WriteMessage(FrameMessage);
+        output.WriteMessage(ServerFrame);
       }
       if (dataCase_ == DataOneofCase.RoomInfo) {
         output.WriteRawTag(18);
@@ -4846,8 +4436,8 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (dataCase_ == DataOneofCase.FrameMessage) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FrameMessage);
+      if (dataCase_ == DataOneofCase.ServerFrame) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ServerFrame);
       }
       if (dataCase_ == DataOneofCase.RoomInfo) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(RoomInfo);
@@ -4874,11 +4464,11 @@ namespace Tankgame {
         return;
       }
       switch (other.DataCase) {
-        case DataOneofCase.FrameMessage:
-          if (FrameMessage == null) {
-            FrameMessage = new global::Tankgame.FrameMessage();
+        case DataOneofCase.ServerFrame:
+          if (ServerFrame == null) {
+            ServerFrame = new global::Tankgame.ServerFrame();
           }
-          FrameMessage.MergeFrom(other.FrameMessage);
+          ServerFrame.MergeFrom(other.ServerFrame);
           break;
         case DataOneofCase.RoomInfo:
           if (RoomInfo == null) {
@@ -4926,12 +4516,12 @@ namespace Tankgame {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            global::Tankgame.FrameMessage subBuilder = new global::Tankgame.FrameMessage();
-            if (dataCase_ == DataOneofCase.FrameMessage) {
-              subBuilder.MergeFrom(FrameMessage);
+            global::Tankgame.ServerFrame subBuilder = new global::Tankgame.ServerFrame();
+            if (dataCase_ == DataOneofCase.ServerFrame) {
+              subBuilder.MergeFrom(ServerFrame);
             }
             input.ReadMessage(subBuilder);
-            FrameMessage = subBuilder;
+            ServerFrame = subBuilder;
             break;
           }
           case 18: {
@@ -4990,12 +4580,12 @@ namespace Tankgame {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            global::Tankgame.FrameMessage subBuilder = new global::Tankgame.FrameMessage();
-            if (dataCase_ == DataOneofCase.FrameMessage) {
-              subBuilder.MergeFrom(FrameMessage);
+            global::Tankgame.ServerFrame subBuilder = new global::Tankgame.ServerFrame();
+            if (dataCase_ == DataOneofCase.ServerFrame) {
+              subBuilder.MergeFrom(ServerFrame);
             }
             input.ReadMessage(subBuilder);
-            FrameMessage = subBuilder;
+            ServerFrame = subBuilder;
             break;
           }
           case 18: {
@@ -5059,7 +4649,7 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[17]; }
+      get { return global::Tankgame.GameReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5080,8 +4670,8 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ClientMessage(ClientMessage other) : this() {
       switch (other.DataCase) {
-        case DataOneofCase.PlayerInput:
-          PlayerInput = other.PlayerInput.Clone();
+        case DataOneofCase.FrameData:
+          FrameData = other.FrameData.Clone();
           break;
         case DataOneofCase.CreateRoomRequest:
           CreateRoomRequest = other.CreateRoomRequest.Clone();
@@ -5104,12 +4694,6 @@ namespace Tankgame {
         case DataOneofCase.GameOverRequest:
           GameOverRequest = other.GameOverRequest.Clone();
           break;
-        case DataOneofCase.ChooseFoodRequest:
-          ChooseFoodRequest = other.ChooseFoodRequest.Clone();
-          break;
-        case DataOneofCase.ShootRequest:
-          ShootRequest = other.ShootRequest.Clone();
-          break;
       }
 
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -5121,15 +4705,18 @@ namespace Tankgame {
       return new ClientMessage(this);
     }
 
-    /// <summary>Field number for the "player_input" field.</summary>
-    public const int PlayerInputFieldNumber = 1;
+    /// <summary>Field number for the "frame_data" field.</summary>
+    public const int FrameDataFieldNumber = 1;
+    /// <summary>
+    /// 帧数据（移动、开火、选择食物）
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Tankgame.PlayerInput PlayerInput {
-      get { return dataCase_ == DataOneofCase.PlayerInput ? (global::Tankgame.PlayerInput) data_ : null; }
+    public global::Tankgame.FrameData FrameData {
+      get { return dataCase_ == DataOneofCase.FrameData ? (global::Tankgame.FrameData) data_ : null; }
       set {
         data_ = value;
-        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.PlayerInput;
+        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.FrameData;
       }
     }
 
@@ -5217,38 +4804,11 @@ namespace Tankgame {
       }
     }
 
-    /// <summary>Field number for the "choose_food_request" field.</summary>
-    public const int ChooseFoodRequestFieldNumber = 9;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Tankgame.ChooseFoodRequest ChooseFoodRequest {
-      get { return dataCase_ == DataOneofCase.ChooseFoodRequest ? (global::Tankgame.ChooseFoodRequest) data_ : null; }
-      set {
-        data_ = value;
-        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.ChooseFoodRequest;
-      }
-    }
-
-    /// <summary>Field number for the "shoot_request" field.</summary>
-    public const int ShootRequestFieldNumber = 10;
-    /// <summary>
-    /// 开火请求
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Tankgame.ShootRequest ShootRequest {
-      get { return dataCase_ == DataOneofCase.ShootRequest ? (global::Tankgame.ShootRequest) data_ : null; }
-      set {
-        data_ = value;
-        dataCase_ = value == null ? DataOneofCase.None : DataOneofCase.ShootRequest;
-      }
-    }
-
     private object data_;
     /// <summary>Enum of possible cases for the "data" oneof.</summary>
     public enum DataOneofCase {
       None = 0,
-      PlayerInput = 1,
+      FrameData = 1,
       CreateRoomRequest = 2,
       JoinRoomRequest = 3,
       LeaveRoomRequest = 4,
@@ -5256,8 +4816,6 @@ namespace Tankgame {
       GameStartRequest = 6,
       KickPlayerRequest = 7,
       GameOverRequest = 8,
-      ChooseFoodRequest = 9,
-      ShootRequest = 10,
     }
     private DataOneofCase dataCase_ = DataOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5288,7 +4846,7 @@ namespace Tankgame {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (!object.Equals(PlayerInput, other.PlayerInput)) return false;
+      if (!object.Equals(FrameData, other.FrameData)) return false;
       if (!object.Equals(CreateRoomRequest, other.CreateRoomRequest)) return false;
       if (!object.Equals(JoinRoomRequest, other.JoinRoomRequest)) return false;
       if (!object.Equals(LeaveRoomRequest, other.LeaveRoomRequest)) return false;
@@ -5296,8 +4854,6 @@ namespace Tankgame {
       if (!object.Equals(GameStartRequest, other.GameStartRequest)) return false;
       if (!object.Equals(KickPlayerRequest, other.KickPlayerRequest)) return false;
       if (!object.Equals(GameOverRequest, other.GameOverRequest)) return false;
-      if (!object.Equals(ChooseFoodRequest, other.ChooseFoodRequest)) return false;
-      if (!object.Equals(ShootRequest, other.ShootRequest)) return false;
       if (DataCase != other.DataCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -5306,7 +4862,7 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (dataCase_ == DataOneofCase.PlayerInput) hash ^= PlayerInput.GetHashCode();
+      if (dataCase_ == DataOneofCase.FrameData) hash ^= FrameData.GetHashCode();
       if (dataCase_ == DataOneofCase.CreateRoomRequest) hash ^= CreateRoomRequest.GetHashCode();
       if (dataCase_ == DataOneofCase.JoinRoomRequest) hash ^= JoinRoomRequest.GetHashCode();
       if (dataCase_ == DataOneofCase.LeaveRoomRequest) hash ^= LeaveRoomRequest.GetHashCode();
@@ -5314,8 +4870,6 @@ namespace Tankgame {
       if (dataCase_ == DataOneofCase.GameStartRequest) hash ^= GameStartRequest.GetHashCode();
       if (dataCase_ == DataOneofCase.KickPlayerRequest) hash ^= KickPlayerRequest.GetHashCode();
       if (dataCase_ == DataOneofCase.GameOverRequest) hash ^= GameOverRequest.GetHashCode();
-      if (dataCase_ == DataOneofCase.ChooseFoodRequest) hash ^= ChooseFoodRequest.GetHashCode();
-      if (dataCase_ == DataOneofCase.ShootRequest) hash ^= ShootRequest.GetHashCode();
       hash ^= (int) dataCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -5335,9 +4889,9 @@ namespace Tankgame {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (dataCase_ == DataOneofCase.PlayerInput) {
+      if (dataCase_ == DataOneofCase.FrameData) {
         output.WriteRawTag(10);
-        output.WriteMessage(PlayerInput);
+        output.WriteMessage(FrameData);
       }
       if (dataCase_ == DataOneofCase.CreateRoomRequest) {
         output.WriteRawTag(18);
@@ -5366,14 +4920,6 @@ namespace Tankgame {
       if (dataCase_ == DataOneofCase.GameOverRequest) {
         output.WriteRawTag(66);
         output.WriteMessage(GameOverRequest);
-      }
-      if (dataCase_ == DataOneofCase.ChooseFoodRequest) {
-        output.WriteRawTag(74);
-        output.WriteMessage(ChooseFoodRequest);
-      }
-      if (dataCase_ == DataOneofCase.ShootRequest) {
-        output.WriteRawTag(82);
-        output.WriteMessage(ShootRequest);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -5385,9 +4931,9 @@ namespace Tankgame {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (dataCase_ == DataOneofCase.PlayerInput) {
+      if (dataCase_ == DataOneofCase.FrameData) {
         output.WriteRawTag(10);
-        output.WriteMessage(PlayerInput);
+        output.WriteMessage(FrameData);
       }
       if (dataCase_ == DataOneofCase.CreateRoomRequest) {
         output.WriteRawTag(18);
@@ -5417,14 +4963,6 @@ namespace Tankgame {
         output.WriteRawTag(66);
         output.WriteMessage(GameOverRequest);
       }
-      if (dataCase_ == DataOneofCase.ChooseFoodRequest) {
-        output.WriteRawTag(74);
-        output.WriteMessage(ChooseFoodRequest);
-      }
-      if (dataCase_ == DataOneofCase.ShootRequest) {
-        output.WriteRawTag(82);
-        output.WriteMessage(ShootRequest);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -5435,8 +4973,8 @@ namespace Tankgame {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (dataCase_ == DataOneofCase.PlayerInput) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(PlayerInput);
+      if (dataCase_ == DataOneofCase.FrameData) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(FrameData);
       }
       if (dataCase_ == DataOneofCase.CreateRoomRequest) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreateRoomRequest);
@@ -5459,12 +4997,6 @@ namespace Tankgame {
       if (dataCase_ == DataOneofCase.GameOverRequest) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(GameOverRequest);
       }
-      if (dataCase_ == DataOneofCase.ChooseFoodRequest) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ChooseFoodRequest);
-      }
-      if (dataCase_ == DataOneofCase.ShootRequest) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ShootRequest);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -5478,11 +5010,11 @@ namespace Tankgame {
         return;
       }
       switch (other.DataCase) {
-        case DataOneofCase.PlayerInput:
-          if (PlayerInput == null) {
-            PlayerInput = new global::Tankgame.PlayerInput();
+        case DataOneofCase.FrameData:
+          if (FrameData == null) {
+            FrameData = new global::Tankgame.FrameData();
           }
-          PlayerInput.MergeFrom(other.PlayerInput);
+          FrameData.MergeFrom(other.FrameData);
           break;
         case DataOneofCase.CreateRoomRequest:
           if (CreateRoomRequest == null) {
@@ -5526,18 +5058,6 @@ namespace Tankgame {
           }
           GameOverRequest.MergeFrom(other.GameOverRequest);
           break;
-        case DataOneofCase.ChooseFoodRequest:
-          if (ChooseFoodRequest == null) {
-            ChooseFoodRequest = new global::Tankgame.ChooseFoodRequest();
-          }
-          ChooseFoodRequest.MergeFrom(other.ChooseFoodRequest);
-          break;
-        case DataOneofCase.ShootRequest:
-          if (ShootRequest == null) {
-            ShootRequest = new global::Tankgame.ShootRequest();
-          }
-          ShootRequest.MergeFrom(other.ShootRequest);
-          break;
       }
 
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -5560,12 +5080,12 @@ namespace Tankgame {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            global::Tankgame.PlayerInput subBuilder = new global::Tankgame.PlayerInput();
-            if (dataCase_ == DataOneofCase.PlayerInput) {
-              subBuilder.MergeFrom(PlayerInput);
+            global::Tankgame.FrameData subBuilder = new global::Tankgame.FrameData();
+            if (dataCase_ == DataOneofCase.FrameData) {
+              subBuilder.MergeFrom(FrameData);
             }
             input.ReadMessage(subBuilder);
-            PlayerInput = subBuilder;
+            FrameData = subBuilder;
             break;
           }
           case 18: {
@@ -5629,24 +5149,6 @@ namespace Tankgame {
             }
             input.ReadMessage(subBuilder);
             GameOverRequest = subBuilder;
-            break;
-          }
-          case 74: {
-            global::Tankgame.ChooseFoodRequest subBuilder = new global::Tankgame.ChooseFoodRequest();
-            if (dataCase_ == DataOneofCase.ChooseFoodRequest) {
-              subBuilder.MergeFrom(ChooseFoodRequest);
-            }
-            input.ReadMessage(subBuilder);
-            ChooseFoodRequest = subBuilder;
-            break;
-          }
-          case 82: {
-            global::Tankgame.ShootRequest subBuilder = new global::Tankgame.ShootRequest();
-            if (dataCase_ == DataOneofCase.ShootRequest) {
-              subBuilder.MergeFrom(ShootRequest);
-            }
-            input.ReadMessage(subBuilder);
-            ShootRequest = subBuilder;
             break;
           }
         }
@@ -5669,12 +5171,12 @@ namespace Tankgame {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            global::Tankgame.PlayerInput subBuilder = new global::Tankgame.PlayerInput();
-            if (dataCase_ == DataOneofCase.PlayerInput) {
-              subBuilder.MergeFrom(PlayerInput);
+            global::Tankgame.FrameData subBuilder = new global::Tankgame.FrameData();
+            if (dataCase_ == DataOneofCase.FrameData) {
+              subBuilder.MergeFrom(FrameData);
             }
             input.ReadMessage(subBuilder);
-            PlayerInput = subBuilder;
+            FrameData = subBuilder;
             break;
           }
           case 18: {
@@ -5738,24 +5240,6 @@ namespace Tankgame {
             }
             input.ReadMessage(subBuilder);
             GameOverRequest = subBuilder;
-            break;
-          }
-          case 74: {
-            global::Tankgame.ChooseFoodRequest subBuilder = new global::Tankgame.ChooseFoodRequest();
-            if (dataCase_ == DataOneofCase.ChooseFoodRequest) {
-              subBuilder.MergeFrom(ChooseFoodRequest);
-            }
-            input.ReadMessage(subBuilder);
-            ChooseFoodRequest = subBuilder;
-            break;
-          }
-          case 82: {
-            global::Tankgame.ShootRequest subBuilder = new global::Tankgame.ShootRequest();
-            if (dataCase_ == DataOneofCase.ShootRequest) {
-              subBuilder.MergeFrom(ShootRequest);
-            }
-            input.ReadMessage(subBuilder);
-            ShootRequest = subBuilder;
             break;
           }
         }

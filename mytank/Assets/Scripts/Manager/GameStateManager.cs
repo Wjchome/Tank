@@ -8,43 +8,50 @@ using UnityEngine.Serialization;
 
 public class GameStateManager : SingletonMono<GameStateManager>
 {
-    public void OnFoodsRequest(List<ChooseFoodRequest> foodRequests)
+    /// <summary>
+    /// 处理服务器帧数据
+    /// </summary>
+    public void OnServerFrame(ServerFrame serverFrame)
     {
-        foreach (var foodRequest in foodRequests)
+        foreach (var frameData in serverFrame.FrameDatas)
         {
-            PlayerTankController tank = PlayerManager.Instance.activePlayerDic[foodRequest.PlayerId];
-            ApplyFoodToTank(tank, foodRequest.FoodId);
-            AudioManager.Instance.Play("GetUp");
-            tank.tankAnimator2.Play("GetUp");
-        }
-    }
-
-    public void OnFrameInputs(List<PlayerInput> inputs)
-    {
-        foreach (var input in inputs)
-        {
-            ApplyInputToTank(PlayerManager.Instance.activePlayerDic[input.PlayerId], input);
-        }
-    }
-    
-    public void OnShootRequests(List<ShootRequest> shootRequests)
-    {
-        foreach (var shootRequest in shootRequests)
-        {
-            if (PlayerManager.Instance.activePlayerDic.TryGetValue(shootRequest.PlayerId, out var tank))
+            if (!PlayerManager.Instance.activePlayerDic.TryGetValue(frameData.PlayerId, out var tank))
             {
-                if (tank != null)
-                {
-                    tank.ShootAt(shootRequest.X, shootRequest.Y);
-                }
+                continue;
+            }
+
+            if (tank == null)
+            {
+                continue;
+            }
+
+            // 处理移动输入
+            if (frameData.InputType != InputType.InputNone)
+            {
+                ApplyInputToTank(tank, frameData.InputType);
+            }
+
+            // 处理开火
+            if (frameData.ShootX != 0 || frameData.ShootY != 0)
+            {
+                tank.ShootAt(frameData.ShootX, frameData.ShootY);
+            }
+
+            // 处理食物选择
+            if (frameData.FoodId != -1)
+            {
+                ApplyFoodToTank(tank, frameData.FoodId);
+                AudioManager.Instance.Play("GetUp");
+                tank.tankAnimator2.Play("GetUp");
             }
         }
     }
+    
 
-    void ApplyInputToTank(PlayerTankController tank, PlayerInput input)
+    void ApplyInputToTank(PlayerTankController tank, InputType inputType)
     {
         if (tank == null) return;
-        switch (input.InputType)
+        switch (inputType)
         {
             case InputType.InputMoveUp:
                 tank.MoveBy(Direction.Up);

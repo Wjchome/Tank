@@ -209,7 +209,7 @@ public class PlayerTankController : TankController
         if (moveDir != Vector2Int.zero)
         {
             var inputType = moveDir.ToDirection().ToInputType();
-            NetworkManager.Instance.SendPlayerInput(inputType);
+            NetworkManager.Instance.SendFrameData(inputType: inputType);
         }
 
         // 触屏问题
@@ -283,7 +283,7 @@ public class PlayerTankController : TankController
                 long targetX = targetXFix.RawValue;
                 long targetY = targetYFix.RawValue;
 
-                NetworkManager.Instance.SendShootRequest(targetX, targetY);
+                NetworkManager.Instance.SendFrameData(shootX: targetX, shootY: targetY);
                 lastShootFrame = NetworkManager.Instance.currentFrame;
             }
         }

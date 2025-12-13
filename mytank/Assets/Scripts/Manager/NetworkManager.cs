@@ -217,12 +217,9 @@ public class NetworkManager : SingletonMono<NetworkManager>
 
     void ProcessServerMessage(ServerMessage message)
     {
-        if (message.FrameMessage != null)
+        if (message.ServerFrame != null)
         {
-            currentFrame = message.FrameMessage.FrameNumber;
-            GameStateManager.Instance.OnFrameInputs(message.FrameMessage.Inputs.ToList());
-            GameStateManager.Instance.OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
-            GameStateManager.Instance.OnShootRequests(message.FrameMessage.ShootRequests.ToList());
+            GameStateManager.Instance.OnServerFrame(message.ServerFrame);
             EnemyManager.Instance.UpdateFrame(); //生成敌人
             FoodManager.Instance.UpdateFrame(); //选择道具
             PlayerManager.Instance.UpdateFrame(); //
@@ -430,24 +427,38 @@ public class NetworkManager : SingletonMono<NetworkManager>
         SendMessage(message);
     }
 
-    // 发送玩家输入
-    public void SendPlayerInput(InputType inputType)
+    /// <summary>
+    /// 发送帧数据（移动、开火、选择食物）
+    /// </summary>
+    public void SendFrameData(InputType inputType = InputType.InputNone, long shootX = 0, long shootY = 0, int foodId = -1)
     {
         if (!isConnected)
         {
-            Debug.LogWarning("Cannot send input: not connected");
+            Debug.LogWarning("Cannot send frame data: not connected");
             return;
         }
 
+        var frameData = new FrameData
+        {
+            PlayerId = playerID,
+            TimeStamp = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            InputType = inputType,
+            ShootX = shootX,
+            ShootY = shootY,
+            FoodId = foodId
+        };
+
         var message = new ClientMessage
         {
-            PlayerInput = new PlayerInput
-            {
-                PlayerId = playerID,
-                InputType = inputType,
-            }
+            FrameData = frameData
         };
         SendMessage(message);
+    }
+
+    // 兼容旧接口，发送移动输入
+    public void SendPlayerInput(InputType inputType)
+    {
+        SendFrameData(inputType: inputType);
     }
     // 请求开始游戏
 
@@ -490,42 +501,16 @@ public class NetworkManager : SingletonMono<NetworkManager>
     }
 
 
+    // 兼容旧接口，发送食物选择请求
     public void FoodChooseRequest(FoodType foodType)
     {
-        var message = new ClientMessage
-        {
-            ChooseFoodRequest = new ChooseFoodRequest()
-            {
-                PlayerId = playerID,
-                FoodId = (int)foodType
-            }
-        };
-        SendMessage(message);
+        SendFrameData(foodId: (int)foodType);
     }
 
-    /// <summary>
-    /// 发送开火请求（包含开火位置）
-    /// </summary>
-    /// <param name="x">开火位置X坐标（Fix64原始值，long类型）</param>
-    /// <param name="y">开火位置Y坐标（Fix64原始值，long类型）</param>
+    // 兼容旧接口，发送开火请求
     public void SendShootRequest(long x, long y)
     {
-        if (!isConnected)
-        {
-            Debug.LogWarning("Cannot send shoot request: not connected");
-            return;
-        }
-
-        var message = new ClientMessage
-        {
-            ShootRequest = new ShootRequest
-            {
-                PlayerId = playerID,
-                X = x,
-                Y = y
-            }
-        };
-        SendMessage(message);
+        SendFrameData(shootX: x, shootY: y);
     }
 
     #endregion
