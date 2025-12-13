@@ -29,10 +29,10 @@ public class PlayerTankController : TankController
     public long shootTwiceFrame = -1;
     public bool isShootThree = false;
     public long secondShootFrame = -1;
-    public Direction secondDir;
+    public FixVector2 secondDir;
     public FixRect secondPos;
     public long threeShootFrame = -1;
-    public Direction threeDir;
+    public FixVector2 threeDir;
     public FixRect threePos;
     public GameObject shootTwiceShow;
 
@@ -111,7 +111,7 @@ public class PlayerTankController : TankController
             EntityManager.Instance.InitializeBullet(threeDir, this, threePos, bulletDamageNum);
             if (rearFire)
             {
-                EntityManager.Instance.InitializeBullet(threeDir.Opposite(), this, threePos, bulletDamageNum);
+                EntityManager.Instance.InitializeBullet(-threeDir, this, threePos, bulletDamageNum);
             }
 
             threeShootFrame = -1; // 重置
@@ -122,7 +122,7 @@ public class PlayerTankController : TankController
             EntityManager.Instance.InitializeBullet(secondDir, this, secondPos, bulletDamageNum);
             if (rearFire)
             {
-                EntityManager.Instance.InitializeBullet(secondDir.Opposite(), this, secondPos, bulletDamageNum);
+                EntityManager.Instance.InitializeBullet(-secondDir, this, secondPos, bulletDamageNum);
             }
 
             secondShootFrame = -1; // 重置
@@ -239,16 +239,51 @@ public class PlayerTankController : TankController
     {
         if (NetworkManager.Instance.currentFrame - lastShootFrame > CurrentShootIntervalFrame())
         {
-            if (Input.GetKey(KeyCode.Space))
+            Vector2 targetPos = Vector2.zero;
+            bool shouldShoot = false;
+
+            // 键盘输入：使用鼠标位置作为开火目标
+            if (Input.GetMouseButton(0))
             {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
-                lastShootFrame = NetworkManager.Instance.currentFrame;
+                // 将鼠标世界坐标转换为Fix64坐标
+                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mouseWorldPos.z = 0;
+                targetPos = mouseWorldPos;
+                shouldShoot = true;
             }
 
+            // // 触屏输入：使用触摸位置作为开火目标
+            // if (GameUIManager.Instance.shootButton.isPressed)
+            // {
+            //     // 使用触摸位置或按钮位置
+            //     if (Input.touchCount > 0)
+            //     {
+            //         Vector3 touchWorldPos = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            //         touchWorldPos.z = 0;
+            //         targetPos = touchWorldPos;
+            //     }
+            //     else
+            //     {
+            //         // 如果没有触摸，使用鼠标位置
+            //         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //         mouseWorldPos.z = 0;
+            //         targetPos = mouseWorldPos;
+            //     }
+            //
+            //     shouldShoot = true;
+            // }
 
-            if (GameUIManager.Instance.shootButton.isPressed)
+            if (shouldShoot)
             {
-                NetworkManager.Instance.SendPlayerInput(InputType.InputShoot);
+                // 将Vector2转换为Fix64，然后获取原始值（rawValue）
+                Fix64 targetXFix = (Fix64)targetPos.x;
+                Fix64 targetYFix = (Fix64)targetPos.y;
+
+                // 获取Fix64的原始值（rawValue），用于网络传输
+                long targetX = targetXFix.RawValue;
+                long targetY = targetYFix.RawValue;
+
+                NetworkManager.Instance.SendShootRequest(targetX, targetY);
                 lastShootFrame = NetworkManager.Instance.currentFrame;
             }
         }
@@ -295,30 +330,54 @@ public class PlayerTankController : TankController
     //     transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
     // }
 
-    public override void Shoot()
+ 
+
+    public void ShootAt(long targetX, long targetY)
     {
+        
+        Fix64 targetXFix = Fix64.FromRaw(targetX);
+        Fix64 targetYFix = Fix64.FromRaw(targetY);
+        Debug.Log(targetXFix+" 2 "+targetYFix);
+        
+        FixVector2 targetPos = new FixVector2(targetXFix, targetYFix);
+        // 计算从坦克中心到目标位置的方向向量
+        FixVector2 directionVec = targetPos - myFixRect.Center;
+
+        // 如果方向向量为零，使用
+        if (directionVec.Magnitude() == Fix64.Zero)
+        {
+            directionVec = FixVector2.Up;
+        }
+        
+
+        // 使用计算出的方向开火
         FixRect currentRect = myFixRect.ScaleCenter((Fix64)0.5f);
-        EntityManager.Instance.InitializeBullet(tankDirection, this, currentRect, bulletDamageNum);
+        EntityManager.Instance.InitializeBullet(directionVec, this, currentRect, bulletDamageNum);
+
+        // 处理后向开火
         if (rearFire)
         {
-            EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this, currentRect, bulletDamageNum);
+            EntityManager.Instance.InitializeBullet(-directionVec, this, currentRect, bulletDamageNum);
         }
 
+        // 处理三次开火
         if (isShootThree)
         {
             int intervalFrame = 8;
             threeShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
-            threeDir = tankDirection;
+            threeDir = directionVec;
             threePos = currentRect;
         }
 
+        // 处理二次开火
         if (isShootTwice)
         {
             int intervalFrame = 4;
             secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
-            secondDir = tankDirection;
+            secondDir = directionVec;
             secondPos = currentRect;
         }
+        
 
         AudioManager.Instance.Play("Shoot");
     }

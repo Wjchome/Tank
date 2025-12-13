@@ -29,7 +29,9 @@ namespace FixMath.NET
         static readonly Fix64 Log2Max = new Fix64(LOG2MAX);
         static readonly Fix64 Log2Min = new Fix64(LOG2MIN);
         static readonly Fix64 Ln2 = new Fix64(LN2);
-
+        
+        
+        
         static readonly Fix64 LutInterval = (Fix64)(LUT_SIZE - 1) / PiOver2;
         const long MAX_VALUE = long.MaxValue;
         const long MIN_VALUE = long.MinValue;

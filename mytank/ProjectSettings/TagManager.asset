@@ -58,6 +58,9 @@ TagManager:
   - name: Tank
     uniqueID: 2752345241
     locked: 0
+  - name: Bullet
+    uniqueID: 314247783
+    locked: 0
   - name: Tree
     uniqueID: 3517817293
     locked: 0

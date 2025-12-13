@@ -36,11 +36,11 @@ public class EnemyTankController : TankController
     
 
 
-    public override void Shoot()
+    public  void Shoot()
     {
         FixRect currentRect = myFixRect.ScaleCenter((Fix64)0.5f);
 
-        EntityManager.Instance.InitializeBullet(tankDirection, this, currentRect, bulletDamageNum);
+        EntityManager.Instance.InitializeBullet(tankDirection.ToFixVector2().Item1, this, currentRect, bulletDamageNum);
         //AudioManager.Instance.Play("Shoot");
     }
 

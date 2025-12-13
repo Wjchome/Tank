@@ -45,6 +45,6 @@ public class AutoTurret : MapEntity
 
     private void Shoot()
     {
-        EntityManager.Instance.InitializeBullet(currentDirection, tank, tank.myFixRect,damageNum);
+        EntityManager.Instance.InitializeBullet(currentDirection.ToFixVector2().Item1, tank, tank.myFixRect,damageNum);
     }
 }

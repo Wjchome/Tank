@@ -222,6 +222,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             currentFrame = message.FrameMessage.FrameNumber;
             GameStateManager.Instance.OnFrameInputs(message.FrameMessage.Inputs.ToList());
             GameStateManager.Instance.OnFoodsRequest(message.FrameMessage.ChooseFoodRequests.ToList());
+            GameStateManager.Instance.OnShootRequests(message.FrameMessage.ShootRequests.ToList());
             EnemyManager.Instance.UpdateFrame(); //生成敌人
             FoodManager.Instance.UpdateFrame(); //选择道具
             PlayerManager.Instance.UpdateFrame(); //
@@ -497,6 +498,31 @@ public class NetworkManager : SingletonMono<NetworkManager>
             {
                 PlayerId = playerID,
                 FoodId = (int)foodType
+            }
+        };
+        SendMessage(message);
+    }
+
+    /// <summary>
+    /// 发送开火请求（包含开火位置）
+    /// </summary>
+    /// <param name="x">开火位置X坐标（Fix64原始值，long类型）</param>
+    /// <param name="y">开火位置Y坐标（Fix64原始值，long类型）</param>
+    public void SendShootRequest(long x, long y)
+    {
+        if (!isConnected)
+        {
+            Debug.LogWarning("Cannot send shoot request: not connected");
+            return;
+        }
+
+        var message = new ClientMessage
+        {
+            ShootRequest = new ShootRequest
+            {
+                PlayerId = playerID,
+                X = x,
+                Y = y
             }
         };
         SendMessage(message);

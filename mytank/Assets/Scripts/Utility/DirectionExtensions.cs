@@ -75,6 +75,7 @@ public static class DirectionExtensions
             return Direction.Up;
         }
     }
+
     public static Direction Opposite(this Direction direction)
     {
         switch (direction)

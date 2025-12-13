@@ -65,7 +65,8 @@ type Room struct {
 	HostID           string
 	Clients          map[string]*Client
 	InputBuffer      []*myproto.PlayerInput
-	ChooseFoodBuffer []*myproto.ChooseFoodRequest // 新增：奖励选择缓冲区
+	ChooseFoodBuffer []*myproto.ChooseFoodRequest // 奖励选择缓冲区
+	ShootBuffer      []*myproto.ShootRequest      // 开火请求缓冲区
 	FrameNumber      int64
 	Status           string // "waiting", "playing"
 	MaxPlayers       int32
@@ -251,6 +252,8 @@ func (s *Server) handleClient(conn net.Conn) {
 			s.handleGameOverRequest(client, data.GameOverRequest)
 		case *myproto.ClientMessage_ChooseFoodRequest:
 			s.handleChooseFood(client, data.ChooseFoodRequest)
+		case *myproto.ClientMessage_ShootRequest:
+			s.handleShoot(client, data.ShootRequest)
 		default:
 			log.Printf("Unknown message type from client %s", client.ID)
 		}
@@ -753,6 +756,22 @@ func (s *Server) sendRoomInfo(conn net.Conn, room *Room, errMsg string) {
 	s.sendMessage(conn, serverMsg)
 }
 
+func (s *Server) handleShoot(client *Client, req *myproto.ShootRequest) {
+	if client.RoomID == "" {
+		return
+	}
+	s.Mutex.Lock()
+	room, exists := s.Rooms[client.RoomID]
+	s.Mutex.Unlock()
+	if !exists {
+		return
+	}
+	room.Mutex.Lock()
+	// 将开火请求添加到房间的开火缓冲区
+	room.ShootBuffer = append(room.ShootBuffer, req)
+	room.Mutex.Unlock()
+}
+
 func (s *Server) handleChooseFood(client *Client, req *myproto.ChooseFoodRequest) {
 	if client.RoomID == "" {
 		return
@@ -809,9 +828,11 @@ func (room *Room) frameLoop() {
 		room.Mutex.Lock()
 		inputs := room.InputBuffer
 		chooseFoods := room.ChooseFoodBuffer
+		shoots := room.ShootBuffer
 		frameNum := room.FrameNumber
 		room.InputBuffer = make([]*myproto.PlayerInput, 0)
 		room.ChooseFoodBuffer = make([]*myproto.ChooseFoodRequest, 0)
+		room.ShootBuffer = make([]*myproto.ShootRequest, 0)
 		room.FrameNumber++
 		clients := make([]*Client, 0, len(room.Clients))
 		for _, c := range room.Clients {
@@ -834,6 +855,7 @@ func (room *Room) frameLoop() {
 			FrameNumber:        frameNum,
 			Inputs:             inputs,
 			ChooseFoodRequests: chooseFoods,
+			ShootRequests:      shoots,
 		}
 		serverMsg := &myproto.ServerMessage{
 			Data: &myproto.ServerMessage_FrameMessage{

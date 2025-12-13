@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 
 public class BulletController : MapEntity
 {
-    public Direction direction;
+
 
     public bool isPlayerBullet;
 
@@ -132,7 +132,6 @@ public class BulletController : MapEntity
 
                 if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy)))
                 {
-                    Debug.Log("qwe");
                     if (isPlayerBullet)
                     {
                         EnemyTankController enemy = get[i].Target.GetComponent<EnemyTankController>();
@@ -255,7 +254,6 @@ public class BulletController : MapEntity
     {
         if (isDead)
         {
-            Debug.Log("赋值死亡多次");
             return;
         }
 

@@ -223,9 +223,6 @@ public abstract class TankController : MonoBehaviour
         return canMove;
     }
 
-    public abstract void Shoot();
-
-
     public abstract void AddOrignalHP(int num);
 
     public abstract void AddHP(int num);

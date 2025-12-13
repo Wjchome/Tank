@@ -281,10 +281,11 @@ public class EntityManager : SingletonMono<EntityManager>
     #region 生成方法
 
     // 子弹生成方法
-    public void InitializeBullet(Direction direction, TankController tank, FixRect rect, int damageNum)
+    public void InitializeBullet(FixVector2 dir, TankController tank, FixRect rect, int damageNum)
     {
+        dir.Normalize();
         BulletController bullet = BulletPool.GetObject();
-        bullet.direction = direction;
+        
         bullet.tank = tank;
         if (tank.identity == Identity.Myself || tank.identity == Identity.OtherPlayer)
             bullet.isPlayerBullet = true;
@@ -294,8 +295,9 @@ public class EntityManager : SingletonMono<EntityManager>
         }
 
         // 设置子弹朝向
-        Fix64 rotation;
-        (bullet.dir, rotation) = direction.ToFixVector2();
+        Fix64 rotation = dir.ToRotation();
+        bullet.dir = dir;
+        
         bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
 
 

@@ -10,6 +10,9 @@ namespace FixMath.NET
     /// </summary>
     public partial struct Fix64
     {
+        public static readonly Fix64 Rad2Deg = (Fix64)57.295779513082320876798154814105M;
+        public static readonly Fix64 Deg2Rad = (Fix64)0.017453292519943295769236907684886M;
+
         /// <summary>
         /// Returns the smaller of two Fix64 values.
         /// </summary>
@@ -133,7 +136,6 @@ namespace FixMath.NET
         }
 
 
-
         /// <summary>
         /// 返回归一化后的向量（单位向量）
         /// 如果向量为零向量，返回零向量
@@ -194,6 +196,7 @@ namespace FixMath.NET
             {
                 return vector.Normalized() * maxLength;
             }
+
             return vector;
         }
 
@@ -226,6 +229,20 @@ namespace FixMath.NET
         public static bool operator !=(FixVector2 a, FixVector2 b)
         {
             return !(a == b);
+        }
+
+
+        public Fix64 ToRotation()
+        {
+            // 1. 调用Atan2计算弧度（注意参数顺序：Atan2(y, x)）
+            Fix64 rad = Fix64.Atan2(y, x);
+            // 2. 转换为角度（弧度 × (180/π)）
+            Fix64 deg = rad * Fix64.Rad2Deg;
+            // 3. 将负角度转换为正角度（比如-90度 → 270度，范围统一为0~360度）
+
+            deg += new Fix64(270);
+
+            return deg;
         }
     }
 }

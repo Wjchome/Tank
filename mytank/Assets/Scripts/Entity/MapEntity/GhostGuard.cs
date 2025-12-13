@@ -35,7 +35,7 @@
         }
         private void Shoot()
         {
-            EntityManager.Instance.InitializeBullet(moveDirection, tank, tank.myFixRect,damageNum);
+            EntityManager.Instance.InitializeBullet(moveDirection.ToFixVector2().Item1, tank, tank.myFixRect,damageNum);
         }
 
         private void Move()

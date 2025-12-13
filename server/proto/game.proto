@@ -76,24 +76,30 @@ message GameOverRequest{
 }
 
 
-// 玩家输入类型（8方向移动）
+// 玩家输入类型（8方向移动，开火已分离）
 enum InputType {
   INPUT_NONE = 0;
   INPUT_MOVE_UP = 1;
   INPUT_MOVE_DOWN = 2;
   INPUT_MOVE_LEFT = 3;
   INPUT_MOVE_RIGHT = 4;
-  INPUT_SHOOT = 5;
-  INPUT_MOVE_UP_LEFT = 6;    // 左上
-  INPUT_MOVE_UP_RIGHT = 7;   // 右上
-  INPUT_MOVE_DOWN_LEFT = 8;  // 左下
-  INPUT_MOVE_DOWN_RIGHT = 9; // 右下
+  INPUT_MOVE_UP_LEFT = 5;    // 左上
+  INPUT_MOVE_UP_RIGHT = 6;   // 右上
+  INPUT_MOVE_DOWN_LEFT = 7;  // 左下
+  INPUT_MOVE_DOWN_RIGHT = 8; // 右下
 }
 
-// 玩家输入
+// 玩家移动输入
 message PlayerInput {
   string player_id = 1;
   InputType input_type = 2;
+}
+
+// 玩家开火请求（包含开火位置）
+message ShootRequest {
+  string player_id = 1;
+  int64  x = 2;  
+  int64  y = 3;  
 }
 
 
@@ -122,7 +128,8 @@ message ChooseFoodRequest{
 message FrameMessage{
     int64 frame_number = 1;
     repeated PlayerInput inputs = 2;
-    repeated ChooseFoodRequest choose_food_requests=3;
+    repeated ChooseFoodRequest choose_food_requests = 3;
+    repeated ShootRequest shoot_requests = 4;  // 开火请求列表
 }
 // 服务器消息
 message ServerMessage {
@@ -148,7 +155,8 @@ message ClientMessage {
     RoomListRequest room_list_request = 5;
     GameStartRequest game_start_request = 6;
     KickPlayerRequest kick_player_request = 7;
-    GameOverRequest game_over_request=8;
-    ChooseFoodRequest choose_food_request=9;
+    GameOverRequest game_over_request = 8;
+    ChooseFoodRequest choose_food_request = 9;
+    ShootRequest shoot_request = 10;  // 开火请求
   }
 }

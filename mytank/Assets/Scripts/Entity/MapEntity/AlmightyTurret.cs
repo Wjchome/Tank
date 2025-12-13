@@ -114,7 +114,7 @@ public class AlmightyTurret : MapEntity
 
     private void Shoot()
     {
-        EntityManager.Instance.InitializeBullet(currentDirection, tank, tank.myFixRect, shootDamageNum);
+        EntityManager.Instance.InitializeBullet(currentDirection.ToFixVector2().Item1, tank, tank.myFixRect, shootDamageNum);
     }
 
     private void Trigger()

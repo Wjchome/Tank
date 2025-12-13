@@ -26,6 +26,20 @@ public class GameStateManager : SingletonMono<GameStateManager>
             ApplyInputToTank(PlayerManager.Instance.activePlayerDic[input.PlayerId], input);
         }
     }
+    
+    public void OnShootRequests(List<ShootRequest> shootRequests)
+    {
+        foreach (var shootRequest in shootRequests)
+        {
+            if (PlayerManager.Instance.activePlayerDic.TryGetValue(shootRequest.PlayerId, out var tank))
+            {
+                if (tank != null)
+                {
+                    tank.ShootAt(shootRequest.X, shootRequest.Y);
+                }
+            }
+        }
+    }
 
     void ApplyInputToTank(PlayerTankController tank, PlayerInput input)
     {
@@ -55,9 +69,6 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 break;
             case InputType.InputMoveUpRight:
                 tank.MoveBy(Direction.RightUp);
-                break;
-            case InputType.InputShoot:
-                tank.Shoot();
                 break;
         }
     }
