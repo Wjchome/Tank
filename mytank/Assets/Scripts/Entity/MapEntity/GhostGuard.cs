@@ -1,7 +1,7 @@
 
     using DG.Tweening;
     using UnityEngine;
-
+    //穿透敌人的炮台
     public class GhostGuard: MapEntity
     {
         
@@ -12,7 +12,6 @@
         
         public int shootIntervalFrame = 60;
         private long lastShootFrame;
-        public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
         
         public int damageNum;
         
@@ -61,22 +60,22 @@
                     dy = 0;
                     break;
             }
-            Vector2Int targetPos=new Vector2Int(Pos.x + dx, Pos.y + dy);
-            if (!MapManager.Instance.IsVailePos(targetPos))
-            {
-                Destroy();
-                return;
-            }
-            
-            Pos = targetPos;
-
-            // 计算坦克中心位置
-            Vector2 centerPos = GetCenter();
-
+           //  Vector2Int targetPos=new Vector2Int(Pos.x + dx, Pos.y + dy);
+           //  if (!MapManager.Instance.IsVailePos(targetPos))
+           //  {
+           //      Destroy();
+           //      return;
+           //  }
+           //  
+           //  Pos = targetPos;
+           //
+           //  // 计算坦克中心位置
+           //  Vector2 centerPos = GetCenter();
+           //
            // isMoving = true;
-          //  animator.Play("Tank" + animType);
+           // animator.Play("Tank" + animType);
            // lastAnimStartFrame = NetworkManager.Instance.currentFrame;
-            transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
+            //transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
 
         }
     }

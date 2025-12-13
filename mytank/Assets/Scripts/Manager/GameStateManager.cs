@@ -525,24 +525,21 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 // 转换地雷
                 foreach (var landmine in landmines)
                 {
-                    Vector2Int pos = landmine.Pos;
-                    EntityManager.Instance.InitAlmightyTurret(tank, pos);
+                    EntityManager.Instance.InitAlmightyTurret(tank, landmine.myFixRect);
                     landmine.Destroy();
                 }
 
                 // 转换自动炮台
                 foreach (var turret in autoTurrets)
                 {
-                    Vector2Int pos = turret.Pos;
-                    EntityManager.Instance.InitAlmightyTurret(tank, pos);
+                    EntityManager.Instance.InitAlmightyTurret(tank, turret.myFixRect);
                     turret.Destroy();
                 }
 
                 // 转换治疗花园
                 foreach (var garden in healingGardens)
                 {
-                    Vector2Int pos = garden.Pos;
-                    EntityManager.Instance.InitAlmightyTurret(tank, pos);
+                    EntityManager.Instance.InitAlmightyTurret(tank, garden.myFixRect);
                     garden.Destroy();
                 }
 

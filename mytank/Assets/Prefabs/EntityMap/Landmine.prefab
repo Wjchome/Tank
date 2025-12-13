@@ -102,9 +102,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
-  Pos: {x: 0, y: 0}
+  spriteRenderer: {fileID: 7065039953901904655}
   animator: {fileID: -2190902832759852224}
   damageNum: 5
+  isDead: 0
+  deadDelayTime: 0
 --- !u!95 &-2190902832759852224
 Animator:
   serializedVersion: 7

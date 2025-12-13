@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
-  Pos: {x: 0, y: 0}
+  spriteRenderer: {fileID: 6057427113148433846}
   lastGenateFrame: 0
   genateIntervalFrame: 2400
   isCanHealing: 0

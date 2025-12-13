@@ -363,5 +363,33 @@ namespace QuadTreeV3
                 return 0;
             return X.CompareTo(other.X);
         }
+        
+        public FixRect ScaleCenter(Fix64 scaleFactor)
+        {
+            // 合法性校验：缩放因子不能为负数或0，避免生成无效的宽高
+            if (scaleFactor <= Fix64.Zero)
+            {
+                // 可以根据需求改为抛出异常，或返回原矩形（这里选择返回原矩形，更健壮）
+                return this;
+                // 若需要严格校验，可抛出异常：
+                // throw new ArgumentOutOfRangeException(nameof(scaleFactor), "缩放因子必须大于0");
+            }
+
+            // 1. 计算原矩形的中心坐标（缩放后中心不变）
+            Fix64 originalCenterX = CenterX;
+            Fix64 originalCenterY = CenterY;
+
+            // 2. 计算缩放后的宽高
+            Fix64 newWidth = Width * scaleFactor;
+            Fix64 newHeight = Height * scaleFactor;
+
+            // 3. 计算缩放后的左、下边界（保证中心不变）
+            // 新X = 中心X - 新宽度/2；新Y = 中心Y - 新高度/2
+            Fix64 newX = originalCenterX - newWidth / new Fix64(2);
+            Fix64 newY = originalCenterY - newHeight / new Fix64(2);
+
+            // 4. 返回新的矩形（保留原旋转角度）
+            return new FixRect(newX, newY, newWidth, newHeight, Rotate);
+        }
     }
 }

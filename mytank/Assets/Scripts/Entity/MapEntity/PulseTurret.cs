@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 脉冲塔，间隔性清楚区域内敌方子弹
+/// </summary>
 public class PulseTurret : MapEntity
 {
     public int targetIntervalFrame = 80;
@@ -9,15 +12,6 @@ public class PulseTurret : MapEntity
 
     public override void UpdateFrame()
     {
-        List<Vector2Int> points = new List<Vector2Int>();
-        for (int i = -1; i <= 1; i++)
-        {
-            for (int j = -1; j <= 1; j++)
-            {
-                points.Add(Pos + new Vector2Int(i, j));
-            }
-        }
-
         if (NetworkManager.Instance.currentFrame - lastTargetFrame >= targetIntervalFrame)
         {
             animator.Play("Pulse", 0, 0);
@@ -26,16 +20,10 @@ public class PulseTurret : MapEntity
 
             foreach (BulletController bullet in bullets)
             {
-                if (points.Contains(bullet.Pos) || points.Contains(bullet.Pos + new Vector2Int(0, 1)) ||
-                    points.Contains(bullet.Pos + new Vector2Int(1, 1)) ||
-                    points.Contains(bullet.Pos + new Vector2Int(1, 0)))
-                {
-                    bullet.isDead = true;
-                    bullet.DestroyBullet();
-                }
+                bullet.isDead = true;
+                bullet.DestroyBullet();
             }
 
-          
 
             lastTargetFrame = NetworkManager.Instance.currentFrame;
         }

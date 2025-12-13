@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
-  Pos: {x: 0, y: 0}
+  spriteRenderer: {fileID: 8296989146632219231}
   targetIntervalFrame: 80
   animator: {fileID: 3014462341065702339}
 --- !u!1 &8569117380116688586

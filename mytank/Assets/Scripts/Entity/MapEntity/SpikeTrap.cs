@@ -15,12 +15,12 @@ using UnityEngine;
                 Destroy();
                 return;
             }
-            var enemyTankInArea = MapManager.Instance.GetEnemyTankInArea(Pos.x, Pos.y, 1, 1);
-            if (enemyTankInArea != null&&enemyTankInArea.Count > 0)
-            {
-                enemyTankInArea.ForEach(enemy=>enemy.DamageHP(damageNum,tank as PlayerTankController,DamageType.SpikeTrap));
-                Destroy(gameObject);
-            }
+            // var enemyTankInArea = MapManager.Instance.GetEnemyTankInArea(Pos.x, Pos.y, 1, 1);
+            // if (enemyTankInArea != null&&enemyTankInArea.Count > 0)
+            // {
+            //     enemyTankInArea.ForEach(enemy=>enemy.DamageHP(damageNum,tank as PlayerTankController,DamageType.SpikeTrap));
+            //     Destroy(gameObject);
+            // }
         }
         
    

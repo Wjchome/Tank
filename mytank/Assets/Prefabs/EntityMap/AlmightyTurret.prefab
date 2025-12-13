@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
-  Pos: {x: 0, y: 0}
+  spriteRenderer: {fileID: 8296989146632219231}
   shootIntervalFrame: 40
   shootDamageNum: 5
   genateIntervalFrame: 2400

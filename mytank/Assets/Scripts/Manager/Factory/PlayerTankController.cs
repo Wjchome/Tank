@@ -73,7 +73,6 @@ public class PlayerTankController : TankController
 
     public override void UpdateFrame()
     {
-        
         base.UpdateFrame();
         HandleBuff();
     }
@@ -166,7 +165,7 @@ public class PlayerTankController : TankController
             HandleShootInput();
         }
     }
-    
+
     int CurrentShootIntervalFrame()
     {
         if (isSpeedKiller)
@@ -298,11 +297,11 @@ public class PlayerTankController : TankController
 
     public override void Shoot()
     {
-        FixRect currentPos = myFixRect;
-        EntityManager.Instance.InitializeBullet(tankDirection, this,   currentPos,bulletDamageNum);
+        FixRect currentRect = myFixRect.ScaleCenter((Fix64)0.5f);
+        EntityManager.Instance.InitializeBullet(tankDirection, this, currentRect, bulletDamageNum);
         if (rearFire)
         {
-            EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this,  currentPos,bulletDamageNum);
+            EntityManager.Instance.InitializeBullet(tankDirection.Opposite(), this, currentRect, bulletDamageNum);
         }
 
         if (isShootThree)
@@ -310,7 +309,7 @@ public class PlayerTankController : TankController
             int intervalFrame = 8;
             threeShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
             threeDir = tankDirection;
-            threePos = currentPos;
+            threePos = currentRect;
         }
 
         if (isShootTwice)
@@ -318,7 +317,7 @@ public class PlayerTankController : TankController
             int intervalFrame = 4;
             secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
             secondDir = tankDirection;
-            secondPos = currentPos;
+            secondPos = currentRect;
         }
 
         AudioManager.Instance.Play("Shoot");
@@ -384,7 +383,7 @@ public class PlayerTankController : TankController
     protected override void ExecuteDeathLogic()
     {
         GameStateManager.Instance.GameOver(false);
-
+        gameObject.SetActive(false);
         transform.position = new Vector2(-100, 0);
     }
 }

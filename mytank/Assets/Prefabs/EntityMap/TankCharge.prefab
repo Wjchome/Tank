@@ -543,9 +543,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
-  Pos: {x: 0, y: 0}
+  spriteRenderer: {fileID: 688619496750072981}
   moveDirection: 0
   moveIntervalFrame: 5
+  isCanBullet: 0
   damageNum: 3
 --- !u!1 &5447267967790324639
 GameObject:

@@ -26,14 +26,14 @@ public class HealingGarden : MapEntity
 
         if (isCanHealing)
         {
-            var tanks = MapManager.Instance.GetPlayerTankInArea(Pos.x, Pos.y, 1, 1);
-            if (tanks != null)
-            {
-                foreach (var _tank in tanks)
-                {
-                    PickUp(_tank);
-                }
-            }
+            // var tanks = MapManager.Instance.GetPlayerTankInArea(Pos.x, Pos.y, 1, 1);
+            // if (tanks != null)
+            // {
+            //     foreach (var _tank in tanks)
+            //     {
+            //         PickUp(_tank);
+            //     }
+            // }
         }
     }
 

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
+/// <summary>
+/// 坦克冲撞
+/// </summary>
 public class TankCharge : MapEntity
 {
     public Direction moveDirection;
@@ -10,7 +13,6 @@ public class TankCharge : MapEntity
     private long lastMoveFrame;
 
     public bool isCanBullet = false;
-    public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
     public int damageNum;
 
@@ -19,10 +21,7 @@ public class TankCharge : MapEntity
         if (NetworkManager.Instance.currentFrame - lastMoveFrame >= moveIntervalFrame)
         {
             Move();
-            List<Vector2Int> poss = new List<Vector2Int>()
-            {
-                Pos, Pos + new Vector2Int(0, 1), Pos + new Vector2Int(1, 1), Pos + new Vector2Int(1, 0)
-            };
+            
             var enemyTank = EnemyManager.Instance.activeEnemies;
             foreach (var enemyTankController in enemyTank)
             {
@@ -77,22 +76,22 @@ public class TankCharge : MapEntity
                 dy = 0;
                 break;
         }
-
-        Vector2Int targetPos = new Vector2Int(Pos.x + dx, Pos.y + dy);
-        if (!MapManager.Instance.IsVailePos(targetPos))
-        {
-            Destroy();
-            return;
-        }
-
-        Pos = targetPos;
-
-        // 计算坦克中心位置
-        Vector2 centerPos = GetCenter();
+        //
+        // Vector2Int targetPos = new Vector2Int(Pos.x + dx, Pos.y + dy);
+        // if (!MapManager.Instance.IsVailePos(targetPos))
+        // {
+        //     Destroy();
+        //     return;
+        // }
+        //
+        // Pos = targetPos;
+        //
+        // // 计算坦克中心位置
+        // Vector2 centerPos = GetCenter();
 
         // isMoving = true;
         //  animator.Play("Tank" + animType);
         // lastAnimStartFrame = NetworkManager.Instance.currentFrame;
-        transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
+        //transform.DOMove(centerPos, moveIntervalFrame * Constant.FrameInterval).SetEase(Ease.Linear);
     }
 }

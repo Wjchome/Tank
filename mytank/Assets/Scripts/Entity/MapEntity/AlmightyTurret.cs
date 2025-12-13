@@ -1,6 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
 
+/// <summary>
+/// 全能炮台
+/// </summary>
 public class AlmightyTurret : MapEntity
 {
     [Header("Shooting Settings")] public int shootIntervalFrame;
@@ -20,7 +23,6 @@ public class AlmightyTurret : MapEntity
     public Animator animator;
 
     public GameObject healGO;
-    public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
 
     public override void UpdateFrame()
     {
@@ -67,24 +69,24 @@ public class AlmightyTurret : MapEntity
         // 执行治疗
         if (isCanHealing)
         {
-            var tanks = MapManager.Instance.GetPlayerTankInArea(Pos.x, Pos.y, 1, 1);
-            if (tanks != null)
-            {
-                foreach (var _tank in tanks)
-                {
-                    PickUp(_tank);
-                }
-            }
+            // var tanks = MapManager.Instance.GetPlayerTankInArea(Pos.x, Pos.y, 1, 1);
+            // if (tanks != null)
+            // {
+            //     foreach (var _tank in tanks)
+            //     {
+            //         PickUp(_tank);
+            //     }
+            // }
         }
     }
 
     private void HandleEnemyDetection()
     {
-        var enemies = MapManager.Instance.GetEnemyTankInArea(Pos.x, Pos.y, 1, 1);
-        if (enemies != null && enemies.Count > 0)
-        {
-            Trigger();
-        }
+        // var enemies = MapManager.Instance.GetEnemyTankInArea(Pos.x, Pos.y, 1, 1);
+        // if (enemies != null && enemies.Count > 0)
+        // {
+        //     Trigger();
+        // }
     }
 
     private void StartHealing()
@@ -117,19 +119,19 @@ public class AlmightyTurret : MapEntity
 
     private void Trigger()
     {
-        // 范围伤害
-        var tanks = MapManager.Instance.GetEnemyTankInArea(Pos.x - 1, Pos.y - 1, 3, 3);
-        foreach (var a in tanks)
-        {
-            a.DamageHP(damageNum, tank as PlayerTankController, DamageType.Landmine);
-        }
-
-        // 播放爆炸动画
-        animator.Play("Trigger", 0, 0);
-
-        // 设置死亡状态
-        isDead = true;
-        deadDelayTime = NetworkManager.Instance.currentFrame + (int)(0.33f / Constant.FrameInterval);
+        // // 范围伤害
+        // var tanks = MapManager.Instance.GetEnemyTankInArea(Pos.x - 1, Pos.y - 1, 3, 3);
+        // foreach (var a in tanks)
+        // {
+        //     a.DamageHP(damageNum, tank as PlayerTankController, DamageType.Landmine);
+        // }
+        //
+        // // 播放爆炸动画
+        // animator.Play("Trigger", 0, 0);
+        //
+        // // 设置死亡状态
+        // isDead = true;
+        // deadDelayTime = NetworkManager.Instance.currentFrame + (int)(0.33f / Constant.FrameInterval);
     }
 
     private void PickUp(TankController tank)

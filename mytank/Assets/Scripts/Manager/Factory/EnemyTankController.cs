@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using FixMath.NET;
+using QuadTreeV3;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -37,7 +38,9 @@ public class EnemyTankController : TankController
 
     public override void Shoot()
     {
-        EntityManager.Instance.InitializeBullet(tankDirection, this, myFixRect, bulletDamageNum);
+        FixRect currentRect = myFixRect.ScaleCenter((Fix64)0.5f);
+
+        EntityManager.Instance.InitializeBullet(tankDirection, this, currentRect, bulletDamageNum);
         //AudioManager.Instance.Play("Shoot");
     }
 
@@ -76,6 +79,8 @@ public class EnemyTankController : TankController
         CamController.Instance.ShakeDead();
 
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
+        QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
+        
         if (attacker != null)
         {
             if (attacker.isSpeedKiller)

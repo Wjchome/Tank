@@ -106,59 +106,60 @@ public class BulletController : MapEntity
                             }
                         }
                     }
+                }
 
-                    if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletFriend)))
+                if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletFriend)))
+                {
+                    if (!isPlayerBullet)
                     {
-                        if (!isPlayerBullet)
-                        {
-                            BulletController _bulletController = get[i].Target.GetComponent<BulletController>();
+                        BulletController _bulletController = get[i].Target.GetComponent<BulletController>();
 
-                            penetrationCount--;
-                            if (penetrationCount <= 0)
+                        penetrationCount--;
+                        if (penetrationCount <= 0)
+                        {
+                            DestroyBullet();
+
+                            isCango = false;
+
+                            _bulletController.penetrationCount--;
+                            if (_bulletController.penetrationCount <= 0)
                             {
                                 DestroyBullet();
-
-                                isCango = false;
-
-                                _bulletController.penetrationCount--;
-                                if (_bulletController.penetrationCount <= 0)
-                                {
-                                    DestroyBullet();
-                                }
                             }
                         }
                     }
+                }
 
-                    if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy)))
+                if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy)))
+                {
+                    Debug.Log("qwe");
+                    if (isPlayerBullet)
                     {
-                        if (isPlayerBullet)
+                        EnemyTankController enemy = get[i].Target.GetComponent<EnemyTankController>();
+                        enemy.DamageHP(damageNum, this.tank as PlayerTankController, DamageType.Bullet);
+
+
+                        penetrationCount--;
+                        if (penetrationCount <= 0)
                         {
-                            EnemyTankController enemy = get[i].Target.GetComponent<EnemyTankController>();
-                            enemy.DamageHP(damageNum, this.tank as PlayerTankController, DamageType.Bullet);
-
-
-                            penetrationCount--;
-                            if (penetrationCount <= 0)
-                            {
-                                DestroyBullet();
-                                isCango = false;
-                            }
+                            DestroyBullet();
+                            isCango = false;
                         }
                     }
+                }
 
-                    if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend)))
+                if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend)))
+                {
+                    if (!isPlayerBullet)
                     {
-                        if (!isPlayerBullet)
-                        {
-                            PlayerTankController player = get[i].Target.GetComponent<PlayerTankController>();
-                            player.DamageHP(damageNum);
+                        PlayerTankController player = get[i].Target.GetComponent<PlayerTankController>();
+                        player.DamageHP(damageNum);
 
-                            penetrationCount--;
-                            if (penetrationCount <= 0)
-                            {
-                                DestroyBullet();
-                                isCango = false;
-                            }
+                        penetrationCount--;
+                        if (penetrationCount <= 0)
+                        {
+                            DestroyBullet();
+                            isCango = false;
                         }
                     }
                 }
@@ -257,9 +258,9 @@ public class BulletController : MapEntity
             Debug.Log("赋值死亡多次");
             return;
         }
-        Debug.Log("死亡 "+ NetworkManager.Instance.currentFrame);
+
+        Debug.Log("死亡 " + NetworkManager.Instance.currentFrame);
         isDead = true;
-        Pos = new Vector2Int(-1, -1);
 
         animator.Play("SmallBoom");
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
@@ -269,8 +270,8 @@ public class BulletController : MapEntity
     // 执行死亡后的逻辑
     void ExecuteDeathLogic()
     {
-        Debug.Log("真死亡 "+ NetworkManager.Instance.currentFrame);
-        
+        Debug.Log("真死亡 " + NetworkManager.Instance.currentFrame);
+
         EntityManager.Instance.BulletPool.ReturnObject(this);
     }
 

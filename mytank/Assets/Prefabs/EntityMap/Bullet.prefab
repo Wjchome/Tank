@@ -75,8 +75,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1542622055
-  m_SortingLayer: 2
+  m_SortingLayerID: -902556997
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c07c568674765409da75764feaa16637, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -102,15 +102,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tank: {fileID: 0}
-  Pos: {x: 0, y: 0}
+  spriteRenderer: {fileID: 7624953589535699200}
   direction: 0
   isPlayerBullet: 0
-  moveIntervalFrame: 4
-  lastMoveTimeFrame: 0
-  dir: {x: 0, y: 0}
-  moveSpeed: 0.1
+  moveSpeed: 0.3
   animator: {fileID: 8540193828245787508}
-  isShouldDestroy: 0
   animTime: 0.55
   damageNum: 0
   penetrationCount: 0

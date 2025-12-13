@@ -9,8 +9,7 @@ public class AutoTurret : MapEntity
     private long lastShootFrame;
 
     private Direction currentDirection = Direction.Up;
-
-    public Vector2 GetCenter() => new Vector2(Pos.x + 0.5f, Pos.y + 0.5f);
+    
     
     public int damageNum = 1;
 

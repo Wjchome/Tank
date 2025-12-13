@@ -260,11 +260,11 @@ public class EntityManager : SingletonMono<EntityManager>
     }
 
     // 生成方法
-    private T SpawnMapEntity<T>(T prefab, PlayerTankController tank, Vector2 position, Vector2Int pos)
+    private T SpawnMapEntity<T>(T prefab, PlayerTankController tank,FixRect fixRect)
         where T : MapEntity
     {
-        T entity = Instantiate(prefab, new Vector2(position.x, position.y), Quaternion.identity);
-        entity.Init(tank, pos);
+        T entity = Instantiate(prefab, (Vector2)fixRect.Center, Quaternion.identity);
+        entity.Init(tank, fixRect);
         AddMapEntity(entity);
         return entity;
     }
@@ -337,48 +337,26 @@ public class EntityManager : SingletonMono<EntityManager>
     // 兼容性方法 - 保持原有接口
     public void InitAutoTurrent(PlayerTankController tank)
     {
-        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
-            .Except(MapManager.Instance.GetAllTankPos()).ToList();
-        var homePos = new List<int>()
-        {
-            (MapManager.Instance.mapWidth - 1) / 2 - 1,
-            (MapManager.Instance.mapWidth - 1) / 2,
-            MapManager.Instance.mapWidth / 2,
-        };
-        foreach (var spawnPo in spawnPos.ToList())
-        {
-            if (spawnPo.y == 0 || spawnPo.y == 1 || spawnPo.y == 2 ||
-                homePos.Contains(spawnPo.x))
-            {
-                spawnPos.Remove(spawnPo);
-            }
-        }
-
-        var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-
-        SpawnMapEntity(autoTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
+        
+        //TODO 随机位置
+        SpawnMapEntity(autoTurretPrefab, tank, tank.myFixRect);
     }
 
     public void InitLandmine(PlayerTankController tank)
     {
-        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
-            .Except(MapManager.Instance.GetAllTankPos()).ToList();
-        var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-
-        SpawnMapEntity(landminePrefab, tank, new Vector2(pos.x, pos.y), pos);
+        //TODO 随机位置
+        SpawnMapEntity(autoTurretPrefab, tank, tank.myFixRect);
     }
 
     public void InitHealingGarden(PlayerTankController tank)
     {
-        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
-            .Except(MapManager.Instance.GetAllTankPos()).ToList();
-        var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-        SpawnMapEntity(healingGardenPrefab, tank, new Vector2(pos.x, pos.y), pos);
+        //TODO 随机位置
+        SpawnMapEntity(autoTurretPrefab, tank, tank.myFixRect);
     }
 
     public void InitSpikeTrap(PlayerTankController tank, Vector2Int pos, int durationFrame)
     {
-        var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, new Vector2(pos.x, pos.y), pos);
+        var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, tank.myFixRect);
         spikeTrap.durationFrame = durationFrame;
     }
 
@@ -396,76 +374,41 @@ public class EntityManager : SingletonMono<EntityManager>
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
-        var ghostGuardLeft = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[0].x + 0.5f, poss[0].y + 0.5f),
-            poss[0]);
+        var ghostGuardLeft = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
         ghostGuardLeft.moveDirection = Direction.Left;
-        ghostGuardLeft.GetComponent<SpriteRenderer>().color = transparentColor;
+        ghostGuardLeft.spriteRenderer.color = transparentColor;
         ghostGuardLeft.transform.rotation = Quaternion.Euler(0, 0, 90);
 
-        var ghostGuardRight = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[1].x + 0.5f, poss[1].y + 0.5f),
-            poss[1]);
+        var ghostGuardRight = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
         ghostGuardRight.moveDirection = Direction.Right;
-        ghostGuardRight.GetComponent<SpriteRenderer>().color = transparentColor;
+        ghostGuardRight.spriteRenderer.color = transparentColor;
         ghostGuardRight.transform.rotation = Quaternion.Euler(0, 0, -90);
 
-        var ghostGuardUp1 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[2].x + 0.5f, poss[2].y + 0.5f),
-            poss[2]);
+        var ghostGuardUp1 = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
         ghostGuardUp1.moveDirection = Direction.Up;
-        ghostGuardUp1.GetComponent<SpriteRenderer>().color = transparentColor;
+        ghostGuardUp1.spriteRenderer.color = transparentColor;
 
-        var ghostGuardUp2 = SpawnMapEntity(ghostGuardPrefab, tank, new Vector2(poss[3].x + 0.5f, poss[3].y + 0.5f),
-            poss[3]);
+        var ghostGuardUp2 = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
         ghostGuardUp2.moveDirection = Direction.Up;
-        ghostGuardUp2.GetComponent<SpriteRenderer>().color = transparentColor;
+        ghostGuardUp2.spriteRenderer.color = transparentColor;
     }
 
     public void InitAlmightyTurret(PlayerTankController tank)
     {
-        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
-            .Except(MapManager.Instance.GetAllTankPos()).ToList();
-        var homePos = new List<int>()
-        {
-            (MapManager.Instance.mapWidth - 1) / 2 - 1,
-            (MapManager.Instance.mapWidth - 1) / 2,
-            MapManager.Instance.mapWidth / 2,
-        };
-        foreach (var spawnPo in spawnPos.ToList())
-        {
-            if (spawnPo.y == 0 || spawnPo.y == 1 || spawnPo.y == 2 ||
-                homePos.Contains(spawnPo.x))
-            {
-                spawnPos.Remove(spawnPo);
-            }
-        }
-
-        var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-
-        SpawnMapEntity(almightyTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
+        //TODO 随机位置
+        SpawnMapEntity(autoTurretPrefab, tank, tank.myFixRect);
     }
 
-    public void InitAlmightyTurret(PlayerTankController tank, Vector2Int pos)
+    public void InitAlmightyTurret(PlayerTankController tank, FixRect fixRect)
     {
-        var homePos = new List<int>()
-        {
-            (MapManager.Instance.mapWidth - 1) / 2 - 1,
-            (MapManager.Instance.mapWidth - 1) / 2,
-            MapManager.Instance.mapWidth / 2,
-        };
-        if (pos.y == 0 || pos.y == 1 || pos.y == 2 ||
-            homePos.Contains(pos.x))
-        {
-            return;
-        }
-
-        SpawnMapEntity(almightyTurretPrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f), pos);
+        //TODO 奇怪
+        SpawnMapEntity(autoTurretPrefab, tank, fixRect);
     }
 
     public void InitPulseTurret(PlayerTankController tank)
     {
-        var spawnPos = MapManager.Instance.GetTwoMapTypePos(new List<MapType>() { MapType.floor })
-            .Except(MapManager.Instance.GetAllTankPos()).ToList();
-        var pos = spawnPos[tank.random.Next(spawnPos.Count)];
-        SpawnMapEntity(pulseTurretPrefab, tank, new Vector2(pos.x, pos.y), pos);
+        //TODO 随机位置
+        SpawnMapEntity(autoTurretPrefab, tank, tank.myFixRect);
     }
 
     public void InitTankCharge(PlayerTankController tank, bool isCanBullet)
@@ -505,8 +448,7 @@ public class EntityManager : SingletonMono<EntityManager>
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
-        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, new Vector2(spawnPos.x + 0.5f, spawnPos.y + 0.5f),
-            spawnPos);
+        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, tank.myFixRect);
         tankCharge.transform.rotation = Quaternion.Euler(rot);
         tankCharge.moveDirection = dir;
         tankCharge.isCanBullet = isCanBullet;
@@ -543,8 +485,7 @@ public class EntityManager : SingletonMono<EntityManager>
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
-        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, new Vector2(pos.x + 0.5f, pos.y + 0.5f),
-            pos);
+        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, tank.myFixRect);
         tankCharge.transform.rotation = Quaternion.Euler(rot);
         tankCharge.moveDirection = dir;
         tankCharge.isCanBullet = isCanBullet;
