@@ -201,6 +201,19 @@ public class MapManager : SingletonMono<MapManager>
     }
 
 
+	public void CreateWallType(FixRect fixRect,MapType wallType)
+	{
+        GameObject prefab = typeToPrefab[wallType];
+
+        switch (wallType)
+        {
+            case MapType.floor:
+                GameObject obj = Instantiate(prefab, (Vector2)fixRect.Center, Quaternion.identity, wallsParent);
+                break;
+        }
+    }
+
+
     // 加载关卡
     public void LoadLevel(Level level)
     {
@@ -473,7 +486,7 @@ public class MapManager : SingletonMono<MapManager>
         int x2, int y2, int w2, int h2)
     {
         return !(x1 + w1 <= x2 || x2 + w2 <= x1 ||
-                 y1 + h1 <= y2 || y2 + h2 <= y1);
+                 y1 + h1 <= y2 || y2 + h2 <= y1); 
     }
 
 

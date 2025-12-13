@@ -849,9 +849,10 @@ type FrameData struct {
 	PlayerId      string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
 	TimeStamp     int64                  `protobuf:"varint,2,opt,name=time_stamp,json=timeStamp,proto3" json:"time_stamp,omitempty"`
 	InputType     InputType              `protobuf:"varint,3,opt,name=input_type,json=inputType,proto3,enum=tankgame.InputType" json:"input_type,omitempty"` // 移动输入，0表示无输入
-	ShootX        int64                  `protobuf:"varint,4,opt,name=shoot_x,json=shootX,proto3" json:"shoot_x,omitempty"`                                  // 开火位置X，0表示未开火
-	ShootY        int64                  `protobuf:"varint,5,opt,name=shoot_y,json=shootY,proto3" json:"shoot_y,omitempty"`                                  // 开火位置Y，0表示未开火
-	FoodId        int32                  `protobuf:"varint,6,opt,name=food_id,json=foodId,proto3" json:"food_id,omitempty"`                                  // 选择的食物ID，0表示未选择
+	IsFire        bool                   `protobuf:"varint,4,opt,name=isFire,proto3" json:"isFire,omitempty"`
+	ShootX        int64                  `protobuf:"varint,5,opt,name=shoot_x,json=shootX,proto3" json:"shoot_x,omitempty"` // 开火位置X
+	ShootY        int64                  `protobuf:"varint,6,opt,name=shoot_y,json=shootY,proto3" json:"shoot_y,omitempty"` // 开火位置Y
+	FoodId        int32                  `protobuf:"varint,7,opt,name=food_id,json=foodId,proto3" json:"food_id,omitempty"` // 选择的食物ID，-1表示未选择
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -905,6 +906,13 @@ func (x *FrameData) GetInputType() InputType {
 		return x.InputType
 	}
 	return InputType_INPUT_NONE
+}
+
+func (x *FrameData) GetIsFire() bool {
+	if x != nil {
+		return x.IsFire
+	}
+	return false
 }
 
 func (x *FrameData) GetShootX() int64 {
@@ -1357,16 +1365,17 @@ const file_proto_game_proto_rawDesc = "" +
 	"\x0fRoomListRequest\"A\n" +
 	"\x10GameStartRequest\x12\x17\n" +
 	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x14\n" +
-	"\x05level\x18\x02 \x01(\x05R\x05level\"\xc6\x01\n" +
+	"\x05level\x18\x02 \x01(\x05R\x05level\"\xde\x01\n" +
 	"\tFrameData\x12\x1b\n" +
 	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\x12\x1d\n" +
 	"\n" +
 	"time_stamp\x18\x02 \x01(\x03R\ttimeStamp\x122\n" +
 	"\n" +
-	"input_type\x18\x03 \x01(\x0e2\x13.tankgame.InputTypeR\tinputType\x12\x17\n" +
-	"\ashoot_x\x18\x04 \x01(\x03R\x06shootX\x12\x17\n" +
-	"\ashoot_y\x18\x05 \x01(\x03R\x06shootY\x12\x17\n" +
-	"\afood_id\x18\x06 \x01(\x05R\x06foodId\"b\n" +
+	"input_type\x18\x03 \x01(\x0e2\x13.tankgame.InputTypeR\tinputType\x12\x16\n" +
+	"\x06isFire\x18\x04 \x01(\bR\x06isFire\x12\x17\n" +
+	"\ashoot_x\x18\x05 \x01(\x03R\x06shootX\x12\x17\n" +
+	"\ashoot_y\x18\x06 \x01(\x03R\x06shootY\x12\x17\n" +
+	"\afood_id\x18\a \x01(\x05R\x06foodId\"b\n" +
 	"\vServerFrame\x12\x1d\n" +
 	"\n" +
 	"time_stamp\x18\x01 \x01(\x03R\ttimeStamp\x124\n" +

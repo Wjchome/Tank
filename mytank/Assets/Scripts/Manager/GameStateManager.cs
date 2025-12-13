@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using FixMath.NET;
 using UnityEngine;
 using Tankgame;
 using TMPro;
@@ -32,10 +33,13 @@ public class GameStateManager : SingletonMono<GameStateManager>
             }
 
             // 处理开火
-            if (frameData.ShootX != 0 || frameData.ShootY != 0)
+            if (frameData.IsFire)
             {
                 tank.ShootAt(frameData.ShootX, frameData.ShootY);
             }
+
+            tank.mouseWorldX = Fix64.FromRaw(frameData.ShootX);
+            tank.mouseWorldY = Fix64.FromRaw(frameData.ShootY);
 
             // 处理食物选择
             if (frameData.FoodId != -1)

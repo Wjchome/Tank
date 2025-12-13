@@ -11,11 +11,12 @@ public class InputManager : SingletonMono<InputManager>
 
     // 当前缓冲的帧数据（在服务器帧间隔内收集）
     private InputType bufferedInputType = InputType.InputNone;
+    private bool isFire = false;
     private long bufferedShootX = 0;
     private long bufferedShootY = 0;
     private int bufferedFoodId = -1;
-    private bool hasBufferedData = false;
 
+    
     Queue<int> foodTiggerQueue = new Queue<int>();
 
     private Vector2 mouseWorldPos;
@@ -29,11 +30,11 @@ public class InputManager : SingletonMono<InputManager>
         }
 
         mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // 收集当前帧的输入（不立即发送）
-        CollectInputs();
 
+        CollectInputs();
+        
         player.barrel.rotation = Quaternion.Euler(0, 0,
-            Mathf.Atan2(mouseWorldPos.y - player.transform.position.x, mouseWorldPos.x - player.transform.position.y) *
+            Mathf.Atan2(mouseWorldPos.y - player.transform.position.y, mouseWorldPos.x - player.transform.position.x) *
             Mathf.Rad2Deg - 90);
     }
 
@@ -41,6 +42,7 @@ public class InputManager : SingletonMono<InputManager>
     public void UpdateFrame()
     {
         ProcessFood();
+        ProcessMouse();
         SendBufferedFrameData();
     }
 
@@ -86,7 +88,6 @@ public class InputManager : SingletonMono<InputManager>
         {
             // 更新缓冲的移动输入（保留最新的）
             bufferedInputType = moveDir.ToDirection().ToInputType();
-            hasBufferedData = true;
         }
     }
 
@@ -98,28 +99,21 @@ public class InputManager : SingletonMono<InputManager>
         // 检查射击冷却
         if (NetworkManager.Instance.currentFrame - player.lastShootFrame > player.CurrentShootIntervalFrame())
         {
-            Vector2 targetPos = Vector2.zero;
-            bool shouldShoot = false;
 
             // 键盘输入：使用鼠标位置作为开火目标
             if (Input.GetMouseButton(0))
             {
-                targetPos = mouseWorldPos;
-                shouldShoot = true;
-            }
-
-            if (shouldShoot)
-            {
+                isFire = true;
                 // 将Vector2转换为Fix64，然后获取原始值（rawValue）
-                Fix64 targetXFix = (Fix64)targetPos.x;
-                Fix64 targetYFix = (Fix64)targetPos.y;
+                Fix64 targetXFix = (Fix64)mouseWorldPos.x;
+                Fix64 targetYFix = (Fix64)mouseWorldPos.y;
 
                 // 更新缓冲的射击输入（保留最新的）
                 bufferedShootX = targetXFix.RawValue;
                 bufferedShootY = targetYFix.RawValue;
-                hasBufferedData = true;
                 player.lastShootFrame = NetworkManager.Instance.currentFrame;
             }
+
         }
     }
 
@@ -128,8 +122,21 @@ public class InputManager : SingletonMono<InputManager>
     {
         if (foodTiggerQueue.Count > 0)
         {
-            hasBufferedData = true;
             bufferedFoodId = foodTiggerQueue.Dequeue();
+        }
+    }
+
+    void ProcessMouse()
+    {
+        if (!isFire)
+        {
+            // 将Vector2转换为Fix64，然后获取原始值（rawValue）
+            Fix64 targetXFix = (Fix64)mouseWorldPos.x;
+            Fix64 targetYFix = (Fix64)mouseWorldPos.y;
+
+            // 更新缓冲的射击输入（保留最新的）
+            bufferedShootX = targetXFix.RawValue;
+            bufferedShootY = targetYFix.RawValue;
         }
     }
 
@@ -143,14 +150,12 @@ public class InputManager : SingletonMono<InputManager>
     /// </summary>
     void SendBufferedFrameData()
     {
-        if (!hasBufferedData)
-        {
-            return;
-        }
+     
 
         // 发送合并后的帧数据
         NetworkManager.Instance.SendFrameData(
             inputType: bufferedInputType,
+            isFire:isFire,
             shootX: bufferedShootX,
             shootY: bufferedShootY,
             foodId: bufferedFoodId
@@ -158,10 +163,10 @@ public class InputManager : SingletonMono<InputManager>
 
         // 重置缓冲区
         bufferedInputType = InputType.InputNone;
+        isFire = false;
         bufferedShootX = 0;
         bufferedShootY = 0;
         bufferedFoodId = -1;
-        hasBufferedData = false;
     }
 
 
@@ -170,9 +175,8 @@ public class InputManager : SingletonMono<InputManager>
     /// </summary>
     public void FlushBuffer()
     {
-        if (hasBufferedData)
-        {
+        
             SendBufferedFrameData();
-        }
+        
     }
 }

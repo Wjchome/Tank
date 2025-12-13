@@ -432,7 +432,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
     /// <summary>
     /// 发送帧数据（移动、开火、选择食物）
     /// </summary>
-    public void SendFrameData(InputType inputType = InputType.InputNone, long shootX = 0, long shootY = 0, int foodId = -1)
+    public void SendFrameData(InputType inputType = InputType.InputNone,bool isFire = false, long shootX = 0, long shootY = 0, int foodId = -1)
     {
         if (!isConnected)
         {
@@ -445,6 +445,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
             PlayerId = playerID,
             TimeStamp = currentFrame,
             InputType = inputType,
+            IsFire = isFire,
             ShootX = shootX,
             ShootY = shootY,
             FoodId = foodId

@@ -80,7 +80,11 @@ public class BulletController : MapEntity
 
                 if (get[i].Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall)))
                 {
-                    //删除 这个墙
+                    GameObject wall = get[i].Target;
+                    QuadTreeV3.QuadTreeV3.Instance.RemoveObject(wall);
+                    Destroy(wall);
+                    MapManager.Instance.CreateWallType( get[i].Bounds, MapType.floor);
+                    
                     DestroyBullet();
 
                     isCango = false;

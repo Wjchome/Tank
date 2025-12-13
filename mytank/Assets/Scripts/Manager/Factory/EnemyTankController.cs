@@ -70,6 +70,11 @@ public class EnemyTankController : TankController
         }
     }
 
+   public override void Update()
+    {
+        base.Update();
+        barrel.rotation = body.rotation;
+    }
     public void Dead(PlayerTankController attacker)
     {
         if (isDead) return;

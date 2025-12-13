@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class PlayerTankController : TankController
 {
+    public Fix64 mouseWorldX;
+    public Fix64 mouseWorldY;
+    
     //击杀数量
     public int killNum = 0;
 
@@ -71,10 +74,12 @@ public class PlayerTankController : TankController
 
     public bool isLegionoftheFallen;
 
+    private float _angleVelocity;
     public override void UpdateFrame()
     {
         base.UpdateFrame();
-        HandleBuff();
+
+         HandleBuff();
     }
 
     void HandleBuff()
@@ -159,6 +164,9 @@ public class PlayerTankController : TankController
     public override void Update()
     {
         base.Update();
+        barrel.rotation = Quaternion.Slerp(barrel.rotation,Quaternion.Euler(0, 0,
+            Mathf.Atan2((float)mouseWorldY - transform.position.y, (float)mouseWorldX - transform.position.x) * Mathf.Rad2Deg - 90 ), 10 * Time.deltaTime);
+
     }
 
     public int CurrentShootIntervalFrame()

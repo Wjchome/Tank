@@ -46,7 +46,7 @@ public abstract class TankController : MonoBehaviour
     public float moveSpeed;
     public Fix64 moveSpeedF => (Fix64)moveSpeed;
     public Fix64 rotationF = Fix64.Zero;
-
+    
 
     // 一些计时器
     public long lastShootFrame;
@@ -131,8 +131,9 @@ public abstract class TankController : MonoBehaviour
         transform.position =
             Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
 
-        body.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0f, 0f, (float)rotationF),
+        body.rotation = Quaternion.Slerp(body.rotation, Quaternion.Euler(0f, 0f, (float)rotationF),
             5 * Time.deltaTime);
+        
     }
 
 

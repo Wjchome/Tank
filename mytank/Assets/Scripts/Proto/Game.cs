@@ -46,34 +46,34 @@ namespace Tankgame {
             "YW1lU3RhcnQSDwoHcm9vbV9pZBgBIAEoCRIqCgxwbGF5ZXJfaW5mb3MYAiAD",
             "KAsyFC50YW5rZ2FtZS5QbGF5ZXJJbmZvEhMKC3JhbmRvbV9zZWVkGAMgASgD",
             "Eg0KBWxldmVsGAQgASgFIhEKD1Jvb21MaXN0UmVxdWVzdCIyChBHYW1lU3Rh",
-            "cnRSZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSDQoFbGV2ZWwYAiABKAUijgEK",
+            "cnRSZXF1ZXN0Eg8KB3Jvb21faWQYASABKAkSDQoFbGV2ZWwYAiABKAUingEK",
             "CUZyYW1lRGF0YRIRCglwbGF5ZXJfaWQYASABKAkSEgoKdGltZV9zdGFtcBgC",
             "IAEoAxInCgppbnB1dF90eXBlGAMgASgOMhMudGFua2dhbWUuSW5wdXRUeXBl",
-            "Eg8KB3Nob290X3gYBCABKAMSDwoHc2hvb3RfeRgFIAEoAxIPCgdmb29kX2lk",
-            "GAYgASgFIksKC1NlcnZlckZyYW1lEhIKCnRpbWVfc3RhbXAYASABKAMSKAoL",
-            "ZnJhbWVfZGF0YXMYAiADKAsyEy50YW5rZ2FtZS5GcmFtZURhdGEi+AEKDVNl",
-            "cnZlck1lc3NhZ2USLQoMc2VydmVyX2ZyYW1lGAEgASgLMhUudGFua2dhbWUu",
-            "U2VydmVyRnJhbWVIABInCglyb29tX2luZm8YAiABKAsyEi50YW5rZ2FtZS5S",
-            "b29tSW5mb0gAEikKCmdhbWVfc3RhcnQYAyABKAsyEy50YW5rZ2FtZS5HYW1l",
-            "U3RhcnRIABIzCg9jb25uZWN0X3N1Y2Nlc3MYBCABKAsyGC50YW5rZ2FtZS5D",
-            "b25uZWN0U3VjY2Vzc0gAEicKCXJvb21fbGlzdBgFIAEoCzISLnRhbmtnYW1l",
-            "LlJvb21MaXN0SABCBgoEZGF0YSLWAwoNQ2xpZW50TWVzc2FnZRIpCgpmcmFt",
-            "ZV9kYXRhGAEgASgLMhMudGFua2dhbWUuRnJhbWVEYXRhSAASOgoTY3JlYXRl",
-            "X3Jvb21fcmVxdWVzdBgCIAEoCzIbLnRhbmtnYW1lLkNyZWF0ZVJvb21SZXF1",
-            "ZXN0SAASNgoRam9pbl9yb29tX3JlcXVlc3QYAyABKAsyGS50YW5rZ2FtZS5K",
-            "b2luUm9vbVJlcXVlc3RIABI4ChJsZWF2ZV9yb29tX3JlcXVlc3QYBCABKAsy",
-            "Gi50YW5rZ2FtZS5MZWF2ZVJvb21SZXF1ZXN0SAASNgoRcm9vbV9saXN0X3Jl",
-            "cXVlc3QYBSABKAsyGS50YW5rZ2FtZS5Sb29tTGlzdFJlcXVlc3RIABI4ChJn",
-            "YW1lX3N0YXJ0X3JlcXVlc3QYBiABKAsyGi50YW5rZ2FtZS5HYW1lU3RhcnRS",
-            "ZXF1ZXN0SAASOgoTa2lja19wbGF5ZXJfcmVxdWVzdBgHIAEoCzIbLnRhbmtn",
-            "YW1lLktpY2tQbGF5ZXJSZXF1ZXN0SAASNgoRZ2FtZV9vdmVyX3JlcXVlc3QY",
-            "CCABKAsyGS50YW5rZ2FtZS5HYW1lT3ZlclJlcXVlc3RIAEIGCgRkYXRhKtQB",
-            "CglJbnB1dFR5cGUSDgoKSU5QVVRfTk9ORRAAEhEKDUlOUFVUX01PVkVfVVAQ",
-            "ARITCg9JTlBVVF9NT1ZFX0RPV04QAhITCg9JTlBVVF9NT1ZFX0xFRlQQAxIU",
-            "ChBJTlBVVF9NT1ZFX1JJR0hUEAQSFgoSSU5QVVRfTU9WRV9VUF9MRUZUEAUS",
-            "FwoTSU5QVVRfTU9WRV9VUF9SSUdIVBAGEhgKFElOUFVUX01PVkVfRE9XTl9M",
-            "RUZUEAcSGQoVSU5QVVRfTU9WRV9ET1dOX1JJR0hUEAhCDloMc2VydmVyL3By",
-            "b3RvYgZwcm90bzM="));
+            "Eg4KBmlzRmlyZRgEIAEoCBIPCgdzaG9vdF94GAUgASgDEg8KB3Nob290X3kY",
+            "BiABKAMSDwoHZm9vZF9pZBgHIAEoBSJLCgtTZXJ2ZXJGcmFtZRISCgp0aW1l",
+            "X3N0YW1wGAEgASgDEigKC2ZyYW1lX2RhdGFzGAIgAygLMhMudGFua2dhbWUu",
+            "RnJhbWVEYXRhIvgBCg1TZXJ2ZXJNZXNzYWdlEi0KDHNlcnZlcl9mcmFtZRgB",
+            "IAEoCzIVLnRhbmtnYW1lLlNlcnZlckZyYW1lSAASJwoJcm9vbV9pbmZvGAIg",
+            "ASgLMhIudGFua2dhbWUuUm9vbUluZm9IABIpCgpnYW1lX3N0YXJ0GAMgASgL",
+            "MhMudGFua2dhbWUuR2FtZVN0YXJ0SAASMwoPY29ubmVjdF9zdWNjZXNzGAQg",
+            "ASgLMhgudGFua2dhbWUuQ29ubmVjdFN1Y2Nlc3NIABInCglyb29tX2xpc3QY",
+            "BSABKAsyEi50YW5rZ2FtZS5Sb29tTGlzdEgAQgYKBGRhdGEi1gMKDUNsaWVu",
+            "dE1lc3NhZ2USKQoKZnJhbWVfZGF0YRgBIAEoCzITLnRhbmtnYW1lLkZyYW1l",
+            "RGF0YUgAEjoKE2NyZWF0ZV9yb29tX3JlcXVlc3QYAiABKAsyGy50YW5rZ2Ft",
+            "ZS5DcmVhdGVSb29tUmVxdWVzdEgAEjYKEWpvaW5fcm9vbV9yZXF1ZXN0GAMg",
+            "ASgLMhkudGFua2dhbWUuSm9pblJvb21SZXF1ZXN0SAASOAoSbGVhdmVfcm9v",
+            "bV9yZXF1ZXN0GAQgASgLMhoudGFua2dhbWUuTGVhdmVSb29tUmVxdWVzdEgA",
+            "EjYKEXJvb21fbGlzdF9yZXF1ZXN0GAUgASgLMhkudGFua2dhbWUuUm9vbUxp",
+            "c3RSZXF1ZXN0SAASOAoSZ2FtZV9zdGFydF9yZXF1ZXN0GAYgASgLMhoudGFu",
+            "a2dhbWUuR2FtZVN0YXJ0UmVxdWVzdEgAEjoKE2tpY2tfcGxheWVyX3JlcXVl",
+            "c3QYByABKAsyGy50YW5rZ2FtZS5LaWNrUGxheWVyUmVxdWVzdEgAEjYKEWdh",
+            "bWVfb3Zlcl9yZXF1ZXN0GAggASgLMhkudGFua2dhbWUuR2FtZU92ZXJSZXF1",
+            "ZXN0SABCBgoEZGF0YSrUAQoJSW5wdXRUeXBlEg4KCklOUFVUX05PTkUQABIR",
+            "Cg1JTlBVVF9NT1ZFX1VQEAESEwoPSU5QVVRfTU9WRV9ET1dOEAISEwoPSU5Q",
+            "VVRfTU9WRV9MRUZUEAMSFAoQSU5QVVRfTU9WRV9SSUdIVBAEEhYKEklOUFVU",
+            "X01PVkVfVVBfTEVGVBAFEhcKE0lOUFVUX01PVkVfVVBfUklHSFQQBhIYChRJ",
+            "TlBVVF9NT1ZFX0RPV05fTEVGVBAHEhkKFUlOUFVUX01PVkVfRE9XTl9SSUdI",
+            "VBAIQg5aDHNlcnZlci9wcm90b2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Tankgame.InputType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -89,7 +89,7 @@ namespace Tankgame {
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStart), global::Tankgame.GameStart.Parser, new[]{ "RoomId", "PlayerInfos", "RandomSeed", "Level" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.RoomListRequest), global::Tankgame.RoomListRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.GameStartRequest), global::Tankgame.GameStartRequest.Parser, new[]{ "RoomId", "Level" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.FrameData), global::Tankgame.FrameData.Parser, new[]{ "PlayerId", "TimeStamp", "InputType", "ShootX", "ShootY", "FoodId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.FrameData), global::Tankgame.FrameData.Parser, new[]{ "PlayerId", "TimeStamp", "InputType", "IsFire", "ShootX", "ShootY", "FoodId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ServerFrame), global::Tankgame.ServerFrame.Parser, new[]{ "TimeStamp", "FrameDatas" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ServerMessage), global::Tankgame.ServerMessage.Parser, new[]{ "ServerFrame", "RoomInfo", "GameStart", "ConnectSuccess", "RoomList" }, new[]{ "Data" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Tankgame.ClientMessage), global::Tankgame.ClientMessage.Parser, new[]{ "FrameData", "CreateRoomRequest", "JoinRoomRequest", "LeaveRoomRequest", "RoomListRequest", "GameStartRequest", "KickPlayerRequest", "GameOverRequest" }, new[]{ "Data" }, null, null, null)
@@ -3591,6 +3591,7 @@ namespace Tankgame {
       playerId_ = other.playerId_;
       timeStamp_ = other.timeStamp_;
       inputType_ = other.inputType_;
+      isFire_ = other.isFire_;
       shootX_ = other.shootX_;
       shootY_ = other.shootY_;
       foodId_ = other.foodId_;
@@ -3642,11 +3643,23 @@ namespace Tankgame {
       }
     }
 
+    /// <summary>Field number for the "isFire" field.</summary>
+    public const int IsFireFieldNumber = 4;
+    private bool isFire_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsFire {
+      get { return isFire_; }
+      set {
+        isFire_ = value;
+      }
+    }
+
     /// <summary>Field number for the "shoot_x" field.</summary>
-    public const int ShootXFieldNumber = 4;
+    public const int ShootXFieldNumber = 5;
     private long shootX_;
     /// <summary>
-    /// 开火位置X，0表示未开火
+    /// 开火位置X
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3658,10 +3671,10 @@ namespace Tankgame {
     }
 
     /// <summary>Field number for the "shoot_y" field.</summary>
-    public const int ShootYFieldNumber = 5;
+    public const int ShootYFieldNumber = 6;
     private long shootY_;
     /// <summary>
-    /// 开火位置Y，0表示未开火
+    /// 开火位置Y
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3673,10 +3686,10 @@ namespace Tankgame {
     }
 
     /// <summary>Field number for the "food_id" field.</summary>
-    public const int FoodIdFieldNumber = 6;
+    public const int FoodIdFieldNumber = 7;
     private int foodId_;
     /// <summary>
-    /// 选择的食物ID，0表示未选择
+    /// 选择的食物ID，-1表示未选择
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3705,6 +3718,7 @@ namespace Tankgame {
       if (PlayerId != other.PlayerId) return false;
       if (TimeStamp != other.TimeStamp) return false;
       if (InputType != other.InputType) return false;
+      if (IsFire != other.IsFire) return false;
       if (ShootX != other.ShootX) return false;
       if (ShootY != other.ShootY) return false;
       if (FoodId != other.FoodId) return false;
@@ -3718,6 +3732,7 @@ namespace Tankgame {
       if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
       if (TimeStamp != 0L) hash ^= TimeStamp.GetHashCode();
       if (InputType != global::Tankgame.InputType.InputNone) hash ^= InputType.GetHashCode();
+      if (IsFire != false) hash ^= IsFire.GetHashCode();
       if (ShootX != 0L) hash ^= ShootX.GetHashCode();
       if (ShootY != 0L) hash ^= ShootY.GetHashCode();
       if (FoodId != 0) hash ^= FoodId.GetHashCode();
@@ -3751,16 +3766,20 @@ namespace Tankgame {
         output.WriteRawTag(24);
         output.WriteEnum((int) InputType);
       }
-      if (ShootX != 0L) {
+      if (IsFire != false) {
         output.WriteRawTag(32);
+        output.WriteBool(IsFire);
+      }
+      if (ShootX != 0L) {
+        output.WriteRawTag(40);
         output.WriteInt64(ShootX);
       }
       if (ShootY != 0L) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(48);
         output.WriteInt64(ShootY);
       }
       if (FoodId != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(56);
         output.WriteInt32(FoodId);
       }
       if (_unknownFields != null) {
@@ -3785,16 +3804,20 @@ namespace Tankgame {
         output.WriteRawTag(24);
         output.WriteEnum((int) InputType);
       }
-      if (ShootX != 0L) {
+      if (IsFire != false) {
         output.WriteRawTag(32);
+        output.WriteBool(IsFire);
+      }
+      if (ShootX != 0L) {
+        output.WriteRawTag(40);
         output.WriteInt64(ShootX);
       }
       if (ShootY != 0L) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(48);
         output.WriteInt64(ShootY);
       }
       if (FoodId != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(56);
         output.WriteInt32(FoodId);
       }
       if (_unknownFields != null) {
@@ -3815,6 +3838,9 @@ namespace Tankgame {
       }
       if (InputType != global::Tankgame.InputType.InputNone) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) InputType);
+      }
+      if (IsFire != false) {
+        size += 1 + 1;
       }
       if (ShootX != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(ShootX);
@@ -3845,6 +3871,9 @@ namespace Tankgame {
       }
       if (other.InputType != global::Tankgame.InputType.InputNone) {
         InputType = other.InputType;
+      }
+      if (other.IsFire != false) {
+        IsFire = other.IsFire;
       }
       if (other.ShootX != 0L) {
         ShootX = other.ShootX;
@@ -3887,14 +3916,18 @@ namespace Tankgame {
             break;
           }
           case 32: {
-            ShootX = input.ReadInt64();
+            IsFire = input.ReadBool();
             break;
           }
           case 40: {
-            ShootY = input.ReadInt64();
+            ShootX = input.ReadInt64();
             break;
           }
           case 48: {
+            ShootY = input.ReadInt64();
+            break;
+          }
+          case 56: {
             FoodId = input.ReadInt32();
             break;
           }
@@ -3930,14 +3963,18 @@ namespace Tankgame {
             break;
           }
           case 32: {
-            ShootX = input.ReadInt64();
+            IsFire = input.ReadBool();
             break;
           }
           case 40: {
-            ShootY = input.ReadInt64();
+            ShootX = input.ReadInt64();
             break;
           }
           case 48: {
+            ShootY = input.ReadInt64();
+            break;
+          }
+          case 56: {
             FoodId = input.ReadInt32();
             break;
           }

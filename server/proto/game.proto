@@ -111,9 +111,10 @@ message FrameData {
   string player_id = 1;
   int64 time_stamp = 2;
   InputType input_type = 3;  // 移动输入，0表示无输入
-  int64 shoot_x = 4;  // 开火位置X，0表示未开火
-  int64 shoot_y = 5;  // 开火位置Y，0表示未开火
-  int32 food_id = 6;  // 选择的食物ID，0表示未选择
+  bool isFire  = 4; 
+  int64 shoot_x = 5;  // 开火位置X
+  int64 shoot_y = 6;  // 开火位置Y
+  int32 food_id = 7;  // 选择的食物ID，-1表示未选择
 }
 
 // 服务器帧消息（服务器广播）
