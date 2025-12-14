@@ -128,7 +128,7 @@ public class BulletController : MapEntity
                             _bulletController.penetrationCount--;
                             if (_bulletController.penetrationCount <= 0)
                             {
-                                DestroyBullet();
+                                _bulletController.DestroyBullet();
                             }
                         }
                     }

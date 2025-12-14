@@ -2,15 +2,13 @@ package main
 
 import (
 	"bufio"
-	"crypto/rand"
 	"encoding/binary"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net"
+	"strconv"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	myproto "github.com/WjcHome/gohello/proto" // 使用模块路径导入proto包
@@ -23,21 +21,7 @@ const (
 
 // 全局客户端计数器
 var clientCounter int64 = 0
-
-// 生成唯一客户端ID
-func generateClientID() string {
-	// 使用原子操作递增计数器
-	counter := atomic.AddInt64(&clientCounter, 1)
-
-	// 生成随机字节
-	randomBytes := make([]byte, 8)
-	rand.Read(randomBytes)
-	randomHex := hex.EncodeToString(randomBytes)
-
-	// 组合时间戳、计数器和随机数
-	timestamp := time.Now().UnixNano()
-	return fmt.Sprintf("client_%d_%d_%s", timestamp, counter, randomHex[:8])
-}
+var roomCounter int64 = 0
 
 // 服务器信息结构
 type ServerInfo struct {
@@ -196,7 +180,8 @@ func (s *Server) handleClient(conn net.Conn) {
 		tcpConn.SetNoDelay(true)
 	}
 
-	clientID := generateClientID()
+	clientID := strconv.Itoa(int(clientCounter))
+	clientCounter++
 	client := &Client{ID: clientID, Conn: conn}
 
 	// 发送连接成功消息
@@ -282,7 +267,8 @@ func (s *Server) handleFrameData(client *Client, frameData *myproto.FrameData) {
 }
 
 func (s *Server) handleCreateRoom(client *Client, req *myproto.CreateRoomRequest) {
-	roomID := fmt.Sprintf("room_%d", time.Now().UnixNano())
+	roomID := strconv.Itoa(int(roomCounter))
+	roomCounter++
 	roomName := req.RoomName
 	if roomName == "" {
 		roomName = fmt.Sprintf("Room %s", roomID[:8])
