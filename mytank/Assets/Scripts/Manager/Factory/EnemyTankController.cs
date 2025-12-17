@@ -27,7 +27,7 @@ public class EnemyTankController : TankController
         {
             if (enter.gameObject.CompareTag("Wall") ||
                 enter.gameObject.CompareTag("BreakableWall") ||
-                enter.gameObject.CompareTag("Ice") ||
+                enter.gameObject.CompareTag("River") ||
                 enter.gameObject.CompareTag("Tank"))
             {
                 int a = random.Next(0, 8);
@@ -59,10 +59,9 @@ public class EnemyTankController : TankController
 
     public  void Shoot()
     {
-        //FixRect currentRect = myFixRect;
 
-       // EntityManager.Instance.InitializeBullet(tankDirection.ToFixVector2().Item1, this, currentRect, bulletDamageNum);
-        //AudioManager.Instance.Play("Shoot");
+        EntityManager.Instance.InitializeBullet(tankDirection.ToFixVector2().Item1, this, rigidBody2D.Body.Position, bulletDamageNum);
+        AudioManager.Instance.Play("Shoot");
     }
 
     public override void AddOrignalHP(int num)
