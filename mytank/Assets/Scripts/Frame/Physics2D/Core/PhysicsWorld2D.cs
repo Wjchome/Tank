@@ -148,6 +148,7 @@ namespace Physics2D
         /// 4. 更新位置：x = x + v*dt
         /// 5. 碰撞检测和响应
         /// 6. 处理触发器回调（enter/stay/exit）
+        /// 注意：时间步长假设为1（每帧代表一个固定时间单位）
         /// </summary>
         public void Update()
         {
@@ -156,6 +157,9 @@ namespace Physics2D
 
             // 3. 计算加速度并更新速度 更新位置（积分）
             UpdateVelocities();
+
+            // 4. 在迭代前更新一次四叉树（优化：避免在每次迭代中重复更新）
+            UpdateQuadTreeIncremental();
 
             // 5. 碰撞检测和响应（迭代多次以提高稳定性）
             for (int i = 0; i < Iterations; i++)
@@ -245,11 +249,10 @@ namespace Physics2D
         /// <summary>
         /// 碰撞检测和响应
         /// 使用四叉树优化：O(n^2) -> O(n log n)
+        /// 注意：四叉树更新已在Update()中统一处理，这里不再重复更新
         /// </summary>
         private void ResolveCollisions()
         {
-            UpdateQuadTreeIncremental(); // 使用增量更新
-
             ResolveCollisionsWithQuadTree();
         }
 
@@ -258,10 +261,12 @@ namespace Physics2D
         /// 使用四叉树优化的碰撞检测（O(n log n)）
         /// 优化：四叉树只做AABB快速筛选，精确检测在物理系统中进行，避免重复计算SAT
         /// </summary>
+        private HashSet<(int, int)> _checkedPairsCache = new HashSet<(int, int)>();
+
         private void ResolveCollisionsWithQuadTree()
         {
-            // 使用HashSet避免重复检测同一对物体
-            HashSet<(int, int)> checkedPairs = new HashSet<(int, int)>();
+            // 使用HashSet避免重复检测同一对物体（重用缓存，减少GC）
+            _checkedPairsCache.Clear();
 
             for (int i = 0; i < bodies.Count; i++)
             {
@@ -278,9 +283,13 @@ namespace Physics2D
                 foreach (var bodyB in candidates)
                 {
                     if (bodyB.Equals(bodyA)) continue;
+                    
+                    // 跳过静态-静态碰撞对（静态物体不会相互碰撞）
+                    if (!bodyA.IsDynamic && !bodyB.IsDynamic) continue;
+                    
                     var pair = bodyA.id < bodyB.id ? (bodyA.id, bodyB.id) : (bodyB.id, bodyA.id);
-                    if (checkedPairs.Contains(pair)) continue;
-                    checkedPairs.Add(pair);
+                    if (_checkedPairsCache.Contains(pair)) continue;
+                    _checkedPairsCache.Add(pair);
 
                     // 窄相位：精确碰撞检测（这里会使用FixRect.Overlaps()的SAT，只计算一次）
                     if (CollisionShape2D.CheckCollision(
@@ -327,9 +336,14 @@ namespace Physics2D
         /// </summary>
         private void SeparateBodies(RigidBody2D bodyA, RigidBody2D bodyB, Contact2D contact)
         {
+            // 如果两个都是静态物体，不需要分离
+            if (!bodyA.IsDynamic && !bodyB.IsDynamic)
+            {
+                return;
+            }
+
             // 计算需要移动的距离（根据质量分配）
             Fix64 totalMass = bodyA.Mass + bodyB.Mass;
-
 
             // 质量越大，移动距离越小
             Fix64 moveA = bodyB.Mass / totalMass;
@@ -383,6 +397,11 @@ namespace Physics2D
             Fix64 invMassB = bodyB.IsDynamic ? Fix64.One / bodyB.Mass : Fix64.Zero;
             Fix64 invMassSum = invMassA + invMassB;
 
+            // 防止除零（两个静态物体不应该进入这里，但添加保护）
+            if (invMassSum == Fix64.Zero)
+            {
+                return;
+            }
 
             Fix64 impulseMagnitude = -(Fix64.One + restitution) * velocityAlongNormal / invMassSum;
 
@@ -397,14 +416,20 @@ namespace Physics2D
             if (tangentLength > Fix64.Zero)
             {
                 FixVector2 tangentDir = tangent / tangentLength;
-                Fix64 frictionImpulse = -FixVector2.Dot(relativeVelocity, tangentDir) / invMassSum;
+                
+                // 计算切向速度大小（沿切向方向的相对速度）
+                Fix64 tangentVelocity = FixVector2.Dot(relativeVelocity, tangentDir);
+                
+                // 计算摩擦力冲量（尝试消除切向速度）
+                // 注意：这里需要除以invMassSum来得到正确的冲量
+                Fix64 frictionImpulse = -tangentVelocity / invMassSum;
 
-                // 限制摩擦力（库仑摩擦）
+                // 限制摩擦力（库仑摩擦：摩擦力不能超过法向力乘以摩擦系数）
                 Fix64 frictionCoeff = Fix64.Sqrt(bodyA.Friction * bodyB.Friction);
                 Fix64 maxFriction = Fix64.Abs(impulseMagnitude) * frictionCoeff;
-                //限制大小
+                
+                // 限制摩擦力大小（库仑摩擦定律）
                 frictionImpulse = Fix64.Clamp(frictionImpulse, -maxFriction, maxFriction);
-
 
                 FixVector2 friction = tangentDir * frictionImpulse;
                 bodyA.ApplyImpulse(-friction);

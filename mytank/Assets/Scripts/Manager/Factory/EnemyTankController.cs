@@ -39,7 +39,7 @@ public class EnemyTankController : TankController
         {
             if (enter.gameObject.CompareTag("Wall") ||
                 enter.gameObject.CompareTag("BreakableWall") ||
-                enter.gameObject.CompareTag("Ice") ||
+                enter.gameObject.CompareTag("River") ||
                 enter.gameObject.CompareTag("Tank"))
             {
                 int a = random.Next(0, 8);
