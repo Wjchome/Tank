@@ -25,10 +25,6 @@ namespace Physics2D
         /// </summary>
         public FixVector2 Gravity { get; set; } = FixVector2.Zero;
 
-        /// <summary>
-        /// 时间步长（秒）
-        /// </summary>
-        public Fix64 TimeStep { get; set; } = Fix64.One / (Fix64)30; // 默认60fps
 
         /// <summary>
         /// 迭代次数（用于碰撞分离，提高稳定性）
@@ -57,14 +53,14 @@ namespace Physics2D
             {
                 throw new System.Exception("物理体已属于其他世界");
             }
-            
+
 
             if (!bodies.Contains(body))
             {
                 bodies.Add(body);
                 body.World = this;
                 body.id = ++nextId;
-                
+
                 // 标记为脏，下次更新时添加到四叉树
                 body.QuadTreeDirty = true;
                 body.InQuadTree = false;
@@ -88,10 +84,10 @@ namespace Physics2D
                     quadTree.RemoveObject(body);
                     body.InQuadTree = false;
                 }
+
                 body.World = null;
             }
         }
-
 
 
         /// <summary>
@@ -110,6 +106,7 @@ namespace Physics2D
                     body.InQuadTree = true;
                     body.PreviousAABB = body.Shape.GetBounds(body.Position);
                 }
+
                 return;
             }
 
@@ -119,7 +116,7 @@ namespace Physics2D
                 if (body.QuadTreeDirty)
                 {
                     FixRect currentAABB = body.Shape.GetBounds(body.Position);
-                    
+
                     if (!body.InQuadTree)
                     {
                         // 新物体：添加到四叉树
@@ -135,7 +132,7 @@ namespace Physics2D
                             quadTree.UpdateObject(body);
                         }
                     }
-                    
+
                     body.PreviousAABB = currentAABB;
                     body.QuadTreeDirty = false;
                 }
@@ -154,22 +151,21 @@ namespace Physics2D
         /// </summary>
         public void Update()
         {
-           
-
             // 2. 收集所有常态力（重力等）
             CollectForces();
 
             // 3. 计算加速度并更新速度 更新位置（积分）
             UpdateVelocities();
-            
+
             // 5. 碰撞检测和响应（迭代多次以提高稳定性）
             for (int i = 0; i < Iterations; i++)
             {
                 ResolveCollisions();
             }
+
             // 6.处理数据
             ProcessAllBody();
-            
+
             // 1. 清除所有物体的力累加器
             ClearForces();
         }
@@ -220,12 +216,12 @@ namespace Physics2D
                     FixVector2 acceleration = body.ForceAccumulator / body.Mass;
 
                     // 更新速度：v = v + a*dt
-                    body.Velocity += acceleration * TimeStep;
-                    
+                    body.Velocity += acceleration;
+
                     FixVector2 oldPosition = body.Position;
                     // 简单欧拉积分：x = x + v * dt
-                    body.Position += body.Velocity * TimeStep;
-                    
+                    body.Position += body.Velocity;
+
                     // 标记为脏（位置改变，需要更新四叉树）
                     // 优化：静态物体不会移动，不需要标记
                     if (oldPosition != body.Position)
@@ -238,7 +234,7 @@ namespace Physics2D
                     {
                         // v = v * (1 - damping * dt)
                         // 使用Clamp确保阻尼值在合理范围内
-                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping, Fix64.Zero, Fix64.One) ;
+                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping, Fix64.Zero, Fix64.One);
                         body.Velocity *= dampingFactor;
                     }
                 }
@@ -253,11 +249,10 @@ namespace Physics2D
         private void ResolveCollisions()
         {
             UpdateQuadTreeIncremental(); // 使用增量更新
-            
+
             ResolveCollisionsWithQuadTree();
         }
-        
-        
+
 
         /// <summary>
         /// 使用四叉树优化的碰撞检测（O(n log n)）
@@ -265,7 +260,6 @@ namespace Physics2D
         /// </summary>
         private void ResolveCollisionsWithQuadTree()
         {
-            
             // 使用HashSet避免重复检测同一对物体
             HashSet<(int, int)> checkedPairs = new HashSet<(int, int)>();
 
@@ -277,20 +271,21 @@ namespace Physics2D
                 {
                     continue;
                 }
+
                 FixRect aabbA = bodyA.Shape.GetBounds(bodyA.Position);
                 // 宽相位：使用AABB快速筛选候选对（不进行精确检测）
                 var candidates = quadTree.Query(aabbA);
                 foreach (var bodyB in candidates)
                 {
                     if (bodyB.Equals(bodyA)) continue;
-                    var pair = bodyA.id <  bodyB.id ? ( bodyA.id,  bodyB.id) : ( bodyB.id,  bodyA.id);
+                    var pair = bodyA.id < bodyB.id ? (bodyA.id, bodyB.id) : (bodyB.id, bodyA.id);
                     if (checkedPairs.Contains(pair)) continue;
                     checkedPairs.Add(pair);
 
                     // 窄相位：精确碰撞检测（这里会使用FixRect.Overlaps()的SAT，只计算一次）
                     if (CollisionShape2D.CheckCollision(
-                            bodyA.Shape, bodyA.Position, 
-                            bodyB.Shape, bodyB.Position, 
+                            bodyA.Shape, bodyA.Position,
+                            bodyB.Shape, bodyB.Position,
                             out Contact2D contact))
                     {
                         Record(bodyA, bodyB);
@@ -305,7 +300,7 @@ namespace Physics2D
             bodyA.CurrentRigidBody2D.Add(bodyB);
             bodyB.CurrentRigidBody2D.Add(bodyA);
         }
-        
+
 
         /// <summary>
         /// 处理碰撞响应（分离物体并修正速度）
@@ -358,7 +353,7 @@ namespace Physics2D
             // 移动物体
             bodyA.Position -= separation * moveA;
             bodyB.Position += separation * moveB;
-            
+
             // 位置改变，标记为脏（需要更新四叉树）
             if (moveA != Fix64.Zero) bodyA.QuadTreeDirty = true;
             if (moveB != Fix64.Zero) bodyB.QuadTreeDirty = true;
@@ -422,8 +417,8 @@ namespace Physics2D
             for (int i = 0; i < bodies.Count; i++)
             {
                 RigidBody2D bodyA = bodies[i];
-                
-                
+
+
                 bodyA.CurrentRigidBody2D = bodyA.CurrentRigidBody2D.GetUniqueList();
                 bodyA.Enter = bodyA.CurrentRigidBody2D.UniqueExcept(bodyA.LastRigidBody2D);
                 bodyA.Stay = bodyA.CurrentRigidBody2D.UniqueIntersect(bodyA.LastRigidBody2D);
@@ -432,7 +427,7 @@ namespace Physics2D
                 bodyA.CurrentRigidBody2D.Clear();
             }
         }
-        
+
 
         /// <summary>
         /// 清除所有物理体

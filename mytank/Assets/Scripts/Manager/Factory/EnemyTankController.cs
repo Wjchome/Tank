@@ -35,6 +35,18 @@ public class EnemyTankController : TankController
 
             }
         }
+        foreach (var enter in rigidBody2D.Stay)
+        {
+            if (enter.gameObject.CompareTag("Wall") ||
+                enter.gameObject.CompareTag("BreakableWall") ||
+                enter.gameObject.CompareTag("Ice") ||
+                enter.gameObject.CompareTag("Tank"))
+            {
+                int a = random.Next(0, 8);
+                tankDirection = (Direction)a;
+
+            }
+        }
         
         if (NetworkManager.Instance.currentFrame - lastShootFrame > shootIntervalFrame)
         {
@@ -94,7 +106,7 @@ public class EnemyTankController : TankController
 
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
         //QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
-        
+        PhysicsWorld2DComponent.Instance.World.RemoveBody(rigidBody2D.Body);
         if (attacker != null)
         {
             if (attacker.isSpeedKiller)

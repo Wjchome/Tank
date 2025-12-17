@@ -102,7 +102,7 @@ MonoBehaviour:
   tank: {fileID: 0}
   spriteRenderer: {fileID: 7624953589535699200}
   isPlayerBullet: 0
-  moveSpeed: 40
+  moveSpeed: 1
   rigidBody2D: {fileID: 2846453874813678211}
   animator: {fileID: 8540193828245787508}
   animTime: 0.55

@@ -138,15 +138,6 @@ namespace Physics2D
         }
 
 
-        private void OnDestroy()
-        {
-            // 从物理世界移除
-            if (Body != null)
-            {
-                PhysicsWorld2DComponent.Instance.World.RemoveBody(Body);
-            }
-        }
-
         /// <summary>
         /// 在编辑器中可视化碰撞形状
         /// </summary>

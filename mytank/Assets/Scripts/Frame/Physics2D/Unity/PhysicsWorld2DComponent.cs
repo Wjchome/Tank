@@ -18,26 +18,25 @@ namespace Physics2D
         /// 重力（Unity单位）
         /// </summary>
         public Vector2 gravity = new Vector2(0, -9.81f);
-
-        /// <summary>
-        /// 时间步长（秒）
-        /// </summary>
-        public float timeStep = 1f / 60f;
-
+        
         /// <summary>
         /// 迭代次数
         /// </summary>
         public int iterations = 8;
 
-
+        //"每个节点最大存储物体数（超过则分裂）
+        public int MaxObjectsPerNode;
+        
+        //"最大递归深度（防止无限分裂）
+        public int MaxDepth;
         private void Awake()
         {
             // 创建物理世界
             World = new PhysicsWorld2D();
             World.Gravity = new FixVector2((Fix64)gravity.x, (Fix64)gravity.y);
-            World.TimeStep = (Fix64)timeStep;
             World.Iterations = iterations;
-
+            World.quadTree.MaxDepth = MaxDepth;
+            World.quadTree.MaxObjectsPerNode = MaxObjectsPerNode;
         }
 
 

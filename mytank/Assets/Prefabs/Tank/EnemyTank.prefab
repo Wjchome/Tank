@@ -747,7 +747,7 @@ MonoBehaviour:
   orignalHP: 0
   tankID: 
   tankDirection: 0
-  moveSpeed: 300
+  moveSpeed: 0.05
   lastShootFrame: 0
   playerName: 
   playerColor: {r: 0, g: 0, b: 0, a: 0}
