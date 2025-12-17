@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using FixMath.NET;
-using QuadTreeV3;
+using Physics2D;
 using UnityEngine;
 using Tankgame;
 using TMPro;
@@ -210,18 +210,20 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     bool IsPositionOccupied(Vector2Int pos)
     {
-        // 检查是否有坦克占用2x2区域
-        var res = QuadTreeV3.QuadTreeV3.Instance.Query(new FixRect((Fix64)pos.x -Constant.tankSize, (Fix64)pos.y - Constant.tankSize,
-            Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2),
-            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy) |
-            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend));
-        return res.Count > 0;
+        // // 检查是否有坦克占用2x2区域
+        // var res = QuadTreeV3.QuadTreeV3.Instance.Query(new FixRect((Fix64)pos.x -Constant.tankSize, (Fix64)pos.y - Constant.tankSize,
+        //     Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2),
+        //     QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy) |
+        //     QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend));
+        // return res.Count > 0;
+        return false;
     }
 
 
     public EnemyTankController InitialEnemy(string tankID, string tankName, int x, int y, int dataIndex)
     {
         EnemyTankController temp = enemyTankPool.GetObject();
+        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y));
 
 
         temp.tankID = tankID;
@@ -236,12 +238,12 @@ public class EnemyManager : SingletonMono<EnemyManager>
   
         FixRect fixRect = new FixRect((Fix64)x -Constant.tankSize, (Fix64)y -Constant.tankSize,
             Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
-        temp.myFixRect = fixRect;
+        //temp.myFixRect = fixRect;
         //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
         QuadTreeLayer layer =
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
 
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
+       // QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
 
         temp.transform.position = new Vector2((float)fixRect.CenterX, (float)fixRect.CenterY);
 
@@ -269,6 +271,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public EnemyTankController InitialSpecialEnemy(string playerID, string playerName, int x, int y, int dataIndex)
     {
         EnemyTankController temp = enemyTankPool.GetObject();
+        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y));
 
         temp.tankID = playerID;
         int dir = random.Next(0, 4);
@@ -284,10 +287,11 @@ public class EnemyManager : SingletonMono<EnemyManager>
         
         FixRect fixRect = new FixRect((Fix64)x - Constant.tankSize, (Fix64)y - Constant.tankSize,
             Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
-        temp.myFixRect = fixRect;
+        //temp.myFixRect = fixRect;
         QuadTreeLayer layer =
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
+       // QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
+        
         temp.transform.position = (Vector2)fixRect.Center;
         int seed =
             (int)(NetworkManager.Instance.seed +

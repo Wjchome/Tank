@@ -12,6 +12,7 @@ using Unity.VisualScripting;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
+using Physics2D;
 
 // 服务器信息结构
 [System.Serializable]
@@ -220,6 +221,7 @@ public class NetworkManager : SingletonMono<NetworkManager>
         if (message.ServerFrame != null)
         {
             currentFrame = message.ServerFrame.TimeStamp;
+            PhysicsWorld2DComponent .Instance.UpdateFrame();
             GameStateManager.Instance.OnServerFrame(message.ServerFrame);
             InputManager.Instance.UpdateFrame();
             EnemyManager.Instance.UpdateFrame(); //生成敌人

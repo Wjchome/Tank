@@ -11,7 +11,6 @@ namespace Physics2D
     /// </summary>
     public class RigidBody2D : IComparable<RigidBody2D>, IEquatable<RigidBody2D>
     {
-
         /// <summary>
         /// 是否是触发器
         /// </summary>
@@ -21,7 +20,7 @@ namespace Physics2D
         /// 位置（世界坐标）
         /// </summary>
         public FixVector2 Position { get; set; }
-        
+
 
         /// <summary>
         /// 速度（单位：单位/秒）
@@ -72,11 +71,18 @@ namespace Physics2D
         public Fix64 Friction { get; set; } = (Fix64)0.5m;
 
         /// <summary>
+        /// 线性阻尼（0-1，用于在空地上减速）
+        /// 值越大，减速越快。0表示无阻尼，1表示完全停止
+        /// 例如：0.1表示每秒减少10%的速度
+        /// </summary>
+        public Fix64 LinearDamping { get; set; } = Fix64.Zero;
+
+        /// <summary>
         /// 力累加器（每帧累积所有力，在Update中统一处理）
         /// </summary>
         internal FixVector2 ForceAccumulator { get; set; } = FixVector2.Zero;
-        
-        
+
+
         public GameObject gameObject;
 
         public int id;
@@ -176,12 +182,12 @@ namespace Physics2D
 
         #region 供外部适用
 
-        public List<RigidBody2D> LastRigidBody2D=new List<RigidBody2D>();
-        public List<RigidBody2D> CurrentRigidBody2D =new List<RigidBody2D>();
-        
-        public List<RigidBody2D> Enter;
-        public List<RigidBody2D> Stay;
-        public List<RigidBody2D> Exit;
+        public List<RigidBody2D> LastRigidBody2D = new List<RigidBody2D>();
+        public List<RigidBody2D> CurrentRigidBody2D = new List<RigidBody2D>();
+
+        public List<RigidBody2D> Enter = new List<RigidBody2D>();
+        public List<RigidBody2D> Stay = new List<RigidBody2D>();
+        public List<RigidBody2D> Exit = new List<RigidBody2D>();
 
         #endregion
 
@@ -191,5 +197,3 @@ namespace Physics2D
         }
     }
 }
-
-

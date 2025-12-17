@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using FixMath.NET;
-using QuadTreeV3;
+using Physics2D;
 using Tankgame;
 using TMPro;
 using UnityEngine;
@@ -51,6 +51,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public PlayerTankController InitialPlayer(string tankID, string tankName, int x, int y, Color color, int dataIndex)
     {
         PlayerTankController temp = Instantiate(playerTankControllerPrefab);
+        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y));
 
 
         temp.tankID = tankID;
@@ -73,11 +74,11 @@ public class PlayerManager : SingletonMono<PlayerManager>
         FixRect fixRect = new FixRect((Fix64)x -Constant.tankSize, (Fix64)y - Constant.tankSize,
             Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
         
-        temp.myFixRect = fixRect;
+
         QuadTreeLayer layer =
             QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend);
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
-
+       // QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
+        
         temp.transform.position = (Vector2)fixRect.Center;
         temp.playerColor = color;
         temp.spriteRenderer.color = color;

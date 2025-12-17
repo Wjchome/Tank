@@ -40,19 +40,19 @@ namespace Physics2D
 
         }
 
-        public void AddRigidBody(RigidBody2DComponent rigidBody)
+
+        public void AddRigidBody(RigidBody2DComponent rigidBody, FixVector2 pos)
         {
-            rigidBody.Init();
+            rigidBody.Init(pos);
         }
 
-
-        private void FixedUpdate()
+        public void UpdateFrame()
         {
             // 更新物理世界
             if (World != null)
             {
                 World.Update();
-                Test.Instance.UpdateFrame();
+                //Test.Instance.UpdateFrame();
             }
         }
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using FixMath.NET;
-using QuadTreeV3;
+using Physics2D;
 using Tankgame;
 using UnityEngine;
 
@@ -111,27 +111,27 @@ public class PlayerTankController : TankController
             }
         }
 
-        if (threeShootFrame > 0 && NetworkManager.Instance.currentFrame >= threeShootFrame)
-        {
-            EntityManager.Instance.InitializeBullet(threeDir, this, threePos, bulletDamageNum);
-            if (rearFire)
-            {
-                EntityManager.Instance.InitializeBullet(-threeDir, this, threePos, bulletDamageNum);
-            }
-
-            threeShootFrame = -1; // 重置
-        }
-
-        if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
-        {
-            EntityManager.Instance.InitializeBullet(secondDir, this, secondPos, bulletDamageNum);
-            if (rearFire)
-            {
-                EntityManager.Instance.InitializeBullet(-secondDir, this, secondPos, bulletDamageNum);
-            }
-
-            secondShootFrame = -1; // 重置
-        }
+        // if (threeShootFrame > 0 && NetworkManager.Instance.currentFrame >= threeShootFrame)
+        // {
+        //     EntityManager.Instance.InitializeBullet(threeDir, this, threePos, bulletDamageNum);
+        //     if (rearFire)
+        //     {
+        //         EntityManager.Instance.InitializeBullet(-threeDir, this, threePos, bulletDamageNum);
+        //     }
+        //
+        //     threeShootFrame = -1; // 重置
+        // }
+        //
+        // if (secondShootFrame > 0 && NetworkManager.Instance.currentFrame >= secondShootFrame)
+        // {
+        //     EntityManager.Instance.InitializeBullet(secondDir, this, secondPos, bulletDamageNum);
+        //     if (rearFire)
+        //     {
+        //         EntityManager.Instance.InitializeBullet(-secondDir, this, secondPos, bulletDamageNum);
+        //     }
+        //
+        //     secondShootFrame = -1; // 重置
+        // }
 
         if (rearFire)
         {
@@ -197,7 +197,7 @@ public class PlayerTankController : TankController
         
         FixVector2 targetPos = new FixVector2(targetXFix, targetYFix);
         // 计算从坦克中心到目标位置的方向向量
-        FixVector2 directionVec = targetPos - myFixRect.Center;
+        FixVector2 directionVec = targetPos - rigidBody2D.Body.Position;
 
         // 如果方向向量为零，使用
         if (directionVec.Magnitude() == Fix64.Zero)
@@ -205,36 +205,35 @@ public class PlayerTankController : TankController
             directionVec = FixVector2.Up;
         }
         
-
-        // 使用计算出的方向开火
-        FixRect currentRect = myFixRect.ScaleCenter((Fix64)0.5f);
-        EntityManager.Instance.InitializeBullet(directionVec, this, currentRect, bulletDamageNum);
-
-        // 处理后向开火
-        if (rearFire)
-        {
-            EntityManager.Instance.InitializeBullet(-directionVec, this, currentRect, bulletDamageNum);
-        }
-
-        // 处理三次开火
-        if (isShootThree)
-        {
-            int intervalFrame = 8;
-            threeShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
-            threeDir = directionVec;
-            threePos = currentRect;
-        }
-
-        // 处理二次开火
-        if (isShootTwice)
-        {
-            int intervalFrame = 4;
-            secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
-            secondDir = directionVec;
-            secondPos = currentRect;
-        }
         
-
+        // 使用计算出的方向开火
+        EntityManager.Instance.InitializeBullet(directionVec, this, rigidBody2D.Body.Position, bulletDamageNum);
+        //
+        // // 处理后向开火
+        // if (rearFire)
+        // {
+        //     EntityManager.Instance.InitializeBullet(-directionVec, this, currentRect, bulletDamageNum);
+        // }
+        //
+        // // 处理三次开火
+        // if (isShootThree)
+        // {
+        //     int intervalFrame = 8;
+        //     threeShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
+        //     threeDir = directionVec;
+        //     threePos = currentRect;
+        // }
+        //
+        // // 处理二次开火
+        // if (isShootTwice)
+        // {
+        //     int intervalFrame = 4;
+        //     secondShootFrame = NetworkManager.Instance.currentFrame + intervalFrame;
+        //     secondDir = directionVec;
+        //     secondPos = currentRect;
+        // }
+        //
+        //
         AudioManager.Instance.Play("Shoot");
     }
 
@@ -280,7 +279,7 @@ public class PlayerTankController : TankController
         CamController.Instance.ShakeDead();
 
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
-        QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
+       // QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
     }
 
     public FoodType testFoodType;

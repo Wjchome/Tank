@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using FixMath.NET;
-using QuadTreeV3;
+using Physics2D;
 using Random = System.Random;
 
 public enum Direction
@@ -149,20 +149,21 @@ public class MapManager : SingletonMono<MapManager>
             {
                 case MapType.breakableWall:
                     layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall);
-                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
                     break;
                 case MapType.wall:
                     layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall);
-                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
                     break;
                 case MapType.ice:
                     layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Ice);
-                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
                     break;
                 case MapType.river:
                     layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.River);
-                    QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, obj, layer);
                     break;
+            }
+
+            if (obj.TryGetComponent<RigidBody2DComponent>(out RigidBody2DComponent rigidbody2d))
+            {
+                PhysicsWorld2DComponent.Instance.AddRigidBody(rigidbody2d,new FixVector2((Fix64)x, (Fix64)y));
             }
         }
     }
@@ -194,14 +195,14 @@ public class MapManager : SingletonMono<MapManager>
     }
 
 
-    public void CreateWallType(FixRect fixRect, MapType wallType)
+    public void CreateWallType(FixVector2 pos, MapType wallType)
     {
         GameObject prefab = typeToPrefab[wallType];
 
         switch (wallType)
         {
             case MapType.floor:
-                GameObject obj = Instantiate(prefab, (Vector2)fixRect.Center, Quaternion.identity, wallsParent);
+                GameObject obj = Instantiate(prefab, (Vector2)pos, Quaternion.identity, wallsParent);
                 break;
         }
     }
@@ -219,9 +220,6 @@ public class MapManager : SingletonMono<MapManager>
         ironWallEndFrames = 0;
         isChange = false;
 
-        //加载四叉树
-        QuadTreeV3.QuadTreeV3.Instance.Init(new FixRect(-GridSizeF, -GridSizeF, MapWidthF * GridSizeF,
-            MapHeightF + GridSizeF));
 
         // 解析地图数据
         LoadMapFromString(level.mapData);

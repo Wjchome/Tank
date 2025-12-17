@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FixMath.NET;
-using QuadTreeV3;
+using Physics2D;
 using UnityEngine;
 
 public class EntityManager : SingletonMono<EntityManager>
@@ -260,7 +260,7 @@ public class EntityManager : SingletonMono<EntityManager>
     }
 
     // 生成方法
-    private T SpawnMapEntity<T>(T prefab, PlayerTankController tank,FixRect fixRect)
+    private T SpawnMapEntity<T>(T prefab, PlayerTankController tank, FixRect fixRect)
         where T : MapEntity
     {
         T entity = Instantiate(prefab, (Vector2)fixRect.Center, Quaternion.identity);
@@ -276,16 +276,16 @@ public class EntityManager : SingletonMono<EntityManager>
 
         AddUIEntity(entity);
         return entity;
-    } 
+    }
 
     #region 生成方法
 
     // 子弹生成方法
-    public void InitializeBullet(FixVector2 dir, TankController tank, FixRect rect, int damageNum)
+    public void InitializeBullet(FixVector2 dir, TankController tank, FixVector2 pos, int damageNum)
     {
         dir.Normalize();
         BulletController bullet = BulletPool.GetObject();
-        
+
         bullet.tank = tank;
         if (tank.identity == Identity.Myself || tank.identity == Identity.OtherPlayer)
             bullet.isPlayerBullet = true;
@@ -297,16 +297,15 @@ public class EntityManager : SingletonMono<EntityManager>
         // 设置子弹朝向
         Fix64 rotation = dir.ToRotation();
         bullet.dir = dir;
-        
+
         bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
 
 
-        bullet.myFixRect = rect;
-        
-        QuadTreeLayer layer =bullet.isPlayerBullet?
-            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletFriend):
-            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy);
-        QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject,layer);
+        QuadTreeLayer layer = bullet.isPlayerBullet
+            ? QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletFriend)
+            : QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy);
+        // QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject,layer);
+        PhysicsWorld2DComponent.Instance.AddRigidBody(bullet.GetComponent<RigidBody2DComponent>(),pos);
         bullet.transform.position = (Vector2)bullet.myFixRect.Center;
 
 
@@ -345,31 +344,31 @@ public class EntityManager : SingletonMono<EntityManager>
     private FixRect? GetRandomValidPosition(Fix64 entitySize, int maxAttempts = 50)
     {
         if (MapManager.Instance == null) return null;
-        
+
         // 获取所有可用的floor位置作为候选（使用网格系统快速筛选）
         List<Vector2Int> floorPositions = MapManager.Instance.GetMapTypePos(new List<MapType> { MapType.floor });
-        
+
         if (floorPositions.Count == 0)
         {
             Debug.LogWarning("No floor positions available for random spawn");
             return null;
         }
-        
+
         // 随机打乱候选位置
         System.Random random = new System.Random();
         floorPositions = floorPositions.OrderBy(x => random.Next()).ToList();
-        
+
         // 尝试每个候选位置
         int attempts = 0;
         foreach (var gridPos in floorPositions)
         {
             if (attempts >= maxAttempts) break;
             attempts++;
-            
+
             // 将网格坐标转换为Fix64世界坐标（网格中心）
             Fix64 worldX = (Fix64)gridPos.x * MapManager.Instance.GridSizeF + MapManager.Instance.HalfGridSizeF;
             Fix64 worldY = (Fix64)gridPos.y * MapManager.Instance.GridSizeF + MapManager.Instance.HalfGridSizeF;
-            
+
             // 创建实体的FixRect（以中心为基准）
             FixRect testRect = new FixRect(
                 worldX - entitySize / (Fix64)2,
@@ -377,46 +376,46 @@ public class EntityManager : SingletonMono<EntityManager>
                 entitySize,
                 entitySize
             );
-            
+
             // 使用四叉树检查是否与墙体碰撞
             if (IsPositionValid(testRect))
             {
                 return testRect;
             }
         }
-        
+
         Debug.LogWarning($"Failed to find valid position after {attempts} attempts");
         return null;
     }
-    
+
     /// <summary>
     /// 检查位置是否有效（不与墙体碰撞）
     /// </summary>
     private bool IsPositionValid(FixRect rect)
     {
-        // 查询四叉树中与目标矩形重叠的物体
-        List<QuadTreeObject> collidingObjects = QuadTreeV3.QuadTreeV3.Instance.Query(rect);
-        
-        // 检查是否与墙体碰撞
-        foreach (var obj in collidingObjects)
-        {
-            // 检查是否是墙体或可破坏墙体
-            if (obj.Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall)) ||
-                obj.Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall)))
-            {
-                return false; // 与墙体碰撞，位置无效
-            }
-        }
-        
+        // // 查询四叉树中与目标矩形重叠的物体
+        // List<QuadTreeObject> collidingObjects = QuadTreeV3.QuadTreeV3.Instance.Query(rect);
+        //
+        // // 检查是否与墙体碰撞
+        // foreach (var obj in collidingObjects)
+        // {
+        //     // 检查是否是墙体或可破坏墙体
+        //     if (obj.Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall)) ||
+        //         obj.Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall)))
+        //     {
+        //         return false; // 与墙体碰撞，位置无效
+        //     }
+        // }
+
         return true; // 位置有效
     }
-    
+
     // 兼容性方法 - 保持原有接口
     public void InitAutoTurrent(PlayerTankController tank)
     {
         // 获取随机有效位置（实体大小默认为1.0）
         FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-        
+
         if (randomPos.HasValue)
         {
             SpawnMapEntity(autoTurretPrefab, tank, randomPos.Value);
@@ -455,8 +454,8 @@ public class EntityManager : SingletonMono<EntityManager>
 
     public void InitSpikeTrap(PlayerTankController tank, Vector2Int pos, int durationFrame)
     {
-        var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, tank.myFixRect);
-        spikeTrap.durationFrame = durationFrame;
+        // var spikeTrap = SpawnMapEntity(spikeTrapPrefab, tank, tank.myFixRect);
+        // spikeTrap.durationFrame = durationFrame;
     }
 
     public void InitGhostGuard(PlayerTankController tank)
@@ -473,23 +472,23 @@ public class EntityManager : SingletonMono<EntityManager>
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
-        var ghostGuardLeft = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
-        ghostGuardLeft.moveDirection = Direction.Left;
-        ghostGuardLeft.spriteRenderer.color = transparentColor;
-        ghostGuardLeft.transform.rotation = Quaternion.Euler(0, 0, 90);
-
-        var ghostGuardRight = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
-        ghostGuardRight.moveDirection = Direction.Right;
-        ghostGuardRight.spriteRenderer.color = transparentColor;
-        ghostGuardRight.transform.rotation = Quaternion.Euler(0, 0, -90);
-
-        var ghostGuardUp1 = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
-        ghostGuardUp1.moveDirection = Direction.Up;
-        ghostGuardUp1.spriteRenderer.color = transparentColor;
-
-        var ghostGuardUp2 = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
-        ghostGuardUp2.moveDirection = Direction.Up;
-        ghostGuardUp2.spriteRenderer.color = transparentColor;
+        // var ghostGuardLeft = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
+        // ghostGuardLeft.moveDirection = Direction.Left;
+        // ghostGuardLeft.spriteRenderer.color = transparentColor;
+        // ghostGuardLeft.transform.rotation = Quaternion.Euler(0, 0, 90);
+        //
+        // var ghostGuardRight = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
+        // ghostGuardRight.moveDirection = Direction.Right;
+        // ghostGuardRight.spriteRenderer.color = transparentColor;
+        // ghostGuardRight.transform.rotation = Quaternion.Euler(0, 0, -90);
+        //
+        // var ghostGuardUp1 = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
+        // ghostGuardUp1.moveDirection = Direction.Up;
+        // ghostGuardUp1.spriteRenderer.color = transparentColor;
+        //
+        // var ghostGuardUp2 = SpawnMapEntity(ghostGuardPrefab, tank, tank.myFixRect);
+        // ghostGuardUp2.moveDirection = Direction.Up;
+        // ghostGuardUp2.spriteRenderer.color = transparentColor;
     }
 
     public void InitAlmightyTurret(PlayerTankController tank)
@@ -569,11 +568,11 @@ public class EntityManager : SingletonMono<EntityManager>
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
-        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, tank.myFixRect);
-        tankCharge.transform.rotation = Quaternion.Euler(rot);
-        tankCharge.moveDirection = dir;
-        tankCharge.isCanBullet = isCanBullet;
-        tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
+        // var tankCharge = SpawnMapEntity(tankChargePrefab, tank, tank.myFixRect);
+        // tankCharge.transform.rotation = Quaternion.Euler(rot);
+        // tankCharge.moveDirection = dir;
+        // tankCharge.isCanBullet = isCanBullet;
+        // tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
     }
 
     public void InitTankCharge(PlayerTankController tank, bool isCanBullet, Vector2Int pos)
@@ -606,11 +605,11 @@ public class EntityManager : SingletonMono<EntityManager>
         Color tankColor = tank.playerColor;
         Color transparentColor = new Color(tankColor.r, tankColor.g, tankColor.b, 0.5f); // 半透明白色
 
-        var tankCharge = SpawnMapEntity(tankChargePrefab, tank, tank.myFixRect);
-        tankCharge.transform.rotation = Quaternion.Euler(rot);
-        tankCharge.moveDirection = dir;
-        tankCharge.isCanBullet = isCanBullet;
-        tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
+        // var tankCharge = SpawnMapEntity(tankChargePrefab, tank, tank.myFixRect);
+        // tankCharge.transform.rotation = Quaternion.Euler(rot);
+        // tankCharge.moveDirection = dir;
+        // tankCharge.isCanBullet = isCanBullet;
+        // tankCharge.GetComponent<SpriteRenderer>().color = transparentColor;
     }
 
 

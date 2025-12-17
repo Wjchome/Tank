@@ -1,6 +1,6 @@
 // 地图实体基类（有位置和渲染器）
 
-using QuadTreeV3;
+using Physics2D;
 using UnityEngine;
 
 public abstract class MapEntity : MonoBehaviour, IEntity

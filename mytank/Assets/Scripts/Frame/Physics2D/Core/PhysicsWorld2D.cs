@@ -154,18 +154,13 @@ namespace Physics2D
         /// </summary>
         public void Update()
         {
-            // 1. 清除所有物体的力累加器
-            ClearForces();
+           
 
             // 2. 收集所有常态力（重力等）
             CollectForces();
 
-            // 3. 计算加速度并更新速度
+            // 3. 计算加速度并更新速度 更新位置（积分）
             UpdateVelocities();
-
-            // 4. 更新位置（积分）
-            Integrate();
-            
             
             // 5. 碰撞检测和响应（迭代多次以提高稳定性）
             for (int i = 0; i < Iterations; i++)
@@ -174,6 +169,9 @@ namespace Physics2D
             }
             // 6.处理数据
             ProcessAllBody();
+            
+            // 1. 清除所有物体的力累加器
+            ClearForces();
         }
 
         /// <summary>
@@ -210,6 +208,7 @@ namespace Physics2D
         /// 计算加速度并更新速度
         /// 根据累积的力计算加速度：a = F/m
         /// 然后更新速度：v = v + a*dt
+        /// 应用线性阻尼：v = v * (1 - damping * dt)
         /// </summary>
         private void UpdateVelocities()
         {
@@ -222,19 +221,7 @@ namespace Physics2D
 
                     // 更新速度：v = v + a*dt
                     body.Velocity += acceleration * TimeStep;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 积分（根据速度更新位置）
-        /// </summary>
-        private void Integrate()
-        {
-            foreach (var body in bodies)
-            {
-                if (body.IsDynamic)
-                {
+                    
                     FixVector2 oldPosition = body.Position;
                     // 简单欧拉积分：x = x + v * dt
                     body.Position += body.Velocity * TimeStep;
@@ -245,9 +232,19 @@ namespace Physics2D
                     {
                         body.QuadTreeDirty = true;
                     }
+
+                    // 应用线性阻尼（在空地上减速）
+                    if (body.LinearDamping > Fix64.Zero)
+                    {
+                        // v = v * (1 - damping * dt)
+                        // 使用Clamp确保阻尼值在合理范围内
+                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping, Fix64.Zero, Fix64.One) ;
+                        body.Velocity *= dampingFactor;
+                    }
                 }
             }
         }
+
 
         /// <summary>
         /// 碰撞检测和响应

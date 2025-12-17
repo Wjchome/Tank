@@ -674,6 +674,7 @@ GameObject:
   - component: {fileID: 7324162863934086598}
   - component: {fileID: 8205607647078584822}
   - component: {fileID: -2687135769070647202}
+  - component: {fileID: 3434244529670643580}
   m_Layer: 0
   m_Name: EnemyTank
   m_TagString: Tank
@@ -746,7 +747,7 @@ MonoBehaviour:
   orignalHP: 0
   tankID: 
   tankDirection: 0
-  moveSpeed: 0.1
+  moveSpeed: 300
   lastShootFrame: 0
   playerName: 
   playerColor: {r: 0, g: 0, b: 0, a: 0}
@@ -758,9 +759,34 @@ MonoBehaviour:
   bombAnimator: {fileID: 8012393968690906046}
   tankEntityTankUI: {fileID: 8607547884519390770}
   spriteRenderer: {fileID: 9210441346241023368}
+  rigidBody2D: {fileID: 3434244529670643580}
   animType: 1
   bulletDamageNum: 5
   deathDelayFrames: 0
+--- !u!114 &3434244529670643580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869504961427943122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269bb9630ae25434699e11a83c2f0b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTigger: 0
+  isStatic: 0
+  mass: 1
+  useGravity: 0
+  restitution: 0
+  friction: 0.5
+  linearDamping: 0.3
+  shapeType: 1
+  posOffset: {x: 0, y: 0}
+  circleRadius: 0.5
+  boxSize: {x: 1.8, y: 1.8}
+  rotation: 0
 --- !u!1 &5073776664624131361
 GameObject:
   m_ObjectHideFlags: 0

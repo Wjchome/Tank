@@ -18,6 +18,8 @@ namespace Physics2D
         public Fix64 Top => Y + Height; // 上边界
         public Fix64 CenterX => X + Width / new Fix64(2); // 中心X
         public Fix64 CenterY => Y + Height / new Fix64(2); // 中心Y
+        
+        public FixVector2 Center => new FixVector2(CenterX, CenterY);
 
         // 构造函数（强制校验宽度/高度为正，避免无效数据）
         public FixRect(Fix64 x, Fix64 y, Fix64 width, Fix64 height)

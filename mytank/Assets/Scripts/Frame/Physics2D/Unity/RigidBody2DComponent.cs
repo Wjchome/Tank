@@ -39,6 +39,13 @@ namespace Physics2D
         /// </summary>
         [Range(0f, 1f)] public float friction = 0.5f;
 
+        /// <summary>
+        /// 线性阻尼（0-1，用于在空地上减速）
+        /// 值越大，减速越快。0表示无阻尼，1表示完全停止
+        /// 例如：0.1表示每秒减少10%的速度
+        /// </summary>
+        [Range(0f, 1f)] public float linearDamping = 0f;
+
 
         public List<Physics2D.RigidBody2D> Stay => Body.Stay;
         public List<Physics2D.RigidBody2D> Enter => Body.Enter;
@@ -81,7 +88,7 @@ namespace Physics2D
         /// </summary>
         public RigidBody2D Body { get; private set; }
 
-        public void Init()
+        public void Init(FixVector2 pos)
         {
             // 创建碰撞形状
             CollisionShape2D shape;
@@ -94,8 +101,7 @@ namespace Physics2D
                 shape = new BoxShape2D((Fix64)boxSize.x, (Fix64)boxSize.y, (Fix64)rotation*Fix64.Deg2Rad);
             }
 
-            // 创建物理体
-            Vector3 pos = transform.position;
+  
             Body = new RigidBody2D(
                 new FixVector2((Fix64)pos.x + (Fix64)posOffset.x, (Fix64)pos.y + (Fix64)posOffset.y),
                 (Fix64)mass,
@@ -105,6 +111,7 @@ namespace Physics2D
             Body.UseGravity = useGravity;
             Body.Restitution = (Fix64)restitution;
             Body.Friction = (Fix64)friction;
+            Body.LinearDamping = (Fix64)linearDamping;
             Body.IsStatic = isStatic;
             Body.gameObject = gameObject;
 
@@ -112,7 +119,34 @@ namespace Physics2D
             // 添加到物理世界
             PhysicsWorld2DComponent.Instance.World.AddBody(Body);
         }
-        
+
+        private void Update()
+        {
+            // 同步物理位置和旋转到Unity Transform
+            if (Body != null)
+            {
+                FixVector2 pos = Body.Position;
+                transform.position = new Vector3((float)pos.x, (float)pos.y, transform.position.z) - (Vector3)posOffset;
+
+                // 同步旋转（仅对矩形有效）
+                if (shapeType == ShapeType.Box && Body.Shape is BoxShape2D q)
+                {
+                    float rotationDegrees = (float)q.Rotation;
+                    transform.rotation = Quaternion.Euler(0, 0, rotationDegrees);
+                }
+            }
+        }
+
+
+        private void OnDestroy()
+        {
+            // 从物理世界移除
+            if (Body != null)
+            {
+                PhysicsWorld2DComponent.Instance.World.RemoveBody(Body);
+            }
+        }
+
         /// <summary>
         /// 在编辑器中可视化碰撞形状
         /// </summary>
@@ -186,7 +220,7 @@ namespace Physics2D
 
             }
             Gizmos.color = Color.yellow;
-            if (Application.isPlaying)
+            if (Application.isPlaying&& Body!=null)
             {
                 var bound = Body.Shape.GetBounds((FixVector2)(Vector2)transform.position);
 

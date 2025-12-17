@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using FixMath.NET;
-using QuadTreeV3;
+using Physics2D;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,6 +10,7 @@ public class EnemyTankController : TankController
 {
     public override void UpdateFrame()
     {
+        
         base.UpdateFrame();
         if (identity == Identity.Enemy && !isDead &&
             NetworkManager.Instance.currentFrame >= EnemyManager.Instance.pauseEndFrame)
@@ -21,10 +22,18 @@ public class EnemyTankController : TankController
 
     void AiControls()
     {
-        if (MoveBy(tankDirection))
+        MoveBy(tankDirection);
+        foreach (var enter in rigidBody2D.Enter)
         {
-            int a = random.Next(0, 8);
-            tankDirection = (Direction)a;
+            if (enter.gameObject.CompareTag("Wall") ||
+                enter.gameObject.CompareTag("BreakableWall") ||
+                enter.gameObject.CompareTag("Ice") ||
+                enter.gameObject.CompareTag("Tank"))
+            {
+                int a = random.Next(0, 8);
+                tankDirection = (Direction)a;
+
+            }
         }
         
         if (NetworkManager.Instance.currentFrame - lastShootFrame > shootIntervalFrame)
@@ -38,9 +47,9 @@ public class EnemyTankController : TankController
 
     public  void Shoot()
     {
-        FixRect currentRect = myFixRect.ScaleCenter((Fix64)0.5f);
+        //FixRect currentRect = myFixRect;
 
-        EntityManager.Instance.InitializeBullet(tankDirection.ToFixVector2().Item1, this, currentRect, bulletDamageNum);
+       // EntityManager.Instance.InitializeBullet(tankDirection.ToFixVector2().Item1, this, currentRect, bulletDamageNum);
         //AudioManager.Instance.Play("Shoot");
     }
 
@@ -84,7 +93,7 @@ public class EnemyTankController : TankController
         CamController.Instance.ShakeDead();
 
         deathDelayFrames = NetworkManager.Instance.currentFrame + (int)(animTime / Constant.FrameInterval);
-        QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
+        //QuadTreeV3.QuadTreeV3.Instance.RemoveObject(gameObject);
         
         if (attacker != null)
         {

@@ -1127,6 +1127,7 @@ GameObject:
   - component: {fileID: 7324162863934086598}
   - component: {fileID: 8205607647078584822}
   - component: {fileID: 7221023760519817669}
+  - component: {fileID: 7641681403537261839}
   m_Layer: 0
   m_Name: PlayerTank
   m_TagString: Tank
@@ -1204,7 +1205,7 @@ MonoBehaviour:
   orignalHP: 0
   tankID: 
   tankDirection: 0
-  moveSpeed: 0.3
+  moveSpeed: 300
   lastShootFrame: 0
   playerName: 
   playerColor: {r: 0, g: 0, b: 0, a: 0}
@@ -1216,6 +1217,7 @@ MonoBehaviour:
   bombAnimator: {fileID: 8012393968690906046}
   tankEntityTankUI: {fileID: 3066874005566756042}
   spriteRenderer: {fileID: 6084342107278937849}
+  rigidBody2D: {fileID: 7641681403537261839}
   animType: 1
   bulletDamageNum: 10
   deathDelayFrames: 0
@@ -1257,6 +1259,30 @@ MonoBehaviour:
   chainImplosionShow: {fileID: 4494342791916860737}
   isLegionoftheFallen: 0
   testFoodType: 0
+--- !u!114 &7641681403537261839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4869504961427943122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269bb9630ae25434699e11a83c2f0b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTigger: 0
+  isStatic: 0
+  mass: 1
+  useGravity: 0
+  restitution: 0
+  friction: 0.5
+  linearDamping: 0.3
+  shapeType: 1
+  posOffset: {x: 0, y: 0}
+  circleRadius: 0.5
+  boxSize: {x: 1.8, y: 1.8}
+  rotation: 0
 --- !u!1 &5285582712719221069
 GameObject:
   m_ObjectHideFlags: 0
