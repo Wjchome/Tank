@@ -12,6 +12,7 @@ namespace FixMath.NET
     {
         public static readonly Fix64 Rad2Deg = (Fix64)57.295779513082320876798154814105M;
         public static readonly Fix64 Deg2Rad = (Fix64)0.017453292519943295769236907684886M;
+        public static readonly Fix64 Two = (Fix64)2;
 
         /// <summary>
         /// Returns the smaller of two Fix64 values.
@@ -27,6 +28,11 @@ namespace FixMath.NET
         public static Fix64 Max(Fix64 x, Fix64 y)
         {
             return x.m_rawValue > y.m_rawValue ? x : y;
+        }
+
+        public static Fix64 Clamp(Fix64 value, Fix64 min, Fix64 max)
+        {
+            return value < min ? min : value > max ? max : value;
         }
     }
 
@@ -147,6 +153,8 @@ namespace FixMath.NET
                 return Zero;
             return new FixVector2(x / magnitude, y / magnitude);
         }
+        
+        
 
         /// <summary>
         /// 归一化向量（修改自身）

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9139735536015855569}
   - component: {fileID: 3174303414336934917}
   - component: {fileID: 8455040038371740320}
+  - component: {fileID: -8591231967769729186}
   m_Layer: 0
   m_Name: River
   m_TagString: River
@@ -50,9 +51,6 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -90,7 +88,7 @@ SpriteRenderer:
   m_SpriteSortPoint: 0
 --- !u!95 &8455040038371740320
 Animator:
-  serializedVersion: 7
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -104,9 +102,31 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-8591231967769729186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8885425979842284787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269bb9630ae25434699e11a83c2f0b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTigger: 0
+  isStatic: 1
+  mass: 1
+  useGravity: 0
+  restitution: 0
+  friction: 0
+  shapeType: 1
+  posOffset: {x: 0, y: 0}
+  circleRadius: 0.5
+  boxSize: {x: 1, y: 1}
+  rotation: 0
