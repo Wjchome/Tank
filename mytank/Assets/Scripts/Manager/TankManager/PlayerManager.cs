@@ -51,7 +51,9 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public PlayerTankController InitialPlayer(string tankID, string tankName, int x, int y, Color color, int dataIndex)
     {
         PlayerTankController temp = Instantiate(playerTankControllerPrefab);
-        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y));
+        PhysicsLayer layer =
+            PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankFriend);
+        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y),layer);
 
 
         temp.tankID = tankID;
@@ -75,8 +77,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
             Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
         
 
-        QuadTreeLayer layer =
-            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankFriend);
+      
        // QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
         
         temp.transform.position = (Vector2)fixRect.Center;

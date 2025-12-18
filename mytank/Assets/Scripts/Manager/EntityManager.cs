@@ -301,11 +301,11 @@ public class EntityManager : SingletonMono<EntityManager>
         bullet.GetComponent<SpriteRenderer>().material.color = tank.playerColor;
 
 
-        QuadTreeLayer layer = bullet.isPlayerBullet
-            ? QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletFriend)
-            : QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy);
+        PhysicsLayer layer = bullet.isPlayerBullet
+            ? PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend)
+            : PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy);
         // QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject,layer);
-        PhysicsWorld2DComponent.Instance.AddRigidBody(bullet.GetComponent<RigidBody2DComponent>(),pos);
+        PhysicsWorld2DComponent.Instance.AddRigidBody(bullet.GetComponent<RigidBody2DComponent>(),pos,layer);
         bullet.transform.position = (Vector2)bullet.myFixRect.Center;
         bullet.rigidBody2D.Body.ApplyImpulse(dir*bullet.moveSpeedF);
 

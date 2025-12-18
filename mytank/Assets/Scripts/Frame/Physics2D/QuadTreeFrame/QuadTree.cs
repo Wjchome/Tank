@@ -206,7 +206,7 @@ namespace Physics2D
         /// <param name="area">查询区域</param>
         /// <param name="layerMask">层掩码（只返回匹配的层，默认返回所有层）</param>
         /// <returns>匹配的物体列表（已排序，确定性）</returns>
-        public List<RigidBody2D> Query(FixRect area, QuadTreeLayer layerMask = default)
+        public List<RigidBody2D> Query(FixRect area, PhysicsLayer layerMask = default)
         {
             EnsureInitialized();
             var result = new List<RigidBody2D>();
@@ -362,7 +362,7 @@ namespace Physics2D
         /// 查询指定区域内的所有物体（支持层过滤）
         /// 使用精确检测（包含SAT），用于最终碰撞检测
         /// </summary>
-        public void GetObjectsInArea(FixRect area, List<RigidBody2D> result, QuadTreeLayer layerMask)
+        public void GetObjectsInArea(FixRect area, List<RigidBody2D> result, PhysicsLayer layerMask)
         {
             // 1. 如果当前节点与查询区域无重叠，直接返回
             if (!Rect.Overlaps(area)) return;

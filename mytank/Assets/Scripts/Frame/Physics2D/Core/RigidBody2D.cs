@@ -61,9 +61,9 @@ namespace Physics2D
         public bool IsStatic { get; set; } = false;
 
         /// <summary>
-        /// 
+        /// 判断层，几乎和Unity的Tag一个作用，但是可以更加更加细节
         /// </summary>
-        public QuadTreeLayer Layer { get; set; }
+        public PhysicsLayer Layer { get; set; } 
 
         /// <summary>
         /// 弹性系数（0-1，0表示完全非弹性，1表示完全弹性）

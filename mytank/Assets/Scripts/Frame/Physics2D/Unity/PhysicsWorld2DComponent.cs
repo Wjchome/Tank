@@ -40,9 +40,9 @@ namespace Physics2D
         }
 
 
-        public void AddRigidBody(RigidBody2DComponent rigidBody, FixVector2 pos)
+        public void AddRigidBody(RigidBody2DComponent rigidBody, FixVector2 pos,PhysicsLayer layer)
         {
-            rigidBody.Init(pos);
+            rigidBody.Init(pos,layer);
         }
 
         public void UpdateFrame()

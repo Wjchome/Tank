@@ -8,14 +8,14 @@ namespace Physics2D
     /// 支持最多 32 层（使用 int 的 32 位）
     /// </summary>
     [Serializable]
-    public struct QuadTreeLayer
+    public struct PhysicsLayer
     {
         /// <summary>
         /// 层位掩码（每个位代表一个层）
         /// </summary>
         public int value;
 
-        public QuadTreeLayer(int layerMask)
+        public PhysicsLayer(int layerMask)
         {
             value = layerMask;
         }
@@ -35,7 +35,7 @@ namespace Physics2D
         /// <summary>
         /// 检查两个层掩码是否有交集
         /// </summary>
-        public bool Intersects(QuadTreeLayer other)
+        public bool Intersects(PhysicsLayer other)
         {
             return (value & other.value) != 0;
         }
@@ -65,33 +65,33 @@ namespace Physics2D
         /// <summary>
         /// 创建包含所有层的掩码
         /// </summary>
-        public static QuadTreeLayer Everything => new QuadTreeLayer(-1);
+        public static PhysicsLayer Everything => new PhysicsLayer(-1);
 
         /// <summary>
         /// 创建不包含任何层的掩码
         /// </summary>
-        public static QuadTreeLayer Nothing => new QuadTreeLayer(0);
+        public static PhysicsLayer Nothing => new PhysicsLayer(0);
 
         /// <summary>
         /// 创建只包含指定层的掩码
         /// </summary>
-        public static QuadTreeLayer GetLayer(int layer)
+        public static PhysicsLayer GetLayer(int layer)
         {
             if (layer >= 0 && layer < 32)
             {
-                return new QuadTreeLayer(1 << layer);
+                return new PhysicsLayer(1 << layer);
             }
             return Nothing;
         }
 
-        public static implicit operator int(QuadTreeLayer layer)
+        public static implicit operator int(PhysicsLayer layer)
         {
             return layer.value;
         }
 
-        public static implicit operator QuadTreeLayer(int layerMask)
+        public static implicit operator PhysicsLayer(int layerMask)
         {
-            return new QuadTreeLayer(layerMask);
+            return new PhysicsLayer(layerMask);
         }
 
         public override string ToString()

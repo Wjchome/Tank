@@ -224,7 +224,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public EnemyTankController InitialEnemy(string tankID, string tankName, int x, int y, int dataIndex)
     {
         EnemyTankController temp = enemyTankPool.GetObject();
-        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y));
+        PhysicsLayer layer =
+            PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
+        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y),layer);
 
 
         temp.tankID = tankID;
@@ -241,8 +243,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
             Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
         //temp.myFixRect = fixRect;
         //temp.PosF = new FixVector2((Fix64)(x + MapManager.Instance.gridSize / 2), (Fix64)(y + MapManager.Instance.gridSize / 2));
-        QuadTreeLayer layer =
-            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
+     
 
        // QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
 
@@ -272,7 +273,9 @@ public class EnemyManager : SingletonMono<EnemyManager>
     public EnemyTankController InitialSpecialEnemy(string playerID, string playerName, int x, int y, int dataIndex)
     {
         EnemyTankController temp = enemyTankPool.GetObject();
-        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y));
+        PhysicsLayer layer =
+            PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
+        PhysicsWorld2DComponent.Instance.AddRigidBody(temp.GetComponent<RigidBody2DComponent>(),new FixVector2((Fix64)x,(Fix64)y),layer);
 
         temp.tankID = playerID;
         int dir = random.Next(0, 4);
@@ -289,8 +292,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         FixRect fixRect = new FixRect((Fix64)x - Constant.tankSize, (Fix64)y - Constant.tankSize,
             Constant.tankSize * (Fix64)2, Constant.tankSize * (Fix64)2);
         //temp.myFixRect = fixRect;
-        QuadTreeLayer layer =
-            QuadTreeLayer.GetLayer((int)QuadTreeLayerType.TankEnemy);
+
        // QuadTreeV3.QuadTreeV3.Instance.AddObject(fixRect, temp.gameObject, layer);
         
         temp.transform.position = (Vector2)fixRect.Center;

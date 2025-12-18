@@ -144,26 +144,26 @@ public class MapManager : SingletonMono<MapManager>
             GameObject obj = Instantiate(prefab, new Vector2(x, y), Quaternion.identity, wallsParent);
 
             FixRect fixRect = new FixRect((Fix64)x - HalfGridSizeF, (Fix64)y - HalfGridSizeF, GridSizeF, GridSizeF);
-            QuadTreeLayer layer;
+            PhysicsLayer layer = PhysicsLayer.Everything;
             switch (wallType)
             {
                 case MapType.breakableWall:
-                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall);
+                    layer = PhysicsLayer.GetLayer((int)QuadTreeLayerType.BreakableWall);
                     break;
                 case MapType.wall:
-                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall);
+                    layer = PhysicsLayer.GetLayer((int)QuadTreeLayerType.Wall);
                     break;
                 case MapType.ice:
-                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Ice);
+                    layer = PhysicsLayer.GetLayer((int)QuadTreeLayerType.Ice);
                     break;
                 case MapType.river:
-                    layer = QuadTreeLayer.GetLayer((int)QuadTreeLayerType.River);
+                    layer = PhysicsLayer.GetLayer((int)QuadTreeLayerType.River);
                     break;
             }
 
             if (obj.TryGetComponent<RigidBody2DComponent>(out RigidBody2DComponent rigidbody2d))
             {
-                PhysicsWorld2DComponent.Instance.AddRigidBody(rigidbody2d,new FixVector2((Fix64)x, (Fix64)y));
+                PhysicsWorld2DComponent.Instance.AddRigidBody(rigidbody2d,new FixVector2((Fix64)x, (Fix64)y),layer);
             }
         }
     }

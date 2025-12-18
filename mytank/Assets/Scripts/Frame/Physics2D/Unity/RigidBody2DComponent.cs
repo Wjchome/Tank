@@ -81,14 +81,14 @@ namespace Physics2D
         /// 旋转角度（度，仅用于矩形，手动设置）
         /// </summary>
         [Range(-180f, 180f)] public float rotation = 0f;
-
-
+        
+        
         /// <summary>
         /// 物理体实例
         /// </summary>
         public RigidBody2D Body { get; private set; }
 
-        public void Init(FixVector2 pos)
+        public void Init(FixVector2 pos,PhysicsLayer layer)
         {
             // 创建碰撞形状
             CollisionShape2D shape;
@@ -114,8 +114,8 @@ namespace Physics2D
             Body.LinearDamping = (Fix64)linearDamping;
             Body.IsStatic = isStatic;
             Body.gameObject = gameObject;
-
-
+            Body.Layer = layer;
+    
             // 添加到物理世界
             PhysicsWorld2DComponent.Instance.World.AddBody(Body);
         }
