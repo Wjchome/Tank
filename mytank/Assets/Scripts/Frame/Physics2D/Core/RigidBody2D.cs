@@ -12,6 +12,11 @@ namespace Physics2D
     public class RigidBody2D : IComparable<RigidBody2D>, IEquatable<RigidBody2D>
     {
         /// <summary>
+        /// 组件缓存字典（避免重复调用GetComponent，提升性能）
+        /// Key: 组件类型名称，Value: 缓存的组件实例
+        /// </summary>
+        private Dictionary<string, Component> _componentCache = new Dictionary<string, Component>();
+        /// <summary>
         /// 是否是触发器
         /// </summary>
         public bool IsTrigger { get; set; }
@@ -195,5 +200,48 @@ namespace Physics2D
         {
             return $"RigidBody2D: {id} name:{gameObject}";
         }
+
+        #region 组件缓存系统（性能优化）
+
+        /// <summary>
+        /// 获取缓存的组件（避免重复调用GetComponent，提升性能）
+        /// 第一次获取时会缓存，后续直接返回缓存
+        /// </summary>
+        /// <typeparam name="T">组件类型</typeparam>
+        /// <returns>组件实例，如果不存在则返回null</returns>
+        public T GetCachedComponent<T>() where T : Component
+        {
+            
+            string typeName = typeof(T).FullName;
+            // 检查缓存
+            if (_componentCache.TryGetValue(typeName, out Component cached))
+            {
+                // 验证缓存是否仍然有效（组件可能被销毁）
+                if (cached != null)
+                {
+                    return cached as T;
+                }
+                else
+                {
+                    // 组件已被销毁，移除缓存
+                    _componentCache.Remove(typeName);
+                }
+            }
+
+            // 缓存未命中，获取组件并缓存
+            T component = gameObject.GetComponent<T>();
+            if (component != null)
+            {
+                _componentCache[typeName] = component;
+            }
+
+            return component;
+        }
+
+
+
+        
+
+        #endregion
     }
 }

@@ -101,8 +101,9 @@ MonoBehaviour:
   isStatic: 1
   mass: 1
   useGravity: 0
-  restitution: 0
+  restitution: 1
   friction: 0
+  linearDamping: 0
   shapeType: 1
   posOffset: {x: 0, y: 0}
   circleRadius: 0.5

@@ -15,7 +15,6 @@ public class BulletController : MapEntity
 
 
     public FixVector2 dir;
-    public FixRect myFixRect => rigidBody2D.Body.Shape.GetBounds(rigidBody2D.Body.Position);
     public float moveSpeed;
     public Fix64 moveSpeedF => (Fix64)moveSpeed;
 
@@ -49,7 +48,7 @@ public class BulletController : MapEntity
     public void UpdatePos()
     {
         transform.position =
-            Vector2.SmoothDamp(transform.position, (Vector2)myFixRect.Center, ref _smoothVelocity, 0.1f);
+            Vector2.SmoothDamp(transform.position, (Vector2)rigidBody2D.Body.Position, ref _smoothVelocity, 0.1f);
     }
 
     public override void UpdateFrame()
@@ -61,8 +60,8 @@ public class BulletController : MapEntity
             {
                 if (enter.gameObject.CompareTag("Wall"))
                 {
-                    DestroyBullet();
-                    isCango = false;
+                    // DestroyBullet();
+                    // isCango = false;
                 }
                 else if (enter.gameObject.CompareTag("BreakableWall"))
                 {
@@ -75,7 +74,7 @@ public class BulletController : MapEntity
                 }
                 else if (enter.gameObject.CompareTag("Bullet"))
                 {
-                    BulletController _bulletController = enter.gameObject.GetComponent<BulletController>();
+                    BulletController _bulletController = enter.GetCachedComponent<BulletController>();
 
                     if (isPlayerBullet != _bulletController.isPlayerBullet)
                     {
@@ -95,7 +94,7 @@ public class BulletController : MapEntity
                 }
                 else if (enter.gameObject.CompareTag("Tank"))
                 {
-                    TankController tank = enter.gameObject.GetComponent<TankController>();
+                    TankController tank = enter.GetCachedComponent<TankController>();
                 
                     if (isPlayerBullet && tank is EnemyTankController enemy )
                     {
@@ -111,13 +110,19 @@ public class BulletController : MapEntity
                     else if (!isPlayerBullet && tank is PlayerTankController player)
                     {
                         player.DamageHP(damageNum);
+                        penetrationCount--;
+                        if (penetrationCount <= 0)
+                        {
+                            DestroyBullet();
+                            isCango = false;
+                        }
                     }
                 }
             }
 
             if (isCango)
             {
-                rigidBody2D.Body.ApplyImpulse(dir*moveSpeedF);
+              //  rigidBody2D.Body.ApplyImpulse(dir*moveSpeedF);
             }
         }
         else

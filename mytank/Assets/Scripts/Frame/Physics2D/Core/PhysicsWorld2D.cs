@@ -156,7 +156,7 @@ namespace Physics2D
             CollectForces();
 
             // 3. 计算加速度并更新速度 更新位置（积分）
-            UpdateVelocities();
+            UpdatePositions();
 
             // 4. 在迭代前更新一次四叉树（优化：避免在每次迭代中重复更新）
             UpdateQuadTreeIncremental();
@@ -172,6 +172,8 @@ namespace Physics2D
 
             // 1. 清除所有物体的力累加器
             ClearForces();
+            
+            UpdateVelocities();
         }
 
         /// <summary>
@@ -208,7 +210,42 @@ namespace Physics2D
         /// 计算加速度并更新速度
         /// 根据累积的力计算加速度：a = F/m
         /// 然后更新速度：v = v + a*dt
-        /// 应用线性阻尼：v = v * (1 - damping * dt)
+        /// </summary>
+        private void UpdatePositions()
+        {
+            foreach (var body in bodies)
+            {
+                if (body.IsDynamic)
+                {
+                    // F = ma => a = F/m
+                    FixVector2 acceleration = body.ForceAccumulator / body.Mass;
+
+                    // 更新速度：v = v + a*dt
+                    body.Velocity += acceleration;
+
+                    FixVector2 oldPosition = body.Position;
+                    // 简单欧拉积分：x = x + v * dt
+                    body.Position += body.Velocity;
+
+                    // 标记为脏（位置改变，需要更新四叉树）
+                    // 优化：静态物体不会移动，不需要标记
+                    if (oldPosition != body.Position)
+                    {
+                        body.QuadTreeDirty = true;
+                    }
+
+                    // 应用线性阻尼（在空地上减速）
+                    if (body.LinearDamping > Fix64.Zero)
+                    {
+                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping, Fix64.Zero, Fix64.One);
+                        body.Velocity *= dampingFactor;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新速度阻尼
         /// </summary>
         private void UpdateVelocities()
         {
@@ -236,8 +273,6 @@ namespace Physics2D
                     // 应用线性阻尼（在空地上减速）
                     if (body.LinearDamping > Fix64.Zero)
                     {
-                        // v = v * (1 - damping * dt)
-                        // 使用Clamp确保阻尼值在合理范围内
                         Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping, Fix64.Zero, Fix64.One);
                         body.Velocity *= dampingFactor;
                     }
@@ -247,23 +282,12 @@ namespace Physics2D
 
 
         /// <summary>
-        /// 碰撞检测和响应
-        /// 使用四叉树优化：O(n^2) -> O(n log n)
-        /// 注意：四叉树更新已在Update()中统一处理，这里不再重复更新
-        /// </summary>
-        private void ResolveCollisions()
-        {
-            ResolveCollisionsWithQuadTree();
-        }
-
-
-        /// <summary>
         /// 使用四叉树优化的碰撞检测（O(n log n)）
         /// 优化：四叉树只做AABB快速筛选，精确检测在物理系统中进行，避免重复计算SAT
         /// </summary>
         private HashSet<(int, int)> _checkedPairsCache = new HashSet<(int, int)>();
 
-        private void ResolveCollisionsWithQuadTree()
+        private void ResolveCollisions()
         {
             // 使用HashSet避免重复检测同一对物体（重用缓存，减少GC）
             _checkedPairsCache.Clear();
@@ -323,7 +347,11 @@ namespace Physics2D
                 // 触发器：只记录碰撞，不分离、不修正速度
                 return;
             }
-
+            // 如果两个都是静态物体，不需要分离
+            if (!bodyA.IsDynamic && !bodyB.IsDynamic)
+            {
+                return;
+            }
             // 1. 分离重叠的物体
             SeparateBodies(bodyA, bodyB, contact);
 
@@ -336,11 +364,7 @@ namespace Physics2D
         /// </summary>
         private void SeparateBodies(RigidBody2D bodyA, RigidBody2D bodyB, Contact2D contact)
         {
-            // 如果两个都是静态物体，不需要分离
-            if (!bodyA.IsDynamic && !bodyB.IsDynamic)
-            {
-                return;
-            }
+            
 
             // 计算需要移动的距离（根据质量分配）
             Fix64 totalMass = bodyA.Mass + bodyB.Mass;
@@ -380,7 +404,10 @@ namespace Physics2D
         {
             // 计算相对速度
             FixVector2 relativeVelocity = bodyB.Velocity - bodyA.Velocity;
-
+            if (relativeVelocity != FixVector2.Zero)
+            {
+                int a = 1;
+            }
             // 计算沿法向量方向的相对速度
             Fix64 velocityAlongNormal = FixVector2.Dot(relativeVelocity, contact.Normal);
 

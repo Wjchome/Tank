@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PlayerTank
   m_EditorClassIdentifier: 
   moveIntervalFrame: 8
-  shootIntervalFrame: 28
+  shootIntervalFrame: 16
   HP: 30
   orignalHP: 30

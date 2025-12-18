@@ -195,6 +195,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         int spawnType = random.Next(1, 5);
         //随机坦克是否特殊
         int a = random.Next(0, specialRange);
+        return;
 
         if (a == 0)
         {

@@ -102,7 +102,7 @@ MonoBehaviour:
   tank: {fileID: 0}
   spriteRenderer: {fileID: 7624953589535699200}
   isPlayerBullet: 0
-  moveSpeed: 1
+  moveSpeed: 0.1
   rigidBody2D: {fileID: 2846453874813678211}
   animator: {fileID: 8540193828245787508}
   animTime: 0.55
@@ -143,13 +143,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269bb9630ae25434699e11a83c2f0b0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTigger: 1
+  isTigger: 0
   isStatic: 0
   mass: 1
   useGravity: 0
-  restitution: 0
+  restitution: 1
   friction: 0
-  linearDamping: 1
+  linearDamping: 0
   shapeType: 0
   posOffset: {x: 0, y: 0}
   circleRadius: 0.25

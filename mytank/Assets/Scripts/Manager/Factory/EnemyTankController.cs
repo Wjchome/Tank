@@ -10,7 +10,7 @@ public class EnemyTankController : TankController
 {
     public override void UpdateFrame()
     {
-        
+
         base.UpdateFrame();
         if (identity == Identity.Enemy && !isDead &&
             NetworkManager.Instance.currentFrame >= EnemyManager.Instance.pauseEndFrame)
@@ -32,9 +32,9 @@ public class EnemyTankController : TankController
             {
                 int a = random.Next(0, 8);
                 tankDirection = (Direction)a;
-
             }
         }
+
         foreach (var enter in rigidBody2D.Stay)
         {
             if (enter.gameObject.CompareTag("Wall") ||
@@ -44,23 +44,21 @@ public class EnemyTankController : TankController
             {
                 int a = random.Next(0, 8);
                 tankDirection = (Direction)a;
-
             }
         }
-        
+
         if (NetworkManager.Instance.currentFrame - lastShootFrame > shootIntervalFrame)
         {
             Shoot();
             lastShootFrame = NetworkManager.Instance.currentFrame;
         }
     }
-    
 
 
-    public  void Shoot()
+    public void Shoot()
     {
-
-        EntityManager.Instance.InitializeBullet(tankDirection.ToFixVector2().Item1, this, rigidBody2D.Body.Position, bulletDamageNum);
+        EntityManager.Instance.InitializeBullet(tankDirection.ToFixVector2().Item1, this, rigidBody2D.Body.Position,
+            bulletDamageNum);
         AudioManager.Instance.Play("Shoot");
     }
 
@@ -90,11 +88,12 @@ public class EnemyTankController : TankController
         }
     }
 
-   public override void Update()
+    public override void Update()
     {
         base.Update();
         barrel.rotation = body.rotation;
     }
+
     public void Dead(PlayerTankController attacker)
     {
         if (isDead) return;
