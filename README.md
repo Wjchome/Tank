@@ -136,3 +136,8 @@ BulletDeadzone TankCharge ChainImplosion
 1.UI表现
 2.顶级技能
 3.初始角色选择
+
+
+
+#物理框架位置
+Assets/Scripts/Frame
