@@ -37,6 +37,15 @@ namespace Physics2D
             World.Iterations = iterations;
             World.quadTree.MaxDepth = MaxDepth;
             World.quadTree.MaxObjectsPerNode = MaxObjectsPerNode;
+
+            World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankEnemy),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy));
+            World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankFriend),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend));
+            World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy));
+            World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend));
         }
 
 

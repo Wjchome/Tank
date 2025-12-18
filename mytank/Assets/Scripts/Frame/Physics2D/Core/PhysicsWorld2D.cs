@@ -34,6 +34,13 @@ namespace Physics2D
 
         public int nextId = 0;
 
+        /// <summary>
+        /// 碰撞矩阵（用于定义哪些Layer之间应该忽略碰撞）
+        /// Key: (layerA.value, layerB.value) 的元组，Value: 是否忽略碰撞（true表示忽略）
+        /// 使用双向存储，确保无论顺序如何都能快速查找
+        /// </summary>
+        private Dictionary<(int, int), bool> _collisionMatrix = new Dictionary<(int, int), bool>();
+
         public PhysicsWorld2D()
         {
             quadTree = new QuadTree();
@@ -315,6 +322,12 @@ namespace Physics2D
                     if (_checkedPairsCache.Contains(pair)) continue;
                     _checkedPairsCache.Add(pair);
 
+                    // 检查Layer碰撞矩阵（是否忽略了这两个Layer之间的碰撞）
+                    if (ShouldIgnoreCollision(bodyA.Layer, bodyB.Layer))
+                    {
+                        continue; // 忽略碰撞，跳过物理响应和碰撞记录
+                    }
+
                     // 窄相位：精确碰撞检测（这里会使用FixRect.Overlaps()的SAT，只计算一次）
                     if (CollisionShape2D.CheckCollision(
                             bodyA.Shape, bodyA.Position,
@@ -493,5 +506,91 @@ namespace Physics2D
 
             bodies.Clear();
         }
+
+        #region Layer碰撞矩阵管理（类似Unity的Physics.IgnoreCollision）
+
+        /// <summary>
+        /// 检查两个Layer之间是否应该忽略碰撞
+        /// </summary>
+        /// <param name="layerA">Layer A</param>
+        /// <param name="layerB">Layer B</param>
+        /// <returns>如果应该忽略碰撞返回true，否则返回false</returns>
+        private bool ShouldIgnoreCollision(PhysicsLayer layerA, PhysicsLayer layerB)
+        {
+            // 如果两个Layer都没有设置（默认值），不忽略
+            if (layerA.value == 0 && layerB.value == 0)
+            {
+                return false;
+            }
+
+            // 检查碰撞矩阵（双向检查）
+            var key1 = (layerA.value, layerB.value);
+            var key2 = (layerB.value, layerA.value);
+
+            if (_collisionMatrix.TryGetValue(key1, out bool ignore1))
+            {
+                return ignore1;
+            }
+
+            if (_collisionMatrix.TryGetValue(key2, out bool ignore2))
+            {
+                return ignore2;
+            }
+
+            // 默认不忽略
+            return false;
+        }
+
+        /// <summary>
+        /// 忽略两个Layer之间的碰撞（双向忽略）
+        /// 类似Unity的Physics.IgnoreCollision，但基于Layer而不是具体的GameObject
+        /// </summary>
+        /// <param name="layerA">Layer A</param>
+        /// <param name="layerB">Layer B</param>
+        /// <example>
+        /// // 忽略玩家子弹和玩家之间的碰撞
+        /// world.IgnoreLayerCollision(PhysicsLayer.GetLayer(PlayerLayer), PhysicsLayer.GetLayer(PlayerBulletLayer));
+        /// 
+        /// // 忽略敌人子弹和敌人之间的碰撞
+        /// world.IgnoreLayerCollision(PhysicsLayer.GetLayer(EnemyLayer), PhysicsLayer.GetLayer(EnemyBulletLayer));
+        /// </example>
+        public void IgnoreLayerCollision(PhysicsLayer layerA, PhysicsLayer layerB)
+        {
+            if (layerA.value == 0 && layerB.value == 0)
+            {
+                return; // 两个都是默认Layer，不需要设置
+            }
+
+            // 双向存储，确保无论顺序如何都能快速查找
+            var key1 = (layerA.value, layerB.value);
+            var key2 = (layerB.value, layerA.value);
+
+            _collisionMatrix[key1] = true;
+            _collisionMatrix[key2] = true;
+        }
+
+        /// <summary>
+        /// 恢复两个Layer之间的碰撞（双向恢复）
+        /// </summary>
+        /// <param name="layerA">Layer A</param>
+        /// <param name="layerB">Layer B</param>
+        public void ResumeLayerCollision(PhysicsLayer layerA, PhysicsLayer layerB)
+        {
+            var key1 = (layerA.value, layerB.value);
+            var key2 = (layerB.value, layerA.value);
+
+            _collisionMatrix.Remove(key1);
+            _collisionMatrix.Remove(key2);
+        }
+
+        /// <summary>
+        /// 清除所有Layer碰撞忽略设置
+        /// </summary>
+        public void ClearLayerCollisionMatrix()
+        {
+            _collisionMatrix.Clear();
+        }
+
+        #endregion
     }
 }

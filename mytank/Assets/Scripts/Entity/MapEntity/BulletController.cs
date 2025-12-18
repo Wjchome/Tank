@@ -60,8 +60,8 @@ public class BulletController : MapEntity
             {
                 if (enter.gameObject.CompareTag("Wall"))
                 {
-                    // DestroyBullet();
-                    // isCango = false;
+                    DestroyBullet();
+                    isCango = false;
                 }
                 else if (enter.gameObject.CompareTag("BreakableWall"))
                 {
