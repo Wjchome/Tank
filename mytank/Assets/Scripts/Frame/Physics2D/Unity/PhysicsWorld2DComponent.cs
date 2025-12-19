@@ -20,23 +20,31 @@ namespace Physics2D
         public Vector2 gravity = new Vector2(0, -9.81f);
         
         /// <summary>
-        /// 迭代次数
+        /// 迭代次数（用于碰撞分离，提高稳定性）
         /// </summary>
         public int iterations = 8;
 
+        /// <summary>
+        /// 子步迭代次数（将一个时间步分成多个子步，提高物理模拟稳定性）
+        /// 子步迭代可以有效处理高速移动物体，避免穿透等问题
+        /// </summary>
+        [Tooltip("子步迭代次数")]
+        public int subSteps = 2;
+
         //"每个节点最大存储物体数（超过则分裂）
-        public int MaxObjectsPerNode;
+        public int maxObjectsPerNode;
         
         //"最大递归深度（防止无限分裂）
-        public int MaxDepth;
+        public int maxDepth;
         private void Awake()
         {
             // 创建物理世界
             World = new PhysicsWorld2D();
             World.Gravity = new FixVector2((Fix64)gravity.x, (Fix64)gravity.y);
             World.Iterations = iterations;
-            World.quadTree.MaxDepth = MaxDepth;
-            World.quadTree.MaxObjectsPerNode = MaxObjectsPerNode;
+            World.SubSteps = subSteps;
+            World.quadTree.MaxDepth = maxDepth;
+            World.quadTree.MaxObjectsPerNode = maxObjectsPerNode;
 
             World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankEnemy),
                 PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy));
@@ -46,6 +54,10 @@ namespace Physics2D
                 PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy));
             World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend),
                 PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend));
+            World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.River));
+            World.IgnoreLayerCollision(PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.River));
         }
 
 

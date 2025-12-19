@@ -307,7 +307,7 @@ public class EntityManager : SingletonMono<EntityManager>
         // QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject,layer);
         PhysicsWorld2DComponent.Instance.AddRigidBody(bullet.GetComponent<RigidBody2DComponent>(),pos,layer);
         bullet.transform.position = (Vector2)bullet.myFixRect.Center;
-        bullet.rigidBody2D.Body.ApplyImpulse(dir*bullet.moveSpeedF);
+        bullet.rigidBody2D.Body.ApplyForce(dir*bullet.moveSpeedF);
 
 
         bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, (float)rotation));

@@ -31,6 +31,13 @@ namespace Physics2D
         /// </summary>
         public int Iterations { get; set; } = 8;
 
+        /// <summary>
+        /// 子步迭代次数（将一个时间步分成多个子步，提高物理模拟稳定性）
+        /// 建议值：2-4，值越大越稳定但性能开销也越大
+        /// 子步迭代可以有效处理高速移动物体，避免穿透等问题
+        /// </summary>
+        public int SubSteps { get; set; } = 2;
+
 
         public int nextId = 0;
 
@@ -40,6 +47,11 @@ namespace Physics2D
         /// 使用双向存储，确保无论顺序如何都能快速查找
         /// </summary>
         private Dictionary<(int, int), bool> _collisionMatrix = new Dictionary<(int, int), bool>();
+
+        /// <summary>
+        /// 子步迭代状态缓存（用于在子步之间保存和恢复状态）
+        /// </summary>
+        private Dictionary<int, (FixVector2 position, FixVector2 velocity)> _subStepStateCache = new Dictionary<int, (FixVector2, FixVector2)>();
 
         public PhysicsWorld2D()
         {
@@ -145,25 +157,46 @@ namespace Physics2D
                 }
             }
         }
+        public void Update()
+        {
+            // 子步迭代：将时间步长分成多个子步
+            Fix64 deltaTime = Fix64.One;
+            Fix64 subStepDeltaTime = deltaTime / (Fix64)SubSteps;
+
+            // 执行每个子步
+            for (int subStep = 0; subStep < SubSteps; subStep++)
+            {
+                // 如果不是第一个子步，恢复上一个子步的状态
+                if (subStep > 0)
+                {
+                    RestoreState();
+                }
+
+                // 执行单个子步
+                UpdateSingleStep(subStepDeltaTime);
+
+                // 如果不是最后一个子步，保存当前状态用于下一个子步
+                if (subStep < SubSteps - 1)
+                {
+                    SaveState();
+                }
+            }
+
+            // 最后处理碰撞回调（只在所有子步完成后处理一次）
+            ProcessAllBody();
+        }
 
         /// <summary>
-        /// 更新物理世界（执行一个时间步）
-        /// 标准物理引擎流程：
-        /// 1. 清除力累加器
-        /// 2. 收集所有力（重力、用户施加的力等）
-        /// 3. 计算加速度并更新速度：a = F/m, v = v + a*dt
-        /// 4. 更新位置：x = x + v*dt
-        /// 5. 碰撞检测和响应
-        /// 6. 处理触发器回调（enter/stay/exit）
-        /// 注意：时间步长假设为1（每帧代表一个固定时间单位）
+        /// 执行单个子步的物理更新
         /// </summary>
-        public void Update()
+        /// <param name="deltaTime">子步的时间步长</param>
+        private void UpdateSingleStep(Fix64 deltaTime)
         {
             // 2. 收集所有常态力（重力等）
             CollectForces();
 
             // 3. 计算加速度并更新速度 更新位置（积分）
-            UpdatePositions();
+            UpdatePositions(deltaTime);
 
             // 4. 在迭代前更新一次四叉树（优化：避免在每次迭代中重复更新）
             UpdateQuadTreeIncremental();
@@ -174,13 +207,8 @@ namespace Physics2D
                 ResolveCollisions();
             }
 
-            // 6.处理数据
-            ProcessAllBody();
-
             // 1. 清除所有物体的力累加器
             ClearForces();
-            
-            UpdateVelocities();
         }
 
         /// <summary>
@@ -218,8 +246,15 @@ namespace Physics2D
         /// 根据累积的力计算加速度：a = F/m
         /// 然后更新速度：v = v + a*dt
         /// </summary>
-        private void UpdatePositions()
+        /// <param name="deltaTime">时间步长（用于子步迭代）</param>
+        private void UpdatePositions(Fix64 deltaTime = default)
         {
+            // 如果deltaTime为0，使用默认值1（兼容旧代码）
+            if (deltaTime == Fix64.Zero)
+            {
+                deltaTime = Fix64.One;
+            }
+
             foreach (var body in bodies)
             {
                 if (body.IsDynamic)
@@ -228,11 +263,11 @@ namespace Physics2D
                     FixVector2 acceleration = body.ForceAccumulator / body.Mass;
 
                     // 更新速度：v = v + a*dt
-                    body.Velocity += acceleration;
+                    body.Velocity += acceleration * deltaTime;
 
                     FixVector2 oldPosition = body.Position;
                     // 简单欧拉积分：x = x + v * dt
-                    body.Position += body.Velocity;
+                    body.Position += body.Velocity * deltaTime;
 
                     // 标记为脏（位置改变，需要更新四叉树）
                     // 优化：静态物体不会移动，不需要标记
@@ -242,51 +277,18 @@ namespace Physics2D
                     }
 
                     // 应用线性阻尼（在空地上减速）
+                    // 注意：阻尼应该在每个子步都应用，但需要根据deltaTime调整
                     if (body.LinearDamping > Fix64.Zero)
                     {
-                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping, Fix64.Zero, Fix64.One);
+                        // 阻尼公式：v = v * (1 - damping * dt)
+                        // 对于子步，需要根据deltaTime调整
+                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping * deltaTime, Fix64.Zero, Fix64.One);
                         body.Velocity *= dampingFactor;
                     }
                 }
             }
         }
-
-        /// <summary>
-        /// 更新速度阻尼
-        /// </summary>
-        private void UpdateVelocities()
-        {
-            foreach (var body in bodies)
-            {
-                if (body.IsDynamic)
-                {
-                    // F = ma => a = F/m
-                    FixVector2 acceleration = body.ForceAccumulator / body.Mass;
-
-                    // 更新速度：v = v + a*dt
-                    body.Velocity += acceleration;
-
-                    FixVector2 oldPosition = body.Position;
-                    // 简单欧拉积分：x = x + v * dt
-                    body.Position += body.Velocity;
-
-                    // 标记为脏（位置改变，需要更新四叉树）
-                    // 优化：静态物体不会移动，不需要标记
-                    if (oldPosition != body.Position)
-                    {
-                        body.QuadTreeDirty = true;
-                    }
-
-                    // 应用线性阻尼（在空地上减速）
-                    if (body.LinearDamping > Fix64.Zero)
-                    {
-                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping, Fix64.Zero, Fix64.One);
-                        body.Velocity *= dampingFactor;
-                    }
-                }
-            }
-        }
-
+        
 
         /// <summary>
         /// 使用四叉树优化的碰撞检测（O(n log n)）
@@ -505,7 +507,48 @@ namespace Physics2D
             }
 
             bodies.Clear();
+            _subStepStateCache.Clear();
         }
+
+        #region 子步迭代状态管理
+
+        /// <summary>
+        /// 保存当前所有物体的状态（位置和速度）
+        /// 用于子步迭代之间的状态传递
+        /// </summary>
+        private void SaveState()
+        {
+            _subStepStateCache.Clear();
+            foreach (var body in bodies)
+            {
+                if (body.IsDynamic)
+                {
+                    _subStepStateCache[body.id] = (body.Position, body.Velocity);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 恢复所有物体的状态（位置和速度）
+        /// 用于子步迭代之间的状态传递
+        /// 在子步开始时调用，从上一步的结果继续
+        /// </summary>
+        private void RestoreState()
+        {
+            foreach (var body in bodies)
+            {
+                if (body.IsDynamic && _subStepStateCache.TryGetValue(body.id, out var state))
+                {
+                    body.Position = state.position;
+                    body.Velocity = state.velocity;
+                    body.QuadTreeDirty = true; // 位置改变，标记为脏
+                }
+            }
+        }
+
+
+
+        #endregion
 
         #region Layer碰撞矩阵管理（类似Unity的Physics.IgnoreCollision）
 

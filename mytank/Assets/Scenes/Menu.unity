@@ -5864,9 +5864,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: {x: 0, y: -9.81}
-  iterations: 8
-  MaxObjectsPerNode: 3
-  MaxDepth: 3
+  iterations: 5
+  subSteps: 2
+  maxObjectsPerNode: 5
+  maxDepth: 5
 --- !u!1 &644248047
 GameObject:
   m_ObjectHideFlags: 0
@@ -7874,7 +7875,7 @@ MonoBehaviour:
   currentFrame: 0
   isGameing: 0
   seed: 0
-  serverIP: 192.168.3.27
+  serverIP: 127.0.0.1
   serverPort: 8088
   myTank: {fileID: 0}
 --- !u!1 &843415143
