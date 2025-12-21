@@ -635,5 +635,95 @@ namespace Physics2D
         }
 
         #endregion
+
+        #region 空间查询（类似Unity的Physics2D.OverlapCircle）
+
+        /// <summary>
+        /// 查询指定圆形范围内的所有物体（立即返回结果）
+        /// 类似Unity的Physics2D.OverlapCircle，但基于定点数，用于帧同步
+        /// </summary>
+        /// <param name="center">圆心位置</param>
+        /// <param name="radius">半径</param>
+        /// <param name="layerMask">Layer过滤（只返回匹配的Layer，默认返回所有Layer）</param>
+        /// <returns>范围内的物体列表</returns>
+        /// <example>
+        /// // 爆炸效果：查询半径3范围内的敌对坦克
+        /// var enemyTanks = world.QueryRange(
+        ///     explosionPosition, 
+        ///     (Fix64)3.0f, 
+        ///     PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankEnemy)
+        /// );
+        /// </example>
+        public List<RigidBody2D> QueryRange(FixVector2 center, Fix64 radius, PhysicsLayer layerMask = default)
+        {
+            // 1. 计算圆形范围的AABB（用于四叉树快速筛选）
+            FixRect queryAABB = new FixRect(
+                center.x - radius,  // 左边界
+                center.y - radius,  // 下边界
+                radius * Fix64.Two,  // 宽度
+                radius * Fix64.Two   // 高度
+            );
+
+            // 2. 使用四叉树查询AABB范围内的所有物体（宽相位：快速筛选）
+            var candidates = quadTree.Query(queryAABB, layerMask);
+
+            // 3. 创建临时圆形形状用于精确碰撞检测
+            var queryCircle = new CircleShape2D(radius);
+
+            // 4. 精确碰撞检测（窄相位：精确判断）
+            List<RigidBody2D> result = new List<RigidBody2D>();
+            foreach (var body in candidates)
+            {
+                // 精确碰撞检测：查询圆形 vs 物体形状
+                // 注意：查询操作不检查碰撞矩阵，因为这是主动查询，不是碰撞响应
+                if (CollisionShape2D.CheckCollision(
+                        queryCircle, center,
+                        body.Shape, body.Position,
+                        out Contact2D contact))
+                {
+                    result.Add(body);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 查询指定矩形范围内的所有物体（立即返回结果）
+        /// 类似Unity的Physics2D.OverlapBox
+        /// </summary>
+        /// <param name="center">矩形中心位置</param>
+        /// <param name="size">矩形尺寸（宽度、高度）</param>
+        /// <param name="rotation">旋转角度（弧度，0表示轴对齐）</param>
+        /// <param name="layerMask">Layer过滤</param>
+        /// <returns>范围内的物体列表</returns>
+        public List<RigidBody2D> QueryRange(FixVector2 center, FixVector2 size, Fix64 rotation, PhysicsLayer layerMask = default)
+        {
+            // 1. 计算旋转矩形的AABB（用于四叉树快速筛选）
+            var queryBox = new BoxShape2D(size.x, size.y, rotation);
+            FixRect queryAABB = queryBox.GetBounds(center);
+
+            // 2. 使用四叉树查询AABB范围内的所有物体（宽相位）
+            var candidates = quadTree.Query(queryAABB, layerMask);
+
+            // 3. 精确碰撞检测（窄相位）
+            List<RigidBody2D> result = new List<RigidBody2D>();
+            foreach (var body in candidates)
+            {
+                // 精确碰撞检测：查询矩形 vs 物体形状
+                // 注意：查询操作不检查碰撞矩阵，因为这是主动查询，不是碰撞响应
+                if (CollisionShape2D.CheckCollision(
+                        queryBox, center,
+                        body.Shape, body.Position,
+                        out Contact2D contact))
+                {
+                    result.Add(body);
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }
