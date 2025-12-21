@@ -335,122 +335,47 @@ public class EntityManager : SingletonMono<EntityManager>
         // bullet.Init(tank, pos);
     }
 
-
-    /// <summary>
-    /// 生成一个不与墙体碰撞的随机位置（使用四叉树检测）
-    /// </summary>
-    /// <param name="entitySize">实体大小（Fix64，通常为1.0）</param>
-    /// <param name="maxAttempts">最大尝试次数</param>
-    /// <returns>有效的FixRect位置，如果找不到则返回null</returns>
-    private FixRect? GetRandomValidPosition(Fix64 entitySize, int maxAttempts = 50)
-    {
-        if (MapManager.Instance == null) return null;
-
-        // 获取所有可用的floor位置作为候选（使用网格系统快速筛选）
-        List<Vector2Int> floorPositions = MapManager.Instance.GetMapTypePos(new List<MapType> { MapType.floor });
-
-        if (floorPositions.Count == 0)
-        {
-            Debug.LogWarning("No floor positions available for random spawn");
-            return null;
-        }
-
-        // 随机打乱候选位置
-        System.Random random = new System.Random();
-        floorPositions = floorPositions.OrderBy(x => random.Next()).ToList();
-
-        // 尝试每个候选位置
-        int attempts = 0;
-        foreach (var gridPos in floorPositions)
-        {
-            if (attempts >= maxAttempts) break;
-            attempts++;
-
-            // 将网格坐标转换为Fix64世界坐标（网格中心）
-            Fix64 worldX = (Fix64)gridPos.x * MapManager.Instance.GridSizeF + MapManager.Instance.HalfGridSizeF;
-            Fix64 worldY = (Fix64)gridPos.y * MapManager.Instance.GridSizeF + MapManager.Instance.HalfGridSizeF;
-
-            // 创建实体的FixRect（以中心为基准）
-            FixRect testRect = new FixRect(
-                worldX - entitySize / (Fix64)2,
-                worldY - entitySize / (Fix64)2,
-                entitySize,
-                entitySize
-            );
-
-            // 使用四叉树检查是否与墙体碰撞
-            if (IsPositionValid(testRect))
-            {
-                return testRect;
-            }
-        }
-
-        Debug.LogWarning($"Failed to find valid position after {attempts} attempts");
-        return null;
-    }
-
-    /// <summary>
-    /// 检查位置是否有效（不与墙体碰撞）
-    /// </summary>
-    private bool IsPositionValid(FixRect rect)
-    {
-        // // 查询四叉树中与目标矩形重叠的物体
-        // List<QuadTreeObject> collidingObjects = QuadTreeV3.QuadTreeV3.Instance.Query(rect);
-        //
-        // // 检查是否与墙体碰撞
-        // foreach (var obj in collidingObjects)
-        // {
-        //     // 检查是否是墙体或可破坏墙体
-        //     if (obj.Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.Wall)) ||
-        //         obj.Layer.Intersects(QuadTreeLayer.GetLayer((int)QuadTreeLayerType.BreakableWall)))
-        //     {
-        //         return false; // 与墙体碰撞，位置无效
-        //     }
-        // }
-
-        return true; // 位置有效
-    }
-
+    
     // 兼容性方法 - 保持原有接口
     public void InitAutoTurrent(PlayerTankController tank)
     {
         // 获取随机有效位置（实体大小默认为1.0）
-        FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-
-        if (randomPos.HasValue)
-        {
-            SpawnMapEntity(autoTurretPrefab, tank, randomPos.Value);
-        }
-        else
-        {
-            Debug.LogWarning("Failed to spawn AutoTurret: no valid position found");
-        }
+        // FixRect? randomPos = PhysicsWorld2DComponent.Instance.World.GetRandomValidPosition(tank.random,)
+        //
+        // if (randomPos.HasValue)
+        // {
+        //     SpawnMapEntity(autoTurretPrefab, tank, randomPos.Value);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Failed to spawn AutoTurret: no valid position found");
+        // }
     }
 
     public void InitLandmine(PlayerTankController tank)
     {
-        FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-        if (randomPos.HasValue)
-        {
-            SpawnMapEntity(landminePrefab, tank, randomPos.Value);
-        }
-        else
-        {
-            Debug.LogWarning("Failed to spawn Landmine: no valid position found");
-        }
+        // FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
+        // if (randomPos.HasValue)
+        // {
+        //     SpawnMapEntity(landminePrefab, tank, randomPos.Value);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Failed to spawn Landmine: no valid position found");
+        // }
     }
 
     public void InitHealingGarden(PlayerTankController tank)
     {
-        FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-        if (randomPos.HasValue)
-        {
-            SpawnMapEntity(healingGardenPrefab, tank, randomPos.Value);
-        }
-        else
-        {
-            Debug.LogWarning("Failed to spawn HealingGarden: no valid position found");
-        }
+        // FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
+        // if (randomPos.HasValue)
+        // {
+        //     SpawnMapEntity(healingGardenPrefab, tank, randomPos.Value);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Failed to spawn HealingGarden: no valid position found");
+        // }
     }
 
     public void InitSpikeTrap(PlayerTankController tank, Vector2Int pos, int durationFrame)
@@ -494,42 +419,42 @@ public class EntityManager : SingletonMono<EntityManager>
 
     public void InitAlmightyTurret(PlayerTankController tank)
     {
-        FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-        if (randomPos.HasValue)
-        {
-            SpawnMapEntity(almightyTurretPrefab, tank, randomPos.Value);
-        }
-        else
-        {
-            Debug.LogWarning("Failed to spawn AlmightyTurret: no valid position found");
-        }
+        // FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
+        // if (randomPos.HasValue)
+        // {
+        //     SpawnMapEntity(almightyTurretPrefab, tank, randomPos.Value);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Failed to spawn AlmightyTurret: no valid position found");
+        // }
     }
 
     public void InitAlmightyTurret(PlayerTankController tank, FixRect fixRect)
     {
-        // 如果提供了固定位置，直接使用（可能是特殊逻辑）
-        if (IsPositionValid(fixRect))
-        {
-            SpawnMapEntity(almightyTurretPrefab, tank, fixRect);
-        }
-        else
-        {
-            Debug.LogWarning("Provided position for AlmightyTurret is invalid, trying random position");
-            InitAlmightyTurret(tank); // 回退到随机位置
-        }
+        // // 如果提供了固定位置，直接使用（可能是特殊逻辑）
+        // if (IsPositionValid(fixRect))
+        // {
+        //     SpawnMapEntity(almightyTurretPrefab, tank, fixRect);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Provided position for AlmightyTurret is invalid, trying random position");
+        //     InitAlmightyTurret(tank); // 回退到随机位置
+        // }
     }
 
     public void InitPulseTurret(PlayerTankController tank)
     {
-        FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-        if (randomPos.HasValue)
-        {
-            SpawnMapEntity(pulseTurretPrefab, tank, randomPos.Value);
-        }
-        else
-        {
-            Debug.LogWarning("Failed to spawn PulseTurret: no valid position found");
-        }
+        // FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
+        // if (randomPos.HasValue)
+        // {
+        //     SpawnMapEntity(pulseTurretPrefab, tank, randomPos.Value);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Failed to spawn PulseTurret: no valid position found");
+        // }
     }
 
     public void InitTankCharge(PlayerTankController tank, bool isCanBullet)

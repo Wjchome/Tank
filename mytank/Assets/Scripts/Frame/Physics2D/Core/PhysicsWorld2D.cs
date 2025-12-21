@@ -725,5 +725,96 @@ namespace Physics2D
         }
 
         #endregion
+
+
+        /// <summary>
+        /// 获取一个随机有效位置（该位置不与指定Layer的物体碰撞）
+        /// 用于生成物体时找到一个不重叠的位置
+        /// </summary>
+        /// <param name="random">确定性随机数生成器（FixRandom，用于帧同步）</param>
+        /// <param name="size">需要的空间尺寸（宽度、高度）</param>
+        /// <param name="noNeedLayer">要避开的Layer（如果该位置有这些Layer的物体，则无效）</param>
+        /// <param name="tryCount">尝试次数（默认10次）</param>
+        /// <returns>有效的位置（FixRect，X和Y是左下角坐标），如果找不到则返回null</returns>
+        /// <example>
+        /// // 生成敌人时，找一个不与墙壁和坦克重叠的位置
+        /// var random = new FixRandom(seed); // 使用固定种子确保确定性
+        /// var enemySize = new FixVector2((Fix64)1.8f, (Fix64)1.8f);
+        /// var avoidLayers = PhysicsLayer.GetLayer((int)QuadTreeLayerType.Wall) | 
+        ///                   PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankEnemy) |
+        ///                   PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankFriend);
+        /// var validPos = world.GetRandomValidPosition(random, enemySize, avoidLayers, 20);
+        /// if (validPos.HasValue)
+        /// {
+        ///     // 在validPos.Value.Center的位置生成敌人
+        /// }
+        /// </example>
+        public FixRect? GetRandomValidPosition(FixRandom random, FixVector2 size, PhysicsLayer noNeedLayer, int tryCount = 10)
+        {
+            if (tryCount <= 0)
+            {
+                return null;
+            }
+
+            // 1. 获取世界边界（从四叉树）
+            FixRect worldBounds = quadTree.GetWorldBounds();
+            
+            // 2. 计算可用的随机范围（考虑needSpace的大小，确保不会超出边界）
+            // needSpace的X和Y是左下角坐标，所以需要确保整个矩形都在世界边界内
+            Fix64 availableWidth = worldBounds.Width - size.x;
+            Fix64 availableHeight = worldBounds.Height - size.y;
+
+            // 如果需要的空间大于世界大小，无法放置
+            if (availableWidth <= Fix64.Zero || availableHeight <= Fix64.Zero)
+            {
+                return null;
+            }
+
+            // 3. 循环尝试随机位置
+            for (int i = 0; i < tryCount; i++)
+            {
+                // 随机生成位置（左下角坐标）
+                Fix64 randomX = worldBounds.X + random.NextFix64(availableWidth);
+                Fix64 randomY = worldBounds.Y + random.NextFix64(availableHeight);
+
+                // 创建候选位置（使用needSpace的尺寸，但位置是随机的）
+                FixRect candidatePos = new FixRect(randomX, randomY, size.x, size.y);
+
+                // 4. 检查该位置是否有效（不与noNeedLayer的物体碰撞）
+                if (IsPositionValid(candidatePos, noNeedLayer))
+                {
+                    return candidatePos;
+                }
+            }
+
+            // 尝试多次都失败，返回null
+            return null;
+        }
+
+        /// <summary>
+        /// 检查指定位置是否有效（不与指定Layer的物体碰撞）
+        /// </summary>
+        /// <param name="position">要检查的位置（矩形区域）</param>
+        /// <param name="noNeedLayer">要避开的Layer</param>
+        /// <returns>如果位置有效（没有碰撞）返回true，否则返回false</returns>
+        private bool IsPositionValid(FixRect position, PhysicsLayer noNeedLayer)
+        {
+            // 如果noNeedLayer为空，不需要检查，直接返回有效
+            if (noNeedLayer.value == 0)
+            {
+                return true;
+            }
+
+            // 使用QueryRange检查该位置是否有noNeedLayer的物体
+            // 使用矩形的中心点和尺寸进行查询
+            FixVector2 center = position.Center;
+            FixVector2 size = new FixVector2(position.Width, position.Height);
+
+            // 查询该矩形范围内的物体（只查询noNeedLayer）
+            var overlappingBodies = QueryRange(center, size, Fix64.Zero, noNeedLayer);
+
+            // 如果没有重叠的物体，位置有效
+            return overlappingBodies.Count == 0;
+        }
     }
 }

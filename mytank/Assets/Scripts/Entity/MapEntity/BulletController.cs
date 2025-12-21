@@ -15,6 +15,7 @@ public class BulletController : MapEntity
 
 
     public FixVector2 dir;
+    public Fix64 rotationF;
     public float moveSpeed;
     public Fix64 moveSpeedF => (Fix64)moveSpeed;
 
@@ -49,6 +50,7 @@ public class BulletController : MapEntity
     {
         transform.position =
             Vector2.SmoothDamp(transform.position, (Vector2)rigidBody2D.Body.Position, ref _smoothVelocity, 0.1f);
+        transform.rotation =  Quaternion.Euler(0f, 0f, (float)rotationF);
     }
 
     public override void UpdateFrame()
@@ -122,7 +124,8 @@ public class BulletController : MapEntity
 
             if (isCango)
             {
-              //  rigidBody2D.Body.ApplyImpulse(dir*moveSpeedF);
+                rotationF = rigidBody2D.Body.Velocity.ToRotation();
+                //  rigidBody2D.Body.ApplyImpulse(dir*moveSpeedF);
             }
         }
         else

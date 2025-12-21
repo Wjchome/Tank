@@ -253,4 +253,9 @@ namespace FixMath.NET
             return deg;
         }
     }
+    
+    
+    
+    
+    
 }
