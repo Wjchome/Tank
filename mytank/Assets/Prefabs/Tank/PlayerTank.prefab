@@ -1258,7 +1258,7 @@ MonoBehaviour:
   chainImplosionRange: 0
   chainImplosionShow: {fileID: 4494342791916860737}
   isLegionoftheFallen: 0
-  testFoodType: 13
+  testFoodType: 10
 --- !u!114 &7641681403537261839
 MonoBehaviour:
   m_ObjectHideFlags: 0

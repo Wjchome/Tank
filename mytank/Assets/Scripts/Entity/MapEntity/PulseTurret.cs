@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using FixMath.NET;
+using Physics2D;
 using UnityEngine;
 
 /// <summary>
@@ -15,7 +17,10 @@ public class PulseTurret : MapEntity
         if (NetworkManager.Instance.currentFrame - lastTargetFrame >= targetIntervalFrame)
         {
             animator.Play("Pulse", 0, 0);
-            var bullets = EntityManager.Instance.activeBullets.FindAll(bullet => bullet.isPlayerBullet == false);
+
+            var bullets =PhysicsWorld2DComponent.Instance.World.QueryRange(myFixRect.Center, (Fix64)2,
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy)|PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend))
+                .ConvertAll(a=>a.GetCachedComponent<BulletController>());
 
 
             foreach (BulletController bullet in bullets)

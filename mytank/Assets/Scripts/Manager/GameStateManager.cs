@@ -311,16 +311,13 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    EntityManager.Instance.InitPulseTurret(tank);
-                    EntityManager.Instance.InitPulseTurret(tank);
+                    EntityManager.Instance.InitPulseTurret(tank,2);
 
                     tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
                 else if (num == 2)
                 {
-                    EntityManager.Instance.InitPulseTurret(tank);
-                    EntityManager.Instance.InitPulseTurret(tank);
-                    EntityManager.Instance.InitPulseTurret(tank);
+                    EntityManager.Instance.InitPulseTurret(tank,3);
 
                     tank.bombAnimator.Play("GenateWall", 0, 0);
                 }
@@ -333,14 +330,12 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    EntityManager.Instance.InitAutoTurrent(tank);
-                    EntityManager.Instance.InitAutoTurrent(tank);
+                    EntityManager.Instance.InitAutoTurrent(tank,2);
                 }
                 else if (num == 2)
                 {
-                    EntityManager.Instance.InitAutoTurrent(tank);
-                    EntityManager.Instance.InitAutoTurrent(tank);
-                    EntityManager.Instance.InitAutoTurrent(tank);
+                    EntityManager.Instance.InitAutoTurrent(tank,3);
+      
                 }
 
 
@@ -371,14 +366,11 @@ public class GameStateManager : SingletonMono<GameStateManager>
                 }
                 else if (num == 1)
                 {
-                    EntityManager.Instance.InitHealingGarden(tank);
-                    EntityManager.Instance.InitHealingGarden(tank);
+                    EntityManager.Instance.InitHealingGarden(tank,2);
                 }
                 else if (num == 2)
                 {
-                    EntityManager.Instance.InitHealingGarden(tank);
-                    EntityManager.Instance.InitHealingGarden(tank);
-                    EntityManager.Instance.InitHealingGarden(tank);
+                    EntityManager.Instance.InitHealingGarden(tank,3);
                 }
 
                 break;

@@ -458,17 +458,23 @@ public class EntityManager : SingletonMono<EntityManager>
         // }
     }
 
-    public void InitPulseTurret(PlayerTankController tank)
+    public void InitPulseTurret(PlayerTankController tank,int count = 1)
     {
-        // FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-        // if (randomPos.HasValue)
-        // {
-        //     SpawnMapEntity(pulseTurretPrefab, tank, randomPos.Value);
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Failed to spawn PulseTurret: no valid position found");
-        // }
+        for (int i = 0; i < count; i++)
+        {
+            FixRect? randomPos = PhysicsWorld2DComponent.Instance.World.GetRandomValidPosition(tank.random, FixVector2.One,
+                new FixRect(Fix64.One,Fix64.One,MapManager.Instance.MapWidthF,MapManager.Instance.MapHeightF),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.Wall | (int)QuadTreeLayerType.BreakableWall));
+
+            if (randomPos.HasValue)
+            {
+                 SpawnMapEntity(pulseTurretPrefab, tank, randomPos.Value);
+            }
+            else
+            {
+                Debug.LogWarning("Failed to spawn AutoTurret: no valid position found");
+            }
+        }
     }
 
     public void InitTankCharge(PlayerTankController tank, bool isCanBullet)
