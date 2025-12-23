@@ -87,7 +87,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);
 
-        temp.random = new System.Random(seed);
+        temp.random =new FixRandom(seed);
 
         TankData data = playerTankData;
         temp.shootIntervalFrame = data.shootIntervalFrame;

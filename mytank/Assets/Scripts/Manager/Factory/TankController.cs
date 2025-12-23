@@ -26,7 +26,8 @@ public enum QuadTreeLayerType : Int32
     TankFriend,
     TankEnemy,
     BulletFriend,
-    BulletEnemy
+    BulletEnemy,
+    HealingGarden
 }
 
 public abstract class TankController : MonoBehaviour
@@ -75,7 +76,7 @@ public abstract class TankController : MonoBehaviour
 
     public SpriteRenderer spriteRenderer;
 
-    public System.Random random = new System.Random();
+    public FixRandom random;
     
     public RigidBody2DComponent rigidBody2D;
 

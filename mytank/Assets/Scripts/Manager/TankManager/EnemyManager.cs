@@ -33,7 +33,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
 
     private int enemyIndex = 0;
     public TextMeshProUGUI enemyleafText;
-    public System.Random random;
+    public  FixRandom random;
 
 
     public Dictionary<EnemyEvent, int> enemyEvents = new Dictionary<EnemyEvent, int>();
@@ -107,7 +107,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
         // ClearAllEnemies();
 
         // 初始化随机种子
-        random = new System.Random((int)NetworkManager.Instance.seed);
+        random =new FixRandom((int)NetworkManager.Instance.seed);
 
         // 生成初始敌人
         SpawnInitialEnemies();
@@ -256,7 +256,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);
 
-        temp.random = new System.Random(seed);
+        temp.random = new FixRandom(seed);
 
         TankData data = orignalDatas[dataIndex];
         InitialEnemyData(temp, data);
@@ -300,7 +300,7 @@ public class EnemyManager : SingletonMono<EnemyManager>
             (int)(NetworkManager.Instance.seed +
                   NetworkManager.Instance.currentFrame);
 
-        temp.random = new System.Random(seed);
+        temp.random = new FixRandom(seed);
 
         TankData data = orignalDatas[dataIndex];
         InitialEnemyData(temp, data);

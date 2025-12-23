@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2844532599451672217}
   - component: {fileID: 6057427113148433846}
   - component: {fileID: 5576086412088546095}
+  - component: {fileID: 6372896230203441949}
   m_Layer: 0
   m_Name: HealingGendan
   m_TagString: Untagged
@@ -50,9 +51,6 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -103,6 +101,31 @@ MonoBehaviour:
   tank: {fileID: 0}
   spriteRenderer: {fileID: 6057427113148433846}
   lastGenateFrame: 0
-  genateIntervalFrame: 2400
+  genateIntervalFrame: 100
   isCanHealing: 0
   healingNum: 5
+  rigidBody: {fileID: 6372896230203441949}
+--- !u!114 &6372896230203441949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5202594948766818963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 269bb9630ae25434699e11a83c2f0b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isTigger: 1
+  isStatic: 0
+  mass: 1
+  useGravity: 0
+  restitution: 0
+  friction: 0
+  linearDamping: 0
+  shapeType: 0
+  posOffset: {x: 0, y: 0}
+  circleRadius: 0.5
+  boxSize: {x: 1, y: 1}
+  rotation: 0

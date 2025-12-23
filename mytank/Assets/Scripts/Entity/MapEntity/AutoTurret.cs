@@ -43,6 +43,6 @@ public class AutoTurret : MapEntity
     {
         var (dir, dr) = currentDirection.ToFixVector2();
         
-        //EntityManager.Instance.InitializeBullet(dir, tank, myFixRect,damageNum);
+        EntityManager.Instance.InitializeBullet(dir, tank, myFixRect.Center,damageNum);
     }
 }

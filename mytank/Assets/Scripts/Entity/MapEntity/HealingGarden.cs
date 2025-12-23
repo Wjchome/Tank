@@ -1,4 +1,5 @@
 using System;
+using Physics2D;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,9 +9,11 @@ public class HealingGarden : MapEntity
 
     public int genateIntervalFrame;
 
-     public bool isCanHealing = false;
+    public bool isCanHealing = false;
 
-     public int healingNum;
+    public int healingNum;
+
+    public RigidBody2DComponent rigidBody;
 
     public override void UpdateFrame()
     {
@@ -26,14 +29,14 @@ public class HealingGarden : MapEntity
 
         if (isCanHealing)
         {
-            // var tanks = MapManager.Instance.GetPlayerTankInArea(Pos.x, Pos.y, 1, 1);
-            // if (tanks != null)
-            // {
-            //     foreach (var _tank in tanks)
-            //     {
-            //         PickUp(_tank);
-            //     }
-            // }
+            foreach (var stay in rigidBody.Stay)
+            {
+                if (stay.Layer == PhysicsLayer.GetLayer((int)QuadTreeLayerType.TankFriend))
+                {
+                    var _tank = stay.GetCachedComponent<PlayerTankController>();
+                    PickUp(_tank);
+                }
+            }
         }
     }
 

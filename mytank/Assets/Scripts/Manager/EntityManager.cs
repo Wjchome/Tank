@@ -305,9 +305,9 @@ public class EntityManager : SingletonMono<EntityManager>
             ? PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletFriend)
             : PhysicsLayer.GetLayer((int)QuadTreeLayerType.BulletEnemy);
         // QuadTreeV3.QuadTreeV3.Instance.AddObject(bullet.myFixRect, bullet.gameObject,layer);
-        PhysicsWorld2DComponent.Instance.AddRigidBody(bullet.GetComponent<RigidBody2DComponent>(),pos,layer);
+        PhysicsWorld2DComponent.Instance.AddRigidBody(bullet.GetComponent<RigidBody2DComponent>(), pos, layer);
         bullet.transform.position = (Vector2)bullet.myFixRect.Center;
-        bullet.rigidBody2D.Body.ApplyForce(dir*bullet.moveSpeedF);
+        bullet.rigidBody2D.Body.ApplyForce(dir * bullet.moveSpeedF);
 
 
         bullet.transform.rotation = Quaternion.Euler(new Vector3(0, 0, (float)rotation));
@@ -335,21 +335,26 @@ public class EntityManager : SingletonMono<EntityManager>
         // bullet.Init(tank, pos);
     }
 
-    
+
     // 兼容性方法 - 保持原有接口
-    public void InitAutoTurrent(PlayerTankController tank)
+    public void InitAutoTurrent(PlayerTankController tank,int count = 1)
     {
-        // 获取随机有效位置（实体大小默认为1.0）
-        // FixRect? randomPos = PhysicsWorld2DComponent.Instance.World.GetRandomValidPosition(tank.random,)
-        //
-        // if (randomPos.HasValue)
-        // {
-        //     SpawnMapEntity(autoTurretPrefab, tank, randomPos.Value);
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Failed to spawn AutoTurret: no valid position found");
-        // }
+        for (int i = 0; i < count; i++)
+        {
+            FixRect? randomPos = PhysicsWorld2DComponent.Instance.World.GetRandomValidPosition(tank.random, FixVector2.One,
+                new FixRect(Fix64.One,Fix64.One,MapManager.Instance.MapWidthF,MapManager.Instance.MapHeightF),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.Wall | (int)QuadTreeLayerType.BreakableWall));
+
+            if (randomPos.HasValue)
+            {
+                SpawnMapEntity(autoTurretPrefab, tank, randomPos.Value);
+            }
+            else
+            {
+                Debug.LogWarning("Failed to spawn AutoTurret: no valid position found");
+            }
+        }
+        
     }
 
     public void InitLandmine(PlayerTankController tank)
@@ -365,17 +370,26 @@ public class EntityManager : SingletonMono<EntityManager>
         // }
     }
 
-    public void InitHealingGarden(PlayerTankController tank)
+    public void InitHealingGarden(PlayerTankController tank,int count = 1)
     {
-        // FixRect? randomPos = GetRandomValidPosition((Fix64)1.0f);
-        // if (randomPos.HasValue)
-        // {
-        //     SpawnMapEntity(healingGardenPrefab, tank, randomPos.Value);
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Failed to spawn HealingGarden: no valid position found");
-        // }
+        for (int i = 0; i < count; i++)
+        {
+            FixRect? randomPos = PhysicsWorld2DComponent.Instance.World.GetRandomValidPosition(tank.random, FixVector2.One,
+                new FixRect(Fix64.One,Fix64.One,MapManager.Instance.MapWidthF,MapManager.Instance.MapHeightF),
+                PhysicsLayer.GetLayer((int)QuadTreeLayerType.Wall | (int)QuadTreeLayerType.BreakableWall));
+
+            if (randomPos.HasValue)
+            {
+                var healingGarden= SpawnMapEntity(healingGardenPrefab, tank, randomPos.Value);
+                PhysicsWorld2DComponent.Instance.AddRigidBody(
+                    healingGarden.rigidBody,randomPos.Value.Center,   PhysicsLayer.GetLayer((int)QuadTreeLayerType.HealingGarden));
+                
+            }
+            else
+            {
+                Debug.LogWarning("Failed to spawn AutoTurret: no valid position found");
+            }
+        }
     }
 
     public void InitSpikeTrap(PlayerTankController tank, Vector2Int pos, int durationFrame)

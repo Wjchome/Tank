@@ -51,7 +51,8 @@ namespace Physics2D
         /// <summary>
         /// 子步迭代状态缓存（用于在子步之间保存和恢复状态）
         /// </summary>
-        private Dictionary<int, (FixVector2 position, FixVector2 velocity)> _subStepStateCache = new Dictionary<int, (FixVector2, FixVector2)>();
+        private Dictionary<int, (FixVector2 position, FixVector2 velocity)> _subStepStateCache =
+            new Dictionary<int, (FixVector2, FixVector2)>();
 
         public PhysicsWorld2D()
         {
@@ -157,6 +158,7 @@ namespace Physics2D
                 }
             }
         }
+
         public void Update()
         {
             // 子步迭代：将时间步长分成多个子步
@@ -282,13 +284,14 @@ namespace Physics2D
                     {
                         // 阻尼公式：v = v * (1 - damping * dt)
                         // 对于子步，需要根据deltaTime调整
-                        Fix64 dampingFactor = Fix64.One - Fix64.Clamp(body.LinearDamping * deltaTime, Fix64.Zero, Fix64.One);
+                        Fix64 dampingFactor =
+                            Fix64.One - Fix64.Clamp(body.LinearDamping * deltaTime, Fix64.Zero, Fix64.One);
                         body.Velocity *= dampingFactor;
                     }
                 }
             }
         }
-        
+
 
         /// <summary>
         /// 使用四叉树优化的碰撞检测（O(n log n)）
@@ -316,10 +319,10 @@ namespace Physics2D
                 foreach (var bodyB in candidates)
                 {
                     if (bodyB.Equals(bodyA)) continue;
-                    
+
                     // 跳过静态-静态碰撞对（静态物体不会相互碰撞）
                     if (!bodyA.IsDynamic && !bodyB.IsDynamic) continue;
-                    
+
                     var pair = bodyA.id < bodyB.id ? (bodyA.id, bodyB.id) : (bodyB.id, bodyA.id);
                     if (_checkedPairsCache.Contains(pair)) continue;
                     _checkedPairsCache.Add(pair);
@@ -362,11 +365,13 @@ namespace Physics2D
                 // 触发器：只记录碰撞，不分离、不修正速度
                 return;
             }
+
             // 如果两个都是静态物体，不需要分离
             if (!bodyA.IsDynamic && !bodyB.IsDynamic)
             {
                 return;
             }
+
             // 1. 分离重叠的物体
             SeparateBodies(bodyA, bodyB, contact);
 
@@ -379,8 +384,6 @@ namespace Physics2D
         /// </summary>
         private void SeparateBodies(RigidBody2D bodyA, RigidBody2D bodyB, Contact2D contact)
         {
-            
-
             // 计算需要移动的距离（根据质量分配）
             Fix64 totalMass = bodyA.Mass + bodyB.Mass;
 
@@ -423,6 +426,7 @@ namespace Physics2D
             {
                 int a = 1;
             }
+
             // 计算沿法向量方向的相对速度
             Fix64 velocityAlongNormal = FixVector2.Dot(relativeVelocity, contact.Normal);
 
@@ -458,10 +462,10 @@ namespace Physics2D
             if (tangentLength > Fix64.Zero)
             {
                 FixVector2 tangentDir = tangent / tangentLength;
-                
+
                 // 计算切向速度大小（沿切向方向的相对速度）
                 Fix64 tangentVelocity = FixVector2.Dot(relativeVelocity, tangentDir);
-                
+
                 // 计算摩擦力冲量（尝试消除切向速度）
                 // 注意：这里需要除以invMassSum来得到正确的冲量
                 Fix64 frictionImpulse = -tangentVelocity / invMassSum;
@@ -469,7 +473,7 @@ namespace Physics2D
                 // 限制摩擦力（库仑摩擦：摩擦力不能超过法向力乘以摩擦系数）
                 Fix64 frictionCoeff = Fix64.Sqrt(bodyA.Friction * bodyB.Friction);
                 Fix64 maxFriction = Fix64.Abs(impulseMagnitude) * frictionCoeff;
-                
+
                 // 限制摩擦力大小（库仑摩擦定律）
                 frictionImpulse = Fix64.Clamp(frictionImpulse, -maxFriction, maxFriction);
 
@@ -545,8 +549,6 @@ namespace Physics2D
                 }
             }
         }
-
-
 
         #endregion
 
@@ -658,10 +660,10 @@ namespace Physics2D
         {
             // 1. 计算圆形范围的AABB（用于四叉树快速筛选）
             FixRect queryAABB = new FixRect(
-                center.x - radius,  // 左边界
-                center.y - radius,  // 下边界
-                radius * Fix64.Two,  // 宽度
-                radius * Fix64.Two   // 高度
+                center.x - radius, // 左边界
+                center.y - radius, // 下边界
+                radius * Fix64.Two, // 宽度
+                radius * Fix64.Two // 高度
             );
 
             // 2. 使用四叉树查询AABB范围内的所有物体（宽相位：快速筛选）
@@ -697,7 +699,8 @@ namespace Physics2D
         /// <param name="rotation">旋转角度（弧度，0表示轴对齐）</param>
         /// <param name="layerMask">Layer过滤</param>
         /// <returns>范围内的物体列表</returns>
-        public List<RigidBody2D> QueryRange(FixVector2 center, FixVector2 size, Fix64 rotation, PhysicsLayer layerMask = default)
+        public List<RigidBody2D> QueryRange(FixVector2 center, FixVector2 size, Fix64 rotation,
+            PhysicsLayer layerMask = default)
         {
             // 1. 计算旋转矩形的AABB（用于四叉树快速筛选）
             var queryBox = new BoxShape2D(size.x, size.y, rotation);
@@ -733,6 +736,7 @@ namespace Physics2D
         /// </summary>
         /// <param name="random">确定性随机数生成器（FixRandom，用于帧同步）</param>
         /// <param name="size">需要的空间尺寸（宽度、高度）</param>
+        /// <param name="bound"> 能生成的空间内 </param>
         /// <param name="noNeedLayer">要避开的Layer（如果该位置有这些Layer的物体，则无效）</param>
         /// <param name="tryCount">尝试次数（默认10次）</param>
         /// <returns>有效的位置（FixRect，X和Y是左下角坐标），如果找不到则返回null</returns>
@@ -749,20 +753,19 @@ namespace Physics2D
         ///     // 在validPos.Value.Center的位置生成敌人
         /// }
         /// </example>
-        public FixRect? GetRandomValidPosition(FixRandom random, FixVector2 size, PhysicsLayer noNeedLayer, int tryCount = 10)
+        public FixRect? GetRandomValidPosition(FixRandom random, FixVector2 size, FixRect bound,
+            PhysicsLayer noNeedLayer, int tryCount = 10)
         {
             if (tryCount <= 0)
             {
                 return null;
             }
 
-            // 1. 获取世界边界（从四叉树）
-            FixRect worldBounds = quadTree.GetWorldBounds();
-            
+
             // 2. 计算可用的随机范围（考虑needSpace的大小，确保不会超出边界）
             // needSpace的X和Y是左下角坐标，所以需要确保整个矩形都在世界边界内
-            Fix64 availableWidth = worldBounds.Width - size.x;
-            Fix64 availableHeight = worldBounds.Height - size.y;
+            Fix64 availableWidth = bound.Width - size.x;
+            Fix64 availableHeight = bound.Height - size.y;
 
             // 如果需要的空间大于世界大小，无法放置
             if (availableWidth <= Fix64.Zero || availableHeight <= Fix64.Zero)
@@ -774,8 +777,8 @@ namespace Physics2D
             for (int i = 0; i < tryCount; i++)
             {
                 // 随机生成位置（左下角坐标）
-                Fix64 randomX = worldBounds.X + random.NextFix64(availableWidth);
-                Fix64 randomY = worldBounds.Y + random.NextFix64(availableHeight);
+                Fix64 randomX = bound.X + random.NextFix64(availableWidth);
+                Fix64 randomY = bound.Y + random.NextFix64(availableHeight);
 
                 // 创建候选位置（使用needSpace的尺寸，但位置是随机的）
                 FixRect candidatePos = new FixRect(randomX, randomY, size.x, size.y);
